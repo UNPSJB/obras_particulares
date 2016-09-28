@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="es">
+<head>
+
+	<meta charset="UTF-8">
+	<title>Profesional</title>
+	<link rel="icon" href="{% static 'images/casa.ico' %}" type="image/x-icon">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximun-scale=1, minimun-scale=1">
+	<link href="bootstrap/css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+	<script src="bootstrap/js/jquery-3.1.0.min.js"></script>
+	<script src="bootstrap/js/fileinput.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" media="screen"/>
+	<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+
+</head>
+
+<body>
+
+	<footer>
+		<div class="container-fluid">
+			<h6 align="right">Sistema de Obras Particulares</h6>
+		</div>
+	</footer>
+
+	<header>
+		<div class="container-fluid">
+			<div class="row">
+				<div class=" col-xs-12 col-sm-12 col-md-4">
+					<img src="Images/Escudo.png" align="left" width="50" height="50" hspace="10" vspace="10"/>
+					<h1 align="left">SOP</h1>
+				</div>
+				<div class=" col-xs-12 col-sm-12 col-md-8" align="right">
+					<br />	
+					<form action="" class="form-inline" >
+						<div class="form-group">
+							<img src="Images/Silueta usuario blanco.png"  alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
+							<label for="">Profesional: </label>
+							<label for=""><small>Nombre de Usuario</small></label>
+						</div>
+
+						<div class="form-group">
+							<button class="color1 btn btn-sm" type="button" >
+	  							Cambios en tramites <span class="badge">4</span>
+							</button>
+						</div>
+						<div class="form-group">	
+							<a href="Index.html">
+								<img src="Images/Boton cancelar.png" alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
+							</a>
+						</div>						
+					</form>				
+				</div>
+			</div>
+		</div>
+	</header>
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<br> <!-- linea vacia que ocupa to el ancho de la pantalla-->
+			</div>
+		</div>
+	</div>
+	
+
+
+	<div class="container-fluid">
+		<div class="row">
+
+			<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+	
+				
+				  	<div class="list-group">
+				  		<font face="serif" color="blue" size="2">				  			
+							<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Iniciar Nuevo Trámite</a>
+							<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Cargar correcciones a un Trámite</a>
+							<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
+							<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Modificar mis datos personales</a>
+							<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>												
+						</font>
+					</div>
+				
+			</div>
+
+			<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+				  <div class="panel panel-default">
+				    <div class="panel-heading" role="tab" id="headingOne">
+				      <h5 class="panel-title">
+				        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<small>Iniciar Nuevo Trámite</small>
+				        </a>
+				      </h5>
+				    </div>
+				    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+				      <div class="panel-body">
+					      <div class="container-fluid">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<div class="container-fluid">
+										<form action="" class="" >	
+											<div class="row">
+												<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<br>
+														<font color="#337ab7"><h4 align="left">Datos del Propietario:</h4></font>
+														
+														<div class="form-group">	
+															<label for="">Nombre:</label>	
+															<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nombre" title="Ingresar Nombre del propietario" maxlength="20" required autofocus/>	
+														</div>	
+														<div class="form-group">
+															<label for="">Apellido:</label>	
+															<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Apellido" title="Ingresar Apellido del propietario" maxlength="15" required />
+														</div>		
+														<div class="form-group">
+															<label for="">Tipo de documento:</label>
+															<select class="form-control input-sm">
+																<option>Ingresar tipo de documento</option>
+																<option>DNI</option>
+																<option>LE</option>
+															</select>
+														</div>		
+														<div class="form-group">
+															<label for="">Nro de documento:</label>									
+															<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nro de Documento" title="Ingresar Nro de Documento del propietario" maxlength="9" required />
+														</div>		
+														<div class="form-group">
+															<label for="">Nro de CUIT:</label>
+															<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nro de CUIT" title="Ingresar Nro de CUIT del propietario" maxlength="13" required />
+														</div>	
+														<div class="form-group">
+															<label for="telefono">Nro. de teléfono:</label>
+															<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar Nro de telefono del propietario" maxlength="13" required />
+														</div>
+														<div class="form-group">
+															<label for="">E-Mail:</label>
+															<input class="form-control input-sm" id="" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar e-mail del propietario" maxlength="20" required />
+														</div>
+												</div>				
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<br>			
+														<font color="#337ab7"><h4 align="left">Datos de la obra:</h4></font>
+														
+														<div class="form-group">
+															<label for="">Tipo de obra:</label>
+															<select class="form-control input-sm" required>
+																<option>Ingresar tipo de obra</option>
+																<option>1</option>
+																<option>2</option>
+																<option>3</option>
+															</select>
+														</div>
+														<div class="form-group">
+															<label for="">Nro de padrón:</label>
+															<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro. de padrón" title="Ingresar Nro. de padrón del la obra" maxlength="7" required />
+														</div>
+														<div class="form-group">
+															<label for="">Nro de matricula RT:</label>
+															<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de matrícula de RT" title="Ingresar Nro de matrícula de RT de la obra" maxlength="4" required />
+														</div>
+														<div class="form-group">
+															<label for="">Nro de matricula DO:</label>
+															<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de matrícula de DO" title="Ingresar Nro de matrícula de DO" maxlength="4" required />
+														</div>			
+												</div>
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<br>
+														<font color="#337ab7"><h4 align="left">Documentación del trámite:</h4></font>
+														<div class="form-group">
+															<label for="">Certificado de CACH:</label>
+															<input class="file" id="cach" type="file" data-preview-file-type="any" title="Cargar el Certificado del CACH" required />
+														</div>
+														<hr size="5" width="300" align="left">
+														<div class="form-group">
+															<label for="">Planilla Tributaria:</label>
+															<input class="file" id="tributaria" type="file" data-preview-file-type="any" title="Cargar la Planilla Tributaria" required />
+														</div>
+														<hr size="5" width="300" align="left">	
+														<div class="form-group">
+															<label for="">Planilla Dominial:</label>
+															<input type="file" id="dominial" data-preview-file-type="any" title="Cargar la Planilla Dominial" required />
+														</div>
+														<hr size="5" width="300" align="left">	
+														<div class="form-group">
+															<label for="">Planos:</label>
+															<input type="file" id="planos" multiple="true" data-preview-file-type="any" title="Cargar los planos de la obra" required />
+														</div>
+														<hr size="5" width="300" align="left">				
+												</div>	
+											</div>
+											<div class="container-fluid">
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+														<button class="btn btn-primary btn-sm" type="submit" title="Enviar datos y documentacion del tramite">
+															Iniciar Tramite
+														</button>
+														<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+															Limpiar
+														</button>
+													</div>
+												</div>
+											</div>
+										</form>
+										<br>
+									</div>
+								</div>
+							</div>
+						</div>
+				      </div>
+				    </div>
+				  </div>
+
+				  <div class="panel panel-default">
+				    <div class="panel-heading" role="tab" id="headingTwo">
+				      <h5 class="panel-title">
+				        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+				          <small>Cargar correcciones a un Trámite</small>
+				        </a>
+				      </h5>
+				    </div>
+				    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+				      <div class="panel-body">
+					    <div class="container-fluid">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<div class="container-fluid">
+										<br>
+										<form action="" class="" >	
+											<div class="row">
+												<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
+													<div class="form-group">
+														<label for="">Nro de trámite:</label>
+														<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro. de trámite" title="Ingresar Nro. de trámite" required />
+													</div>		
+												</div>			
+												<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">			
+													<div class="form-group">
+														<label for="">Documentos corregidos:</label>
+														<input class="file" id="correcciones"  type="file" data-preview-file-type="any" multiple="true" title="Cargar documentos corregidos" required />
+													</div>
+												</div>		
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+												</div>	
+											</div>
+											<div class="container-fluid">
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+														<button class="btn btn-primary btn-sm" type="submit" title="Envia documentos corregidos">
+															Enviar correcciones
+														</button>
+														<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+															Limpiar
+														</button>
+													</div>
+												</div>
+											</div>
+										</form>
+										<br>
+									</div>
+								</div>
+							</div>
+						</div>
+				      </div>
+				    </div>
+				  </div>
+
+				  <div class="panel panel-default">
+				    <div class="panel-heading" role="tab" id="headingFive">
+				      <h5 class="panel-title">
+				        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+				          <small>Solicitar final de obra a un Trámite</small>
+				        </a>
+				      </h5>
+				    </div>
+				    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+				      <div class="panel-body">
+					    <div class="container-fluid">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<div class="container-fluid">
+										<br>
+										<form action="" class="" >	
+											<div class="row">
+												<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
+													<div class="form-group">
+														<label for="">Nro de trámite:</label>
+														<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro. de trámite" title="Ingresar Nro. de trámite" required />
+													</div>		
+												</div>			
+												<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">			
+													<div class="form-group">
+														<label for="">Documentos de Final de Obra:</label>
+														<input class="file" id="final"  type="file" data-preview-file-type="any" multiple="true" title="Cargar documentos Final de Obra" required />
+													</div>
+												</div>		
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+												</div>	
+											</div>
+											<div class="container-fluid">
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+														<button class="btn btn-primary btn-sm" type="submit" title="Envia solicitud de final de obra">
+															Solicitar final de obra
+														</button>
+														<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+															Limpiar
+														</button>
+													</div>
+												</div>
+											</div>
+										</form>
+										<br>
+									</div>
+								</div>
+							</div>
+						</div>
+				      </div>
+				    </div>
+				  </div>
+
+				  <div class="panel panel-default">
+				    <div class="panel-heading" role="tab" id="headingThree">
+				      <h5 class="panel-title">
+				        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+				          <small>Modificar mis datos personales</small>
+				        </a>
+				      </h5>
+				    </div>
+				    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+				      <div class="panel-body">
+					    <div class="container-fluid">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<div class="container-fluid">
+									<br>
+										<form action="" class="" >	
+											<div class="row">
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="telefono">Nro. de teléfono:</label>
+															<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono"/>
+														</div>
+												</div>				
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">			
+														<div class="form-group">
+															<label for="">E-Mail:</label>
+															<input class="form-control input-sm" id="" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail"/>
+														</div>		
+												</div>
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+													<label for="">Cambiar Foto de perfil:</label>
+													<br>
+													<input class="file" id="perfil" type="file" data-preview-file-type="any" title="Cargar nueva foto de perfil">
+												</div>				
+											</div>	
+											<div class="container-fluid">
+												<br>
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+														<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
+															Modificar mis datos
+														</button>
+														<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+															Limpiar
+														</button>
+													</div>
+												</div>
+											</div>
+										</form>
+										<br>
+									</div>
+								</div>
+							</div>	
+						</div>
+				      </div>
+				    </div>
+				  </div>
+
+				  <div class="panel panel-default">
+				    <div class="panel-heading" role="tab" id="headingFour">
+				      <h5 class="panel-title">
+				        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+				          <small>Consultar estado de mis Trámites</small>
+				        </a>
+				      </h5>
+				    </div>
+				    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+				      	<div class="panel-body">
+				      		<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							      		 <!-- Table -->
+							      		<div class="table-responsive">
+							  				<table  class="table table-striped table-hover table-condensed">
+							    				<thead>
+											      <tr>
+											        <th>Nro Tramite</th>
+											        <th>Estado</th>
+											        <th>Fecha Iniciado</th>
+											        <th>Descripción</th>
+											        <th>Correcciones</th>
+											        <th>Anexo</th>
+											      </tr>
+											    </thead>
+											    <tbody>
+											      <tr>
+											        <td>1234</td>
+											        <td>Visado</td>
+											        <td>12/01/2016</td>
+											        <td><button>Ver</button></td>
+											        <td><button>Cargar correcciones</button></td>
+											        <td><button>Solicitar final de obra</button></td>
+											      </tr>
+											      <tr>
+											        <td>3456</td>
+											        <td>Aceptado</td>
+											        <td>21/02/2016</td>
+											        <td><button>Ver</button></td>
+											        <td><button>Cargar correcciones</button></td>
+											        <td><button>Solicitar final de obra</button></td>
+											      </tr>
+											      <tr>
+											        <td>4575</td>
+											        <td>Correciones</td>
+											        <td>01/03/2016</td>
+											        <td><button>Ver</button></td>
+											        <td><button>Cargar correcciones</button></td>
+											        <td><button>Solicitar final de obra</button></td>
+											      </tr>
+											    </tbody>
+							  				</table>
+							  			</div>
+									</div>
+					  			</div>
+				   			</div>
+						</div>
+					 </div>
+				   </div>		
+				</div>   
+			</div>
+		</div>
+	</div>
+
+
+	<footer>
+		<div class="container-fluid">
+			<h6 align="left">Municipalidad de Trelew</h6>
+		</div>
+	</footer>
+
+	<!-- Esto no se debe borrar-->
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+
+	<script>
+		$("#perfil").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar nueva foto de perfil',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
+
+	<script>
+		$("#cach").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar Certificado CACH',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
+
+	<script>
+		$("#tributaria").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar Planilla Tributaria',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
+
+	<script>
+		$("#dominial").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar Planilla Dominial' ,
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
+	
+	<script>
+		$("#planos").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar Planos de Obra',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
+
+	<script>
+		$("#correcciones").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar documentos corregidos',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
+
+	<script>
+		$("#final").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar documentos de Final de Obra',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
+	
+
+</html>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="es">
+<head>
+
+	<meta charset="UTF-8">
+	<title>Inspector</title>
+	<link rel="icon" href="{% static 'images/casa.ico' %}" type="image/x-icon">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximun-scale=1, minimun-scale=1">
+	<link href="css/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+	<script src="js/jquery-3.1.0.min.js"></script>
+	<script src="bootstrap/js/fileinput.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}" media="screen"/>
+
+</head>
+
+<body>
+
+	<footer>
+		<div class="container-fluid">
+			<h6 align="right">Sistema de Obras Particulares</h6>
+		</div>
+	</footer>
+
+	<header>
+		<div class="container-fluid">
+			<div class="row">
+				<div class=" col-xs-12 col-sm-12 col-md-4">
+					<img src="Images/Escudo.png" align="left" width="50" height="50" hspace="10" vspace="10"/>
+					<h1 align="left">SOP</h1>
+				</div>
+				<div class=" col-xs-12 col-sm-12 col-md-8" align="right">
+					<br />	
+					<form action="" class="form-inline" >
+						<div class="form-group">
+							<img src="Images/Silueta usuario blanco.png" alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
+							<label for="">Inspector: </label>
+							<label for=""><small>Nombre de Usuario</small></label>
+						</div>
+
+						<div class="form-group">
+							<button class="color1 btn btn-sm" type="button" >
+	  							Cambios en tramites <span class="badge">4</span>
+							</button>
+						</div>
+						<div class="form-group">	
+							<a href="Index.html">
+								<img src="Images/Boton cancelar.png" alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
+							</a>
+						</div>						
+					</form>				
+				</div>
+			</div>
+		</div>
+	</header>
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<br> <!-- linea vacia que ocupa to el ancho de la pantalla-->
+			</div>
+		</div>
+	</div>
+	
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">		
+				  	<div class="list-group">
+				  		<font face="serif" color="blue" size="2">
+							<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Iniciar Inspección</a>
+							<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar mis Inspecciones</a>
+							<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree">Cargar mis Inspecciones</a>
+							<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a>
+						</font>
+					</div>		
+			</div>
+
+			<div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+				<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+				  <div class="panel panel-default">
+				    <div class="panel-heading" role="tab" id="headingTwo">
+				      <h5 class="panel-title">
+				       	<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+				          <small>Iniciar Inspección</small>
+				        </a>
+				      </h5>
+				    </div>
+				     <div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">
+				      <div class="panel-body">
+					    <div class="container-fluid">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<div class="container-fluid">
+										<br>
+										<form action="" class="" >	
+											<div class="row">
+												<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+													 <!-- Table -->
+										      		<div class="table-responsive">
+										  				<table  class="table table-striped table-hover table-condensed">
+										    				<thead>
+														      <tr>
+														        <th class="col-sm-1">Nro Tramite</th>
+														        <th class="col-sm-1">Profesiónal</th>
+														        <th class="col-sm-1">Dirección</th>
+														        <th class="col-sm-1">Fecha Pactada</th>
+														        <th class="col-sm-1">Asignarme</th>
+														      </tr>
+														    </thead>
+														    <tbody>
+														      <tr>
+														        <td>1234</td>
+														        <td>Juan Perez</td>
+														        <td>Colon 23</td>
+														        <td><input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar fecha de inspección" title="Ingresar fecha de Inspección" maxlength="10" maxlength="10" /></td>
+														        <td><center><div class="checkbox"><input type="checkbox">Asignarme</div></center></td>
+														      </tr>
+														      <tr>
+														        <td>3456</td>
+														        <td>Jose Fernandes</td>
+														        <td>Edinson 33</td>
+														        <td><input class="form-control input-xs" id="" name="" type="text" placeholder="Ingresar fecha de inspección" title="Ingresar fecha de Inspección" maxlength="10" maxlength="10" /></td>
+														        <td><center><div class="checkbox"><input type="checkbox">Asignarme</div></center></td>
+														      </tr>
+														      <tr>
+														        <td>4575</td>
+														        <td>Marcos Lopez</td>
+														        <td>Brasil 50</td>
+														        <td><input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar fecha de inspección" title="Ingresar fecha de Inspección" maxlength="10" maxlength="10" /></td>
+														        <td><center><div class="checkbox"><input type="checkbox">Asignarme</div></center></td>
+														      </tr>
+														    </tbody>
+										  				</table>
+													</div>	
+												</div>	
+											</div>
+											<div class="container-fluid">
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+														<button class="btn btn-primary btn-sm" type="submit" title="Asignar inspecciones a Inspector">
+															Asignar Inspecciones
+														</button>
+														<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+															Limpiar
+														</button>
+													</div>
+												</div>
+											</div>
+										</form>
+										<br>
+									</div>
+								</div>
+							</div>
+						</div>
+				      </div>
+				    </div>
+				  </div>
+
+
+				  <div class="panel panel-default">
+				    <div class="panel-heading" role="tab" id="headingFour">
+				      <h5 class="panel-title">
+				        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+				          <small>Consultar mis Inspecciones</small>
+				        </a>
+				      </h5>
+				    </div>
+				    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+				      	<div class="panel-body">
+				      		<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			 							<!-- Table -->
+							      		<div class="table-responsive">
+							  				<table  class="table table-striped table-hover table-condensed">
+							    				<thead>
+											      <tr>
+											        <th>Nro Tramite</th>
+											        <th>Profesional</th>
+											        <th>Estado</th>
+											        <th>Fecha Inspección</th>
+											        <th>Dirección</th>
+											        <th>Inspección</th>
+											      </tr>
+											    </thead>
+											    <tbody>
+											      <tr>
+											        <td>1234</td>
+											        <td>Juan</td>
+											        <td>Visado</td>
+											        <td>12/12/1900</td>
+											        <td>Alberdi 77</td>
+											        <td><center><button>Ver</button></center></td>
+											      </tr>
+											      <tr>
+											        <td>3456</td>
+											        <td>Marcos</td>
+											        <td>Visado</td>
+											        <td>12/12/1900</td>
+											        <td>Almafuerte 45</td>
+											        <td><center><button>Ver</button></center></td>
+											      </tr>
+											      <tr>
+											        <td>4575</td>
+											        <td>Pedro</td>
+											        <td>Visado</td>
+											        <td>12/12/1900</td>
+											        <td>San Martín</td>
+											        <td><center><button>Ver</button></center></td>
+											      </tr>
+											    </tbody>
+							  				</table>
+							  			</div>
+									</div>
+					  			</div>
+				   			</div>
+						</div>
+					 </div>
+				   </div>
+
+				   <div class="panel panel-default">
+				    <div class="panel-heading" role="tab" id="headingthree">
+				      <h5 class="panel-title">
+				        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree">
+				          <small>Cargar mis Inspecciones</small>
+				        </a>
+				      </h5>
+				    </div>
+				    <div id="collapsethree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingthree">
+				      	<div class="panel-body">
+				      		<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							      		 <!-- Table -->
+							      		<div class="table-responsive">
+							  				<table  class="table table-striped table-hover table-condensed">
+							    				<thead>
+											      <tr>
+											        <th>Nro Tramite</th>								     
+											        <th>Fecha Inspección</th>
+											        <th>Dirección</th>
+											        <th>Inspección</th>
+											      </tr>
+											    </thead>
+											    <tbody>
+											      <tr>
+											        <td>1234</td>
+											        <td>12/12/1900</td>
+											        <td>Alberdi 77</td>
+											        <td><center><button>Cargar</button></center></td>
+											      </tr>
+											      <tr>
+											        <td>3456</td>
+											        <td>12/12/1900</td>
+											        <td>Almafuerte 45</td>
+											        <td><center><button>Cargar</button></center></td>
+											      </tr>
+											      <tr>
+											        <td>4575</td>
+											        <td>12/12/1900</td>
+											        <td>San Martín</td>
+											        <td><center><button>Cargar</button></center></td>
+											      </tr>
+											    </tbody>
+							  				</table>
+							  			</div>
+									</div>
+					  			</div>
+				   			</div>
+						</div>
+					 </div>
+				   </div>
+
+				  <div class="panel panel-default">
+				    <div class="panel-heading" role="tab" id="headingOne">
+				      <h5 class="panel-title">
+				      	<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+				          <small>Modificar mis datos personales</small>
+				        </a>
+				      </h5>
+				    </div>
+				    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+				      <div class="panel-body">
+					    <div class="container-fluid">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<div class="container-fluid">
+									<br>
+										<form action="" class="" >	
+											<div class="row">
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="telefono">Nro. de teléfono:</label>
+															<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono" maxlength="13" />
+														</div>
+												</div>				
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">			
+														<div class="form-group">
+															<label for="">E-Mail:</label>
+															<input class="form-control input-sm" id="" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail" maxlength="20" />
+														</div>		
+												</div>
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+													<label for="">Cambiar Foto de perfil:</label>
+													<br>
+													<input class="file" id="perfil" type="file" data-preview-file-type="any" title="Cargar nueva foto de perfil">
+												</div>				
+											</div>	
+											<div class="container-fluid">
+												<br>
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+														<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
+															Modificar mis datos
+														</button>
+														<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+															Limpiar
+														</button>
+													</div>
+												</div>
+											</div>
+										</form>
+										<br>
+									</div>
+								</div>
+							</div>	
+						</div>
+				      </div>
+				    </div>
+				  </div>
+				</div>  
+			</div> 
+		</div>
+	</div>
+
+	<footer>
+		<div class="container-fluid">
+			<h6 align="left">Municipalidad de Trelew</h6>
+		</div>
+	</footer>
+
+	<!-- Esto no se debe borrar-->
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+
+</body>
+
+	<script>
+		$("#perfil").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar nueva foto de perfil',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
+
+	<script>
+		$("#final").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar constancia de CACH',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
+
+</html>
