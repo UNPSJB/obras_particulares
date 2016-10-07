@@ -8,5 +8,3 @@ admin.site.register(TipoDocumento)
 admin.site.register(TipoObra)
 
 admin.site.register(Documento)
-
-admin.site.register(Categoria)
