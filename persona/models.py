@@ -42,8 +42,31 @@ class Persona(models.Model):
     telefono = models.CharField(max_length = 15)
     profesional = models.OneToOneField(Profesional, blank=True)
     propietario = models.OneToOneField(Propietario, blank=True)
-    Usuario = models.OneToOneField(Usuario, blank=True)
+    usuario = models.OneToOneField(Usuario, blank=True)
 
+    @property
+    def profesional(self):
+        return self.profesional
+
+    @profesional.setter
+    def profesional(self, profesional):
+        self.profesional = profesional
+
+    @property
+    def propietario(self):
+        return self.propietario
+
+    @propietario.setter
+    def propietario(self, propietario):
+        self.propietario = propietario
+
+    @property
+    def usuario(self):
+        return self.usuario
+
+    @usuario.setter
+    def usuario(self, usuario):
+        self.usuario = usuario
 
     def __str__(self):
         return "{}, {}" .format(self.apellido, self.nombre)
