@@ -12,14 +12,18 @@ class Persona(models.Model):
     cuil = models.CharField(max_length = 14)    #el ultimo numero va a ser 00..09
     domicilio = models.CharField(max_length = 50)
     telefono = models.CharField(max_length = 15)
-    roles = []
+    profesional = models.OneToOneField(Profesional, blank=True)
+    propietario = models.OneToOneField(Propietario, blank=True)
+    Usuario = models.OneToOneField(Usuario, blank=True)
 
 
 def __str__(self):
     return "{}, {}" .format(self.apellido, self.nombre)
 
 class Rol(models.Model):
-    persona = models.ForeignKey(Persona)
+
+    class Meta:
+        abstract = True
 
 class Profesional(Rol):
 
