@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 # Register your models here.
 from .models import *
 
@@ -12,11 +11,26 @@ class AltaTipoDocumento(admin.ModelAdmin):
         ('Informacion de Fechas',{'fields':['fecha_alta']}),
         (None, {'fields':['fecha_baja']})
     ]
+    search_fields = ['nombre']
+    list_display = ('nombre', 'descripcion', 'fue_pubicado_recientemente')
+    list_filter = ['fecha_alta']
 
+class AltaDocumento(admin.ModelAdmin):
+    fieldsets=[
+        ('Informacion',{'fields':['identificador','tipoDocumento']}),
+    ]
+    search_fields=['identificador','tipoDocumento']
+
+class AltaTipoObra(admin.ModelAdmin):
+    fieldsets=[
+        ('Informacion', {'fields':['nombre','descripcion','categorias']})
+    ]
+    search_fields = ['nombre']
+    list_display = ('nombre', 'descripcion','categorias')
 
 
 admin.site.register(TipoDocumento,AltaTipoDocumento)
 
-admin.site.register(TipoObra)
+admin.site.register(TipoObra,AltaTipoObra)
 
-admin.site.register(Documento)
+admin.site.register(Documento,AltaDocumento)
