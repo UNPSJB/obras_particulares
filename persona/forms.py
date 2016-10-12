@@ -6,4 +6,4 @@ class FormularioPersona(forms.ModelForm):
 
     class Meta:
         model = Persona
-        fields = ('Nombre', 'Apellido', 'Dni', 'Direccion', 'Telefono', 'cuil')
+        fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil')

@@ -10,6 +10,13 @@
     <p>Aca doy de alta una persona.</p>
     <p>Se tiene que mostrar el formulario para completar los datos de la persona y darla de alta.</p>
 
+    <form METHOD="PERSONA">{% csrf_token %}
+
+            {{ form.as_p }}
+
+        <button type="submit" class="save btn btn-default">Guardar</button>
+    </form>
+
 </body>
 
 </html>

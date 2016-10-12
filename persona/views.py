@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+from .forms import *
+
 def mostrar_inicio(request):
     return render(request, 'inicio/base.html', {})
 
@@ -25,4 +27,6 @@ def mostrar_visar(request):
     return render(request, 'visador/visar.html')
 
 def alta_persona(request):
-    return render(request, 'persona/alta_persona.html')
+    #Aca tengo que instanciar el formulario y se lo paso por parametro a la plantilla y se muestra "Guala!"
+    form = FormularioPersona()
+    return render(request, 'persona/alta_persona.html', {'form': form})
