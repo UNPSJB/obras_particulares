@@ -28,5 +28,15 @@ def mostrar_visar(request):
 
 def alta_persona(request):
     #Aca tengo que instanciar el formulario y se lo paso por parametro a la plantilla y se muestra "Guala!"
-    form = FormularioPersona()
+    #form = FormularioPersona()
+    #return render(request, 'persona/alta_persona.html', {'form': form})
+
+    if request.method == "POST":
+        form = FormularioPersona(request.POST)
+        if form.is_valid():
+            persona = form.save()
+            persona.save()
+    else:
+        form = FormularioPersona()
+
     return render(request, 'persona/alta_persona.html', {'form': form})
