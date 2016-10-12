@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tipo Documento</title>
+</head>
+<body>
+  <p>Esta vista permite la carga de tipos de documento en la base de datos.</p>
+
+  <p>Nota importante de las fechas:</p>
+  <p>hay que ponerlas con el siguiente formato por ej-> "2016-10-12 19:29:34"</p>
+  <form method="POST" class="tipoDocumento">{% csrf_token %}
+
+          {{ form.as_p }}
+
+      <button type="submit" class="save btn btn-default">Guardar</button>
+
+  </form>
+
+</body>
+</html>
