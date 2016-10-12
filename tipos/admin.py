@@ -1,10 +1,36 @@
 from django.contrib import admin
-
 # Register your models here.
 from .models import *
 
-admin.site.register(TipoDocumento)
 
-admin.site.register(TipoObra)
+class AltaTipoDocumento(admin.ModelAdmin):
+    fieldsets = [
+        ('Informacion general', {'fields':['nombre']}),
+        (None,  {'fields':['descripcion']}),
+        (None,  {'fields':['activo']}),
+        ('Informacion de Fechas',{'fields':['fecha_alta']}),
+        (None, {'fields':['fecha_baja']})
+    ]
+    search_fields = ['nombre']
+    list_display = ('nombre', 'descripcion', 'fue_pubicado_recientemente')
+    list_filter = ['fecha_alta']
 
-admin.site.register(Documento)
+class AltaDocumento(admin.ModelAdmin):
+    fieldsets=[
+        ('Informacion',{'fields':['identificador','tipoDocumento']}),
+    ]
+    search_fields=['identificador','tipoDocumento']
+
+class AltaTipoObra(admin.ModelAdmin):
+    fieldsets=[
+        ('Informacion', {'fields':['nombre','descripcion','categorias']})
+    ]
+    search_fields = ['nombre']
+    list_display = ('nombre', 'descripcion','categorias')
+
+
+admin.site.register(TipoDocumento,AltaTipoDocumento)
+
+admin.site.register(TipoObra,AltaTipoObra)
+
+admin.site.register(Documento,AltaDocumento)

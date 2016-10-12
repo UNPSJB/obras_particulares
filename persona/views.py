@@ -23,3 +23,6 @@ def mostrar_visador(request):
 
 def mostrar_visar(request):
     return render(request, 'visador/visar.html')
+
+def alta_persona(request):
+    return render(request, 'persona/alta_persona.html')
