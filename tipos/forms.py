@@ -14,8 +14,10 @@ class FormularioDocumento(forms.ModelForm):
         model = Documento
         fields = ('identificador','tipoDocumento')
 
+'''
 class FormularioTipoObra(forms.ModelForm):
 
     class Meta:
         model = TipoObra
         fields = ('nombre','descripcion','categorias')
+'''

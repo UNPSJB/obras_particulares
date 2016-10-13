@@ -12,13 +12,15 @@ def mostrar_inspector(request):
     return render(request, 'inspector/inspector.html', {})
 
 def mostrar_profesional(request):
-    return render(request, 'profesional/profesional.html')
+    form = FormularioProfesional()
+    return render(request, 'profesional/profesional.html',{'form':form})
 
 def mostrar_jefe_inspector(request):
     return render(request, 'jefe_inspector/jefe_inspector.html')
 
 def mostrar_propietario(request):
-    return render(request, 'propietario/propietario.html')
+    form = FormularioPropietario()
+    return render(request, 'propietario/propietario.html',{'form':form})
 
 def mostrar_visador(request):
     return render(request, 'visador/visador.html')
