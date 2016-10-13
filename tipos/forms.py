@@ -23,10 +23,15 @@ class FormularioDocumento(forms.ModelForm):
         model = Documento
         fields = ('identificador','tipoDocumento')
 
-'''
+
 class FormularioTipoObra(forms.ModelForm):
 
     class Meta:
         model = TipoObra
         fields = ('nombre','descripcion','categorias')
-'''
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioTipoObra, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        #self.helper.form_class = 'form-horizontal'
+        self.helper.add_input(Submit('submit', 'Submit'))
