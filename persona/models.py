@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.contrib.auth.models import AbstractUser
 
 class Rol(models.Model):
 
@@ -24,10 +24,7 @@ class Profesional(Rol):
 class Propietario(Rol):
     pass
 
-class Usuario(Rol):
-    nombre_de_usuario = models.CharField(max_length = 15)
-    contrasenia = models.CharField(max_length = 15)
-
+class Usuario(Rol, AbstractUser):
     def login(self):
         print("Iniciando secion")
 
@@ -44,30 +41,6 @@ class Persona(models.Model):
     propietario = models.OneToOneField(Propietario, blank=True)
     usuario = models.OneToOneField(Usuario, blank=True)
 
-    @property
-    def profesional(self):
-        return self.profesional
-
-    @profesional.setter
-    def profesional(self, profesional):
-        self.profesional = profesional
-
-    @property
-    def propietario(self):
-        return self.propietario
-
-    @propietario.setter
-    def propietario(self, propietario):
-        self.propietario = propietario
-
-    @property
-    def usuario(self):
-        return self.usuario
-
-    @usuario.setter
-    def usuario(self, usuario):
-        self.usuario = usuario
 
     def __str__(self):
         return "{}, {}" .format(self.apellido, self.nombre)
-
