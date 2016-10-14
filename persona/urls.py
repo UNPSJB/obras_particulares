@@ -13,5 +13,6 @@ urlpatterns = [
     url(r'^visador$', views.mostrar_visador),
     url(r'^visar$', views.mostrar_visar),
     url(r'^altapersona$', views.alta_persona),
+    url(r'^director$', views.mostrar_director),
 
 ]

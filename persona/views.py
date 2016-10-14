@@ -28,6 +28,9 @@ def mostrar_visador(request):
 def mostrar_visar(request):
     return render(request, 'visador/visar.html')
 
+def mostrar_director(request):
+    return render(request, 'director/director.html')
+
 def alta_persona(request):
     #Aca tengo que instanciar el formulario y se lo paso por parametro a la plantilla y se muestra "Guala!"
     #form = FormularioPersona()

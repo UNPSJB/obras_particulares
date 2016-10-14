@@ -1,0 +1,256 @@
+/* CSS Document */
+
+/* opciones generales */
+
+.color1 {
+	background: #34495e;
+	color:#fff;
+}
+
+.color2 {
+	background: #0098db;
+	color:#ffffff;
+}
+
+.color3 {
+	background:#5cbde7;
+	color:#fff;
+}
+
+footer {
+	background:#268e37;
+	color:#fff;
+}
+
+section {
+	background:#5cbde7;
+	color:#fff;
+}
+
+/* degradado de color de fondo */
+
+body { 
+	min-height: 100vh; width: 100%; 
+	xoverflow: hidden;
+	/*color: whitesmoke; 
+	font-size: 16px; 
+	font-family: 'Lato';*/
+	
+	
+	background: 
+		radial-gradient(circle at 1.98% 14.97%, #556270, transparent 100%),
+		radial-gradient(circle at 98.02% 52.96%, #FF6B6B, transparent 100%),
+		radial-gradient(circle at 50% 50%, #4a2735, #4a2735 100%);
+		
+	/* otro degradado
+	background: 
+		background:-webkit-linear-gradient(315deg, #8254EA 0%, #E86DEC 100%);
+  		background: linear-gradient(135deg, #8254EA 0%, #E86DEC 100%);
+        -webkit-font-smoothing: antialiased;
+     */   	
+} 
+
+
+/* color del nav igual al del header*/
+
+.navbar{
+        border-color: #2c3e50 !important;
+}
+
+header{
+	background:#2c3e50;
+	color: #ffffff;
+	transition: 0.5s;
+}
+
+
+img.logo { 
+	height: 50px; 
+
+}
+
+/* eso es para modifical el header cuando top */
+
+header.sticky {
+	position: fixed;
+	left: 0; right: 0;
+	height: 60px;
+	padding: 0px 0 10px 0;
+	box-shadow: 0 5px 15px black;
+	text-shadow: 0 0 20px black;
+}
+
+.sticky img.logo { 
+	height: 40px;
+
+}
+
+/* configuracion panel gris*/
+
+.panel-custom {
+    border-color: #444444;
+    border-radius: 0px;
+    background:#444444;
+}
+.panel-custom > .panel-heading-custom { 
+    background: #444444;
+    border-radius: 0px;
+}
+
+
+/* cambio de color de heading*/
+
+.box {
+  	-webkit-transition: background-color 400ms ease-out;
+	-moz-transition: background-color 400ms ease-out;
+	-o-transition: background-color 400ms ease-out;
+	transition: background-color 400ms ease-out;
+}
+
+.box:hover {
+  background-color: #3a3a3a;
+  cursor: pointer;
+}
+
+
+label {
+	color: tomato; 
+}
+
+
+   
+a:link {   
+	text-decoration:none;   
+}   
+
+/* menu lateral */
+
+.left-sidebar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+}
+
+.sidebar {
+	width: 200px;
+	margin-right: 35px;
+	background-color: #444;
+	list-style-type: none;
+	padding-left: 0;
+}
+
+.sidebar li a { 
+	color: white; 
+	box-sizing: border-box; }
+
+.sidebar li a:hover { 
+	color: tomato; }
+
+/* sidebar 1 */
+
+.sidebar-1 li a { 
+	display: block; 
+	padding: 10px 20px;
+	border-left: 5px solid transparent;
+	transition: all 400ms ease;
+}
+
+.sidebar-1 li a:hover,
+.sidebar-1 li a.current {
+	background-color: #3a3a3a;
+	border-left: 5px solid tomato;
+}
+
+.sidebar-1 li a:focus{
+	color: tomato;
+	background-color: #3a3a3a;
+	border-left: 5px solid tomato;
+}
+
+/*Subemu lateral*/
+
+.sidebar-2 li a { 
+	color: white; 
+	background-color: #5E5E65;
+	box-sizing: border-box; }
+
+
+.sidebar-2 li a { 
+	display: block; 
+	padding: 10px 20px;
+	border-left: 5px solid transparent;
+	transition: all 400ms ease;
+}
+
+.sidebar-2 li a:hover,
+.sidebar-2 li a.current {
+	color: tomato;
+	background-color: #3a3a3a;
+	border-left: 3px solid tomato;
+}
+
+.sidebar-2 li a:focus{
+	color: tomato;
+	background-color: #3a3a3a;
+	border-left: 3px solid tomato;
+}
+
+/* validar contraseña */ 
+
+#pswd_info {
+	position:relative;
+	background:#fefefe;
+	font-size:.875em;
+	border-radius:1px;
+	box-shadow:0 1px 3px #ccc;
+	border:1px solid #ddd;
+	float: center;
+}
+
+#pswd_info::before {
+	content: "\25B2";
+	position:absolute;
+	top:-12px;
+	left:45%;
+	color:#ddd;
+	display:block;
+}
+.invalid {
+	background:url(images/cancel.png) no-repeat 0 50%;
+	padding-left:22px;
+	line-height:24px;
+	color:tomato;
+}
+.valid {
+	background:url(images/accept.png) no-repeat 0 50%;
+	padding-left:22px; 
+	line-height:24px;
+	color:#268e37;
+}	
+#pswd_info {
+	display:none;
+}	
+
+#pswd2_info {
+	position:relative;
+	background:#fefefe;
+	font-size:.875em;
+	border-radius:1px;
+	box-shadow:0 1px 3px #ccc;
+	border:1px solid #ddd;
+	float: center;
+}
+
+#pswd2_info::before {
+	content: "\25B2";
+	position:absolute;
+	top:-12px;
+	left:45%;
+	color:#ddd;
+	display:block;
+}
+	
+#pswd2_info {
+	display:none;
+}	
+

@@ -1,0 +1,886 @@
+
+{% extends 'inicio/base.html' %}
+{% load staticfiles %}
+
+
+				{% block login %}
+
+
+					<form action="" class="form-inline">
+						<div class="form-group">
+							<img src="{% static 'images/Silueta usuario blanco.png' %}"  alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
+							<label for="" style="margin-right: 10px;"><small>Nombre de Usuario</small></label>
+						</div>
+
+						<div class="form-group">
+							<button class="color1 btn btn-sm" type="button" >
+								Mis Tramites <span class="badge">4</span>
+							</button>
+						</div>
+						<div class="form-group">
+							<a href="Index.html">
+								<img src="{% static 'images/Boton cancelar.png' %}" alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
+							</a>
+						</div>
+					</form>
+
+				{% endblock %}
+
+
+	<!--comienza la barra lateral del main-->
+
+				{% block barra %}
+					<ul class="sidebar sidebar-1">
+						<font size="2">
+							<li><a href="#" class="current"><font color="tomato">Director</font></a></li>
+							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"  onclick='mostrarSubmenu("tareasGrupo")'>Grupos</a></li>
+							<!--hay quev ver si queremos esto asi-->
+								<ul class="sidebar sidebar-2" style="display:none;" id="tareasGrupo">
+									<li><a href="#" onclick='opcionesGrupo("alta_grupo")'>Crear nuevo grupo</a></li>
+									<li><a href="#" onclick='opcionesGrupo("modificar_grupo")'>Modificar permisos de un grupo</a></li>
+									<li><a href="#" onclick='opcionesGrupo("baja_grupo")'>Eliminar un grupo</a></li>
+								</ul>
+							<!-- sino se elimina esto, el onclick-->
+							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("tareasUsuario")'>Usuarios</a></li>
+							<!--hay quev ver si queremos esto asi-->
+								<ul class="sidebar sidebar-2" style="display:none;" id="tareasUsuario">
+									<li><a href="#" onclick='opcionesUsuario("alta_usuario")'>Crear nuevo usuario</a></li>
+									<li><a href="#" onclick='opcionesUsuario("modificar_usuario_grupo")'>Cambiar usuario de grupo</a></li>
+								</ul>
+							<!-- sino se elimina esto, el onclick-->
+
+							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Datos necesarios para tramites</a></li>
+							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Otorgar final de obra</a></li>
+							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">Modificar mis datos personales</a></li>
+							<li><a href="#" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
+								<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
+									<li><a href="#">Consulta 1</a></li>
+									<li><a href="#">Consulta 2</a></li>
+									<li><a href="#">Consulta 3</a></li>
+								</ul>
+						</font>
+					</ul>
+				{% endblock %}
+	<!--termina la barra lateral del main-->
+
+	<!--comienza el contenido del main-->
+				{% block contenido %}
+					<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+					  <div class="panel panel-custom">
+						<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
+						  <h5 class="panel-title">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							  <font color="#ffffff" size="2">Grupos</font>
+							</a>
+						  </h5>
+						</div>
+						 <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+						  <div class="panel-body">
+
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+										<div class="container-fluid">
+											<form action="" method="">
+												<select class="form-control input-sm" id="opcionesDelGrupo" name="Opciones grupo" onChange="opcionesGrupo(this.value);">
+													<option selected value="nada"> ¿Que desea hacer? </option>
+													<option value="alta_grupo">Crear nuevo grupo</option>
+													<option value="modificar_grupo">Modificar permisos a un grupo</option>
+													<option value="baja_grupo">Eliminar un grupo</option>
+												 </select>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="container-fluid" id="alta_grupo" style="display: none;">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<hr>
+										<div class="container-fluid">
+											<form action="" class="">
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Nombre del grupo:</label>
+															<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar nombre del nuevo grupo" title="Ingresar nombre del nuevo grupo" maxlength="13" autofocus />
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Permisos disponibles:</label>
+															 <select id='permisos' class="form-control" onchange='cargarpermisosSeleccionados(this,"permisosSeleccionados");' title="Seleccionar que permisos desea dar al grupo" size="12">
+																<optgroup label="Elige los permisos">
+																	<option value='0'></option>
+																	<option value="1">Alta</option>
+																	<option value="2">Baja</option>
+																	<option value="3">Modificacion</option>
+																	<option value="4">Alta de</option>
+																	<option value="5">Baja de</option>
+																	<option value="6">Modificacion de</option>
+																</optgroup>
+															</select>
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Permisos seleccionados del grupo:</label>
+															<select id='permisosSeleccionados' class="form-control" size="12" onclick='eliminarSeleccionado(this);' disabled>
+																<!--<option value='0'>Permiso elegidos</option>-->
+																<optgroup label="Permisos elegidos">
+																	<option value="0"></option>
+																</optgroup>
+															</select>
+														</div>
+													</div>
+												</div>
+												<div class="container-fluid">
+													<br>
+													<div class="row">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+															<button class="btn btn-primary btn-sm" type="submit" title="Crear grupo">
+																Crear grupo
+															</button>
+															<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarTodosPermisosSeleccionados()">
+																Limpiar
+															</button>
+														</div>
+													</div>
+												</div>
+											</form>
+											<br>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="container-fluid" id="modificar_grupo" style="display: none;">
+								<hr>
+								<div class="row">
+
+
+									<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+										<div class="container-fluid">
+											<form action="" method="">
+												<select class="form-control input-sm" id="" name="" onChange="" title="Selecciona nombre del grupo que vas a modificar" >
+													<option selected value=""> ¿Que grupo desea modificar? </option>
+													<option value="">Grupo 1</option>
+													<option value="">Grupo 2</option>
+													<option value="">Grupo 3</option>
+												 </select>
+											</form>
+										</div>
+									</div>
+
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<hr>
+										<div class="container-fluid">
+											<form action="" class="">
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Nombre del grupo:</label>
+															<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar nuevo nombre del grupo" title="Ingresar nuevo nombre del grupo" maxlength="13" autofocus />
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Permisos disponibles:</label>
+															 <select id='permisosDisponibles' class="form-control" onchange='cargarpermisosSeleccionados(this,"permisosActuales");' title="Seleccionar que permisos desea dar al grupo" size="12">
+																<optgroup label="Elige los permisos">
+																	<option value='0'></option>
+																	<option value="1">Alta</option>
+																	<option value="2">Baja</option>
+																	<option value="3">Modificacion</option>
+																	<option value="4">Alta de</option>
+																	<option value="5">Baja de</option>
+																	<option value="6">Modificacion de</option>
+																</optgroup>
+															</select>
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Permisos seleccionados del grupo:</label>
+															<select id='permisosActuales' class="form-control" size="12" onclick='eliminarSeleccionado(this);'>
+																<optgroup label="Permisos del Grupo">
+																	<option value="0"></option>
+																	<option value="1">Aca aparecen los permiso que tiene el grupo</option>
+																</optgroup>
+															</select>
+														</div>
+													</div>
+												</div>
+												<div class="container-fluid">
+													<br>
+													<div class="row">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+															<button class="btn btn-primary btn-sm" type="submit" title="Modificar permisos del grupo">
+																Modificar grupo
+															</button>
+															<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarTodosLosPermisos()">
+																Limpiar
+															</button>
+														</div>
+													</div>
+												</div>
+											</form>
+											<br>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="container-fluid" id="baja_grupo" style="display: none;">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<hr>
+										<div class="container-fluid">
+											<form action="" class="" >
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+															<div class="form-group">
+																<label for="">Nombre del grupo:</label>
+																<select class="form-control input-sm" id="" name="" onChange="" title="Selecciona nombre del grupo que vas a eliminar" >
+																	<option selected value=""> ¿Que grupo desea eliminar? </option>
+																	<option value="">Grupo 1</option>
+																	<option value="">Grupo 2</option>
+																	<option value="">Grupo 3</option>
+																 </select>
+															</div>
+													</div>
+												</div>
+												<div class="container-fluid">
+													<br>
+													<div class="row">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+															<button class="btn btn-primary btn-sm" type="submit" title="Dar baja del grupo">
+																Eliminar grupo
+															</button>
+															<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+																Limpiar
+															</button>
+														</div>
+													</div>
+												</div>
+											</form>
+											<br>
+										</div>
+									</div>
+								</div>
+							</div>
+						  </div>
+						</div>
+					  </div>
+
+					  <div class="panel panel-custom">
+						<div class="panel-heading panel-heading-custom box" role="tab" id="headingFive">
+						  <h5 class="panel-title">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+							  <font color="#ffffff" size="2">Usuarios</font>
+							</a>
+						  </h5>
+						</div>
+						<div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+						  <div class="panel-body">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+										<div class="container-fluid">
+											<form action="" method="">
+												<select class="form-control input-sm" id="opcionesDelUsuario" name="Opciones de usuario" onChange="opcionesUsuario(this.value);">
+													<option selected value="nada"> ¿Que desea hacer? </option>
+													<option value="alta_usuario">Crear nuevo usuario</option>
+													<option value="modificar_usuario_grupo">Cambiar usuario de grupo</option>
+												 </select>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="container-fluid" id="alta_usuario" style="display: none;">
+								<div class="row">
+									<form action="" class="">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<hr>
+											<div class="container-fluid">
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Nombre del usuario:</label>
+															<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nombre de Usuario"  title="Ingresar Nombre de Usario" minlength="6" maxlength="20"  autofocus required />
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Contraseña:</label>
+															<input class="form-control input-sm" id="pswd" name="pswd" type="password" placeholder="Ingresar Contraseña del Usuario"  title="Ingresar contraseña del Usuario" minlength="6" maxlength="20" onkeyup='activarVerificar(this,"pswd2");' required />
+														</div>
+														<div id="pswd_info">
+															<br>
+															<center><font size="2">La contraseña debe cumplir con lo siguiente</font></center>
+															<ul style="	margin:0;padding: 10px 10px 10px 10px;list-style-type:none;text-align: left;position: relative;">
+																<li id="letter" class="invalid">Debe tener al menos <strong>una letra</strong></li>
+																<li id="capital" class="invalid">Debe tener al menos <strong>una letra mayuscula</strong></li>
+																<li id="number" class="invalid">Debe tener al menos <strong>un numero</strong></li>
+																<li id="length" class="invalid">Debe tener como minimo de <strong>6 caracteres</strong></li>
+															</ul>
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Verificar Contraseña:</label>
+															<input class="form-control input-sm" id="pswd2" name="pswd2" type="password" placeholder="Ingresar Contraseña del Usuario"  title="Vuelva a escribir la contraseña del Usuario" minlength="6" maxlength="20" required />
+														</div>
+														<div id="pswd2_info">
+															<br>
+															<center><font size="2">La verificación debe cumplir con lo siguiente</font></center>
+															<ul style="	margin:0;padding: 10px 10px 10px 10px;list-style-type:none;text-align: left;position: relative;">
+																<li id="equals" class="invalid">La verificación debe ser <strong>igual a la contraseña</strong></li>
+															</ul>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+
+
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<hr>
+											<div class="container-fluid">
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Nombre:</label>
+															<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nombre"  title="Ingresar Nombre" maxlength="20" required />
+														</div>
+														<div class="form-group">
+															<label for="">Apellido:</label>
+															<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Apellido" title="Ingresar Apellido" maxlength="15" required />
+														</div>
+														<div class="form-group">
+															<label for="">Domicilio:</label>
+															<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Domicilio" title="Ingresar domicilio" maxlength="15" required />
+														</div>
+														<div class="form-group">
+															<label for="">Nro de documento:</label>
+															<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nro Documento" title="Ingresar Nro Documento" maxlength="9" required />
+														</div>
+														<div class="form-group">
+															<label for="">Nro de CUIT:</label>
+															<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nro de CUIT" title="Ingresar Nro de CUIT" maxlength="14" required />
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Grupos disponibles:</label>
+															 <select id='grupos' class="form-control" onchange='cargarpermisosSeleccionados(this,"gruposSeleccionados");' title="Seleccionar a que grupo pertenece el usuario" size="12">
+																<optgroup label="Selecciona un grupo">
+																	<option value='0'></option>
+																	<option value="1">Grupo 1</option>
+																	<option value="2">Grupo 2</option>
+																	<option value="3">Grupo 3</option>
+																</optgroup>
+															</select>
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Grupo seleccionado para el usuario:</label>
+															<select id='gruposSeleccionados' class="form-control" size="12" onclick='eliminarSeleccionado(this);' disabled>
+																<optgroup label="Grupo elegido">
+																	<option value="0"></option>
+																</optgroup>
+															</select>
+														</div>
+													</div>
+												</div>
+
+												<div class="container-fluid">
+													<br>
+													<div class="row">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+															<button class="btn btn-primary btn-sm" type="submit" title="Crear usuario">
+																Crear usuario
+															</button>
+															<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarGruposSeleccionados();limpiaSpan()">
+																Limpiar
+															</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+
+							<div class="container-fluid" id="modificar_usuario_grupo" style="display: none;">
+								<hr>
+								<div class="row">
+
+									<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+										<div class="container-fluid">
+											<form action="" method="">
+												<select class="form-control input-sm" id="" name="" onChange="" title="Selecciona nombre del grupo que vas a modificar" >
+													<option selected value=""> ¿Que usuario desea cambiar? </option>
+													<option value="">Usuario 1</option>
+													<option value="">Usuario 2</option>
+													<option value="">Usuario 3</option>
+												 </select>
+											</form>
+										</div>
+									</div>
+
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<hr>
+										<div class="container-fluid">
+											<form action="" class="">
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Nombre del usuario:</label>
+															<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar nuevo nombre del grupo" title="Ingresar nuevo nombre del usuario" maxlength="13" autofocus />
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Grupos disponibles:</label>
+															 <select id='gruposDisponibles' class="form-control" onchange='cargarpermisosSeleccionados(this,"gruposActuales");' title="Seleccionar a que grupo desea asignarlo" size="12">
+																<optgroup label="Seleccciona un grupo">
+																	<option value='0'></option>
+																	<option value="1">Grupo 1</option>
+																	<option value="2">Grupo 2</option>
+																	<option value="3">Grupo 3</option>
+																</optgroup>
+															</select>
+														</div>
+													</div>
+
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Grupo seleccionado para el usuario:</label>
+															<select id='gruposActuales' class="form-control" size="12" onclick='eliminarSeleccionado(this);'>
+																<optgroup label="Grupo elegido">
+																	<option value="0"></option>
+																	<option value="1">Aca aparecen los grupos que tiene el usuario</option>
+																</optgroup>
+															</select>
+														</div>
+													</div>
+												</div>
+												<div class="container-fluid">
+													<br>
+													<div class="row">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+															<button class="btn btn-primary btn-sm" type="submit" title="Modificar permisos del grupo">
+																Modificar grupo
+															</button>
+															<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarTodosLosGrupos()">
+																Limpiar
+															</button>
+														</div>
+													</div>
+												</div>
+											</form>
+											<br>
+										</div>
+									</div>
+								</div>
+							</div>
+						  </div>
+						</div>
+					  </div>
+
+					  <div class="panel panel-custom">
+						<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
+						  <h5 class="panel-title">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+							  <font color="#ffffff" size="2">Datos necesarios para un trámite</font>
+							</a>
+						  </h5>
+						</div>
+						<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+						  <div class="panel-body">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+									</div>
+								</div>
+							</div>
+						  </div>
+						</div>
+					  </div>
+
+					  <div class="panel panel-custom">
+						<div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
+						  <h5 class="panel-title">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+							  <font color="#ffffff" size="2">Otorgar final de obra</font>
+							</a>
+						  </h5>
+						</div>
+						<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+						  <div class="panel-body">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<div class="container-fluid">
+											<br>
+											<form action="" class="" >
+												<div class="row">
+													<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Nro de trámite:</label>
+															<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro. de trámite" title="Ingresar Nro. de trámite" required />
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+														<div class="form-group">
+															<label for="">Constancia de CACH:</label>
+															<input class="file" id="final"  type="file" data-preview-file-type="any" title="Cargar constancia de CACH" required />
+														</div>
+													</div>
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+													</div>
+												</div>
+												<div class="container-fluid">
+													<div class="row">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+															<button class="btn btn-primary btn-sm" type="submit" title="Envia solicitud de final de obra">
+																Solicitar final de obra
+															</button>
+															<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+																Limpiar
+															</button>
+														</div>
+													</div>
+												</div>
+											</form>
+											<br>
+										</div>
+									</div>
+								</div>
+							</div>
+						  </div>
+						</div>
+					  </div>
+
+					  <div class="panel panel-custom">
+						<div class="panel-heading panel-heading-custom box" role="tab" id="headingSix">
+						  <h5 class="panel-title">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+							  <font color="#ffffff" size="2">Modificar mis datos personales</font>
+							</a>
+						  </h5>
+						</div>
+						<div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+						  <div class="panel-body">
+							<div class="container-fluid">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<div class="container-fluid">
+										<br>
+											<form action="" class="" >
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+															<div class="form-group">
+																<label for="telefono">Nro. de teléfono:</label>
+																<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono" maxlength="13" autofocus />
+															</div>
+													</div>
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+															<div class="form-group">
+																<label for="">E-Mail:</label>
+																<input class="form-control input-sm" id="" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail" maxlength="20" />
+															</div>
+													</div>
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<label for="">Cambiar Foto de perfil:</label>
+														<br>
+														<input class="file" id="perfil" type="file" data-preview-file-type="any" title="Cargar nueva foto de perfil">
+													</div>
+												</div>
+												<div class="container-fluid">
+													<br>
+													<div class="row">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+															<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
+																Modificar mis datos
+															</button>
+															<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+																Limpiar
+															</button>
+														</div>
+													</div>
+												</div>
+											</form>
+											<br>
+										</div>
+									</div>
+								</div>
+							</div>
+						  </div>
+						</div>
+					  </div>
+					</div>
+
+				{% endblock %}
+	<!--termina el contenido del main-->				
+
+
+	{% block scripts %}
+
+		<!-- Esto no se debe borrar-->
+		<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+		<script>
+			$("#perfil").fileinput({
+				showCaption: false,
+				browseClass: "btn btn-primary btn-sm",
+				fileType: "any",
+				maxFileCount: 1,
+				browseLabel: 'Cargar nueva foto de perfil',
+				showUpload: false,
+				showRemove: false
+			});
+		</script>
+
+		<script>
+			$("#final").fileinput({
+				showCaption: false,
+				browseClass: "btn btn-primary btn-sm",
+				fileType: "any",
+				maxFileCount: 1,
+				browseLabel: 'Cargar constancia de CACH',
+				showUpload: false,
+				showRemove: false
+			});
+		</script>
+
+		<script type="text/javascript">
+			function opcionesGrupo(id) {
+				if (id == "nada") {
+					$("#alta_grupo").hide();
+					$("#baja_grupo").hide();
+					$("#modificar_grupo").hide();
+				}
+
+				if (id == "alta_grupo") {
+					$("#alta_grupo").show();
+					$("#baja_grupo").hide();
+					$("#modificar_grupo").hide();
+					//esto es por si dejo los submenu
+					$("#" + "opcionesDelGrupo").val('alta_grupo');
+				}
+
+				if (id == "baja_grupo") {
+					$("#alta_grupo").hide();
+					$("#modificar_grupo").hide();
+					$("#baja_grupo").show();
+					//esto es por si dejo los submenu
+					$("#" + "opcionesDelGrupo").val('baja_grupo');
+				}
+
+				if (id == "modificar_grupo") {
+					$("#alta_grupo").hide();
+					$("#modificar_grupo").show();
+					$("#baja_grupo").hide();
+					//esto es por si dejo los submenu
+					$("#" + "opcionesDelGrupo").val('modificar_grupo');
+				}
+			}
+
+			function opcionesUsuario(id) {
+					if (id == "nada") {
+						$("#alta_usuario").hide();
+						$("#modificar_usuario_grupo").hide();
+					}
+
+					if (id == "alta_usuario") {
+						$("#alta_usuario").show();
+						$("#modificar_usuario_grupo").hide();
+						$("#pswd2").attr('disabled', 'disabled');
+						//esto es por si dejo los submenu
+						$("#" + "opcionesDelUsuario").val('alta_usuario');
+					}
+
+					if (id == "modificar_usuario_grupo") {
+						$("#alta_usuario").hide();
+						$("#modificar_usuario_grupo").show();
+						//esto es por si dejo los submenu
+						$("#" + "opcionesDelUsuario").val('modificar_usuario_grupo');
+					}
+			}
+		</script>
+
+		<script type="text/javascript">
+			function cargarpermisosSeleccionados(objeto,selectUsado)
+			{
+				var indexSelect=document.getElementById(objeto.id).selectedIndex;
+				var idUsado=document.getElementById(selectUsado);
+				if(objeto.value==0)
+				{
+					idUsado.disabled=true;
+				}else if(idUsado.options.length==1){
+					idUsado.options[idUsado.options.length]=new Option(($("#"+objeto.id+" option:selected").text()),indexSelect);
+					idUsado.disabled=false;
+				}
+				else if(idUsado.options.length>1){
+					for(i=1;i<idUsado.options.length;i++){
+						var evaluar= ($("#"+selectUsado+" option")[i]);
+						var paraevaluar= evaluar.text;
+						if(($("#"+objeto.id+" option:selected").text())==paraevaluar){
+							i=idUsado.options.length;
+						}else if((($("#"+objeto.id+" option:selected").text())!=paraevaluar) && (idUsado.options.length==i+1)){
+							idUsado.options[idUsado.options.length]=new Option(($("#"+objeto.id+" option:selected").text()),indexSelect);
+							idUsado.disabled=false;
+						}
+					}
+				}
+			}
+
+			function eliminarSeleccionado(objeto)
+			{
+				if(objeto.value>0){
+					$('#'+objeto.id).find("option[value="+objeto.value+"]").remove();
+				}
+				if(objeto.options.length==1){
+					document.getElementById(objeto.id).disabled=true;
+				}
+			}
+
+			function eliminarTodosPermisosSeleccionados()
+			{
+				document.getElementById("permisosSeleccionados").options.length=1;
+				document.getElementById("permisosSeleccionados").disabled=true;
+			}
+
+			function eliminarTodosLosPermisos()
+			{
+				document.getElementById("permisosActuales").options.length=1;
+				document.getElementById("permisosActuales").disabled=true;
+			}
+
+			function eliminarGruposSeleccionados()
+			{
+				document.getElementById("gruposSeleccionados").options.length=1;
+				document.getElementById("gruposSeleccionados").disabled=true;
+			}
+
+			function eliminarTodosLosGrupos()
+			{
+				document.getElementById("gruposActuales").options.length=1;
+				document.getElementById("gruposActuales").disabled=true;
+			}
+
+		</script>
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+
+			$('input[name=pswd]').keyup(function() {
+				// set password variable
+				var pswd = $(this).val();
+				//validate the length
+			if ( pswd.length < 6 ) {
+				$('#length').removeClass('valid').addClass('invalid');
+			} else {
+				$('#length').removeClass('invalid').addClass('valid');
+			}
+			//validate letter
+			if ( pswd.match(/[A-z]/) ) {
+				$('#letter').removeClass('invalid').addClass('valid');
+			} else {
+				$('#letter').removeClass('valid').addClass('invalid');
+			}
+
+			//validate capital letter
+			if ( pswd.match(/[A-Z]/) ) {
+				$('#capital').removeClass('invalid').addClass('valid');
+			} else {
+				$('#capital').removeClass('valid').addClass('invalid');
+			}
+
+			//validate number
+			if ( pswd.match(/\d/) ) {
+				$('#number').removeClass('invalid').addClass('valid');
+			} else {
+				$('#number').removeClass('valid').addClass('invalid');
+			}
+
+			}).focus(function() {
+				$('#pswd_info').show();
+			}).blur(function() {
+				$('#pswd_info').hide();
+			});
+
+			});
+		</script>
+
+		<!--habilita el verificar contraseña-->
+		<script type="text/javascript">
+			function activarVerificar(input, inputParaActivar){
+
+				var valInput=input.value;
+				var idVerificar=document.getElementById(inputParaActivar).id;
+
+				if(valInput.length > 5 && valInput.match(/[A-z]/) && valInput.match(/[A-Z]/) && valInput.match(/\d/)){
+					$("#"+ idVerificar).removeAttr("disabled");
+				}else{
+					$("#pswd2").attr('disabled', 'disabled');
+				}
+			}
+
+		</script>
+
+		<script type="text/javascript">
+			$(document).ready(function() {
+
+			$('input[name=pswd2]').keyup(function() {
+				// set password variable
+				var pswd2 = $(this).val();
+				var pass = $('[name=pswd]');
+				var valorPass = pass.val();
+			//validate text
+			if (pswd2==valorPass) {
+				$('#equals').removeClass('invalid').addClass('valid');
+			} else {
+				$('#equals').removeClass('valid').addClass('invalid');
+			}
+
+			}).focus(function() {
+				$('#pswd2_info').show();
+			}).blur(function() {
+				$('#pswd2_info').hide();
+			});
+
+			});
+		</script>
+
+		<!-- si existe boton  consulta e informes, esto lo despliega-->
+
+		<script type="text/javascript">
+			function mostrarSubmenu(subformulario)
+			{
+				var idSubformulario=document.getElementById(subformulario).id;
+				if($('#' + idSubformulario).is(':hidden')){
+					$('#' + idSubformulario).show();
+				}else{
+					$('#' + idSubformulario).hide();
+				}
+			}
+		</script>
+
+	{% endblock %}
