@@ -21,7 +21,7 @@ class FormularioDocumento(forms.ModelForm):
 
     class Meta:
         model = Documento
-        fields = ('identificador','tipoDocumento')
+        fields = ('identificador','tipo_documento')
 
     def __init__(self, *args, **kwargs):
         super(FormularioDocumento, self).__init__(*args, **kwargs)
