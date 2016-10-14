@@ -28,10 +28,10 @@ class TipoDocumento(models.Model):
 
 class Documento(models.Model):
     identificador = models.IntegerField(unique=True)
-    tipoDocumento = models.ForeignKey(TipoDocumento)
+    tipo_documento = models.ForeignKey(TipoDocumento)
 
     def __str__(self):
-        return self.tipoDocumento.nombre
+        return self.tipo_documento.nombre
 
 
 class TipoObra(models.Model):
