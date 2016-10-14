@@ -1,5 +1,8 @@
 from django import forms
 
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
+
 from .models import *
 
 class FormularioPersona(forms.ModelForm):
@@ -7,6 +10,12 @@ class FormularioPersona(forms.ModelForm):
     class Meta:
         model = Persona
         fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil')
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioPersona, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        #self.helper.form_class = 'form-horizontal'
+        self.helper.add_input(Submit('submit', 'Guardar'))
 
 
 class FormularioProfesional(forms.ModelForm):

@@ -1,21 +1,18 @@
 <!DOCTYPE html>
+{% load staticfiles %}
+{% load crispy_forms_tags%}
 <html>
 
 <head>
     <title>Alta Persona</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 </head>
 
 <body>
 
-    <p>Aca doy de alta una persona.</p>
-    <p>Se tiene que mostrar el formulario para completar los datos de la persona y darla de alta.</p>
-
-    <form METHOD="POST">{% csrf_token %}
-
-            {{ form.as_p }}
-
-        <button type="submit" class="save btn btn-default">Guardar</button>
-    </form>
+    <div class="container">
+        {% crispy form %}
+    </div>
 
 </body>
 
