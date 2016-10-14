@@ -27,7 +27,7 @@ class TipoDocumento(models.Model):
 
 
 class Documento(models.Model):
-    identificador = models.IntegerField()
+    identificador = models.IntegerField(unique=True)
     tipoDocumento = models.ForeignKey(TipoDocumento)
 
     def __str__(self):

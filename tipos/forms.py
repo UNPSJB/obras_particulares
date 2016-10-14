@@ -23,6 +23,12 @@ class FormularioDocumento(forms.ModelForm):
         model = Documento
         fields = ('identificador','tipoDocumento')
 
+    def __init__(self, *args, **kwargs):
+        super(FormularioDocumento, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        #self.helper.form_class = 'form-horizontal'
+        self.helper.add_input(Submit('submit', 'Submit'))
+
 
 class FormularioTipoObra(forms.ModelForm):
 

@@ -3,7 +3,8 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^alta_tipoDocumento/new/$', views.alta_tipoDocumento),
-    url(r'^tipoDocumento$', views.mostrar_tipoDocumento,name='mostrar_tipoDocumento'),
-    url(r'^alta_tipoObra/new/$', views.alta_tipoObra,name='alta_tipoObra'),
+    url(r'^tipoDocumento/new/$', views.alta_tipoDocumento),
+    url(r'^tipoDocumento$', views.mostrar_tipoDocumento, name='mostrar_tipoDocumento'),
+    url(r'^tipoObra/new/$', views.alta_tipoObra, name='alta_tipoObra'),
+    url(r'^documento/new/$', views.alta_documento, name='alta_docuemto'),
 ]
