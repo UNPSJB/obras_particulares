@@ -77,17 +77,17 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.AddField(
-            model_name='persona',
+            model_name='alta',
             name='profesional',
-            field=models.OneToOneField(blank=True, on_delete=django.db.models.deletion.CASCADE, to='persona.Profesional'),
+            field=models.OneToOneField(blank=True, on_delete=django.db.models.deletion.CASCADE, to='alta.Profesional'),
         ),
         migrations.AddField(
-            model_name='persona',
+            model_name='alta',
             name='propietario',
-            field=models.OneToOneField(blank=True, on_delete=django.db.models.deletion.CASCADE, to='persona.Propietario'),
+            field=models.OneToOneField(blank=True, on_delete=django.db.models.deletion.CASCADE, to='alta.Propietario'),
         ),
         migrations.AddField(
-            model_name='persona',
+            model_name='alta',
             name='usuario',
             field=models.OneToOneField(blank=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),

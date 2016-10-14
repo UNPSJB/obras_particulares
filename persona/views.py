@@ -3,38 +3,38 @@ from django.shortcuts import render
 from .forms import *
 
 def mostrar_inicio(request):
-    return render(request, 'inicio/base.html', {})
+    return render(request, 'persona/inicio/base.html', {})
 
 def mostrar_index(request):
-    return render(request, 'inicio/index.html')
+    return render(request, 'persona/inicio/index.html')
 
 def mostrar_inspector(request):
-    return render(request, 'inspector/inspector.html', {})
+    return render(request, 'persona/inspector/inspector.html', {})
 
 def mostrar_profesional(request):
     form = FormularioProfesional()
-    return render(request, 'profesional/profesional.html',{'form':form})
+    return render(request, 'persona/profesional/profesional.html',{'form':form})
 
 def mostrar_jefe_inspector(request):
-    return render(request, 'jefe_inspector/jefe_inspector.html')
+    return render(request, 'persona/jefe_inspector/jefe_inspector.html')
 
 def mostrar_propietario(request):
     form = FormularioPropietario()
-    return render(request, 'propietario/propietario.html',{'form':form})
+    return render(request, 'persona/propietario/propietario.html',{'form':form})
 
 def mostrar_visador(request):
-    return render(request, 'visador/visador.html')
+    return render(request, 'persona/visador/visador.html')
 
 def mostrar_visar(request):
-    return render(request, 'visador/visar.html')
+    return render(request, 'persona/visador/visar.html')
 
 def mostrar_director(request):
-    return render(request, 'director/director.html')
+    return render(request, 'persona/director/director.html')
 
 def alta_persona(request):
     #Aca tengo que instanciar el formulario y se lo paso por parametro a la plantilla y se muestra "Guala!"
     #form = FormularioPersona()
-    #return render(request, 'persona/alta_persona.html', {'form': form})
+    #return render(request, 'alta/alta.html', {'form': form})
 
     if request.method == "POST":
         form = FormularioPersona(request.POST)
@@ -44,4 +44,4 @@ def alta_persona(request):
     else:
         form = FormularioPersona()
 
-    return render(request, 'persona/alta_persona.html', {'form': form})
+    return render(request, 'persona/alta/alta_persona.html', {'form': form})

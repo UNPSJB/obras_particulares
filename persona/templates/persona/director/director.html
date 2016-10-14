@@ -1,5 +1,5 @@
 
-{% extends 'inicio/base.html' %}
+{% extends 'persona/inicio/base.html' %}
 {% load staticfiles %}
 
 
@@ -8,7 +8,7 @@
 
 					<form action="" class="form-inline">
 						<div class="form-group">
-							<img src="{% static 'images/Silueta usuario blanco.png' %}"  alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
+							<img src="{% static 'images/silueta_usuario_blanco.png' %}"  alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
 							<label for="" style="margin-right: 10px;"><small>Nombre de Usuario</small></label>
 						</div>
 
@@ -19,7 +19,7 @@
 						</div>
 						<div class="form-group">
 							<a href="Index.html">
-								<img src="{% static 'images/Boton cancelar.png' %}" alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
+								<img src="{% static 'images/boton_cancelar.png' %}" alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
 							</a>
 						</div>
 					</form>
@@ -515,7 +515,11 @@
 							<div class="container-fluid">
 								<div class="row">
 									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										{% block alta_tipo_documento %}
 
+											{% include "tipos/tipo_documento/tipoDocumento.html" %}
+
+										{% endblock %}
 									</div>
 								</div>
 							</div>
