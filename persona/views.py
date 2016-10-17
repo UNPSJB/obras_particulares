@@ -1,6 +1,7 @@
 from django.shortcuts import render
 
 from .forms import *
+from tipos.forms import *
 
 def mostrar_inicio(request):
     return render(request, 'persona/inicio/base.html', {})
@@ -29,7 +30,10 @@ def mostrar_visar(request):
     return render(request, 'persona/visador/visar.html')
 
 def mostrar_director(request):
-    return render(request, 'persona/director/director.html')
+    alta_tipo_documento_form = FormularioTipoDocumento()
+    alta_persona_form = FormularioPersona()
+    return render(request, 'persona/director/director.html', {'alta_persona_form':alta_persona_form, 'alta_tipo_documento_form':alta_tipo_documento_form})
+
 
 def alta_persona(request):
     #Aca tengo que instanciar el formulario y se lo paso por parametro a la plantilla y se muestra "Guala!"
