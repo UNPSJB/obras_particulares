@@ -10,12 +10,12 @@ class FormularioTipoDocumento(forms.ModelForm):
         model = TipoDocumento
         fields = ('nombre', 'descripcion', 'activo', 'fecha_alta')
 
-    #Esto es pora el crispy
+    #Esto es para el crispy
     def __init__(self, *args, **kwargs):
         super(FormularioTipoDocumento, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         #self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('guardar_tipo_documento', 'Guardar'))
 
 class FormularioDocumento(forms.ModelForm):
 
@@ -27,7 +27,7 @@ class FormularioDocumento(forms.ModelForm):
         super(FormularioDocumento, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         #self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('submit', 'Guardar'))
 
 
 class FormularioTipoObra(forms.ModelForm):
@@ -40,4 +40,4 @@ class FormularioTipoObra(forms.ModelForm):
         super(FormularioTipoObra, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         #self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit('submit', 'Submit'))
+        self.helper.add_input(Submit('submit', 'Guardar'))

@@ -310,18 +310,17 @@
 										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 											<hr>
 											<div class="container-fluid">
+
+
+													{% block alta_persona %}
+
+														{% include "persona/alta/alta_persona.html" with form=alta_persona_form %}
+
+													{% endblock %}
+
+
 												<div class="row">
-													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-														<div class="form-group">
-															<label for="">Nombre del usuario:</label>
-															<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nombre de Usuario"  title="Ingresar Nombre de Usario" minlength="6" maxlength="20"  autofocus required />
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-														<div class="form-group">
-															<label for="">Contraseña:</label>
-															<input class="form-control input-sm" id="pswd" name="pswd" type="password" placeholder="Ingresar Contraseña del Usuario"  title="Ingresar contraseña del Usuario" minlength="6" maxlength="20" onkeyup='activarVerificar(this,"pswd2");' required />
-														</div>
+
 														<div id="pswd_info">
 															<br>
 															<center><font size="2">La contraseña debe cumplir con lo siguiente</font></center>
@@ -334,10 +333,10 @@
 														</div>
 													</div>
 													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-														<div class="form-group">
+														<!--<div class="form-group">
 															<label for="">Verificar Contraseña:</label>
 															<input class="form-control input-sm" id="pswd2" name="pswd2" type="password" placeholder="Ingresar Contraseña del Usuario"  title="Vuelva a escribir la contraseña del Usuario" minlength="6" maxlength="20" required />
-														</div>
+														</div>-->
 														<div id="pswd2_info">
 															<br>
 															<center><font size="2">La verificación debe cumplir con lo siguiente</font></center>
@@ -348,7 +347,8 @@
 													</div>
 												</div>
 											</div>
-										</div>
+										</form>
+									</div>
 
 
 
@@ -356,19 +356,22 @@
 											<hr>
 											<div class="container-fluid">
 												<div class="row">
+
 													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 
-														{% block alta_persona %}
+														{% block alta_usuario %}
 
-															{% include "persona/alta/alta_persona.html" with form=alta_persona_form %}
+															{% include "persona/alta/alta_usuario.html" with form=alta_usuario_form %}
 
 														{% endblock %}
 
 
 
+
+
 													</div>
 
-													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+													<!--<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 														<div class="form-group">
 															<label for="">Grupos disponibles:</label>
 															 <select id='grupos' class="form-control" onchange='cargarpermisosSeleccionados(this,"gruposSeleccionados");' title="Seleccionar a que grupo pertenece el usuario" size="12">
@@ -392,9 +395,9 @@
 															</select>
 														</div>
 													</div>
-												</div>
+												</div>-->
 
-												<div class="container-fluid">
+												<!--<div class="container-fluid">
 													<br>
 													<div class="row">
 														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
@@ -406,7 +409,7 @@
 															</button>
 														</div>
 													</div>
-												</div>
+												</div>-->
 											</div>
 										</div>
 									</form>
@@ -510,8 +513,6 @@
 											{% include "tipos/tipo_documento/tipoDocumento.html" with form=alta_tipo_documento_form %}
 
 										{% endblock %}
-
-
 
 									</div>
 								</div>

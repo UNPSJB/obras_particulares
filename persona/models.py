@@ -24,7 +24,10 @@ class Profesional(Rol):
 class Propietario(Rol):
     pass
 
-class Usuario(Rol, AbstractUser):
+class Usuario(Rol):
+    nombre_de_usuario = models.CharField(max_length = 15)
+    contrasenia = models.CharField(max_length = 15)
+
     def login(self):
         print("Iniciando secion")
 

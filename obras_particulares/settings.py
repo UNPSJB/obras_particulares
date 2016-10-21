@@ -122,4 +122,3 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
-AUTH_USER_MODEL = 'persona.Usuario'

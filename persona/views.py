@@ -32,7 +32,31 @@ def mostrar_visar(request):
 def mostrar_director(request):
     alta_tipo_documento_form = FormularioTipoDocumento()
     alta_persona_form = FormularioPersona()
-    return render(request, 'persona/director/director.html', {'alta_persona_form':alta_persona_form, 'alta_tipo_documento_form':alta_tipo_documento_form})
+    alta_usuario_form = FormularioUsuario()
+
+    if 'guardar_tipo_documento' in request.POST:
+
+        if request.method == "POST":
+            alta_tipo_documento_form = FormularioTipoDocumento(request.POST)
+            if alta_tipo_documento_form.is_valid():
+                tipo_documento = alta_tipo_documento_form.save()
+                tipo_documento.save()
+        else:
+            alta_tipo_documento_form = FormularioTipoDocumento()
+
+    if 'guardar_persona' in request.POST:
+
+        if request.method == "POST":
+            alta_persona_form = FormularioPersona(request.POST)
+            if alta_persona_form.is_valid():
+                persona = alta_persona_form.save()
+                persona.save()
+        else:
+            alta_persona_form = FormularioPersona()
+
+
+    return render(request, 'persona/director/director.html', {'alta_persona_form':alta_persona_form, 'alta_tipo_documento_form':alta_tipo_documento_form,
+                    'alta_usuario_form':alta_usuario_form})
 
 
 def alta_persona(request):
