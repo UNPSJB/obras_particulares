@@ -1,0 +1,12 @@
+{% extends 'persona/inicio/base.html' %}
+{% load staticfiles %}
+
+{% block contenido %}
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+
+    </form>
+{% endblock %}

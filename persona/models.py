@@ -24,10 +24,7 @@ class Profesional(Rol):
 class Propietario(Rol):
     pass
 
-class Usuario(Rol):
-    nombre_de_usuario = models.CharField(max_length = 15)
-    contrasenia = models.CharField(max_length = 15)
-
+class Usuario(Rol, AbstractUser):
     def login(self):
         print("Iniciando secion")
 
@@ -40,9 +37,9 @@ class Persona(models.Model):
     cuil = models.CharField(max_length = 14)    #el ultimo numero va a ser 00..09
     domicilio = models.CharField(max_length = 50)
     telefono = models.CharField(max_length = 15)
-    profesional = models.OneToOneField(Profesional, null=True, blank=True)
-    propietario = models.OneToOneField(Propietario, null=True, blank=True)
-    usuario = models.OneToOneField(Usuario, null=True, blank=True)
+    profesional = models.OneToOneField(Profesional, blank=True, null=True)
+    propietario = models.OneToOneField(Propietario, blank=True, null=True)
+    usuario = models.OneToOneField(Usuario, blank=True, null=True)
 
 
     def __str__(self):

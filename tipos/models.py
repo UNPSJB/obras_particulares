@@ -37,7 +37,7 @@ class Documento(models.Model):
 class TipoObra(models.Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=100)
-    categorias = models.CommaSeparatedIntegerField(max_length=100)
+    categorias = models.CharField(max_length=100, blank= True, null = True)
 
     def __str__(self):
         return "%s - %s - Categoria: %s" %(self.nombre, self.descripcion, self.categorias)

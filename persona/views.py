@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+
 
 from .forms import *
 from tipos.forms import *
@@ -60,9 +61,6 @@ def mostrar_director(request):
 
 
 def alta_persona(request):
-    #Aca tengo que instanciar el formulario y se lo paso por parametro a la plantilla y se muestra "Guala!"
-    #form = FormularioPersona()
-    #return render(request, 'alta/alta.html', {'form': form})
 
     if request.method == "POST":
         form = FormularioPersona(request.POST)
@@ -71,5 +69,35 @@ def alta_persona(request):
             persona.save()
     else:
         form = FormularioPersona()
-
     return render(request, 'persona/alta/alta_persona.html', {'form': form})
+
+def mostrar_administrativo(request):
+    return render(request, 'persona/administrativo/Administrativo.html',{'FormularioProfesional':FormularioProfesional})
+#return render(request, 'persona/director/director.html', {'alta_persona_form':alta_persona_form, 'alta_tipo_documento_form':alta_tipo_documento_form})
+
+
+#Lo que se muestra en el template de administrativo
+
+from django.http import HttpResponse
+from django import forms
+from persona.models import Persona, Profesional
+from persona.forms import FormularioProfesional
+
+
+def profesional_view(request):
+    if request.method == 'POST':
+        form = FormularioProfesional(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('persona/administrativo/profesional_form.html')
+    else:
+        form = FormularioProfesional()
+
+    return render(request, 'persona/administrativo/profesional_form.html',{'form':form})
+
+def profesional_list(request):
+    persona = Persona.objects.all()
+    contexto = {'personas': persona}
+    #return render(request, 'persona/administrativo/profesional_list.html', contexto)
+    return render(request, 'persona/administrativo/Administrativo.html', contexto)
+

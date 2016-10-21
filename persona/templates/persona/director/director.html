@@ -304,85 +304,80 @@
 								</div>
 							</div>
 
-							<div class="container-fluid" id="alta_usuario" style="display: none;">
-								<div class="row">
-									<form action="" class="">
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-											<hr>
-											<div class="container-fluid">
+						<div class="container-fluid" id="alta_usuario" style="display: none;">
+							<div class="row">
+								<form action="" class="">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<hr>
+										<div class="container-fluid">
+											<div class="row">
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+													<div class="form-group">
+														<label for="">Nombre del usuario:</label>
+														<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nombre de Usuario"  title="Ingresar Nombre de Usario" minlength="6" maxlength="20"  autofocus required />
+													</div>
+												</div>
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+													<div class="form-group">
+														<label for="">Contraseña:</label>
+														<input class="form-control input-sm" id="pswd" name="pswd" type="password" placeholder="Ingresar Contraseña del Usuario"  title="Ingresar contraseña del Usuario" minlength="6" maxlength="20" onkeyup='activarVerificar(this,"pswd2");' required />
+													</div>
+													<div id="pswd_info">
+														<br>
+														<center><font size="2">La contraseña debe cumplir con lo siguiente</font></center>
+														<ul style="	margin:0;padding: 10px 10px 10px 10px;list-style-type:none;text-align: left;position: relative;">
+															<li id="letter" class="invalid">Debe tener al menos <strong>una letra</strong></li>
+															<li id="capital" class="invalid">Debe tener al menos <strong>una letra mayuscula</strong></li>
+															<li id="number" class="invalid">Debe tener al menos <strong>un numero</strong></li>
+															<li id="length" class="invalid">Debe tener como minimo de <strong>6 caracteres</strong></li>
+														</ul>
+													</div>
+												</div>
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+													<div class="form-group">
+														<label for="">Verificar Contraseña:</label>
+														<input class="form-control input-sm" id="pswd2" name="pswd2" type="password" placeholder="Ingresar Contraseña del Usuario"  title="Vuelva a escribir la contraseña del Usuario" minlength="6" maxlength="20" required />
+													</div>
+													<div id="pswd2_info">
+														<br>
+														<center><font size="2">La verificación debe cumplir con lo siguiente</font></center>
+														<ul style="	margin:0;padding: 10px 10px 10px 10px;list-style-type:none;text-align: left;position: relative;">
+															<li id="equals" class="invalid">La verificación debe ser <strong>igual a la contraseña</strong></li>
+														</ul>
+													</div>
+												</div>
+											</div>
+										</div>
 
+
+
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<hr>
+										<div class="container-fluid">
+											<div class="row">
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 
 													{% block alta_persona %}
 
 														{% include "persona/alta/alta_persona.html" with form=alta_persona_form %}
 
-													{% endblock %}
-
-
-												<div class="row">
-
-														<div id="pswd_info">
-															<br>
-															<center><font size="2">La contraseña debe cumplir con lo siguiente</font></center>
-															<ul style="	margin:0;padding: 10px 10px 10px 10px;list-style-type:none;text-align: left;position: relative;">
-																<li id="letter" class="invalid">Debe tener al menos <strong>una letra</strong></li>
-																<li id="capital" class="invalid">Debe tener al menos <strong>una letra mayuscula</strong></li>
-																<li id="number" class="invalid">Debe tener al menos <strong>un numero</strong></li>
-																<li id="length" class="invalid">Debe tener como minimo de <strong>6 caracteres</strong></li>
-															</ul>
-														</div>
-													</div>
-													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-														<!--<div class="form-group">
-															<label for="">Verificar Contraseña:</label>
-															<input class="form-control input-sm" id="pswd2" name="pswd2" type="password" placeholder="Ingresar Contraseña del Usuario"  title="Vuelva a escribir la contraseña del Usuario" minlength="6" maxlength="20" required />
-														</div>-->
-														<div id="pswd2_info">
-															<br>
-															<center><font size="2">La verificación debe cumplir con lo siguiente</font></center>
-															<ul style="	margin:0;padding: 10px 10px 10px 10px;list-style-type:none;text-align: left;position: relative;">
-																<li id="equals" class="invalid">La verificación debe ser <strong>igual a la contraseña</strong></li>
-															</ul>
-														</div>
-													</div>
-												</div>
-											</div>
-										</form>
-									</div>
-
-
-
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-											<hr>
-											<div class="container-fluid">
-												<div class="row">
-
-													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-
-														{% block alta_usuario %}
-
-															{% include "persona/alta/alta_usuario.html" with form=alta_usuario_form %}
-
 														{% endblock %}
 
 
 
-
-
 													</div>
 
-													<!--<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-														<div class="form-group">
-															<label for="">Grupos disponibles:</label>
-															 <select id='grupos' class="form-control" onchange='cargarpermisosSeleccionados(this,"gruposSeleccionados");' title="Seleccionar a que grupo pertenece el usuario" size="12">
-																<optgroup label="Selecciona un grupo">
-																	<option value='0'></option>
-																	<option value="1">Grupo 1</option>
-																	<option value="2">Grupo 2</option>
-																	<option value="3">Grupo 3</option>
-																</optgroup>
-															</select>
-														</div>
+												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+													<div class="form-group">
+														<label for="">Grupos disponibles:</label>
+														 <select id='grupos' class="form-control" onchange='cargarpermisosSeleccionados(this,"gruposSeleccionados");' title="Seleccionar a que grupo pertenece el usuario" size="12">
+															<optgroup label="Selecciona un grupo">
+																<option value='0'></option>
+																<option value="1">Grupo 1</option>
+																<option value="2">Grupo 2</option>
+																<option value="3">Grupo 3</option>
+															</optgroup>
+														</select>
 													</div>
 
 													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
@@ -395,21 +390,20 @@
 															</select>
 														</div>
 													</div>
-												</div>-->
+												</div>
 
-												<!--<div class="container-fluid">
-													<br>
-													<div class="row">
-														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-															<button class="btn btn-primary btn-sm" type="submit" title="Crear usuario">
-																Crear usuario
-															</button>
-															<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarGruposSeleccionados();limpiaSpan()">
-																Limpiar
-															</button>
-														</div>
+											<div class="container-fluid">
+												<br>
+												<div class="row">
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+														<button class="btn btn-primary btn-sm" type="submit" title="Crear usuario">
+															Crear usuario
+														</button>
+														<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarGruposSeleccionados();limpiaSpan()">
+															Limpiar
+														</button>
 													</div>
-												</div>-->
+												</div>
 											</div>
 										</div>
 									</form>
@@ -513,6 +507,8 @@
 											{% include "tipos/tipo_documento/tipoDocumento.html" with form=alta_tipo_documento_form %}
 
 										{% endblock %}
+
+
 
 									</div>
 								</div>

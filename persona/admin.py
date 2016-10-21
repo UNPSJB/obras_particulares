@@ -12,7 +12,7 @@ class ALtaPersona(admin.ModelAdmin):
     list_display = ('apellido','nombre','dni','mail','cuil','domicilio','telefono')
 
 
-admin.site.register(Persona,ALtaPersona)
+admin.site.register(Persona, ALtaPersona)
 admin.site.register(Propietario)
 admin.site.register(Usuario)
 admin.site.register(Profesional)
