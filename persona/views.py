@@ -78,11 +78,6 @@ def mostrar_administrativo(request):
 
 #Lo que se muestra en el template de administrativo
 
-from django.http import HttpResponse
-from django import forms
-from persona.models import Persona, Profesional
-from persona.forms import FormularioProfesional
-
 
 def profesional_view(request):
     if request.method == 'POST':

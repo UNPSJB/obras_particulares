@@ -15,7 +15,7 @@ class FormularioPersona(forms.ModelForm):
         super(FormularioPersona, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         #self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit('submit', 'Guardar'))
+        self.helper.add_input(Submit('guardar_persona', 'Guardar'))
 
 
 class FormularioProfesional(forms.ModelForm):
@@ -34,12 +34,14 @@ class FormularioPropietario(forms.ModelForm):
 ''' SE DEBE PARSEAR CON LOS ROLES?
 
 '''
-class FormularioUsuaro(forms.ModelForm):
+class FormularioUsuario(forms.ModelForm):
 
     class Meta:
-        fields = ('nombre_de_usuario')'''
+        model = Usuario
+        fields = ('username', 'password')
 
-from persona.models import *
+
+
 
 class FormularioProfesional(forms.ModelForm):
     class Meta:

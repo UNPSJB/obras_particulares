@@ -17,7 +17,7 @@ class Profesional(Rol):
         (3, 'Categoria 3'),
     ]
     matricula = models.CharField(max_length = 10)
-    profesion = ["Maestro Mayor de Obra", "Ingeniero Civil", "Arquitecto"]
+    profesion = models.CharField(max_length=10)  # ["Maestro Mayor de Obra", "Ingeniero Civil", "Arquitecto"]
     categoria = models.IntegerField()
 
 

@@ -2,8 +2,6 @@
 {% extends 'persona/inicio/base.html' %}
 {% load staticfiles %}
 
-
-
 				{% block login %}
 
 					<form action="" class="form-inline">
@@ -304,82 +302,82 @@
 								</div>
 							</div>
 
-						<div class="container-fluid" id="alta_usuario" style="display: none;">
-							<div class="row">
-								<form action="" class="">
-									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-										<hr>
-										<div class="container-fluid">
-											<div class="row">
-												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-													<div class="form-group">
-														<label for="">Nombre del usuario:</label>
-														<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nombre de Usuario"  title="Ingresar Nombre de Usario" minlength="6" maxlength="20"  autofocus required />
+							<div class="container-fluid" id="alta_usuario" style="display: none;">
+								<div class="row">
+									<form action="" class="">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<hr>
+											<div class="container-fluid">
+
+
+												{% block alta_usuario %}
+
+													{% include "persona/alta/alta_usuario.html" with form=alta_usuario_form %}
+
+												{% endblock %}
+
+
+												{% block alta_persona %}
+
+													{% include "persona/alta/alta_persona.html" with form=alta_persona_form %}
+
+												{% endblock %}
+
+
+
+
+												<div class="row">
+
+														<div id="pswd_info">
+															<br>
+															<center><font size="2">La contraseña debe cumplir con lo siguiente</font></center>
+															<ul style="	margin:0;padding: 10px 10px 10px 10px;list-style-type:none;text-align: left;position: relative;">
+																<li id="letter" class="invalid">Debe tener al menos <strong>una letra</strong></li>
+																<li id="capital" class="invalid">Debe tener al menos <strong>una letra mayuscula</strong></li>
+																<li id="number" class="invalid">Debe tener al menos <strong>un numero</strong></li>
+																<li id="length" class="invalid">Debe tener como minimo de <strong>6 caracteres</strong></li>
+															</ul>
+														</div>
 													</div>
-												</div>
-												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-													<div class="form-group">
-														<label for="">Contraseña:</label>
-														<input class="form-control input-sm" id="pswd" name="pswd" type="password" placeholder="Ingresar Contraseña del Usuario"  title="Ingresar contraseña del Usuario" minlength="6" maxlength="20" onkeyup='activarVerificar(this,"pswd2");' required />
-													</div>
-													<div id="pswd_info">
-														<br>
-														<center><font size="2">La contraseña debe cumplir con lo siguiente</font></center>
-														<ul style="	margin:0;padding: 10px 10px 10px 10px;list-style-type:none;text-align: left;position: relative;">
-															<li id="letter" class="invalid">Debe tener al menos <strong>una letra</strong></li>
-															<li id="capital" class="invalid">Debe tener al menos <strong>una letra mayuscula</strong></li>
-															<li id="number" class="invalid">Debe tener al menos <strong>un numero</strong></li>
-															<li id="length" class="invalid">Debe tener como minimo de <strong>6 caracteres</strong></li>
-														</ul>
-													</div>
-												</div>
-												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-													<div class="form-group">
-														<label for="">Verificar Contraseña:</label>
-														<input class="form-control input-sm" id="pswd2" name="pswd2" type="password" placeholder="Ingresar Contraseña del Usuario"  title="Vuelva a escribir la contraseña del Usuario" minlength="6" maxlength="20" required />
-													</div>
-													<div id="pswd2_info">
-														<br>
-														<center><font size="2">La verificación debe cumplir con lo siguiente</font></center>
-														<ul style="	margin:0;padding: 10px 10px 10px 10px;list-style-type:none;text-align: left;position: relative;">
-															<li id="equals" class="invalid">La verificación debe ser <strong>igual a la contraseña</strong></li>
-														</ul>
+													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<!--<div class="form-group">
+															<label for="">Verificar Contraseña:</label>
+															<input class="form-control input-sm" id="pswd2" name="pswd2" type="password" placeholder="Ingresar Contraseña del Usuario"  title="Vuelva a escribir la contraseña del Usuario" minlength="6" maxlength="20" required />
+														</div>-->
+														<div id="pswd2_info">
+															<br>
+															<center><font size="2">La verificación debe cumplir con lo siguiente</font></center>
+															<ul style="	margin:0;padding: 10px 10px 10px 10px;list-style-type:none;text-align: left;position: relative;">
+																<li id="equals" class="invalid">La verificación debe ser <strong>igual a la contraseña</strong></li>
+															</ul>
+														</div>
 													</div>
 												</div>
 											</div>
-										</div>
+										</form>
+									</div>
 
 
 
-									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-										<hr>
-										<div class="container-fluid">
-											<div class="row">
-												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-
-													{% block alta_persona %}
-
-														{% include "persona/alta/alta_persona.html" with form=alta_persona_form %}
-
-														{% endblock %}
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+											<hr>
+											<div class="container-fluid">
+												<div class="row">
 
 
-
+													<!--<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+														<div class="form-group">
+															<label for="">Grupos disponibles:</label>
+															 <select id='grupos' class="form-control" onchange='cargarpermisosSeleccionados(this,"gruposSeleccionados");' title="Seleccionar a que grupo pertenece el usuario" size="12">
+																<optgroup label="Selecciona un grupo">
+																	<option value='0'></option>
+																	<option value="1">Grupo 1</option>
+																	<option value="2">Grupo 2</option>
+																	<option value="3">Grupo 3</option>
+																</optgroup>
+															</select>
+														</div>
 													</div>
-
-												<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-													<div class="form-group">
-														<label for="">Grupos disponibles:</label>
-														 <select id='grupos' class="form-control" onchange='cargarpermisosSeleccionados(this,"gruposSeleccionados");' title="Seleccionar a que grupo pertenece el usuario" size="12">
-															<optgroup label="Selecciona un grupo">
-																<option value='0'></option>
-																<option value="1">Grupo 1</option>
-																<option value="2">Grupo 2</option>
-																<option value="3">Grupo 3</option>
-															</optgroup>
-														</select>
-													</div>
-
 													<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 														<div class="form-group">
 															<label for="">Grupo seleccionado para el usuario:</label>
@@ -390,20 +388,21 @@
 															</select>
 														</div>
 													</div>
-												</div>
+												</div>-->
 
-											<div class="container-fluid">
-												<br>
-												<div class="row">
-													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-														<button class="btn btn-primary btn-sm" type="submit" title="Crear usuario">
-															Crear usuario
-														</button>
-														<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarGruposSeleccionados();limpiaSpan()">
-															Limpiar
-														</button>
+												<!--<div class="container-fluid">
+													<br>
+													<div class="row">
+														<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+															<button class="btn btn-primary btn-sm" type="submit" title="Crear usuario">
+																Crear usuario
+															</button>
+															<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarGruposSeleccionados();limpiaSpan()">
+																Limpiar
+															</button>
+														</div>
 													</div>
-												</div>
+												</div>-->
 											</div>
 										</div>
 									</form>
@@ -507,8 +506,6 @@
 											{% include "tipos/tipo_documento/tipoDocumento.html" with form=alta_tipo_documento_form %}
 
 										{% endblock %}
-
-
 
 									</div>
 								</div>
@@ -631,7 +628,7 @@
 					</div>
 
 				{% endblock %}
-	<!--termina el contenido del main-->				
+	<!--termina el contenido del main-->
 
 
 	{% block scripts %}
@@ -670,7 +667,6 @@
 					$("#baja_grupo").hide();
 					$("#modificar_grupo").hide();
 				}
-
 				if (id == "alta_grupo") {
 					$("#alta_grupo").show();
 					$("#baja_grupo").hide();
@@ -678,7 +674,6 @@
 					//esto es por si dejo los submenu
 					$("#" + "opcionesDelGrupo").val('alta_grupo');
 				}
-
 				if (id == "baja_grupo") {
 					$("#alta_grupo").hide();
 					$("#modificar_grupo").hide();
@@ -686,7 +681,6 @@
 					//esto es por si dejo los submenu
 					$("#" + "opcionesDelGrupo").val('baja_grupo');
 				}
-
 				if (id == "modificar_grupo") {
 					$("#alta_grupo").hide();
 					$("#modificar_grupo").show();
@@ -695,13 +689,11 @@
 					$("#" + "opcionesDelGrupo").val('modificar_grupo');
 				}
 			}
-
 			function opcionesUsuario(id) {
 					if (id == "nada") {
 						$("#alta_usuario").hide();
 						$("#modificar_usuario_grupo").hide();
 					}
-
 					if (id == "alta_usuario") {
 						$("#alta_usuario").show();
 						$("#modificar_usuario_grupo").hide();
@@ -709,7 +701,6 @@
 						//esto es por si dejo los submenu
 						$("#" + "opcionesDelUsuario").val('alta_usuario');
 					}
-
 					if (id == "modificar_usuario_grupo") {
 						$("#alta_usuario").hide();
 						$("#modificar_usuario_grupo").show();
@@ -744,7 +735,6 @@
 					}
 				}
 			}
-
 			function eliminarSeleccionado(objeto)
 			{
 				if(objeto.value>0){
@@ -754,36 +744,30 @@
 					document.getElementById(objeto.id).disabled=true;
 				}
 			}
-
 			function eliminarTodosPermisosSeleccionados()
 			{
 				document.getElementById("permisosSeleccionados").options.length=1;
 				document.getElementById("permisosSeleccionados").disabled=true;
 			}
-
 			function eliminarTodosLosPermisos()
 			{
 				document.getElementById("permisosActuales").options.length=1;
 				document.getElementById("permisosActuales").disabled=true;
 			}
-
 			function eliminarGruposSeleccionados()
 			{
 				document.getElementById("gruposSeleccionados").options.length=1;
 				document.getElementById("gruposSeleccionados").disabled=true;
 			}
-
 			function eliminarTodosLosGrupos()
 			{
 				document.getElementById("gruposActuales").options.length=1;
 				document.getElementById("gruposActuales").disabled=true;
 			}
-
 		</script>
 
 		<script type="text/javascript">
 			$(document).ready(function() {
-
 			$('input[name=pswd]').keyup(function() {
 				// set password variable
 				var pswd = $(this).val();
@@ -799,49 +783,41 @@
 			} else {
 				$('#letter').removeClass('valid').addClass('invalid');
 			}
-
 			//validate capital letter
 			if ( pswd.match(/[A-Z]/) ) {
 				$('#capital').removeClass('invalid').addClass('valid');
 			} else {
 				$('#capital').removeClass('valid').addClass('invalid');
 			}
-
 			//validate number
 			if ( pswd.match(/\d/) ) {
 				$('#number').removeClass('invalid').addClass('valid');
 			} else {
 				$('#number').removeClass('valid').addClass('invalid');
 			}
-
 			}).focus(function() {
 				$('#pswd_info').show();
 			}).blur(function() {
 				$('#pswd_info').hide();
 			});
-
 			});
 		</script>
 
 		<!--habilita el verificar contraseña-->
 		<script type="text/javascript">
 			function activarVerificar(input, inputParaActivar){
-
 				var valInput=input.value;
 				var idVerificar=document.getElementById(inputParaActivar).id;
-
 				if(valInput.length > 5 && valInput.match(/[A-z]/) && valInput.match(/[A-Z]/) && valInput.match(/\d/)){
 					$("#"+ idVerificar).removeAttr("disabled");
 				}else{
 					$("#pswd2").attr('disabled', 'disabled');
 				}
 			}
-
 		</script>
 
 		<script type="text/javascript">
 			$(document).ready(function() {
-
 			$('input[name=pswd2]').keyup(function() {
 				// set password variable
 				var pswd2 = $(this).val();
@@ -853,13 +829,11 @@
 			} else {
 				$('#equals').removeClass('valid').addClass('invalid');
 			}
-
 			}).focus(function() {
 				$('#pswd2_info').show();
 			}).blur(function() {
 				$('#pswd2_info').hide();
 			});
-
 			});
 		</script>
 
