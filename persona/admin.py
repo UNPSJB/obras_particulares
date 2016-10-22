@@ -11,8 +11,13 @@ class ALtaPersona(admin.ModelAdmin):
     search_fields = ['nombre','apellido','dni']
     list_display = ('apellido','nombre','dni','mail','cuil','domicilio','telefono')
 
+class AltaProfesional(admin.ModelAdmin):
+    _fieldsets = [
+        ('Datos Profesional', {'fields':['matricula','categoria']}),
+    ]
+    search_fields = ['matricula','categoria']
+    list_display = ('matricula','categoria')
 
-admin.site.register(Persona, ALtaPersona)
-admin.site.register(Propietario)
+admin.site.register(Persona,ALtaPersona)
+admin.site.register(Profesional,AltaProfesional)
 admin.site.register(Usuario)
-admin.site.register(Profesional)

@@ -14,8 +14,7 @@ urlpatterns = [
     url(r'^visar$', views.mostrar_visar),
     url(r'^altapersona$', views.alta_persona),
     url(r'^director$', views.mostrar_director),
-
     url(r'^administrativo$', views.profesional_list),
-    url(r'^profesional_form', views.profesional_view),
+    url(r'^nuevoprofesional$', views.nuevo),
 
 ]
