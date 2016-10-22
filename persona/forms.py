@@ -40,7 +40,11 @@ class FormularioUsuario(forms.ModelForm):
         model = Usuario
         fields = ('username', 'password')
 
-
+    def __init__(self, *args, **kwargs):
+        super(FormularioUsuario, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        #self.helper.form_class = 'form-horizontal'
+        self.helper.add_input(Submit('guardar_usuario', 'Guardar'))
 
 
 class FormularioProfesional(forms.ModelForm):
