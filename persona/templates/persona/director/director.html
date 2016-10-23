@@ -45,6 +45,12 @@
 									<li><a href="#" onclick='opcionesUsuario("alta_usuario")'>Crear nuevo usuario</a></li>
 									<li><a href="#" onclick='opcionesUsuario("modificar_usuario_grupo")'>Cambiar usuario de grupo</a></li>
 								</ul>
+
+							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("tareasTramite")'>Usuarios</a></li>
+								<ul class="sidebar sidebar-2" style="display:none;" id="tareasTramite">
+									<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_documento")'>Crear un nuevo tipo de documento</a></li>
+									<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_obra")'>Crear un nuevo tipo de obra</a></li>
+								</ul>
 							<!-- sino se elimina esto, el onclick-->
 
 							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Datos necesarios para tramites</a></li>
@@ -497,15 +503,15 @@
 
 							  <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 								  <div class="container-fluid">
-									  <select class="form-control input-sm" id="opcionesDelUsuario" name="Opciones de usuario" onChange="opcionesUsuario(this.value);">
+									  <select class="form-control input-sm" id="datosParaTramite" name="Opciones de Datos" onChange="opcionesDatosTramite(this.value);">
 											<option selected value="nada"> ¿Que desea hacer? </option>
-											<option value="alta_usuario">Crear un nuevo tipo de documento</option>
-											<option value="modificar_usuario_grupo">Crear un nuevo tipo de obra</option>
+											<option value="alta_tipo_documento">Crear un nuevo tipo de documento</option>
+											<option value="alta_tipo_de_obra">Crear un nuevo tipo de obra</option>
 									  </select>
 								  </div>
 							  </div>
 
-							<div class="container-fluid">
+							<div class="container-fluid" id="alta_tipo_documento" style="display: none;">
 								<div class="row">
 									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
@@ -516,16 +522,24 @@
 
 										{% endblock %}
 
+									</div>
+								</div>
+							</div>
+
+						    <div class="container-fluid" id="alta_tipo_de_obra" style="display: none;">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+										<hr>
 										{% block alta_tipo_de_obra %}
 
 											{% include "tipos/tipo_obra/tipoObra.html" with form=alta_tipo_de_obra_form %}
 
 										{% endblock %}
 
-
 									</div>
 								</div>
-							</div>
+						  </div>
 						  </div>
 						</div>
 					  </div>
@@ -724,6 +738,27 @@
 						$("#" + "opcionesDelUsuario").val('modificar_usuario_grupo');
 					}
 			}
+
+			function opcionesDatosTramite(id) {
+					if (id == "nada") {
+						$("#alta_tipo_documento").hide();
+						$("#alta_tipo_de_obra").hide();
+					}
+					if (id == "alta_tipo_documento") {
+						$("#alta_tipo_documento").show();
+						$("#alta_tipo_de_obra").hide();
+						$("#pswd2").attr('disabled', 'disabled');
+						//esto es por si dejo los submenu
+						//$("#" + "opcionesDelUsuario").val('alta_usuario');
+					}
+					if (id == "alta_tipo_de_obra") {
+						$("#alta_tipo_documento").hide();
+						$("#alta_tipo_de_obra").show();
+						//esto es por si dejo los submenu
+						//$("#" + "opcionesDelUsuario").val('modificar_usuario_grupo');
+					}
+			}
+
 		</script>
 
 		<script type="text/javascript">
