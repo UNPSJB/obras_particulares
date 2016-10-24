@@ -42,14 +42,14 @@
 									<li><a href="#" onclick='opcionesUsuario("alta_usuario")'>Crear nuevo usuario</a></li>
 									<li><a href="#" onclick='opcionesUsuario("modificar_usuario_grupo")'>Cambiar usuario de grupo</a></li>
 								</ul>
-							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite",opcionesDatosTramite("nada"))'>Datos tramite</a></li>
+							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite"),opcionesDatosTramite("nada")'>Datos tramite</a></li>
 								<ul class="sidebar sidebar-2" style="display:none;" id="tareasTramite">
 									<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_documento")'>Crear tipo de documento</a></li>
 									<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_obra")'>Crear tipo de obra</a></li>
 								</ul>
-							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Otorgar final de obra</a></li>
+							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Otorgar final de obra</a></li>
 							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">Modificar mis datos personales</a></li>
-							<li><a href="#" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes</a></li>
+							<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes</a></li>
 								<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
 									<li><a href="#">Consulta 1</a></li>
 									<li><a href="#">Consulta 2</a></li>
@@ -66,7 +66,7 @@
 					  <div class="panel" >
 						<div class="panel-heading box" role="tab" id="headingOne">
 						  <h5 class="panel-title">
-							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasGrupo")'>
 							  <font color="#ffffff" size="2">Grupos</font>
 							</a>
 						  </h5>
@@ -278,7 +278,7 @@
 					  <div class="panel">
 						<div class="panel-heading box" role="tab" id="headingFive">
 						  <h5 class="panel-title">
-							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("tareasUsuario")'>
 							  <font color="#ffffff" size="2">Usuarios</font>
 							</a>
 						  </h5>
@@ -399,7 +399,7 @@
 					  <div class="panel">
 						<div class="panel-heading box" role="tab" id="headingTwo">
 						  <h5 class="panel-title">
-							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite")'>
 							  <font color="#ffffff" size="2">Datos Trámite</font>
 							</a>
 						  </h5>
@@ -541,6 +541,23 @@
 						  </div>
 						</div>
 					  </div>
+
+
+					  <div class="panel" style="display: none;">
+						<div class="panel-heading box" role="tab" id="headingFour">
+						  <h5 class="panel-title">
+							<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+							  <font color="#ffffff" size="2">Consultas e Informes</font>
+							</a>
+						  </h5>
+						</div>
+						<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+						  <div class="panel-body">
+						  </div>
+						</div>
+					  </div>
+
+
 					</div>
 
 				{% endblock %}
@@ -627,12 +644,17 @@
 		<script type="text/javascript">
 			function mostrarSubmenu(subformulario)
 			{
-				var idSubformulario=document.getElementById(subformulario).id;
-				if($('#' + idSubformulario).is(':hidden')){
+				if(subformulario=="sin_submenu"){
 					$('.' + "sidebar-2").hide();
-					$('#' + idSubformulario).show();
-				}else{
-					$('#' + idSubformulario).hide();
+				}
+				else{
+					var idSubformulario=document.getElementById(subformulario).id;
+					if($('#' + idSubformulario).is(':hidden')){
+						$('.' + "sidebar-2").hide();
+						$('#' + idSubformulario).show();
+					}else{
+						$('#' + idSubformulario).hide();
+					}
 				}
 			}
 		</script>
