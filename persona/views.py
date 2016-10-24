@@ -99,10 +99,7 @@ def mostrar_administrativo(request):
     return render(request, 'persona/administrativo/Administrativo.html',{'FormularioProfesional':FormularioProfesional})
 #return render(request, 'persona/director/director.html', {'alta_persona_form':alta_persona_form, 'alta_tipo_documento_form':alta_tipo_documento_form})
 
-
 #Lo que se muestra en el template de administrativo
-
-
 def profesional_list(request):
     persona = Persona.objects.all()
     contexto = {'personas': persona}
@@ -110,7 +107,7 @@ def profesional_list(request):
     return render(request, 'persona/administrativo/profesional_list.html', contexto)
 
 #Nuevo profesional en el registro del municio
-def alta_profesional(request):
+'''def alta_profesional(request):
     if request.method == "POST":
         form = FormularioProfesional(request.POST)
         if form.is_valid():
@@ -119,7 +116,14 @@ def alta_profesional(request):
     else:
         form = FormularioProfesional()
     return render(request, 'persona/alta/alta_profesional.html', {'form': form})
-
+'''
 def nuevo(request):
     form = FormularioProfesional()
+    if request.method == "POST":
+        form = FormularioProfesional(request.POST)
+        if form.is_valid():
+            profesional = form.save()
+            profesional.save()
+    else:
+        form = FormularioProfesional()
     return render(request, 'persona/inicio/login_nuevo_profesional.html', {'form':form})
