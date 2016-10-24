@@ -42,12 +42,13 @@
 				  		<div class="collapse navbar-collapse navbar-ex1-collapse" align="right">
 							<br>
 
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-inline">
+								{% block login %}
 
-							{% block login %}
+									{% include "persona/inicio/login.html" with form=login_usuario_form %}
 
-								{% include "persona/inicio/login.html" with form=login_usuario_form %}
-
-							{% endblock %}
+								{% endblock %}
+							</div>
 
 						</div>
 				  	</div>

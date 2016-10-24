@@ -37,20 +37,8 @@ class FormularioUsuario(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super(FormularioUsuario, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_class = 'form-inline'
-        self.helper.label_class = 'col-lg-6'
-        self.helper.field_class = 'col-lg-6'
-        self.helper.layout = Layout(
-
-            'Nombre de usuario',
-            'Contrasenia',
-            'Recordarme',
-
-        )
-        self.helper.layout = Layout(
-            self.helper.add_input(Submit('Sign in', 'ingresar', css_class='btn-default,'))
-        )
-
+        self.helper.layout = Layout()
+        self.helper.add_input(Submit('Submit', 'Submit', css_class='btn-default,'))
 
 
 class FormularioProfesional(forms.ModelForm):
