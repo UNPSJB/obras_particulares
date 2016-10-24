@@ -1,7 +1,11 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Submit, Layout, Button
+from crispy_forms.bootstrap import InlineField
+
 from .models import *
+from django.contrib.auth.forms import AuthenticationForm
+
 
 class FormularioPersona(forms.ModelForm):
     class Meta:
@@ -28,18 +32,25 @@ class FormularioPropietario(forms.ModelForm):
         model = Persona
         fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil')
 
-class FormularioUsuario(forms.ModelForm):
-    class Meta:
-        model = Usuario
-        fields = ('username', 'password')
-<<<<<<< HEAD
-=======
+class FormularioUsuario(AuthenticationForm):
 
     def __init__(self, *args, **kwargs):
         super(FormularioUsuario, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        #self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit('guardar_usuario', 'Guardar'))
+        self.helper.form_class = 'form-inline'
+        self.helper.label_class = 'col-lg-6'
+        self.helper.field_class = 'col-lg-6'
+        self.helper.layout = Layout(
+
+            'Nombre de usuario',
+            'Contrasenia',
+            'Recordarme',
+
+        )
+        self.helper.layout = Layout(
+            self.helper.add_input(Submit('Sign in', 'ingresar', css_class='btn-default,'))
+        )
+
 
 
 class FormularioProfesional(forms.ModelForm):
@@ -63,5 +74,3 @@ class FormularioProfesional(forms.ModelForm):
             'matricula': forms.TextInput(attrs={'class':'forms-control'}),
             'profesion': forms.TextInput(attrs={'class':'forms-control'}),
         }
-
->>>>>>> 700476f3be508c72a71d8f9a37e20fe45f079844

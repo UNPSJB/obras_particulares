@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
 
+from django.contrib.auth import authenticate, login
 
 from .forms import *
 from tipos.forms import *
 
-def mostrar_inicio(request):
-    return render(request, 'persona/inicio/base.html', {})
+
 
 def mostrar_index(request):
-    return render(request, 'persona/inicio/index.html')
+    login_usuario_form = FormularioUsuario()
+    return render(request, 'persona/inicio/index.html', {'login_usuario_form':login_usuario_form})
 
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
