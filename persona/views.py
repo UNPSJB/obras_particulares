@@ -34,6 +34,7 @@ def mostrar_director(request):
     alta_tipo_documento_form = FormularioTipoDocumento()
     alta_persona_form = FormularioPersona()
     alta_usuario_form = FormularioUsuario()
+    alta_tipo_de_obra_form = FormularioTipoObra()
 
     if 'guardar_tipo_documento' in request.POST:
 
@@ -45,7 +46,7 @@ def mostrar_director(request):
         else:
             alta_tipo_documento_form = FormularioTipoDocumento()
 
-    if 'guardar_persona' in request.POST:
+    elif 'guardar_persona' in request.POST:
 
         if request.method == "POST":
             alta_persona_form = FormularioPersona(request.POST)
@@ -55,9 +56,32 @@ def mostrar_director(request):
         else:
             alta_persona_form = FormularioPersona()
 
+    elif 'guardar_tipo_de_obra' in request.POST:
 
-    return render(request, 'persona/director/director.html', {'alta_persona_form':alta_persona_form, 'alta_tipo_documento_form':alta_tipo_documento_form,
-                    'alta_usuario_form':alta_usuario_form})
+        if request.method == "POST":
+            alta_tipo_de_obra_form = FormularioTipoObra(request.POST)
+            if alta_tipo_de_obra_form.is_valid():
+                tipo_de_obra = alta_tipo_de_obra_form.save()
+                tipo_de_obra.save()
+        else:
+            alta_tipo_de_obra_form = FormularioTipoObra()
+
+    if 'guardar_usuario == "POST':
+
+        if request.method == "POST":
+            alta_usuario_form = FormularioUsuario(request.POST)
+            if alta_usuario_form.is_valid():
+                usuario = alta_usuario_form.save()
+                usuario.save()
+        else:
+            alta_usuario_form = FormularioUsuario()
+
+
+    return render(request, 'persona/director/director.html', {
+        'alta_persona_form':alta_persona_form,
+        'alta_tipo_documento_form':alta_tipo_documento_form,
+        'alta_usuario_form':alta_usuario_form,
+        'alta_tipo_de_obra_form':alta_tipo_de_obra_form})
 
 
 def alta_persona(request):

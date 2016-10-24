@@ -87,7 +87,13 @@ header.sticky {
 
 /* configuracion panel gris*/
 
-.panel-custom {
+.panel-group > .panel {
+    border-color: #444444;
+    border-radius: 0px;
+    background:#444444;
+}
+
+/*.panel-custom {
     border-color: #444444;
     border-radius: 0px;
     background:#444444;
@@ -96,6 +102,7 @@ header.sticky {
     background: #444444;
     border-radius: 0px;
 }
+*/
 
 
 /* cambio de color de heading*/
@@ -254,3 +261,14 @@ a:link {
 	display:none;
 }	
 
+
+/* ----------------------------------cryspy-----------------------------*/
+
+
+/* Ocultar asterisco de campo obligatorio*/
+
+.asteriskField {
+    display: none;
+   }
+
+  
