@@ -13,10 +13,10 @@ class ALtaPersona(admin.ModelAdmin):
 
 class AltaProfesional(admin.ModelAdmin):
     _fieldsets = [
-        ('Datos Profesional', {'fields':['matricula','categoria']}),
+        ('Datos Profesional', {'fields':['matricula','categoria', 'profesion']}),
     ]
-    search_fields = ['matricula','categoria']
-    list_display = ('matricula','categoria')
+    search_fields = ['matricula','categoria' 'profesion']
+    list_display = ('matricula','categoria', 'profesion')
 
 admin.site.register(Persona,ALtaPersona)
 admin.site.register(Profesional,AltaProfesional)

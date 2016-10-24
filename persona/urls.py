@@ -6,7 +6,6 @@ urlpatterns = [
 
     url(r'^index$', views.mostrar_index),
     url(r'^inspector$', views.mostrar_inspector),
-    #url(r'^profesional$', views.mostrar_profesional,name='mostrar_profesional'),
     url(r'^jefeinspector$', views.mostrar_jefe_inspector),
     url(r'^propietario$', views.mostrar_propietario,name='mostrar_propietario'),
     url(r'^visador$', views.mostrar_visador),

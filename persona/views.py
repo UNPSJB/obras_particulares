@@ -111,7 +111,7 @@ def profesional_list(request):
     return render(request, 'persona/administrativo/profesional_list.html', contexto)
 
 #Nuevo profesional en el registro del municio
-def alta_profesional(request):
+'''def alta_profesional(request):
     if request.method == "POST":
         form = FormularioProfesional(request.POST)
         if form.is_valid():
@@ -120,7 +120,14 @@ def alta_profesional(request):
     else:
         form = FormularioProfesional()
     return render(request, 'persona/alta/alta_profesional.html', {'form': form})
-
+'''
 def nuevo(request):
     form = FormularioProfesional()
+    if request.method == "POST":
+        form = FormularioProfesional(request.POST)
+        if form.is_valid():
+            profesional = form.save()
+            profesional.save()
+    else:
+        form = FormularioProfesional()
     return render(request, 'persona/inicio/login_nuevo_profesional.html', {'form':form})
