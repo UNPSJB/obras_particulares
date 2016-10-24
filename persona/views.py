@@ -107,8 +107,9 @@ def mostrar_administrativo(request):
 def profesional_list(request):
     persona = Persona.objects.all()
     contexto = {'personas': persona}
-    #return render(request, 'persona/administrativo/profesional_list.html', contexto)
-    return render(request, 'persona/administrativo/profesional_list.html', contexto)
+    return render(request, 'persona/administrativo/administrativo.html', contexto)
+    
+
 
 #Nuevo profesional en el registro del municio
 '''def alta_profesional(request):
