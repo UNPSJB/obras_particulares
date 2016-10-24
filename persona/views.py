@@ -1,14 +1,15 @@
 from django.shortcuts import render, redirect
 
+from django.contrib.auth import authenticate, login
 
 from .forms import *
 from tipos.forms import *
 
-def mostrar_inicio(request):
-    return render(request, 'persona/inicio/base.html', {})
+
 
 def mostrar_index(request):
-    return render(request, 'persona/inicio/index.html')
+    login_usuario_form = FormularioUsuario()
+    return render(request, 'persona/inicio/index.html', {'login_usuario_form':login_usuario_form})
 
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
@@ -99,7 +100,10 @@ def mostrar_administrativo(request):
     return render(request, 'persona/administrativo/Administrativo.html',{'FormularioProfesional':FormularioProfesional})
 #return render(request, 'persona/director/director.html', {'alta_persona_form':alta_persona_form, 'alta_tipo_documento_form':alta_tipo_documento_form})
 
+
 #Lo que se muestra en el template de administrativo
+
+
 def profesional_list(request):
     persona = Persona.objects.all()
     contexto = {'personas': persona}
