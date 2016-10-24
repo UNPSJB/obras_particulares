@@ -1,16 +1,20 @@
 {% load staticfiles %}
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags%}
+<html lang="es">
 
-      
+	<head>
 
-<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+	    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
 
-     <label>Complete los campos para dar de alta un nuevo tipo de documento</label>
+	</head>
 
-     {% crispy form %}
+	<body>
 
-</div>
+	     {% crispy form %}
 
+	</body>
+
+</html>
 
 
 
