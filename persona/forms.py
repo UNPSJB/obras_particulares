@@ -3,6 +3,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from .models import *
 from django.forms import ValidationError
+from django.contrib.auth.forms import AuthenticationForm
 
 class FormularioPersona(forms.ModelForm):
     class Meta:
@@ -38,19 +39,15 @@ class FormularioProfesional(FormularioPersona):
         if Profesional.objects.filter(matricula=dato).exists():
             raise ValidationError('matricula repetida')
         return dato
-                
+
 class FormularioPropietario(forms.ModelForm):
     class Meta:
         model = Persona
         fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil')
 
-class FormularioUsuario(forms.ModelForm):
-    class Meta:
-        model = Usuario
-        fields = ('username', 'password')
+class FormularioUsuario(AuthenticationForm):
+
     def __init__(self, *args, **kwargs):
         super(FormularioUsuario, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        #self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit('guardar_usuario', 'Guardar'))
-
+        self.helper.add_input(Submit('submit', 'Submit', css_class="btn btn-default"))
