@@ -5,11 +5,10 @@ from django.contrib.auth import authenticate, login
 from .forms import *
 from tipos.forms import *
 
-
-
 def mostrar_index(request):
+    solicitud_registro_profesional_form = FormularioProfesional()
     login_usuario_form = FormularioUsuario()
-    return render(request, 'persona/inicio/index.html', {'login_usuario_form':login_usuario_form})
+    return render(request, 'persona/inicio/index.html', {'profesional_form':solicitud_registro_profesional_form, 'login_usuario_form': login_usuario_form})
 
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
