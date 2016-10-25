@@ -1,5 +1,4 @@
 from __future__ import unicode_literals
-
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -9,17 +8,15 @@ class Rol(models.Model):
         abstract = True
 
 class Profesional(Rol):
-
     CATEGORIAS = [
 
         (1, 'Categoria 1'),
         (2, 'Categoria 2'),
         (3, 'Categoria 3'),
     ]
-    matricula = models.CharField(max_length = 10)
+    matricula = models.CharField(max_length=10)
     profesion = models.CharField(max_length=10)  # ["Maestro Mayor de Obra", "Ingeniero Civil", "Arquitecto"]
-    categoria = models.IntegerField()
-
+    categoria = models.IntegerField(choices=CATEGORIAS)
 
 class Propietario(Rol):
     pass
