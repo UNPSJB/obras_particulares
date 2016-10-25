@@ -3,51 +3,55 @@
 
 {% block contenido_profesional %}
 
-    <table class="table table-bordered">
-        <!-- Cabecera -->
-        <thead>
-            <tr>
-                <td>Nombre</td>
-                <td>Apellido</td>
-                <td>CUIL</td>
-                <td>Telefono</td>
-                <td>Profesion</td>
-                <td>Categoria</td>
-                <td>Matricula</td>
-                <td>Ver certificados</td>
-                <td>Habilitar profesional</td>
-            </tr>
-        </thead>
-        <!-- Mostramos los datos de las tablas -->
-        <tbody>
-        {% if personas %}
-            {% for persona in personas %}
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+
+        
+            <!-- Cabecera -->
+            <thead>
                 <tr>
-                    <td>{{ persona.nombre }}</td>
-                    <td>{{ persona.apellido }} </td>
-                    <td>{{ persona.cuil }}</td>
-                    <td>{{ persona.telefono }}</td>
-
-                    <td>{{ persona.profesional.profesion }}</td>
-                    <td>{{ persona.profesional.categoria }}</td>
-                    <td>{{ persona.profesional.matricula }}</td>
-
-                    <td>
-                        <center>
-                            <input type="button" value="Certificado" onclick = "location='Ver-Certificados.html'"/>
-                        </center>
-                    </td>
-
-                    <td>
-                        <center>
-                            <input type="button" value="Habilitar " onclick = "location='Asignar-Usuario.html'"/>
-                        </center>
-                    </td>
+                    <td>Nombre</td>
+                    <td>Apellido</td>
+                    <td>CUIL</td>
+                    <td>Telefono</td>
+                    <td>Profesion</td>
+                    <td>Categoria</td>
+                    <td>Matricula</td>
+                    <td>Ver certificados</td>
+                    <td>Habilitar profesional</td>
                 </tr>
-            {% endfor %}
-        {% endif%}
+            </thead>
+            <!-- Mostramos los datos de las tablas -->
+            <tbody>
+            {% if personas %}
+                {% for persona in personas %}
+                    <tr>
+                        <td>{{ persona.nombre }}</td>
+                        <td>{{ persona.apellido }} </td>
+                        <td>{{ persona.cuil }}</td>
+                        <td>{{ persona.telefono }}</td>
 
-        </tbody>
-    </table>
+                        <td>{{ persona.profesional.profesion }}</td>
+                        <td>{{ persona.profesional.categoria }}</td>
+                        <td>{{ persona.profesional.matricula }}</td>
 
+                        <td>
+                            <center>
+                                <input type="button" value="Certificado" onclick = "location='Ver-Certificados.html'"/>
+                            </center>
+                        </td>
+
+                        <td>
+                            <center>
+                                <input type="button" value="Habilitar " onclick = "location='Asignar-Usuario.html'"/>
+                            </center>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif%}
+
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

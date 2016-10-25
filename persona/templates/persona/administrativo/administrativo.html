@@ -5,33 +5,34 @@
 {% block login %}
 	<form action="" class="form-inline">
 		<div class="form-group">
-			<img src="Images/Silueta usuario blanco.png"  alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
+			<img src="{% static 'images/silueta_usuario_blanco.png' %}"  alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
 			<label for="" style="margin-right: 10px;"><small>Nombre de Usuario</small></label>
 		</div>
 
 		<div class="form-group">
 			<button class="color1 btn btn-sm" type="button" >
-					Mis Tramites <span class="badge">4</span>
+				Mis Tramites <span class="badge">4</span>
 			</button>
 		</div>
-		<div class="form-group">	
+		<div class="form-group">
 			<a href="Index.html">
-				<img src="Images/Boton cancelar.png" alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
+				<img src="{% static 'images/boton_cancelar.png' %}" alt="Cerrar sesion" title= "Cerrar Sesión" width="30" height="30" hspace="10"/>
 			</a>
-		</div>						
-	</form>	
+		</div>
+	</form>
+
 {% endblock %}
 
 {% block barra %}
 	<ul class="sidebar sidebar-1">
 		<font size="2">
 			<li><a href="#" class="current"><font color="tomato">Administrativo</font></a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Trámites iniciados</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Tramites corregidos</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Solicitud de final de obra</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">Alta profesional</a></li>	
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Alta propietario</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Modificar mis datos personales</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Trámites iniciados</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Tramites corregidos</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de final de obra</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Alta profesional</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Alta propietario</a></li>		
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
 			<li><a href="#" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
 					<li><a href="#">Consulta 1</a></li>
@@ -43,57 +44,54 @@
 {% endblock %}
 			
 {% block contenido %}
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-	  <div class="panel">
-	    <div class="panel-heading box" role="tab" id="headingOne">
-	      <h5 class="panel-title">
-	        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	  
+	  <div class="panel" >
+		<div class="panel-heading box" role="tab" id="headingOne">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>
 				<font color="#ffffff" size="2">Tramites iniciados</font>
 	        </a>
 	      </h5>
 	    </div>
-	    <div id="collapseOne" class="panel-collapse" role="tabpanel" aria-labelledby="headingOne">
+
+	    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 	      	<div class="panel-body">
 		      	<div class="container-fluid">
 		      		<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
  							<!-- Table -->
-				      		<div class="table-responsive">
-				  				<table  class="table table-striped table-hover table-condensed" style="background: white;">
-				    				
-				  				</table>
-				  			</div>
+				      		aca va un bloque
+
 						</div>
 		  			</div>
 				</div>
 	      	</div>
 	    </div>
+
 	  </div>
 
 	  <div class="panel">
-	    <div class="panel-heading box" role="tab" id="headingTwo">
-	      <h5 class="panel-title">
-	        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-	          <font color="#ffffff" size="2">Tramites corregidos</font>
-	        </a>
-	      </h5>
-	    </div>
-	    <div id="collapseTwo" class="panel-collapse" role="tabpanel" aria-labelledby="headingTwo">
+
+		<div class="panel-heading box" role="tab" id="headingTwo">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite")'>
+			  <font color="#ffffff" size="2">Tramites corregidos</font>
+			</a>
+		  </h5>
+		</div>
+	    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 	      	<div class="panel-body">
 		    	<div class="container-fluid">
 		    		<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
- 							<!-- Table -->
-				      		<div class="table-responsive">
-				  				<table  class="table table-striped table-hover table-condensed" style="background: white;">
-				    				
-				  				</table>
-				  			</div>
+							aca va un bloque	
 						</div>
 		  			</div>
 				</div>
 	      	</div>
 	    </div>
+
 	  </div>
 
 	  <div class="panel">
@@ -104,17 +102,12 @@
 	        </a>
 	      </h5>
 	    </div>
-	    <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+	    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
 	      	<div class="panel-body">
 		    	<div class="container-fluid">
 		    		<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
- 							<!-- Table -->
-				      		<div class="table-responsive">
-				  				<table  class="table table-striped table-hover table-condensed" style="background: white">
-				    				
-				  				</table>
-				  			</div>
+ 							aca va un bloque
 						</div>
 		  			</div>
 				</div>
@@ -130,7 +123,7 @@
 	        </a>
 	      </h5>
 	    </div>
-	    <div id="collapseSix" class="panel-collapse" role="tabpanel" aria-labelledby="headingSix">
+	    <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
 	      	<div class="panel-body">
 		   		<div class="container-fluid">
 					<div class="row">
@@ -146,7 +139,6 @@
 	    </div>
 	  </div>
 
-
 	  <div class="panel">
 	    <div class="panel-heading box" role="tab" id="headingThree">
 	      <h5 class="panel-title">
@@ -155,21 +147,17 @@
 	        </a>
 	      </h5>
 	    </div>
-	    <div id="collapseThree" class="panel-collapse" role="tabpanel" aria-labelledby="headingThree">
+	    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
 	      	<div class="panel-body">
 		    	<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					      	<!-- Table -->
-					      	<div class="table-responsive">
-								<table  class="table table-striped table-hover table-condensed" style="background: white;">
 					    		   
-					  			</table>
-					  		</div>
-						</div>
-		  			</div>	
-				</div>
-	      	</div>
+									aca va un bloque
+					  	</div>
+					</div>
+		  		</div>	
+			</div>
 	    </div>
 	  </div>
 
@@ -181,7 +169,7 @@
 	        </a>
 	      </h5>
 	    </div>
-	    <div id="collapseFour" class="panel-collapse" role="tabpanel" aria-labelledby="headingFour">
+	    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
 	      	<div class="panel-body">
 	      		<div class="container-fluid">
 	      				<div class="row">
@@ -235,7 +223,8 @@
 {% endblock %}
 
 {% block scripts %}
-	<script src="bootstrap/js/bootstrap.min.js"></script>
+	
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
 
 
 	<script>
@@ -252,12 +241,18 @@
 
 	<script type="text/javascript">
 		function mostrarSubmenu(subformulario)
-		{ 
-			var idSubformulario=document.getElementById(subformulario).id;	
-			if($('#' + idSubformulario).is(':hidden')){
-				$('#' + idSubformulario).show();
-			}else{
-				$('#' + idSubformulario).hide();
+		{
+			if(subformulario=="sin_submenu"){
+				$('.' + "sidebar-2").hide();
+			}
+			else{
+				var idSubformulario=document.getElementById(subformulario).id;
+				if($('#' + idSubformulario).is(':hidden')){
+					$('.' + "sidebar-2").hide();
+					$('#' + idSubformulario).show();
+				}else{
+					$('#' + idSubformulario).hide();
+				}
 			}
 		}
 	</script>
