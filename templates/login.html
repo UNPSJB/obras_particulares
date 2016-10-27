@@ -11,8 +11,8 @@
 
 	<body>
 		<form action="{%url "login"%}"method="post">
-			{{form|crispy}}
-			{%csrf_token%}
+			{{ form | crispy }}
+			{% csrf_token %}
 			<input class="btn btn-primary" type="submit" value="login">
 		</form>
 

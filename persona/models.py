@@ -23,8 +23,8 @@ class Propietario(Rol):
     pass
 
 class Usuario(Rol, AbstractUser):
-    def login(self):
-        print("Iniciando secion")
+    def get_view_name(self):
+        return self.groups.first().name
 
 class Persona(models.Model):
     SEXOS = [ {'F', 'Femenino'}, {'M', 'Masculino'} ]
