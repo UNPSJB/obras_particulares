@@ -7,8 +7,8 @@ from tipos.forms import *
 
 def mostrar_index(request):
     solicitud_registro_profesional_form = FormularioProfesional()
-    login_usuario_form = FormularioUsuario()
-    return render(request, 'persona/inicio/index.html', {'profesional_form':solicitud_registro_profesional_form, 'login_usuario_form': login_usuario_form})
+    return render(request, 'persona/inicio/index.html',
+        {'profesional_form':solicitud_registro_profesional_form})
 
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
@@ -107,7 +107,7 @@ def profesional_list(request):
     persona = Persona.objects.all()
     contexto = {'personas': persona}
     return render(request, 'persona/administrativo/administrativo.html', contexto)
-    
+
 
 
 #Nuevo profesional en el registro del municio
@@ -115,6 +115,7 @@ def profesional_list(request):
     if request.method == "POST":
         form = FormularioProfesional(request.POST)
         if form.is_valid():
+
             profesional = form.save()
             profesional.save()
     else:
