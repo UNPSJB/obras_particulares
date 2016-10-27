@@ -17,7 +17,7 @@ def login_view(request):
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
-        if user is not None and user.is_active :
+        if user is not None and uFormularioUsuarioser.is_active :
             login(request, user)
             return redirect(user.get_view_name())
         else:
@@ -30,4 +30,4 @@ def logout_view(request):
 
 def home(request):
     return render(request, 'home.html',
-        {'login_usuario_form': FormularioUsuario()})
+        {'login_usuario_form': FormularioLogin()})

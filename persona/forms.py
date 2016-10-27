@@ -18,6 +18,7 @@ class FormularioProfesional(FormularioPersona):
     matricula = forms.CharField()
     profesion =forms.CharField()
     categorias = forms.ChoiceField(choices=Profesional.CATEGORIAS)
+
     def __init__(self, *args, **kwargs):
         super(FormularioProfesional, self).__init__(*args, **kwargs)
 
@@ -51,3 +52,24 @@ class FormularioUsuario(AuthenticationForm):
         super(FormularioUsuario, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', 'Submit', css_class="btn btn-default"))
+
+'''class FormularioUsuarioPersona(AuthenticationForm, FormularioPersona):
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioUsuarioPersona, self).__init__(*args, **kwargs)
+
+    def save(self, commit = False):
+        persona = super(FormularioProfesional, self).save(commit=commit)
+        datos = self.cleaned_data
+        usuario = AuthenticationForm(username = datos['username'],
+                                     password = datos['password'],)
+        usuario.save()
+        persona.usuario.save()
+        persona.save()'''
+
+
+
+
+
+
+
