@@ -1,16 +1,13 @@
 from django.shortcuts import render, redirect
-
 from django.contrib.auth import authenticate, login
-
 from .forms import *
 from tipos.forms import *
 
 def mostrar_index(request):
 
     login_usuario_form = FormularioUsuario()
-
     if request.method == "POST":
-        form = FormularioProfesional(request.POST)
+        form = FormularioProfesional(request.POST, request.FILES)
         if form.is_valid():
             profesional = form.save()
             profesional.save()

@@ -18,6 +18,7 @@ class FormularioProfesional(FormularioPersona):
     matricula = forms.CharField()
     profesion =forms.CharField()
     categorias = forms.ChoiceField(choices=Profesional.CATEGORIAS)
+    certificado = forms.ImageField()
 
     def __init__(self, *args, **kwargs):
         super(FormularioProfesional, self).__init__(*args, **kwargs)
@@ -29,6 +30,7 @@ class FormularioProfesional(FormularioPersona):
             profesion= datos['profesion'],
             matricula= datos['matricula'],
             categoria= datos['categorias'],
+            certificado = datos['certificado']
         )
         p.save()
         persona.profesional= p
