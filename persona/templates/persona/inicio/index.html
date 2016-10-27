@@ -21,7 +21,7 @@
 							<div class="row">
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 									<br>
-									<form action="" class="" >
+									<form action="" class="" method="POST" >
 									<div class="row">
 
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
@@ -30,7 +30,7 @@
 
 											<hr>
 											{% block solicitud_de_registro_profesional %}
-												{% include "persona/alta/alta_profesional.html" with form=profesional_form %}
+												{% include "persona/alta/alta_profesional.html" with form=form %}
 											{% endblock %}
 										</div>
 
@@ -41,7 +41,7 @@
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 											<div class="form-group">
 												<label for="">Certificado de Colegio Profesional:</label>
-												<input class="file" id="certificado" type="file"  data-preview-file-type="any" title="Cargar Certificado de Colegio Profesional" required />
+												<input class="file" id="certificado" type="file"  data-preview-file-type="any" title="Cargar Certificado de Colegio Profesional"  />
 
 											</div>
 											<hr>

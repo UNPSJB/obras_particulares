@@ -290,14 +290,10 @@
 						<hr>		
 						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 							{% block alta_usuario %}
-								{% include "persona/inicio/login.html" with form=alta_usuario_form %}
+								{% include "persona/alta/alta_usuario.html" with form=alta_usuario_persona_form %}
 							{% endblock %}
 						</div>
-						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-							{% block alta_persona %}
-								{% include "persona/alta/alta_persona.html" with form=alta_persona_form %}
-							{% endblock %}
-						</div>
+
 
 					</div>
 				</div>
