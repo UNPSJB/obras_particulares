@@ -42,12 +42,13 @@ def mostrar_visador(request):
 def mostrar_visar(request):
     return render(request, 'persona/visador/visar.html')
 
-FORMS_DIRECTOR = {
-    ('tipo_documento_form', 'tipo_documento_submit'): FormularioTipoDocumento,
-    ('usuario_persona_form', 'usuario_persona_submit'): FormularioUsuarioPersona,
-    ('tipo_obra_form', 'tipo_obra_submit'): FormularioTipoObra,
-    ('tipo_documento_form', 'tipo_documento_submit'): FormularioTipoDocumento,
-}
+FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
+    FormularioTipoDocumento,
+    FormularioUsuarioPersona,
+    FormularioTipoObra,
+    FormularioTipoDocumento,
+    FormularioAdministrativo
+]}
 
 def mostrar_director(request):
     usuario = request.user
