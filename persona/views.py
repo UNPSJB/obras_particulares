@@ -4,11 +4,11 @@ from .forms import *
 from tipos.forms import *
 
 def mostrar_index(request):
-<<<<<<< HEAD
+
     solicitud_registro_profesional_form = FormularioProfesional()
     return render(request, 'persona/inicio/index.html',
         {'profesional_form':solicitud_registro_profesional_form})
-=======
+
 
     login_usuario_form = FormularioUsuario()
     if request.method == "POST":
@@ -20,7 +20,7 @@ def mostrar_index(request):
         form = FormularioProfesional()
 
     return render(request, 'persona/inicio/index.html', {'form':form, 'login_usuario_form': login_usuario_form})
->>>>>>> refs/remotes/origin/master
+
 
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
