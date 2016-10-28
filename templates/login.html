@@ -1,21 +1,9 @@
-<!DOCTYPE html>
+
 {% load staticfiles %}
 {% load crispy_forms_tags%}
-<html>
 
-	<head>
-
-	    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-
-	</head>
-
-	<body>
 		<form action="{%url "login"%}"method="post">
 			{{ form | crispy }}
 			{% csrf_token %}
 			<input class="btn btn-primary" type="submit" value="login">
 		</form>
-
-	</body>
-
-</html>
