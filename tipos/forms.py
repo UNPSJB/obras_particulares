@@ -15,7 +15,7 @@ class FormularioTipoDocumento(forms.ModelForm):
         super(FormularioTipoDocumento, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         #self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit('guardar_tipo_documento', 'Guardar'))
+        self.helper.add_input(Submit('tipo_documento_submit', 'Guardar'))
 
 class FormularioDocumento(forms.ModelForm):
 
@@ -27,7 +27,7 @@ class FormularioDocumento(forms.ModelForm):
         super(FormularioDocumento, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         #self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit('submit', 'Guardar'))
+        self.helper.add_input(Submit('documento_submit', 'Guardar'))
 
 
 class FormularioTipoObra(forms.ModelForm):
@@ -40,4 +40,4 @@ class FormularioTipoObra(forms.ModelForm):
         super(FormularioTipoObra, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         #self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit('guardar_tipo_de_obra', 'Guardar'))
+        self.helper.add_input(Submit('tipo_obra_submit', 'Guardar'))

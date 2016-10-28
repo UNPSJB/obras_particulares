@@ -5,10 +5,12 @@ from .models import *
 from django.forms import ValidationError
 from django.contrib.auth.forms import AuthenticationForm
 
+
 class FormularioPersona(forms.ModelForm):
     class Meta:
         model = Persona
-        fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil')
+        fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil', 'mail')
+
     def __init__(self, *args, **kwargs):
         super(FormularioPersona, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -55,19 +57,22 @@ class FormularioUsuario(AuthenticationForm):
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', 'Submit', css_class="btn btn-default"))
 
-'''class FormularioUsuarioPersona(AuthenticationForm, FormularioPersona):
+class FormularioUsuarioPersona(FormularioPersona):
+
+    usuario = forms.CharField()
+    password = forms.CharField()
 
     def __init__(self, *args, **kwargs):
         super(FormularioUsuarioPersona, self).__init__(*args, **kwargs)
 
     def save(self, commit = False):
-        persona = super(FormularioProfesional, self).save(commit=commit)
+        persona = super(FormularioUsuarioPersona, self).save(commit=commit)
+        print(persona)
         datos = self.cleaned_data
-        usuario = AuthenticationForm(username = datos['username'],
-                                     password = datos['password'],)
-        usuario.save()
-        persona.usuario.save()
-        persona.save()'''
+        persona.usuario = Usuario.objects.create_user(username = datos['usuario'],email = datos['mail'], password = datos['password'],)
+        persona.save()
+
+        return persona.usuario
 
 
 

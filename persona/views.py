@@ -42,46 +42,31 @@ def mostrar_visador(request):
 def mostrar_visar(request):
     return render(request, 'persona/visador/visar.html')
 
+FORMS_DIRECTOR = {
+    ('tipo_documento_form', 'tipo_documento_submit'): FormularioTipoDocumento,
+    ('usuario_persona_form', 'usuario_persona_submit'): FormularioUsuarioPersona,
+    ('tipo_obra_form', 'tipo_obra_submit'): FormularioTipoObra,
+    ('tipo_documento_form', 'tipo_documento_submit'): FormularioTipoDocumento,
+}
+
 def mostrar_director(request):
-    alta_tipo_documento_form = FormularioTipoDocumento()
-    alta_usuario_persona_form = FormularioUsuarioPersona()
-    alta_tipo_de_obra_form = FormularioTipoObra()
+    usuario = request.user
 
-    if 'guardar_tipo_documento' in request.POST:
-
-        if request.method == "POST":
-            alta_tipo_documento_form = FormularioTipoDocumento(request.POST)
-            if alta_tipo_documento_form.is_valid():
-                tipo_documento = alta_tipo_documento_form.save()
-                tipo_documento.save()
+    values = {}
+    for form_name, submit_name in FORMS_DIRECTOR:
+        KlassForm = FORMS_DIRECTOR[(form_name, submit_name)]
+        if request.method == "POST" and submit_name in request.POST:
+            _form = KlassForm(request.POST)
+            if _form.is_valid():
+                _form.save()
+                return redirect(usuario.get_view_name())
+            else:
+                values["submit_name"] = submit_name
+            values[form_name] = _form
         else:
-            alta_tipo_documento_form = FormularioTipoDocumento()
+            values[form_name] = KlassForm()
 
-    elif 'guardar_tipo_de_obra' in request.POST:
-
-        if request.method == "POST":
-            alta_tipo_de_obra_form = FormularioTipoObra(request.POST)
-            if alta_tipo_de_obra_form.is_valid():
-                tipo_de_obra = alta_tipo_de_obra_form.save()
-                tipo_de_obra.save()
-        else:
-            alta_tipo_de_obra_form = FormularioTipoObra()
-
-    if 'guardar_persona' in  request.POST:
-
-        if request.method == "POST":
-            alta_usuario_persona_form = FormularioUsuarioPersona(request.POST)
-            if alta_usuario_persona_form.is_valid():
-                usuario_persona = alta_usuario_persona_form.save()
-                usuario_persona.save()
-        else:
-            alta_usuario_persona_form = FormularioUsuarioPersona()
-
-
-    return render(request, 'persona/director/director.html', {
-        'alta_tipo_documento_form':alta_tipo_documento_form,
-        'alta_usuario_persona_form':alta_usuario_persona_form,
-        'alta_tipo_de_obra_form':alta_tipo_de_obra_form})
+    return render(request, 'persona/director/director.html', values)
 
 
 def alta_persona(request):
