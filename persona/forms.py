@@ -8,7 +8,7 @@ from django.contrib.auth.models import Group, User
 
 class FormularioPersona(forms.ModelForm):
     NAME = 'persona_form'
-    SUBMIT = 'persona_submit'
+    
     class Meta:
         model = Persona
         fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil', 'mail')
