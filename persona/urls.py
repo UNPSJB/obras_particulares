@@ -4,7 +4,6 @@ from . import views
 
 urlpatterns = [
 
-    url(r'^index$', views.mostrar_index,name="index"),
     url(r'^inspector$', views.mostrar_inspector,name="inspector"),
     url(r'^jefeinspector$', views.mostrar_jefe_inspector,name="jefe_inspector"),
     url(r'^propietario$', views.mostrar_propietario,name="propietario"),
@@ -13,6 +12,4 @@ urlpatterns = [
     url(r'^altapersona$', views.alta_persona,name="alta_persona"),
     url(r'^director$', views.mostrar_director,name="director"),
     url(r'^administrativo$', views.profesional_list,name="administrativo"),
-    url(r'^nuevoprofesional$', views.nuevo,name="nuevo_profesional"),
-
 ]

@@ -1,6 +1,6 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Submit, Layout
 from .models import *
 from django.forms import ValidationError
 from django.contrib.auth.forms import AuthenticationForm
@@ -12,7 +12,6 @@ class FormularioPersona(forms.ModelForm):
     class Meta:
         model = Persona
         fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil', 'mail')
-
     def __init__(self, *args, **kwargs):
         super(FormularioPersona, self).__init__(*args, **kwargs)
         self.helper = FormHelper()

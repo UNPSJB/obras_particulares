@@ -1,19 +1,28 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-			{% block barra %}
+{% block barra %}
+{% endblock %}
 
+{% block contenido %}
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+	<div class="panel panel-custom">
+	<div class="panel-heading panel-heading-custom box" role="tab" id="headingFive">
+	</div>
+		<div class="container-fluid" id="alta_usuario">
+			<div class ="row">
+				<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
+					<div class="form-group">
+					    <legend style = "color: #ff6347;">Nuevo Profesional en Municipio</legend>
+						{% block alta_tipo_documento %}
+							{% include "persona/alta/alta_profesional.html" with form=form %}
+						{% endblock %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
 
-
-			{% endblock %}
-
-
-			{% block contenido %}
-
-			{% endblock %}
-
-			{% block script %}
-
-
-
-			{% endblock %}
+{% block scripts %}
+{% endblock %}

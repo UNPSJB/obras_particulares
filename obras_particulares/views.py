@@ -1,9 +1,8 @@
+from persona.forms import *
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-
 from . import forms
-from persona import *
 
 def login_view(request):
     if request.method == 'POST':
@@ -25,5 +24,13 @@ def logout_view(request):
     return redirect("home")
 
 def home(request):
-    return render(request, 'home.html',
-        {'login_usuario_form': forms.FormularioLogin})
+    form= FormularioProfesional()
+    if request.method == "POST":
+        form = FormularioProfesional(request.POST, request.FILES)
+        if form.is_valid():
+            profesional = form.save()
+            profesional.save()
+            #messages.add_message(request, messages.SUCCESS, "Soliciud de Registro Enviada")
+    else:
+        form = FormularioProfesional()
+    return render(request, 'home.html',{'login_usuario_form': forms.FormularioLogin,'form':form})
