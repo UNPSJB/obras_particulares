@@ -5,25 +5,6 @@ from .forms import *
 from tipos.forms import *
 from obras_particulares.views import *
 
-def mostrar_index(request):
-
-    solicitud_registro_profesional_form = FormularioProfesional()
-    return render(request, 'persona/inicio/index.html',
-        {'profesional_form':solicitud_registro_profesional_form})
-
-
-    login_usuario_form = FormularioUsuario()
-    if request.method == "POST":
-        form = FormularioProfesional(request.POST, request.FILES)
-        if form.is_valid():
-            profesional = form.save()
-            profesional.save()
-    else:
-        form = FormularioProfesional()
-
-    return render(request, 'persona/inicio/index.html', {'form':form, 'login_usuario_form': login_usuario_form})
-
-
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
 
@@ -34,15 +15,22 @@ def mostrar_profesional(request):
 def mostrar_jefe_inspector(request):
     return render(request, 'persona/jefe_inspector/jefe_inspector.html')
 
+
 def mostrar_propietario(request):
     form = FormularioPropietario()
     return render(request, 'persona/propietario/propietario.html',{'form':form})
 
+
+@login_required(login_url="login")
+@grupo_requerido('visador')
 def mostrar_visador(request):
     return render(request, 'persona/visador/visador.html')
 
+@login_required(login_url="login")
+@grupo_requerido('visador')
 def mostrar_visar(request):
     return render(request, 'persona/visador/visar.html')
+
 
 FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioTipoDocumento,
@@ -52,6 +40,8 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioAdministrativo
 ]}
 
+@login_required(login_url="login")
+@grupo_requerido('director')
 def mostrar_director(request):
     usuario = request.user
 
@@ -87,38 +77,9 @@ def alta_persona(request):
 def mostrar_administrativo(request):
     contexto = profesional_list(request)
     return render(request, 'persona/administrativo/administrativo.html',{'FormularioProfesional':FormularioProfesional}, contexto)
-#return render(request, 'persona/director/director.html', {'alta_persona_form':alta_persona_form, 'alta_tipo_documento_form':alta_tipo_documento_form})
-
-
-#Lo que se muestra en el template de administrativo
 
 
 def profesional_list(request):
     persona = Persona.objects.all()
     contexto = {'personas': persona}
     return contexto
-
-
-
-#Nuevo profesional en el registro del municio
-'''def alta_profesional(request):
-    if request.method == "POST":
-        form = FormularioProfesional(request.POST)
-        if form.is_valid():
-
-            profesional = form.save()
-            profesional.save()
-    else:
-        form = FormularioProfesional()
-    return render(request, 'persona/alta/alta_profesional.html', {'form': form})
-'''
-def nuevo(request):
-    form = FormularioProfesional()
-    if request.method == "POST":
-        form = FormularioProfesional(request.POST)
-        if form.is_valid():
-            profesional = form.save()
-            profesional.save()
-    else:
-        form = FormularioProfesional()
-    return render(request, 'persona/inicio/login_nuevo_profesional.html', {'form':form})
