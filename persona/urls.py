@@ -1,4 +1,5 @@
 from django.conf.urls import include, url
+from django.contrib.auth.decorators import login_required
 from . import views
 
 
@@ -12,7 +13,7 @@ urlpatterns = [
     url(r'^visar$', views.mostrar_visar,name="visar"),
     url(r'^altapersona$', views.alta_persona,name="alta_persona"),
     url(r'^director$', views.mostrar_director,name="director"),
-    url(r'^administrativo$', views.profesional_list,name="administrativo"),
+    url(r'^administrativo$', views.mostrar_administrativo,name="administrativo"),
     url(r'^nuevoprofesional$', views.nuevo,name="nuevo_profesional"),
 
 ]

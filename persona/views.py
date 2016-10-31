@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import  login_required
 from .forms import *
 from tipos.forms import *
+from obras_particulares.views import *
 
 def mostrar_index(request):
 
@@ -94,9 +96,11 @@ def alta_persona(request):
         form = FormularioPersona()
     return render(request, 'persona/alta/alta_persona.html', {'form': form})
 
-
+@login_required(login_url="login")
+@grupo_requerido('administrativo')
 def mostrar_administrativo(request):
-    return render(request, 'persona/administrativo/Administrativo.html',{'FormularioProfesional':FormularioProfesional})
+    contexto = profesional_list(request)
+    return render(request, 'persona/administrativo/administrativo.html',{'FormularioProfesional':FormularioProfesional}, contexto)
 #return render(request, 'persona/director/director.html', {'alta_persona_form':alta_persona_form, 'alta_tipo_documento_form':alta_tipo_documento_form})
 
 
@@ -106,7 +110,7 @@ def mostrar_administrativo(request):
 def profesional_list(request):
     persona = Persona.objects.all()
     contexto = {'personas': persona}
-    return render(request, 'persona/administrativo/administrativo.html', contexto)
+    return contexto
 
 
 

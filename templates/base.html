@@ -44,9 +44,26 @@
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-inline">
 								{% block login %}
 
-									{% include "login.html" with form=login_usuario_form %}
+									{% if user.is_active%}
+										<div id="user-tools" class="form-inline">
+
+											<form class="form-inline">
+
+												<label>Hola</label>
+
+												<strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>
+
+
+												<a href="{%url "logout"%}" class="btn btn-primary">Salir</a>
+
+											</form>
+										</div>
+									{% else %}
+										{% include "login.html" with form=login_usuario_form %}
+									{% endif %}
 
 								{% endblock %}
+
 							</div>
 
 						</div>
