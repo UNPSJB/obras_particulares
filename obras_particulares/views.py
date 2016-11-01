@@ -11,12 +11,7 @@ from . import forms
 
 def login_view(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        print(username)
-        password = request.POST['password']
-        print(password)
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
-        print(user)
         if user is not None and user.is_active :
             login(request, user)
             return redirect(user.get_view_name())
@@ -29,7 +24,6 @@ def logout_view(request):
     return redirect("home")
 
 def home(request):
-    form= FormularioProfesional()
     if request.method == "POST":
         form = FormularioProfesional(request.POST, request.FILES)
         if form.is_valid():
