@@ -5,6 +5,7 @@ from .forms import *
 from tipos.forms import *
 from obras_particulares.views import *
 
+
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
 
@@ -103,4 +104,13 @@ def profesional_list(request):
     persona = Persona.objects.all()
     contexto = {'personas': persona}
     return contexto
+
+
+from tramite.forms import FormularioTramite
+from tramite.models import Tramite
+
+def mostrar_tramite(request):
+    tramite = Tramite.objects.all()
+    contexto = { 'tramites': tramite}
+    return render(request, 'persona/administrativo/tramite_list.html', contexto)
 
