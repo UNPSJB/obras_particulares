@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'persona',
     'tipos',
+    'tramite',
 ]
 
 MIDDLEWARE = [

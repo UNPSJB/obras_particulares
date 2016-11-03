@@ -9,5 +9,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^persona/', include('persona.urls')),
     url(r'^tipos/', include('tipos.urls')),
-
+    url(r'^tramite/', include('tramite.urls')),
 ]
