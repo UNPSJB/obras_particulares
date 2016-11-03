@@ -5,7 +5,7 @@
 
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
+<ul class="sidebar sidebar-1" xmlns="http://www.w3.org/1999/html">
 		<font size="2">
 			<li><a href="#" class="current"><font color="tomato">Director</font></a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"  onclick='mostrarSubmenu("tareasGrupo"),opcionesGrupo("nada")'>Grupos</a></li>
@@ -258,6 +258,9 @@
 							<select class="form-control input-sm" id="opcionesDelUsuario" name="Opciones de usuario" onChange="opcionesUsuario(this.value);">
 								<option selected value="nada"> ¿Que desea hacer? </option>
 								<option value="alta_usuario">Crear usuario</option>
+								<option value="alta_administrativo">Crear Administrativo</option>
+								<option value="alta_visador">Crear Visador</option>
+								<option value="alta_inspector">Crear inspector</option>
 								<option value="modificar_usuario_grupo">Cambiar usuario de grupo</option>
 							</select>
 						</div>
@@ -269,15 +272,54 @@
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<hr>
 						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							<label>Soy el form de usuario persona</label>
 							{% block alta_usuario %}
 								{% crispy usuario_persona_form %}
 							{% endblock %}
 						</div>
-
-
 					</div>
 				</div>
 			</div>
+			  <div class="container-fluid" id="alta_administrativo" style="display: none;">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<hr>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							<label>Soy el form de administrativo</label>>
+							{% block alta_administrativo %}
+								{% crispy administrativo_form %}
+							{% endblock %}
+						</div>
+					</div>
+				</div>
+			  </div>
+			  <div class="container-fluid" id="alta_visador" style="display: none;">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<hr>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							<label>Soy el form de visador</label>
+							{% block alta_visador %}
+								{% crispy visador_form %}
+							{% endblock %}
+						</div>
+					</div>
+				</div>
+			  </div>
+			  <div class="container-fluid" id="alta_inspector" style="display: none;">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<hr>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							<label>Soy el form de inspector</label>
+							{% block alta_inspector %}
+								{% crispy inspector_form %}
+							{% endblock %}
+						</div>
+					</div>
+				</div>
+			  </div>
+
 			<div class="container-fluid" id="modificar_usuario_grupo" style="display: none;">
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -546,23 +588,54 @@
 			}
 		}
 		function opcionesUsuario(id) {
-				if (id == "nada") {
-					$("#alta_usuario").hide();
-					$("#modificar_usuario_grupo").hide();
-					$("#" + "opcionesDelUsuario").val('nada');
-				}
-				if (id == "alta_usuario") {
-					$("#alta_usuario").show();
-					$("#modificar_usuario_grupo").hide();
-					//esto es por si dejo los submenu
-					$("#" + "opcionesDelUsuario").val('alta_usuario');
-				}
-				if (id == "modificar_usuario_grupo") {
-					$("#alta_usuario").hide();
-					$("#modificar_usuario_grupo").show();
-					//esto es por si dejo los submenu
-					$("#" + "opcionesDelUsuario").val('modificar_usuario_grupo');
-				}
+			if (id == "nada") {
+				$("#alta_usuario").hide();
+				$("#alta_administrativo").hide();
+				$("#modificar_usuario_grupo").hide();
+				$("#alta_inspector").hide();
+				$("#alta_visador").hide();
+				$("#" + "opcionesDelUsuario").val('nada');
+			}
+			if (id == "alta_usuario") {
+				$("#alta_usuario").show();
+				$("#modificar_usuario_grupo").hide();
+				$("#alta_administrativo").hide();
+				$("#alta_inspector").hide();
+				$("#alta_visador").hide
+				//esto es por si dejo los submenu
+				$("#" + "opcionesDelUsuario").val('alta_usuario');
+			}
+			if (id == "alta_inspector"){
+				$("#alta_inspector").show();
+				$("#alta_usuario").hide();
+				$("#modificar_usuario_grupo").hide();
+				$("#alta_administrativo").hide();
+				$("#alta_visador").hide();
+			}
+			if (id == "alta_administrativo"){
+				$("#alta_administrativo").show();
+				$("#alta_usuario").hide();
+				$("#alta_inspector").hide();
+				$("#alta_visador").hide();
+				$("#modificar_usuario_grupo").hide();
+			}
+			if (id == "alta_visador"){
+				$("#alta_visador").show();
+				$("#alta_usuario").hide();
+				$("#alta_inspector").hide();
+				$("#modificar_usuario_grupo").hide();
+				$("#alta_administrativo").hide();
+			}
+			if (id == "modificar_usuario_grupo") {
+				$("#alta_usuario").hide();
+				$("#modificar_usuario_grupo").show();
+				$("#alta_administrativo").hide();
+				$("#alta_inspector").hide();
+				$("#alta_visador").hide();
+				//esto es por si dejo los submenu
+				$("#" + "opcionesDelUsuario").val('modificar_usuario_grupo');
+			}
+
 		}
 
 		function opcionesDatosTramite(id) {

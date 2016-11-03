@@ -34,10 +34,13 @@ def mostrar_visar(request):
 
 FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioTipoDocumento,
-    FormularioUsuarioPersona,
+    FormularioUsuarioPersona,  #este formulario no se necesitaria, solo se dan de alta visador, inspector y administrativo
     FormularioTipoObra,
     FormularioTipoDocumento,
-    FormularioAdministrativo
+    FormularioAdministrativo,
+    FormularioInspector,
+    FormularioVisador
+
 ]}
 
 @login_required(login_url="login")
