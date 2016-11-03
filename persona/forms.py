@@ -97,9 +97,32 @@ class FormularioAdministrativo(FormularioUsuarioPersona):
 
     def save(self, commit=False):
         usuario = super(FormularioAdministrativo, self).save(commit=False)
-        g = Group.objects.get(name='administrativo')
-        usuario.groups.add(g)
+        grupo = Group.objects.get(name='administrativo')
+        usuario.groups.add(grupo)
         return usuario
+
+class FormularioVisador(FormularioUsuarioPersona):
+    NAME = 'visador_form'
+    SUBMIT = 'visador_submit'
+
+    def save(self, commit = False):
+        usuario = super(FormularioVisador, self).save(commit=False)
+        grupo = Group.objects.get(name = 'visador')
+        usuario.groups.add(grupo)
+        return usuario
+
+class FormularioInspector(FormularioUsuarioPersona):
+    NAME = 'inspector_form'
+    SUBMIT = 'inspector_submit'
+
+    def save(self, commit = False):
+        usuario = super(FormularioInspector, self).save(commit=False)
+        grupo = Group.objects.get(name='inspector')
+        usuario.groups.add(grupo)
+        return usuario
+
+
+
 
 
 

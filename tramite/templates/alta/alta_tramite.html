@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+<html>
+
+<head>
+    <title>Alta Tramite</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+
+            {% crispy form %}
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
