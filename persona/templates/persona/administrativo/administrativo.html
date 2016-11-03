@@ -39,7 +39,9 @@
 		      		<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
  							<!-- Table -->
-				      		aca va un bloque
+				      		{% block contenido_tramite %}
+								{% include "persona/administrativo/tramite_list.html" %}
+							{% endblock %}
 
 						</div>
 		  			</div>

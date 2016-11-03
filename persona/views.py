@@ -5,6 +5,7 @@ from .forms import *
 from tipos.forms import *
 from obras_particulares.views import *
 
+
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
 
@@ -79,10 +80,37 @@ def alta_persona(request):
 @grupo_requerido('administrativo')
 def mostrar_administrativo(request):
     contexto = profesional_list(request)
-    return render(request, 'persona/administrativo/administrativo.html',{'FormularioProfesional':FormularioProfesional}, contexto)
+    return render(request, 'persona/administrativo/administrativo.html',contexto)
+#    return render(request, 'persona/administrativo/administrativo.html',{'FormularioProfesional':FormularioProfesional}, contexto)
+
+#
+
+
+def habilitar(request):
+    print ("HOLA")
+    id_persona = request.get(persona.id)
+    print (id_persona)
+    if request.POST:
+
+        persona.usuario = Usuario.objects.create_user(username=persona.mail,
+                                                      email=persona.mail,
+                                                      password="usuario217")
+
+
+    return redirect("administrativo")
 
 
 def profesional_list(request):
     persona = Persona.objects.all()
     contexto = {'personas': persona}
     return contexto
+
+
+from tramite.forms import FormularioTramite
+from tramite.models import Tramite
+
+def mostrar_tramite(request):
+    tramite = Tramite.objects.all()
+    contexto = { 'tramites': tramite}
+    return render(request, 'persona/administrativo/tramite_list.html', contexto)
+

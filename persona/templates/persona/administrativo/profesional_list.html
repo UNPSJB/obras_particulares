@@ -35,16 +35,12 @@
                         <td>{{ persona.profesional.profesion }}</td>
                         <td>{{ persona.profesional.categoria }}</td>
                         <td>{{ persona.profesional.matricula }}</td>
-
                         <td>
                             <center>
-                                <input type="button" value="Certificado" onclick = "location='Ver-Certificados.html'"/>
-                            </center>
-                        </td>
 
-                        <td>
-                            <center>
-                                <input type="button" value="Habilitar " onclick = "location='Asignar-Usuario.html'"/>
+                                <form action="{% url 'habilitar' %}" method="POST">
+                                    <input type="submit" value="Habilitar" />
+                                </form>
                             </center>
                         </td>
                     </tr>

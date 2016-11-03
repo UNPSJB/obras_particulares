@@ -20,4 +20,5 @@ class AltaProfesional(admin.ModelAdmin):
 
 admin.site.register(Persona,ALtaPersona)
 admin.site.register(Profesional,AltaProfesional)
+admin.site.register(Propietario)
 admin.site.register(Usuario)
