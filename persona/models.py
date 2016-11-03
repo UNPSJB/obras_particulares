@@ -31,7 +31,7 @@ class Persona(models.Model):
     dni =  models.CharField(max_length = 8, unique = True)
     apellido  = models.CharField(max_length = 50)
     nombre = models.CharField(max_length = 50)
-    mail = models.CharField(max_length = 20)
+    mail = models.CharField(max_length = 40)
     cuil = models.CharField(max_length = 14)    #el ultimo numero va a ser 00..09
     domicilio = models.CharField(max_length = 50)
     telefono = models.CharField(max_length = 15)

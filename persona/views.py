@@ -76,10 +76,28 @@ def alta_persona(request):
 @grupo_requerido('administrativo')
 def mostrar_administrativo(request):
     contexto = profesional_list(request)
-    return render(request, 'persona/administrativo/administrativo.html',{'FormularioProfesional':FormularioProfesional}, contexto)
+    return render(request, 'persona/administrativo/administrativo.html',contexto)
+#    return render(request, 'persona/administrativo/administrativo.html',{'FormularioProfesional':FormularioProfesional}, contexto)
+
+#
+
+
+def habilitar(request):
+    print ("HOLA")
+    id_persona = request.get(persona.id)
+    print (id_persona)
+    if request.POST:
+
+        persona.usuario = Usuario.objects.create_user(username=persona.mail,
+                                                      email=persona.mail,
+                                                      password="usuario217")
+
+
+    return redirect("administrativo")
 
 
 def profesional_list(request):
     persona = Persona.objects.all()
     contexto = {'personas': persona}
     return contexto
+

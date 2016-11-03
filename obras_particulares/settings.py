@@ -125,3 +125,18 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 AUTH_USER_MODEL='persona.Usuario'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Para el envio de email
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Host for sending e-mail.
+EMAIL_HOST = 'smtp.gmail.com'
+
+# Port for sending e-mail.
+EMAIL_PORT = 1025
+
+# Optional SMTP authentication information for EMAIL_HOST.
+EMAIL_HOST_USER = 'infosopunpsjb@gmail.com'
+EMAIL_HOST_PASSWORD = 'unpsjb2016'
+EMAIL_USE_TLS = True

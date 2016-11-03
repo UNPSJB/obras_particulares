@@ -15,4 +15,10 @@ urlpatterns = [
     url(r'^director$', views.mostrar_director,name="director"),
     url(r'^administrativo$', views.mostrar_administrativo,name="administrativo"),
 
+
+    url(r'^administrativo/habilitado$', views.habilitar,name="habilitar"),
+    # la que manda el correo
+
+    #url( r'^run/(?P<pk>\d+)/$', views.PerfRunView.as_view( ))
+
 ]
