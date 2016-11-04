@@ -18,7 +18,7 @@ class Tramite(models.Model):
 	profesional= models.OneToOneField(Profesional)
 	medidas = models.IntegerField()
 	tipoObra = models.OneToOneField(TipoObra)
-	#estados = models.ForeignKey(Estado)    
+	estados = models.ForeignKey(Estado)    
 
 	def __init__(self):
 		self.estados = [Iniciado(datetime.now())]

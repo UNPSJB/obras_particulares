@@ -17,7 +17,7 @@ urlpatterns = [
 
     url(r'^administrativo/tramite_listar$', views.mostrar_tramite,name="tramite_listar"),
 
-    url(r'^administrativo/habilitado$', views.habilitar,name="habilitar"),
+    url(r'^crearusuario/(?P<pk_persona>\d+)/$', views.crear_usuario,name="crear_usuario"),
     # la que manda el correo
 
     #url( r'^run/(?P<pk>\d+)/$', views.PerfRunView.as_view( ))

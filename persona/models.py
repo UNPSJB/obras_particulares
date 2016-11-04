@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 
 class Rol(models.Model):
 
@@ -23,6 +23,9 @@ class Propietario(Rol):
     pass
 
 class Usuario(Rol, AbstractUser):
+    PROFESIONAL = "profesional"
+    PROPIETARIO = "propietario"
+
     def get_view_name(self):
         return self.groups.first().name
 
@@ -39,6 +42,24 @@ class Persona(models.Model):
     propietario = models.OneToOneField(Propietario, blank=True, null=True)
     usuario = models.OneToOneField(Usuario, blank=True, null=True)
 
-
     def __str__(self):
         return "{}, {}" .format(self.apellido, self.nombre)
+
+    def crear_usuario(self, *extra_grupos):
+        grupos = list(extra_grupos)
+        created = False
+        password = ""
+        if self.usuario is None:
+            # Hacer una funcion que genere claves aleatorias
+            password = "123456"
+            self.usuario = Usuario.objects.create_user( username=self.mail,
+                                                        email=self.mail,
+                                                        password=password)
+        if self.profesional is not None:
+            grupos.append(Usuario.PROFESIONAL)
+        if self.propietario is not None:
+            grupos.append(Usuario.PROPIETARIO)
+        for nombre in grupos:
+            g = Group.objects.get(name=nombre)
+            self.usuario.groups.add(g)
+        return created, password, self.usuario

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import  login_required
 from .forms import *
@@ -86,18 +86,16 @@ def mostrar_administrativo(request):
 #
 
 
-def habilitar(request):
-    print ("HOLA")
-    id_persona = request.get(persona.id)
-    print (id_persona)
-    if request.POST:
-
-        persona.usuario = Usuario.objects.create_user(username=persona.mail,
-                                                      email=persona.mail,
-                                                      password="usuario217")
-
-
-    return redirect("administrativo")
+def crear_usuario(request, pk_persona):
+    usuario = request.user
+    persona = get_object_or_404(Persona, pk=pk_persona)
+    creado, password, usuario = persona.crear_usuario()
+    if creado:
+        # Mandar correo al  nuevo usuario con su usurio y clave
+        print("Mando correo de creado")
+    else:
+        print("Mando correo informando que se cambio algo en su cuenta de usuario")
+    return redirect(usuario.get_view_name())
 
 
 def profesional_list(request):
@@ -113,4 +111,3 @@ def mostrar_tramite(request):
     tramite = Tramite.objects.all()
     contexto = { 'tramites': tramite}
     return render(request, 'persona/administrativo/tramite_list.html', contexto)
-
