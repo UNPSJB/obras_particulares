@@ -25,6 +25,10 @@ class Propietario(Rol):
 class Usuario(Rol, AbstractUser):
     PROFESIONAL = "profesional"
     PROPIETARIO = "propietario"
+    ADMINISTRATIVO = "administrativo"
+    VISADOR = "visador"
+    INSPECTOR = "inspector"
+    DIRECTOR = "director"
 
     def get_view_name(self):
         return self.groups.first().name
@@ -49,12 +53,18 @@ class Persona(models.Model):
         grupos = list(extra_grupos)
         created = False
         password = ""
+        aux_usuario = None
         if self.usuario is None:
             # Hacer una funcion que genere claves aleatorias
             password = "123456"
-            self.usuario = Usuario.objects.create_user( username=self.mail,
+            aux_usuario = Usuario.objects.create_user( username=self.mail,
                                                         email=self.mail,
                                                         password=password)
+            created = True
+
+        print(self.usuario)
+        self.usuario = aux_usuario
+        print(self.usuario)
         if self.profesional is not None:
             grupos.append(Usuario.PROFESIONAL)
         if self.propietario is not None:
@@ -62,4 +72,6 @@ class Persona(models.Model):
         for nombre in grupos:
             g = Group.objects.get(name=nombre)
             self.usuario.groups.add(g)
+
+        self.save()
         return created, password, self.usuario

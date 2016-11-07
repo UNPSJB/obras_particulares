@@ -80,17 +80,15 @@ def alta_persona(request):
 @grupo_requerido('administrativo')
 def mostrar_administrativo(request):
     contexto = profesional_list(request)
-    return render(request, 'persona/administrativo/administrativo.html',contexto)
-#    return render(request, 'persona/administrativo/administrativo.html',{'FormularioProfesional':FormularioProfesional}, contexto)
-
-#
+    return render(request, 'persona/administrativo/administrativo.html', contexto)
 
 
 def crear_usuario(request, pk_persona):
     usuario = request.user
     persona = get_object_or_404(Persona, pk=pk_persona)
-    creado, password, usuario = persona.crear_usuario()
+    creado, password, usuario_creado = persona.crear_usuario()
     if creado:
+        messages.add_message(request, messages.SUCCESS, 'usuario creado.')
         # Mandar correo al  nuevo usuario con su usurio y clave
         print("Mando correo de creado")
     else:
@@ -99,8 +97,12 @@ def crear_usuario(request, pk_persona):
 
 
 def profesional_list(request):
-    persona = Persona.objects.all()
-    contexto = {'personas': persona}
+    personas = Persona.objects.all()
+    for p in personas:
+        print(p, p.profesional, p.usuario)
+    profesionales = filter(lambda persona: (persona.usuario is None), personas)
+    print(profesionales)
+    contexto = {'personas': profesionales}
     return contexto
 
 
