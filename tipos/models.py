@@ -24,8 +24,6 @@ class TipoDocumento(models.Model):
     fue_pubicado_recientemente.short_description = 'Publicado recintemente?'
 
 
-
-
 class Documento(models.Model):
     identificador = models.IntegerField(unique=True)
     tipo_documento = models.ForeignKey(TipoDocumento)

@@ -23,56 +23,50 @@
 
 {% block contenido %}
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-
 	  <div class="panel" >
-		<div class="panel-heading box" role="tab" id="headingOne">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>
-				<font color="#ffffff" size="2">Tramites iniciados</font>
-	        </a>
-	      </h5>
-	    </div>
+			<div class="panel-heading box" role="tab" id="headingOne">
+			  <h5 class="panel-title">
+					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>
+						<font color="#ffffff" size="2">Tramites iniciados</font>
+			    </a>
+		    </h5>
+		  </div>
 
 	    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-	      	<div class="panel-body">
-		      	<div class="container-fluid">
-		      		<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
- 							<!-- Table -->
-				      		{% block contenido_tramite %}
-								{% include "persona/administrativo/tramite_list.html" %}
-							{% endblock %}
-
-						</div>
-		  			</div>
-				</div>
-	      	</div>
+      	<div class="panel-body">
+	      	<div class="container-fluid">
+	      		<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	 							{% block contenido_tramite %}
+									{% include "persona/administrativo/tramite_list.html" %}
+								{% endblock %}
+							</div>
+	  				</div>
+					</div>
+      	</div>
 	    </div>
-
-	  </div>
+		</div>
 
 	  <div class="panel">
-
-		<div class="panel-heading box" role="tab" id="headingTwo">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite")'>
-			  <font color="#ffffff" size="2">Tramites corregidos</font>
-			</a>
-		  </h5>
-		</div>
+			<div class="panel-heading box" role="tab" id="headingTwo">
+			  <h5 class="panel-title">
+					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite")'>
+					  <font color="#ffffff" size="2">Tramites corregidos</font>
+					</a>
+			  </h5>
+			</div>
 	    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-	      	<div class="panel-body">
+      	<div class="panel-body">
 		    	<div class="container-fluid">
 		    		<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							aca va un bloque
-						</div>
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								aca va un bloque
+							</div>
 		  			</div>
-				</div>
-	      	</div>
-	    </div>
-
-	  </div>
+					</div>
+      	</div>
+		  </div>
+		</div>
 
 	  <div class="panel">
 	    <div class="panel-heading box" role="tab" id="headingFive">
@@ -83,15 +77,15 @@
 	      </h5>
 	    </div>
 	    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-	      	<div class="panel-body">
+	      <div class="panel-body">
 		    	<div class="container-fluid">
 		    		<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
- 							aca va un bloque
-						</div>
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	 							aca va un bloque
+							</div>
 		  			</div>
-				</div>
-	     	 </div>
+					</div>
+	     	</div>
 	    </div>
 	  </div>
 
@@ -104,18 +98,17 @@
 	      </h5>
 	    </div>
 	    <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
-	      	<div class="panel-body">
+	      <div class="panel-body">
 		   		<div class="container-fluid">
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							{% block contenido_profesional %}
-								{% include "persona/administrativo/profesional_list.html" %}
-							{% endblock %}
-
-						</div>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% block contenido_profesional %}
+									{% include "persona/administrativo/profesional_list.html" %}
+								{% endblock %}
+							</div>
 		  			</div>
-				</div>
-	      	</div>
+					</div>
+	      </div>
 	    </div>
 	  </div>
 
@@ -128,16 +121,15 @@
 	      </h5>
 	    </div>
 	    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-	      	<div class="panel-body">
+	      <div class="panel-body">
 		    	<div class="container-fluid">
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-									aca va un bloque
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								aca va un bloque
 					  	</div>
-					</div>
+						</div>
 		  		</div>
-			</div>
+				</div>
 	    </div>
 	  </div>
 
@@ -150,25 +142,25 @@
 	      </h5>
 	    </div>
 	    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-	      	<div class="panel-body">
-	      		<div class="container-fluid">
-	      				<div class="row">
+	      <div class="panel-body">
+	      	<div class="container-fluid">
+	      		<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								<div class="container-fluid">
-								<br>
+									<br>
 									<form action="" class="" >
 										<div class="row">
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-													<div class="form-group">
-														<label for="telefono">Nro. de teléfono:</label>
-														<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono"/>
-													</div>
+												<div class="form-group">
+													<label for="telefono">Nro. de teléfono:</label>
+													<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono"/>
+												</div>
 											</div>
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-													<div class="form-group">
-														<label for="">E-Mail:</label>
-														<input class="form-control input-sm" id="" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail"/>
-													</div>
+												<div class="form-group">
+													<label for="">E-Mail:</label>
+													<input class="form-control input-sm" id="" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail"/>
+												</div>
 											</div>
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 												<label for="">Cambiar Foto de perfil:</label>
@@ -195,9 +187,9 @@
 							</div>
 						</div>
 	   			</div>
+				</div>
 			</div>
-		 </div>
-	   </div>
+	  </div>
 	</div>
 
 {% endblock %}

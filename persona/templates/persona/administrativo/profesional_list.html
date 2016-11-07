@@ -2,52 +2,52 @@
 
 
 {% block contenido_profesional %}
-
-    <div class="table-responsive">
-
-        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-
-
-            <!-- Cabecera -->
-            <thead>
+  <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+          <!-- Cabecera -->
+          <thead>
+              <tr>
+                  <td>Nombre</td>
+                  <td>Apellido</td>
+                  <td>CUIL</td>
+                  <td>Telefono</td>
+                  <td>Profesion</td>
+                  <td>Categoria</td>
+                  <td>Matricula</td>
+                  <td>Ver certificados</td>
+                  <td>Habilitar profesional</td>
+              </tr>
+          </thead>
+          <!-- Mostramos los datos de las tablas -->
+          <tbody>
+          {% if personas %}
+              {% for persona in personas %}
                 <tr>
-                    <td>Nombre</td>
-                    <td>Apellido</td>
-                    <td>CUIL</td>
-                    <td>Telefono</td>
-                    <td>Username</td>
-                    <td>Profesion</td>
-                    <td>Categoria</td>
-                    <td>Matricula</td>
-                    <td>Ver certificados</td>
-                    <td>Habilitar profesional</td>
+                  <td>{{ persona.nombre }}</td>
+                  <td>{{ persona.apellido }} </td>
+                  <td>{{ persona.cuil }}</td>
+                  <td>{{ persona.telefono }}</td>
+                  <td>{{ persona.profesional.profesion }}</td>
+                  <td>{{ persona.profesional.categoria }}</td>
+                  <td>{{ persona.profesional.matricula }}</td>
+                  <td>
+                    <a href="">
+                      <button type="button" class="btn btn-primary" name="ver-certificado">
+                        Ver certificado
+                      </button>
+                    </a>
+                  </td>
+                  <td>
+                    <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
+                      <button type="button" class="btn btn-primary" name="habilitar">
+                        Habilitar
+                      </button>
+                    </a>
+                  </td>
                 </tr>
-            </thead>
-            <!-- Mostramos los datos de las tablas -->
-            <tbody>
-            {% if personas %}
-                {% for persona in personas %}
-                  <tr>
-                    <td>{{ persona.nombre }}</td>
-                    <td>{{ persona.apellido }} </td>
-                    <td>{{ persona.cuil }}</td>
-                    <td>{{ persona.telefono }}</td>
-                    <td>{{ persona.usuario.id }}</td>
-                    <td>{{ persona.profesional.profesion }}</td>
-                    <td>{{ persona.profesional.categoria }}</td>
-                    <td>{{ persona.profesional.matricula }}</td>
-                    <td>
-                      <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
-                        <button type="button" class="btn btn-primary" name="habilitar">
-                          habilitar
-                        </button>
-                      </a>
-                    </td>
-                  </tr>  
-                {% endfor %}
-            {% endif%}
-
-            </tbody>
-        </table>
-    </div>
+              {% endfor %}
+          {% endif%}
+          </tbody>
+      </table>
+  </div>
 {% endblock %}

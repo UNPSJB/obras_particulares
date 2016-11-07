@@ -9,9 +9,11 @@ from django.contrib.auth.models import Group, User
 class FormularioPersona(forms.ModelForm):
     NAME = 'persona_form'
     SUBMIT = 'persona_submit'
+
     class Meta:
         model = Persona
         fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil', 'mail')
+
     def __init__(self, *args, **kwargs):
         super(FormularioPersona, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -35,8 +37,7 @@ class FormularioProfesional(FormularioPersona):
             profesion= datos['profesion'],
             matricula= datos['matricula'],
             categoria= datos['categorias'],
-            certificado = datos['certificado']
-        )
+            certificado = datos['certificado'])
         p.save()
         persona.profesional= p
         persona.save()
@@ -69,7 +70,6 @@ class FormularioUsuario(AuthenticationForm):
 class FormularioUsuarioPersona(FormularioPersona):
     NAME = 'usuario_persona_form'
     SUBMIT = 'usuario_persona_submit'
-
     usuario = forms.CharField()
     password = forms.CharField()
 
@@ -77,17 +77,13 @@ class FormularioUsuarioPersona(FormularioPersona):
         super(FormularioUsuarioPersona, self).__init__(*args, **kwargs)
 
     def save(self, commit = False):
-
         persona = super(FormularioUsuarioPersona, self).save(commit = False)
         datos = self.cleaned_data
-
         persona.usuario = Usuario.objects.create_user(username = datos['usuario'],
                                                       email = datos['mail'],
                                                       password = datos['password'],)
-
         persona.usuario.save()
         persona.save()
-
         return persona.usuario
 
 
@@ -120,9 +116,3 @@ class FormularioInspector(FormularioUsuarioPersona):
         grupo = Group.objects.get(name='inspector')
         usuario.groups.add(grupo)
         return usuario
-
-
-
-
-
-

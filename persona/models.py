@@ -61,10 +61,7 @@ class Persona(models.Model):
                                                         email=self.mail,
                                                         password=password)
             created = True
-
-        print(self.usuario)
         self.usuario = aux_usuario
-        print(self.usuario)
         if self.profesional is not None:
             grupos.append(Usuario.PROFESIONAL)
         if self.propietario is not None:

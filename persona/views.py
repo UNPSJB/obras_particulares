@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import  login_required
 from .forms import *
 from tipos.forms import *
 from obras_particulares.views import *
+from tramite.forms import FormularioTramite
+from tramite.models import Tramite
 
 
 def mostrar_inspector(request):
@@ -48,7 +50,6 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
 @grupo_requerido('director')
 def mostrar_director(request):
     usuario = request.user
-
     values = {}
     for form_name, submit_name in FORMS_DIRECTOR:
         KlassForm = FORMS_DIRECTOR[(form_name, submit_name)]
@@ -98,16 +99,10 @@ def crear_usuario(request, pk_persona):
 
 def profesional_list(request):
     personas = Persona.objects.all()
-    for p in personas:
-        print(p, p.profesional, p.usuario)
-    profesionales = filter(lambda persona: (persona.usuario is None), personas)
-    print(profesionales)
+    profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
     contexto = {'personas': profesionales}
     return contexto
 
-
-from tramite.forms import FormularioTramite
-from tramite.models import Tramite
 
 def mostrar_tramite(request):
     tramite = Tramite.objects.all()

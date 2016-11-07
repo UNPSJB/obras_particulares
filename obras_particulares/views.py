@@ -1,11 +1,9 @@
-
 from persona import *
 from persona.forms import *
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
-
 from . import forms
 
 
@@ -19,9 +17,11 @@ def login_view(request):
             messages.add_message(request, messages.WARNING, 'Clave o usuario incorrecto.')
     return redirect("home")
 
+
 def logout_view(request):
     logout(request)
     return redirect("home")
+
 
 def home(request):
     if request.method == "POST":
@@ -29,10 +29,11 @@ def home(request):
         if form.is_valid():
             profesional = form.save()
             profesional.save()
-            #messages.add_message(request, messages.SUCCESS, "Soliciud de Registro Enviada")
+            messages.add_message(request, messages.SUCCESS, "Soliciud de Registro Enviada")
     else:
         form = FormularioProfesional()
     return render(request, 'home.html',{'login_usuario_form': forms.FormularioLogin(),'form':form})
+
 
 def grupo_requerido(*grupos):
     def view_funct(f):
