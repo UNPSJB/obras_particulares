@@ -116,3 +116,21 @@ class FormularioInspector(FormularioUsuarioPersona):
         grupo = Group.objects.get(name='inspector')
         usuario.groups.add(grupo)
         return usuario
+
+class FormularioBusquedaPropietario(forms.Form):
+    NAME = 'busqueda_propietario_form'
+    SUBMIT = 'busqueda_propietario_submit'
+    dni = forms.CharField()
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioBusquedaPropietario, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit(self.SUBMIT, 'Buscar Propietario'))
+
+    def clean_dni(self):
+        dni = self.cleaned_data['dni']
+        if Propietario.Objects.filter(dni=dni).exists():
+            raise ValidationError('El propietario ya existe')
+        return dni
+
+

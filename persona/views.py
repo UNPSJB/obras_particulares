@@ -12,8 +12,18 @@ def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
 
 def mostrar_profesional(request):
-    form = FormularioProfesional()
-    return render(request, 'persona/profesional/profesional.html',{'form':form})
+    formulario_busqueda_propietario = FormularioBusquedaPropietario()
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento("INICIAR")
+    print(tipos_de_documentos_requeridos)
+    """if request.method == "POST":
+        formulario_busqueda_propietario = FormularioBusquedaPropietario(request.POST)
+        if formulario_busqueda_propietario.is_valid():
+            propietario_form = FormularioPropietario()
+        else:
+            formulario_busqueda_propietario = FormularioBusquedaPropietario()"""
+
+    return render(request, 'persona/profesional/profesional.html',{'busqueda_propietario_form':formulario_busqueda_propietario,
+                                                                   'tipos_de_documentos_requeridos': tipos_de_documentos_requeridos})
 
 def mostrar_jefe_inspector(request):
     return render(request, 'persona/jefe_inspector/jefe_inspector.html')
