@@ -2,14 +2,9 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 import datetime
+from datetime import datetime
 from persona.models import *
-from tipos.models import *
-
-
-class Estado(models.Model):
-	fecha = models.DateTimeField(blank=False)
-	def __init__(self, fecha_creacion):
-		self.fecha = fecha_creacion
+#from tipos.models import TipoObra
 
 
 
@@ -17,39 +12,63 @@ class Tramite(models.Model):
 	propietario = models.OneToOneField(Propietario,null=True)
 	profesional= models.OneToOneField(Profesional)
 	medidas = models.IntegerField()
-	tipoObra = models.OneToOneField(TipoObra)
-	estados = models.ForeignKey(Estado)    
 
-	def __init__(self):
-		self.estados = [Iniciado(datetime.now())]
+	#tipo_obra = models.OneToOneField(TipoObra)
+	#pago = models.BooleanField(initial=False)
+	#colecciones = estados y documentos
 
+	def pago_completo(self):
+		this.pago=True
+
+	def save(self):
+		if self.pk is None:
+			#super save #Iniciado(tramte=self).save()
+			return Iniciado(self)
+		else:
+			print("ya estoyh guardado en la base y esto es un update")
+			self.estados.last().__class__.save()
 
 	def get_nombre_estado(self):
-		return self.estados[-1].fecha, self.estados[-1].__class__.__name__.lower()
+		return self.estados.last().fecha, self.estados[-1].__class__.__name__.lower()
 
 	def quien_lo_inspecciono(self):
 		agendados = filter(lambda e: isinstance(e, Agendado), self.estados)
 		return ", ".join(["%s %s lo inspecciono" % (a.fecha_inspeccion, a.inspector) for a in agendados])
 
+	def hacer(self, accion, *args, **kwargs):
+		if hasattr(self.estados[-1], accion):
+			metodo = getattr(self.estados[-1], accion)
+			self.estados.append(metodo(self, *args, **kwargs))
+
+
+class Estado(models.Model):
+	tramite = models.ForeignKey(Tramite,related_name='estados') # FK related_name=estados
+	timestamp = models.DateTimeField(auto_now=True)
+
+	class Meta:
+		ordering = ['-timestamp']
+
+
+	def agregar_documentacion(self, tramite, documentos):
+		tramite.documentos.add(documento)
 
 
 class Iniciado(Estado):
-	def revisar(self, tramite, obs = None):
-		if obs:
-			return Iniciado(datetime.now())
-		else:
-			return Aceptado(datetime.now())
+	def aceptar(self):
+		return Aceptado(datetime.now())
 
-	def __init__(self, fecha):
-	    super(Iniciado, self).__init__(fecha)
+		#super save #Iniciado(tramte=self).save()
+	def __init__(self, tramite):
+		super(Iniciado, self).__init__(tramite)
+
 
 class Aceptado(Estado):
-	def visar(self, monto, documentos):
-		tramite.documentos = tramite.documentos + documentos
+	def visar(self,tramite, monto, permiso):
+		self.agregar_documentacion(tramite,permiso)
 		return Visado(datetime.now(), monto,documentos)
 
-	def __init__(self, fecha):
-		super(Aceptado, self).__init__(fecha)
+	def __init__(self):
+		super(Aceptado, self).__init__()
 
 
 class Visado(Estado):
@@ -63,7 +82,7 @@ class Visado(Estado):
 		if obs:
 			return Corregido(datetime.now(),obs)
 		else:
-			return Agendado(datetime.now())
+			return Agendado(datetime.now(),fecha)
 
 
 class Corregido(Estado):
@@ -78,16 +97,21 @@ class Corregido(Estado):
 			return Aceptado(datetime.now())
 
 class Agendado(Estado):
-	def __init__(self, fecha, fecha_inspeccion, inspector):
+
+	def __init__(self, fecha): #fecha_inspeccion, inspector
 		super(Agendado, self).__init__(fecha)
-		self.fecha_inspeccion = fecha_inspeccion
-		self.inspector = inspector
+		self.fecha_inspeccion = None
+		self.inspector = None
 
-		def inspeccionar(self, fecha, inspector):
-			return Agendado(datetime.now(), fecha, inspector)
+	def inspeccionar(self, fecha, inspector):
+		estado = Agendado(datetime.now())
+		estado.fecha_inspeccion = fecha
+		estado.inspector= inspector
+		return estado
 
-			def realizar_ultima_inspeccion(self,fecha):
-				return Inspeccionado(datetime.now(), fecha)
+	def realizar_ultima_inspeccion(self,fecha):
+		return Inspeccionado(datetime.now(), fecha)
+
 
 class Inspeccionado(Estado):
 	def __init__(self,fecha,fecha_inspeccion):
@@ -95,7 +119,10 @@ class Inspeccionado(Estado):
 		self.fecha_inspeccion = fecha_inspeccion
 
 	def solicitar_final_obra(self):
-		return Finalizado(datetime.now())
+		if self.tramite.pago:
+			return Finalizado(datetime.now())
+		else:
+			return self
 
 class Finalizado(Estado):
 	def __init__(self,fecha):

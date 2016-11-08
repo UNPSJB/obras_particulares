@@ -11,10 +11,8 @@ class FormularioTramite(forms.ModelForm):
 	SUBMIT = 'tramite_submit'
 	class Meta:
 		model = Tramite
-		fields = ('propietario', 'tipoObra', 'medidas')
+		fields = ('propietario', 'medidas')
 	def __init__(self, *args, **kwargs):
 		super(FormularioTramite, self).__init__(*args, **kwargs)
 		self.helper = FormHelper()
 		self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
-
-		

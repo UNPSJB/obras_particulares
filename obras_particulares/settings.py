@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'persona',
     'tipos',
     'tramite',
+    'documento',
 ]
 
 MIDDLEWARE = [

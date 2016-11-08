@@ -33,4 +33,4 @@ admin.site.register(TipoDocumento, AltaTipoDocumento)
 
 admin.site.register(TipoObra, AltaTipoObra)
 
-admin.site.register(Documento, AltaDocumento)
+#admin.site.register(Documento, AltaDocumento)

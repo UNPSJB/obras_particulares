@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^persona/', include('persona.urls')),
     url(r'^tipos/', include('tipos.urls')),
     url(r'^tramite/', include('tramite.urls')),
+    url(r'^documento/', include('documento.urls')),
 ]

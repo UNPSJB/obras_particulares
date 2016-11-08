@@ -1,8 +1,9 @@
 from __future__ import unicode_literals
 import datetime
 from django.utils import timezone
-
+from datetime import datetime
 from django.db import models
+
 
 
 class TipoDocumento(models.Model):
@@ -23,15 +24,6 @@ class TipoDocumento(models.Model):
     fue_pubicado_recientemente.boolean = True
     fue_pubicado_recientemente.short_description = 'Publicado recintemente?'
 
-
-
-
-class Documento(models.Model):
-    identificador = models.IntegerField(unique=True)
-    tipo_documento = models.ForeignKey(TipoDocumento)
-
-    def __str__(self):
-        return self.tipo_documento.nombre
 
 
 class TipoObra(models.Model):
