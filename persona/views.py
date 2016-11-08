@@ -12,15 +12,17 @@ def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
 
 def mostrar_profesional(request):
-    formulario_busqueda_propietario = FormularioBusquedaPropietario()
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento("INICIAR")
     print(tipos_de_documentos_requeridos)
-    """if request.method == "POST":
+
+    if request.method == "POST":
+        print("entre al if")
         formulario_busqueda_propietario = FormularioBusquedaPropietario(request.POST)
         if formulario_busqueda_propietario.is_valid():
-            propietario_form = FormularioPropietario()
-        else:
-            formulario_busqueda_propietario = FormularioBusquedaPropietario()"""
+
+            print("Aca instancio el formulario para dar de alta el propietario")
+    else:
+        formulario_busqueda_propietario = FormularioBusquedaPropietario()
 
     return render(request, 'persona/profesional/profesional.html',{'busqueda_propietario_form':formulario_busqueda_propietario,
                                                                    'tipos_de_documentos_requeridos': tipos_de_documentos_requeridos})
@@ -77,7 +79,7 @@ def mostrar_director(request):
     return render(request, 'persona/director/director.html', values)
 
 
-def alta_persona(request):
+"""def alta_persona(request):
     if request.method == "POST":
         form = FormularioPersona(request.POST)
         if form.is_valid():
@@ -85,6 +87,18 @@ def alta_persona(request):
             persona.save()
     else:
         form = FormularioPersona()
+    return render(request, 'persona/alta/alta_persona.html', {'form': form})"""
+
+
+def alta_persona(request):
+
+    if request.method == "POST":
+        form = FormularioBusquedaPropietario(request.POST)
+        if form.is_valid():
+            form2 = FormularioPropietario()
+            print("form is valid")
+    else:
+        form = FormularioBusquedaPropietario()
     return render(request, 'persona/alta/alta_persona.html', {'form': form})
 
 @login_required(login_url="login")

@@ -31,15 +31,14 @@
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								<div class="container-fluid">
-									<form action="" class="" >
+									<form action="" class="post-form" method="POST">
 										<div class="row">
 											<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-													<br>
-													<font color="#337ab7"><h4 align="left">Datos del Propietario:</h4></font>
+												<br>
+												<font class="form-group" color="#337ab7"><h4 align="left">Datos del Propietario:</h4></font>
 
-														{% block busqueda_propietario %}
-															{% crispy busqueda_propietario_form %}
-														{% endblock %}
+
+												{% crispy busqueda_propietario_form %}
 
 											</div>
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
@@ -51,7 +50,7 @@
 
 															<div class="form-group">
 																<label>{{tipo_documento}}</label>
-																<!--<input class="file" id="cach" type="file" data-preview-file-type="any" title="Cargar el Certificado del CACH" required />-->
+																<!---<input class="file" id="cach" type="file" data-preview-file-type="any" title="Cargar el Certificado del CACH" required />-->
 																<hr size="5" width="300" align="left">
 															</div>
 
@@ -63,7 +62,7 @@
 													<font color="#337ab7"><h4 align="left">Documentación del trámite:</h4></font>
 													<div class="form-group">
 														<label for="">Certificado de CACH:</label>
-														<input class="file" id="cach" type="file" data-preview-file-type="any" title="Cargar el Certificado del CACH" required />
+														<!---<input class="file" id="cach" type="file" data-preview-file-type="any" title="Cargar el Certificado del CACH" required />-->
 													</div>
 													<hr size="5" width="300" align="left">
 													<div class="form-group">

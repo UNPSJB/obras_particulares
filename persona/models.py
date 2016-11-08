@@ -20,7 +20,14 @@ class Profesional(Rol):
     certificado = models.ImageField(upload_to='certificado/', null= True)
 
 class Propietario(Rol):
-    pass
+    dni = models.CharField(max_length=8, unique=True, blank=True)
+    apellido = models.CharField(max_length=50, blank=True)
+    nombre = models.CharField(max_length=50, blank=True)
+    mail = models.CharField(max_length=40, blank=True)
+    cuil = models.CharField(max_length=14, blank=True)
+    domicilio = models.CharField(max_length=50, blank=True)
+    telefono = models.CharField(max_length=15, blank=True)
+
 
 class Usuario(Rol, AbstractUser):
     PROFESIONAL = "profesional"

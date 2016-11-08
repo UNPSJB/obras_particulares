@@ -46,7 +46,7 @@ class FormularioProfesional(FormularioPersona):
     def clean_matricula(self):
         dato = self.cleaned_data['matricula']
         if Profesional.objects.filter(matricula=dato).exists():
-            raise ValidationError('matricula repetida')
+            raise ValidationError('Matricula repetida')
         return dato
 
 class FormularioPropietario(forms.ModelForm):
@@ -128,9 +128,11 @@ class FormularioBusquedaPropietario(forms.Form):
         self.helper.add_input(Submit(self.SUBMIT, 'Buscar Propietario'))
 
     def clean_dni(self):
-        dni = self.cleaned_data['dni']
-        if Propietario.Objects.filter(dni=dni).exists():
+        print("Entre al clean")
+        dato = self.cleaned_data['dni']
+        if Propietario.objects.filter(dni=dato).exists():
             raise ValidationError('El propietario ya existe')
-        return dni
+
+        return dato
 
 
