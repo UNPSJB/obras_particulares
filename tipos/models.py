@@ -16,13 +16,7 @@ class TipoDocumento(models.Model):
     def __str__(self):
         return self.nombre
 
-    def fue_pubicado_recientemente(self):
-        now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.fecha_alta <= now
-
-    fue_pubicado_recientemente.admin_order_field = 'fecha_alta'
-    fue_pubicado_recientemente.boolean = True
-    fue_pubicado_recientemente.short_description = 'Publicado recintemente?'
+    
 
 
 

@@ -4,7 +4,7 @@ from django.utils import timezone
 import datetime
 from datetime import datetime
 from persona.models import *
-#from tipos.models import TipoObra
+from tipos.models import TipoObra
 
 
 
@@ -12,21 +12,22 @@ class Tramite(models.Model):
 	propietario = models.OneToOneField(Propietario,null=True)
 	profesional= models.OneToOneField(Profesional)
 	medidas = models.IntegerField()
-
-	#tipo_obra = models.OneToOneField(TipoObra)
+	tipo_obra = models.ForeignKey(TipoObra)
 	#pago = models.BooleanField(initial=False)
 	#colecciones = estados y documentos
 
 	def pago_completo(self):
 		this.pago=True
 
-	def save(self):
+	def save(self,*args, **kwds):
 		if self.pk is None:
-			#super save #Iniciado(tramte=self).save()
-			return Iniciado(self)
+			t=super(Tramite, self).save(force_insert=True) #super save
+			Iniciado(tramite=t)
+			return t
 		else:
-			print("ya estoyh guardado en la base y esto es un update")
-			self.estados.last().__class__.save()
+			#estoy en la base y esto es un update
+			return super(Tramite, self).save(force_update=True)#
+
 
 	def get_nombre_estado(self):
 		return self.estados.last().fecha, self.estados[-1].__class__.__name__.lower()
@@ -50,7 +51,7 @@ class Estado(models.Model):
 
 
 	def agregar_documentacion(self, tramite, documentos):
-		tramite.documentos.add(documento)
+		tramite.documentos.add(documento) #buscar tramite con fk y asignarle documentos
 
 
 class Iniciado(Estado):
