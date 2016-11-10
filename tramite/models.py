@@ -9,7 +9,7 @@ from tipos.models import TipoObra
 
 
 class Tramite(models.Model):
-	propietario = models.OneToOneField(Propietario,null=True)
+	propietario = models.OneToOneField(Propietario,null=True) #propietario y profesional fk en vez de 1 a 1 ?
 	profesional= models.OneToOneField(Profesional)
 	medidas = models.IntegerField()
 	tipo_obra = models.ForeignKey(TipoObra)
@@ -29,8 +29,8 @@ class Tramite(models.Model):
 			return super(Tramite, self).save(force_update=True)#
 
 
-	def get_nombre_estado(self):
-		return self.estados.last().fecha, self.estados[-1].__class__.__name__.lower()
+	def get_nombre_estado(self):		
+		return self.estados.last().__class__.__name__.lower()
 
 	def quien_lo_inspecciono(self):
 		agendados = filter(lambda e: isinstance(e, Agendado), self.estados)
@@ -46,85 +46,116 @@ class Estado(models.Model):
 	tramite = models.ForeignKey(Tramite,related_name='estados') # FK related_name=estados
 	timestamp = models.DateTimeField(auto_now=True)
 
+	documentos = [] #provisorio
+
 	class Meta:
 		ordering = ['-timestamp']
 
 
 	def agregar_documentacion(self, tramite, documentos):
-		tramite.documentos.add(documento) #buscar tramite con fk y asignarle documentos
+		self.documentos.add(documento) #buscar tramite con fk y asignarle documentos
 
 
 class Iniciado(Estado):
-	def aceptar(self):
-		return Aceptado(datetime.now())
+	CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
+	observacion = models.CharField(max_length=100,default=CADENA_DEFAULT)
 
-		#super save #Iniciado(tramte=self).save()
+	def aceptar(self):
+		return Aceptado(tramite=self.tramite)
+
+	def rechazar(self,observaciones):
+		estado=Iniciado(tramite=self.tramite)
+		estado.observacion=observaciones
+		return estado
+
 	def __init__(self, tramite):
 		super(Iniciado, self).__init__(tramite)
 
 
 class Aceptado(Estado):
-	def visar(self,tramite, monto, permiso):
-		self.agregar_documentacion(tramite,permiso)
-		return Visado(datetime.now(), monto,documentos)
+	def visar(self,monto,permiso):
+		return Visado(self,monto=monto,documentos=permiso)
 
-	def __init__(self):
-		super(Aceptado, self).__init__()
+	def __init__(self,tramite):
+		super(Aceptado, self).__init__(tramite)
 
 
 class Visado(Estado):
-	monto = models.IntegerField()
-	def __init__(self, fecha, monto,documentos):
-		super(Visado, self).__init__(fecha)
+	monto = models.FloatField()
+	permiso = models.CharField(max_length=20)
+	def __init__(self, tramite,monto,documentos):
+		super(Visado, self).__init__(tramite)
 		self.monto = monto
-		self.documentos = documentos
+		self.agregar_documentacion(documentos)
 
-	def revisar(self, fecha, obs = None):
-		if obs:
-			return Corregido(datetime.now(),obs)
-		else:
-			return Agendado(datetime.now(),fecha)
+	def corregir_visado(self,observacion):
+		return Corregido(tramite=self.tramite,observaciones=observacion)
+
+	def agendar(self,fecha_inspeccion):
+		return Agendado(tramite=self.tramite,fecha=fech)
 
 
 class Corregido(Estado):
-	def __init__(self,fecha,observacion):
-		super(Corregido, self).__init__(fecha)
-		observacion=obs
+	CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
+	observacion = models.CharField(max_length=100,default=CADENA_DEFAULT)
+	def __init__(self,tramite,observaciones):
+		super(Corregido, self).__init__(tramite)
+		self.observacion=observaciones
 
-	def revisar(self,fecha,obs = None):
-		if obs:
-			return Corregido(datetime.now(),obs)
-		else:
-			return Aceptado(datetime.now())
+	def corregir(self,documentos,aclaraciones):	#realiza el profesional, self.observaciones ==aclaraciones
+		estado = Corregido(tramite=self.tramite,observaciones=aclaraciones)
+		estado.agregar_documentacion(documentos=documentos)
+		return estado
+
+	def aceptar(self):
+		return Aceptado(tramite=self.tramite)
+
 
 class Agendado(Estado):
 
-	def __init__(self, fecha): #fecha_inspeccion, inspector
-		super(Agendado, self).__init__(fecha)
-		self.fecha_inspeccion = None
+	def __init__(self, tramite,fecha_inspeccion): #inspector
+		super(Agendado, self).__init__(tramite)
+		self.fecha_inspeccion = fecha_inspeccion
 		self.inspector = None
 
-	def inspeccionar(self, fecha, inspector):
+	def inspeccionar(self, fecha_inspeccion, inspector):
 		estado = Agendado(datetime.now())
-		estado.fecha_inspeccion = fecha
+		estado.fecha_inspeccion = fecha_inspeccion
 		estado.inspector= inspector
 		return estado
 
-	def realizar_ultima_inspeccion(self,fecha):
-		return Inspeccionado(datetime.now(), fecha)
+	def asignar_fecha_inspeccion(self,fecha):
+		self.fecha_inspeccion=fecha
 
+	def asignar_inspector(self,inspector):
+		self.inspector=inspector
+
+	def realizar_ultima_inspeccion(self,fecha):
+		self.fecha_inspeccion_final=fecha
+
+	def inspeccionar(self):
+		if datetime.datetime.now() > self.fecha_inspeccion_final:
+			return Inspeccionado(tramite=self.tramite) #ver si tiene al menos 3 inspecciones--consulta bd
+
+	def corregir_errores_obra(self,observacion):
+		return Corregido(tramite=self.tramite,observaciones=observacion)
 
 class Inspeccionado(Estado):
-	def __init__(self,fecha,fecha_inspeccion):
-		super(Inspeccionado, self).__init__(fecha)
-		self.fecha_inspeccion = fecha_inspeccion
 
-	def solicitar_final_obra(self):
-		if self.tramite.pago:
-			return Finalizado(datetime.now())
+	def __init__(self,tramite): #fecha_inspeccion
+		super(Inspeccionado, self).__init__(tramite)
+
+
+	def solicitar_final_obra(self):# fecha_inspeccion_final en la solucitud?
+		if self.tramite.pago_completo: #Tramite.objects.get(pk=tramite.pk).pago_completo
+			return Finalizado(self.tramite)
 		else:
 			return self
 
+
+
 class Finalizado(Estado):
-	def __init__(self,fecha):
-		super(Finalizado,self).__init__(fecha)
+
+
+	def __init__(self,tramite):
+		super(Finalizado,self).__init__(tramite)
