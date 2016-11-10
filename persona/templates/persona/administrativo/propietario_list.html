@@ -1,7 +1,7 @@
 {% load staticfiles %}
 
 
-{% block contenido_profesional %}
+{% block contenido_propietario %}
   <div class="table-responsive">
       <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
           <!-- Cabecera -->
@@ -11,11 +11,9 @@
                   <td>Apellido</td>
                   <td>CUIL</td>
                   <td>Telefono</td>
-                  <td>Profesion</td>
-                  <td>Categoria</td>
-                  <td>Matricula</td>
-                  <td>Ver certificados</td>
-                  <td>Habilitar profesional</td>
+                  <td>Profesional nombre apellido matricula</td>
+                  <td>Ver datos tramite</td>
+                  <td>Habilitar propietario</td>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -27,9 +25,11 @@
                   <td>{{ persona.apellido }} </td>
                   <td>{{ persona.cuil }}</td>
                   <td>{{ persona.telefono }}</td>
-                  <td>{{ persona.profesional.profesion }}</td>
-                  <td>{{ persona.profesional.categoria }}</td>
-                  <td>{{ persona.profesional.matricula }}</td>
+                  <td>{{ persona.propietario.tramite.profesional.nombre }}
+                        {{ persona.propietario.tramite.profesional.apellido }}
+                        {{ persona.propietario.profesional.matricula }}
+                  </td>
+                  <td>{{ persona.propietario.tramite.id }}</td>
                   <td>
                     <a href="">
                       <button type="button" class="btn btn-primary" name="ver-certificado">

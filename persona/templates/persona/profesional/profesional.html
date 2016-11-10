@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load crispy_forms_tags%}
 
 
 {% block barra %}
@@ -30,92 +31,52 @@
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								<div class="container-fluid">
-									<form action="" class="" >
+									<form action="" class="post-form" method="POST">
 										<div class="row">
 											<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-													<br>
-													<font color="#337ab7"><h4 align="left">Datos del Propietario:</h4></font>
+												<br>
+												<font class="form-group" color="#337ab7"><h4 align="left">Datos del Propietario:</h4></font>
+												
+												{% crispy busqueda_propietario_form %}
 
-													<div class="form-group">
-														<label for="">Nombre:</label>
-														<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nombre" title="Ingresar Nombre del propietario" maxlength="20" required autofocus/>
-													</div>
-													<div class="form-group">
-														<label for="">Apellido:</label>
-														<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Apellido" title="Ingresar Apellido del propietario" maxlength="15" required />
-													</div>
-													<div class="form-group">
-														<label for="">Tipo de documento:</label>
-														<select class="form-control input-sm">
-															<option>Ingresar tipo de documento</option>
-															<option>DNI</option>
-															<option>LE</option>
-														</select>
-													</div>
-													<div class="form-group">
-														<label for="">Nro de documento:</label>
-														<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nro de Documento" title="Ingresar Nro de Documento del propietario" maxlength="9" required />
-													</div>
-													<div class="form-group">
-														<label for="">Nro de CUIT:</label>
-														<input class="form-control input-sm" id="" type="text" placeholder="Ingresar Nro de CUIT" title="Ingresar Nro de CUIT del propietario" maxlength="13" required />
-													</div>
-													<div class="form-group">
-														<label for="telefono">Nro. de teléfono:</label>
-														<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar Nro de telefono del propietario" maxlength="13" required />
-													</div>
-													<div class="form-group">
-														<label for="">E-Mail:</label>
-														<input class="form-control input-sm" id="" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar e-mail del propietario" maxlength="20" required />
-													</div>
 											</div>
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 													<br>
-													<font color="#337ab7"><h4 align="left">Datos de la obra:</h4></font>
+													<font color="#337ab7"><h4 align="left">Datos necesarios para iniciar un tramite:</h4></font>
 
-													<div class="form-group">
-														<label for="">Tipo de obra:</label>
-														<select class="form-control input-sm" required>
-															<option>Ingresar tipo de obra</option>
-															<option>1</option>
-															<option>2</option>
-															<option>3</option>
-														</select>
-													</div>
-													<div class="form-group">
-														<label for="">Nro de padrón:</label>
-														<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro. de padrón" title="Ingresar Nro. de padrón del la obra" maxlength="7" required />
-													</div>
-													<div class="form-group">
-														<label for="">Nro de matricula RT:</label>
-														<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de matrícula de RT" title="Ingresar Nro de matrícula de RT de la obra" maxlength="4" required />
-													</div>
-													<div class="form-group">
-														<label for="">Nro de matricula DO:</label>
-														<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de matrícula de DO" title="Ingresar Nro de matrícula de DO" maxlength="4" required />
-													</div>
+													{% for tipo_documento in tipos_de_documentos_requeridos %}
+														<div>
+
+															<div class="form-group">
+																<label>{{tipo_documento}}</label>
+																<!---<input class="file" id="cach" type="file" data-preview-file-type="any" title="Cargar el Certificado del CACH" required />-->
+																<hr size="5" width="300" align="left">
+															</div>
+
+														</div>
+													{% endfor %}
 											</div>
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 													<br>
 													<font color="#337ab7"><h4 align="left">Documentación del trámite:</h4></font>
 													<div class="form-group">
 														<label for="">Certificado de CACH:</label>
-														<input class="file" id="cach" type="file" data-preview-file-type="any" title="Cargar el Certificado del CACH" required />
+														<!---<input class="file" id="cach" type="file" data-preview-file-type="any" title="Cargar el Certificado del CACH" required />-->
 													</div>
 													<hr size="5" width="300" align="left">
 													<div class="form-group">
 														<label for="">Planilla Tributaria:</label>
-														<input class="file" id="tributaria" type="file" data-preview-file-type="any" title="Cargar la Planilla Tributaria" required />
+														<input class="file" id="tributaria" type="file" data-preview-file-type="any" title="Cargar la Planilla Tributaria" />
 													</div>
 													<hr size="5" width="300" align="left">
 													<div class="form-group">
 														<label for="">Planilla Dominial:</label>
-														<input type="file" id="dominial" data-preview-file-type="any" title="Cargar la Planilla Dominial" required />
+														<input type="file" id="dominial" data-preview-file-type="any" title="Cargar la Planilla Dominial" />
 													</div>
 													<hr size="5" width="300" align="left">
 													<div class="form-group">
 														<label for="">Planos:</label>
-														<input type="file" id="planos" multiple="true" data-preview-file-type="any" title="Cargar los planos de la obra" required />
+														<input type="file" id="planos" multiple="true" data-preview-file-type="any" title="Cargar los planos de la obra" />
 													</div>
 													<hr size="5" width="300" align="left">
 											</div>

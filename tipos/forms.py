@@ -9,7 +9,7 @@ class FormularioTipoDocumento(forms.ModelForm):
     SUBMIT = 'tipo_documento_submit'
     class Meta:
         model = TipoDocumento
-        fields = ('nombre', 'descripcion', 'activo', 'fecha_alta')
+        fields = ('nombre', 'descripcion', 'activo', 'fecha_alta', 'requerido')
 
     #Esto es para el crispy
     def __init__(self, *args, **kwargs):
@@ -17,8 +17,24 @@ class FormularioTipoDocumento(forms.ModelForm):
         self.helper = FormHelper()
         #self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.fields['requerido'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                                             choices=TipoDocumento.ACCIONES)
+
+    def clean_requerido(self):
+        flags = [int(e) for e in self.cleaned_data['requerido']]
+
+        # aca llamo al metodo y le puse print para ver si me traia la lista
+        # con los tipos y si.. funciona! asiq podes llamar a este metodo desde
+        # otra clase donde lo quieras usar. aca justamente no va pero lo estaba haciendo
+        # en modo debbuging jaja
+
+        print(TipoDocumento.get_tipos_documentos_para_momento("INICIAR"))
+
+        # asiq podes borrarlo o dejarlo, no importa. el metodo esta definido en
+        # el modelo de tipo. asiq ahi podes verlo. lo vemo!
 
 
+        return sum(flags)
 
 class FormularioTipoObra(forms.ModelForm):
     NAME = 'tipo_obra_form'

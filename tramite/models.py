@@ -2,9 +2,14 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 import datetime
-from datetime import datetime
 from persona.models import *
-from tipos.models import TipoObra
+from tipos.models import *
+
+
+class Estado(models.Model):
+	fecha = models.DateTimeField(blank=False)
+	def __init__(self, fecha_creacion):
+		self.fecha = fecha_creacion
 
 
 
@@ -133,7 +138,7 @@ class Agendado(Estado):
 	def realizar_ultima_inspeccion(self,fecha):
 		self.fecha_inspeccion_final=fecha
 
-	def inspeccionar(self):
+	def inspeccionar_final(self):
 		if datetime.datetime.now() > self.fecha_inspeccion_final:
 			return Inspeccionado(tramite=self.tramite) #ver si tiene al menos 3 inspecciones--consulta bd
 

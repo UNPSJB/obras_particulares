@@ -1,9 +1,8 @@
 from __future__ import unicode_literals
 import datetime
 from django.utils import timezone
-from datetime import datetime
-from django.db import models
 
+from django.db import models
 
 
 class TipoDocumento(models.Model):
@@ -16,7 +15,22 @@ class TipoDocumento(models.Model):
     def __str__(self):
         return self.nombre
 
-    
+
+    # recibe una accion "visar", "iniciar", etc y devuelve una lista de tipos para esa accion particular
+    @staticmethod
+    def get_tipos_documentos_para_momento(momento):
+        argumentos = ["INICIAR", "REVISAR", "CORREGIR", "VISAR", "AGENDAR", "INSPECCIONAR", "PAGAR", "FINALIZAR"]
+        tipos = TipoDocumento.objects.all()
+        devolucion = []
+        for indice in xrange(len(argumentos)):
+            if (momento == argumentos[indice]):
+                valor = 1 << indice
+        for tipo in tipos:
+            if ((tipo.requerido & valor) == valor):
+                devolucion.append(tipo)
+        return devolucion
+
+
 
 
 

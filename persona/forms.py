@@ -9,9 +9,11 @@ from django.contrib.auth.models import Group, User
 class FormularioPersona(forms.ModelForm):
     NAME = 'persona_form'
     SUBMIT = 'persona_submit'
+
     class Meta:
         model = Persona
         fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil', 'mail')
+
     def __init__(self, *args, **kwargs):
         super(FormularioPersona, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -35,8 +37,7 @@ class FormularioProfesional(FormularioPersona):
             profesion= datos['profesion'],
             matricula= datos['matricula'],
             categoria= datos['categorias'],
-            certificado = datos['certificado']
-        )
+            certificado = datos['certificado'])
         p.save()
         persona.profesional= p
         persona.save()
@@ -45,7 +46,7 @@ class FormularioProfesional(FormularioPersona):
     def clean_matricula(self):
         dato = self.cleaned_data['matricula']
         if Profesional.objects.filter(matricula=dato).exists():
-            raise ValidationError('matricula repetida')
+            raise ValidationError('Matricula repetida')
         return dato
 
 class FormularioPropietario(forms.ModelForm):
@@ -69,7 +70,6 @@ class FormularioUsuario(AuthenticationForm):
 class FormularioUsuarioPersona(FormularioPersona):
     NAME = 'usuario_persona_form'
     SUBMIT = 'usuario_persona_submit'
-
     usuario = forms.CharField()
     password = forms.CharField()
 
@@ -77,17 +77,13 @@ class FormularioUsuarioPersona(FormularioPersona):
         super(FormularioUsuarioPersona, self).__init__(*args, **kwargs)
 
     def save(self, commit = False):
-
         persona = super(FormularioUsuarioPersona, self).save(commit = False)
         datos = self.cleaned_data
-
         persona.usuario = Usuario.objects.create_user(username = datos['usuario'],
                                                       email = datos['mail'],
                                                       password = datos['password'],)
-
         persona.usuario.save()
         persona.save()
-
         return persona.usuario
 
 
@@ -121,8 +117,22 @@ class FormularioInspector(FormularioUsuarioPersona):
         usuario.groups.add(grupo)
         return usuario
 
+class FormularioBusquedaPropietario(forms.Form):
+    NAME = 'busqueda_propietario_form'
+    SUBMIT = 'busqueda_propietario_submit'
+    dni = forms.CharField()
 
+    def __init__(self, *args, **kwargs):
+        super(FormularioBusquedaPropietario, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit(self.SUBMIT, 'Buscar Propietario'))
 
+    def clean_dni(self):
+        print("Entre al clean")
+        dato = self.cleaned_data['dni']
+        if Propietario.objects.filter(dni=dato).exists():
+            raise ValidationError('El propietario ya existe')
 
+        return dato
 
 
