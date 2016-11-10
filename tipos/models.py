@@ -6,11 +6,32 @@ from django.db import models
 
 
 class TipoDocumento(models.Model):
+    INICIAR = 1 << 0
+    REVISAR = 1 << 1
+    CORREGIR = 1 << 2
+    VISAR = 1 << 3
+    AGENDAR = 1 << 4
+    INSPECCIONAR = 1 << 5
+    # realizar el pago de un tramite
+    PAGAR = 1 << 6
+    # Finalizar la obra esto es cuando se pide un final de obra por el ...
+    FINALIZAR = 1 << 7
+    ACCIONES = [
+        (INICIAR, 'Iniciar un tramite'),
+        (CORREGIR, 'Corregir un documento durante el tramite'),
+        (REVISAR, 'Revisar Correcciones'),
+        (VISAR, 'Visar un Tramite'),
+        (AGENDAR, 'Agendar nueva fecha de inspeccion'),
+        (INSPECCIONAR, 'Registrar una inspeccion'),
+        (PAGAR, 'Realizar el pago de un tramite'),
+        (FINALIZAR, 'Solicitud de final de obra')
+    ]
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=100)
     activo = models.BooleanField()
     fecha_alta = models.DateTimeField()
     fecha_baja = models.DateTimeField(blank=True, null=True)
+    requerido = models.IntegerField(default=0)
 
     def __str__(self):
         return self.nombre

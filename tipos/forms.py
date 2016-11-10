@@ -3,6 +3,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
 from .models import *
+from documento import *
+from tipos import *
 
 class FormularioTipoDocumento(forms.ModelForm):
     NAME = 'tipo_documento_form'

@@ -6,13 +6,6 @@ from persona.models import *
 from tipos.models import *
 
 
-class Estado(models.Model):
-	fecha = models.DateTimeField(blank=False)
-	def __init__(self, fecha_creacion):
-		self.fecha = fecha_creacion
-
-
-
 class Tramite(models.Model):
 	propietario = models.OneToOneField(Propietario,null=True) #propietario y profesional fk en vez de 1 a 1 ?
 	profesional= models.OneToOneField(Profesional)
@@ -34,7 +27,7 @@ class Tramite(models.Model):
 			return super(Tramite, self).save(force_update=True)#
 
 
-	def get_nombre_estado(self):		
+	def get_nombre_estado(self):
 		return self.estados.last().__class__.__name__.lower()
 
 	def quien_lo_inspecciono(self):
