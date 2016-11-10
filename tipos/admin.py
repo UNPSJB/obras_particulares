@@ -12,7 +12,7 @@ class AltaTipoDocumento(admin.ModelAdmin):
         (None, {'fields':['fecha_baja']})
     ]
     search_fields = ['nombre']
-    list_display = ('nombre', 'descripcion', 'fue_pubicado_recientemente')
+    list_display = ('nombre', 'descripcion')
     list_filter = ['fecha_alta']
 
 class AltaDocumento(admin.ModelAdmin):
@@ -33,4 +33,4 @@ admin.site.register(TipoDocumento, AltaTipoDocumento)
 
 admin.site.register(TipoObra, AltaTipoObra)
 
-admin.site.register(Documento, AltaDocumento)
+#admin.site.register(Documento, AltaDocumento)

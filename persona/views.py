@@ -132,6 +132,8 @@ def mostrar_administrativo(request):
     return render(request, 'persona/administrativo/administrativo.html', contexto)
 
 
+from django.core.mail import send_mail
+
 def crear_usuario(request, pk_persona):
     usuario = request.user
     persona = get_object_or_404(Persona, pk=pk_persona)
@@ -140,6 +142,14 @@ def crear_usuario(request, pk_persona):
         messages.add_message(request, messages.SUCCESS, 'usuario creado.')
         # Mandar correo al  nuevo usuario con su usurio y clave
         print("Mando correo de creado")
+        send_mail(
+            'Usuario habilitado',
+            'Usted ya puede acceder al sistema',
+            'infosopunpsjb@gmail.com',
+            [persona.mail],
+            fail_silently=False,
+        )
+
     else:
         print("Mando correo informando que se cambio algo en su cuenta de usuario")
     return redirect(usuario.get_view_name())
@@ -151,8 +161,23 @@ def profesional_list(request):
     contexto = {'personas': profesionales}
     return contexto
 
+def propietario_list(request):
+    propietarios = Propietario.objects.all()
+    contexto = {'propietarios': propietario}
+    return render(request, 'persona/administrativo/propietario_list.html', contexto)
 
-def mostrar_tramite(request):
+
+def tramite_list(request):
     tramite = Tramite.objects.all()
-    contexto = { 'tramites': tramite}
+    contexto = {'tramites': tramite}
     return render(request, 'persona/administrativo/tramite_list.html', contexto)
+
+def tramite_corregidos_list(request):
+    tramite = Tramite.objects.all()
+    contexto = {'tramites': tramite}
+    return render(request, 'persona/administrativo/tramite_corregidos_list.html', contexto)
+
+def solicitud_final_obra_list(request):
+    tramite = Tramite.objects.all()
+    contexto = {'tramites': tramite}
+    return render(request, 'persona/administrativo/solicitud_final_obra_list.html', contexto)

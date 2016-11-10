@@ -36,13 +36,6 @@ class TipoDocumento(models.Model):
     def __str__(self):
         return self.nombre
 
-    def fue_pubicado_recientemente(self):
-        now = timezone.now()
-        return now - datetime.timedelta(days=1) <= self.fecha_alta <= now
-
-    fue_pubicado_recientemente.admin_order_field = 'fecha_alta'
-    fue_pubicado_recientemente.boolean = True
-    fue_pubicado_recientemente.short_description = 'Publicado recintemente?'
 
     # recibe una accion "visar", "iniciar", etc y devuelve una lista de tipos para esa accion particular
     @staticmethod
@@ -59,12 +52,7 @@ class TipoDocumento(models.Model):
         return devolucion
 
 
-class Documento(models.Model):
-    identificador = models.IntegerField(unique=True)
-    tipo_documento = models.ForeignKey(TipoDocumento)
 
-    def __str__(self):
-        return self.tipo_documento.nombre
 
 
 class TipoObra(models.Model):
