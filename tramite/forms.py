@@ -12,7 +12,7 @@ class FormularioTramite(forms.ModelForm):
 
     class Meta:
         model = Tramite
-        fields = ('tipoObra', 'medidas')
+        fields = ('tipo_obra', 'medidas')
 
     def __init__(self, *args, **kwargs):
         super(FormularioTramite, self).__init__(*args, **kwargs)

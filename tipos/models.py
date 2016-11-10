@@ -52,9 +52,6 @@ class TipoDocumento(models.Model):
         return devolucion
 
 
-
-
-
 class TipoObra(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
     descripcion = models.CharField(max_length=100)

@@ -17,7 +17,7 @@ def mostrar_profesional(request):
     tramite_form = FormularioTramite()
     formulario_busqueda_propietario = FormularioBusquedaPropietario()
     propietario_form = FormularioPropietario()
-
+    propietario = True
     if request.method == "POST":
 
         if 'busqueda_propietario_submit' in request.POST:
@@ -26,6 +26,7 @@ def mostrar_profesional(request):
             if formulario_busqueda_propietario.is_valid(): #si no lanza la excepcion entra aca (si no existe)
                 messages.add_message(request, messages.WARNING, 'El propietario no existe debe darlo de alta')
                 propietario_form = FormularioPropietario()
+                propietario = False
 
             else:   #propietario existe
                 dni_propietario = request.POST['dni']
@@ -45,7 +46,7 @@ def mostrar_profesional(request):
     return render(request, 'persona/profesional/profesional.html',{'busqueda_propietario_form':formulario_busqueda_propietario,
                                                                    'tipos_de_documentos_requeridos': tipos_de_documentos_requeridos,
                                                                    'tramite_form': tramite_form,
-                                                                   'propietario_form': propietario_form})
+                                                                   'propietario_form': propietario_form, "propietario": propietario})
 
 """def mostrar_profesional(request):
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento("INICIAR")

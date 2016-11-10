@@ -35,11 +35,13 @@
 										<div class="row">
 											<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
 												<br>
+												{{ propietario }}
 												<font class="form-group" color="#337ab7"><h4 align="left">Datos del Propietario:</h4></font>
 
 												{% crispy busqueda_propietario_form %}
-												{% crispy propietario_form %}
-
+												{% if not propietario %}
+													{% crispy propietario_form %}
+												{% endif %}
 
 											</div>
 											<!---Recorro y muestro la lista de tipos de documentas-->
@@ -342,6 +344,8 @@
 
 
 {% block scripts %}
+<!-- Esto no se debe borrar-->
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
 	<script>
 		$("#perfil").fileinput({
 			showCaption: false,
