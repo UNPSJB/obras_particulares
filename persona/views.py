@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import  login_required
 from .forms import *
+from django.contrib import messages
 from tipos.forms import *
 from obras_particulares.views import *
 from tramite.forms import FormularioTramite
@@ -13,19 +14,54 @@ def mostrar_inspector(request):
 
 def mostrar_profesional(request):
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento("INICIAR")
-    print(tipos_de_documentos_requeridos)
+    tramite_form = FormularioTramite()
+    formulario_busqueda_propietario = FormularioBusquedaPropietario()
+    propietario_form = FormularioPropietario()
 
     if request.method == "POST":
-        print("entre al if")
-        formulario_busqueda_propietario = FormularioBusquedaPropietario(request.POST)
-        if formulario_busqueda_propietario.is_valid():
 
-            print("Aca instancio el formulario para dar de alta el propietario")
+        if 'busqueda_propietario_submit' in request.POST:
+
+            formulario_busqueda_propietario = FormularioBusquedaPropietario(request.POST)
+            if formulario_busqueda_propietario.is_valid(): #si no lanza la excepcion entra aca (si no existe)
+                messages.add_message(request, messages.WARNING, 'El propietario no existe debe darlo de alta')
+                propietario_form = FormularioPropietario()
+
+            else:   #propietario existe
+                dni_propietario = request.POST['dni']
+                propietario = Propietario.objects.get(dni=dni_propietario)
+                propietario_form = FormularioPropietario(instance=propietario)
+
+        if 'tramite_submit' in request.POST:
+
+            tramite_form = FormularioTramite(request.POST)
+            if tramite_form.is_valid():
+                tramite_form.save()
+
+    else:
+        formulario_busqueda_propietario = FormularioBusquedaPropietario()
+        propietario_form = FormularioPropietario()
+
+    return render(request, 'persona/profesional/profesional.html',{'busqueda_propietario_form':formulario_busqueda_propietario,
+                                                                   'tipos_de_documentos_requeridos': tipos_de_documentos_requeridos,
+                                                                   'tramite_form': tramite_form,
+                                                                   'propietario_form': propietario_form})
+
+"""def mostrar_profesional(request):
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento("INICIAR")
+    tramite_form = FormularioTramite()
+
+    if request.method == "POST":
+        formulario_busqueda_propietario = FormularioBusquedaPropietario(request.POST)
     else:
         formulario_busqueda_propietario = FormularioBusquedaPropietario()
 
-    return render(request, 'persona/profesional/profesional.html',{'busqueda_propietario_form':formulario_busqueda_propietario,
-                                                                   'tipos_de_documentos_requeridos': tipos_de_documentos_requeridos})
+    return render(request, 'persona/profesional/profesional.html',
+                  {'busqueda_propietario_form': formulario_busqueda_propietario,
+                   'tipos_de_documentos_requeridos': tipos_de_documentos_requeridos,
+                   'tramite_form': tramite_form,})"""
+
+
 
 def mostrar_jefe_inspector(request):
     return render(request, 'persona/jefe_inspector/jefe_inspector.html')
@@ -79,7 +115,7 @@ def mostrar_director(request):
     return render(request, 'persona/director/director.html', values)
 
 
-"""def alta_persona(request):
+def alta_persona(request):
     if request.method == "POST":
         form = FormularioPersona(request.POST)
         if form.is_valid():
@@ -87,18 +123,6 @@ def mostrar_director(request):
             persona.save()
     else:
         form = FormularioPersona()
-    return render(request, 'persona/alta/alta_persona.html', {'form': form})"""
-
-
-def alta_persona(request):
-
-    if request.method == "POST":
-        form = FormularioBusquedaPropietario(request.POST)
-        if form.is_valid():
-            form2 = FormularioPropietario()
-            print("form is valid")
-    else:
-        form = FormularioBusquedaPropietario()
     return render(request, 'persona/alta/alta_persona.html', {'form': form})
 
 @login_required(login_url="login")

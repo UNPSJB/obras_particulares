@@ -54,8 +54,15 @@ class FormularioPropietario(forms.ModelForm):
     SUBMIT = 'propietario_submit'
 
     class Meta:
-        model = Persona
+        model = Propietario
         fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil')
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioPropietario, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+
+
+
 
 class FormularioUsuario(AuthenticationForm):
     NAME = 'usuario_form'
@@ -131,7 +138,7 @@ class FormularioBusquedaPropietario(forms.Form):
         print("Entre al clean")
         dato = self.cleaned_data['dni']
         if Propietario.objects.filter(dni=dato).exists():
-            raise ValidationError('El propietario ya existe')
+            raise ValidationError('El propietario ya existe, no necesita darlo de alta nuevamente')
 
         return dato
 

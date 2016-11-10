@@ -14,13 +14,10 @@ class Estado(models.Model):
 
 class Tramite(models.Model):
     propietario = models.OneToOneField(Propietario, null=True)
-    profesional = models.OneToOneField(Profesional)
+    #profesional = models.OneToOneField(Profesional)
     medidas = models.IntegerField()
     tipoObra = models.OneToOneField(TipoObra)
-    estados = models.ForeignKey(Estado)
-
-    def __init__(self):
-        self.estados = [Iniciado(datetime.now())]
+    #estados = models.ForeignKey(Estado)
 
     def get_nombre_estado(self):
         return self.estados[-1].fecha, self.estados[-1].__class__.__name__.lower()
