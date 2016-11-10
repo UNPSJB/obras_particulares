@@ -1,0 +1,56 @@
+{% load staticfiles %}
+
+
+{% block contenido_tramite_corregidos %}
+  <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+          <!-- Cabecera -->
+          <thead>
+              <tr>
+                  <td>Numero</td>
+                  <td>Medidas</td>
+                  <td>Tipo de Obra</td>
+                  <td>Estado</td>
+                  <td>Profesional</td>
+                  <td>Propietario</td>
+                  <td>Ver datos tramite</td>
+                  <td>Habilitar final de obra</td>
+              </tr>
+          </thead>
+          <!-- Mostramos los datos de las tablas -->
+          <tbody>
+          {% if tramites %}
+              {% for tramite in tramites %}
+                <tr>
+                  <td>{{ tramite.numero }}</td>
+                  <td>{{ tramite.medidas }} </td>
+                  <td>{{ tramite.tipoObra }}</td>
+                  <td>{{ tramite.estado }}</td>
+                  <td>{{ tramite.profesiona.persona.nombre }}
+                      {{ tramite.profesiona.persona.apellido }}
+                      {{ tramite.profesiona.persona.profesion }}
+                      {{ tramite.profesiona.persona.matricula }}
+                  </td>
+                  <td>{{ persona.propietario.nombre }}
+                      {{ persona.propietario.apellido }}
+                  </td>
+                    <a href="">
+                      <button type="button" class="btn btn-primary" name="ver-certificado">
+                        Ver certificado
+                      </button>
+                    </a>
+                  </td>
+                  <td>
+                    <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
+                      <button type="button" class="btn btn-primary" name="habilitar">
+                        Habilitar
+                      </button>
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+          {% endif%}
+          </tbody>
+      </table>
+  </div>
+{% endblock %}

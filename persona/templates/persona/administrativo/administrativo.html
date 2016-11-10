@@ -60,7 +60,9 @@
 		    	<div class="container-fluid">
 		    		<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								aca va un bloque
+								{% block contenido_tramite_corregidos %}
+									{% include "persona/administrativo/tramite_corregidos_list.html" %}
+								{% endblock %}
 							</div>
 		  			</div>
 					</div>
@@ -81,7 +83,9 @@
 		    	<div class="container-fluid">
 		    		<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	 							aca va un bloque
+	 							{% block contenido_tramite_final_obra %}
+									{% include "persona/administrativo/solicitud_final_obra_list.html" %}
+								{% endblock %}
 							</div>
 		  			</div>
 					</div>
@@ -125,8 +129,10 @@
 		    	<div class="container-fluid">
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								aca va un bloque
-					  	</div>
+								{% block contenido_propietario %}
+									{% include "persona/administrativo/propietario_list.html" %}
+								{% endblock %}
+					  		</div>
 						</div>
 		  		</div>
 				</div>
