@@ -11,7 +11,7 @@ class FormularioDocumento(forms.ModelForm):
     SUBMIT = 'documento_submit'
     class Meta:
         model = Documento
-        fields = ('tramite','tipo_documento')
+        fields = ('tramite','tipo_documento','file')
 
     def __init__(self, *args, **kwargs):
         super(FormularioDocumento, self).__init__(*args, **kwargs)
