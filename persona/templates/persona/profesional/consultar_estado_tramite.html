@@ -1,0 +1,42 @@
+{% load staticfiles %}
+
+{% block contenido_tramite_estado %}
+  <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+          <!-- Cabecera -->
+          <thead>
+              <tr>
+                  <td>Nombre propietario</td>
+                  <td>Apellido propietario</td>
+                  <td>Telefono propietario</td>
+                  <td>Domicilio terreno</td>
+                  <td>Estado del tramite</td>
+                  <td>Medidas</td>
+                  <td>Ver documentos</td>
+              </tr>
+          </thead>
+          <!-- Mostramos los datos de las tablas -->
+          <tbody>
+          {% if tramites %}
+              {% for tramite in tramites %}
+                <tr>
+                      <td>tramite.propietario.persona.nombre</td>
+                      <td>tramite.propietario.persona.apellido</td>
+                      <td>tramite.propietario.persona.telefono</td>
+                      <td>tramite.domicilio</td>
+                      <td>tramite.estado</td>
+                      <td>tramite.medidas</td>
+                      <td>
+                            <a href="#">
+                              <button type="button" class="btn btn-primary" name="ver-certificado">
+                                Ver certificado
+                              </button>
+                            </a>
+                      </td>
+                </tr>
+              {% endfor %}
+          {% endif%}
+          </tbody>
+      </table>
+  </div>
+{% endblock %}

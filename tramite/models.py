@@ -7,13 +7,15 @@ from tipos.models import *
 
 
 class Tramite(models.Model):
-    propietario = models.OneToOneField(Propietario, null=True)  # propietario y profesional fk en vez de 1 a 1 ?
-    profesional = models.OneToOneField(Profesional)
+    propietario = models.ForeignKey(Propietario,blank=True, null=True,unique=False)
+    profesional= models.ForeignKey(Profesional,unique=False)
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
+    domicilio = models.CharField(max_length=50,blank=True)
+    #pago = models.BooleanField(initial=False)
 
     def pago_completo(self):
-        this.pago = True
+        self.pago = True
 
     def save(self, *args, **kwds):
         if self.pk is None:

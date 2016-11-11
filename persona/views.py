@@ -151,7 +151,7 @@ def profesional_list(request):
     profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
     contexto = {'personas': profesionales}
     return contexto
-
+    
 def propietario_list(request):
     propietarios = Propietario.objects.all()
     contexto = {'propietarios': propietario}
@@ -172,3 +172,10 @@ def solicitud_final_obra_list(request):
     tramite = Tramite.objects.all()
     contexto = {'tramites': tramite}
     return render(request, 'persona/administrativo/solicitud_final_obra_list.html', contexto)
+
+
+
+def consultar_estado_tramite_list():
+    tramite = Tramite.objects.all()
+    contexto = {'tramites': tramite}
+    return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
