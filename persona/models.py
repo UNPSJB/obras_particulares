@@ -31,6 +31,7 @@ class Propietario(Rol):
     def __str__(self):
         return "{}, {}".format(self.nombre, self.apellido)
 
+    __unicode__ = __str__
 
 class Usuario(Rol, AbstractUser):
     PROFESIONAL = "profesional"

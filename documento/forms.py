@@ -2,19 +2,29 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout
 from .models import *
-from django.forms import ValidationError
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import Group, User
+from django.forms import formset_factory
 
 class FormularioDocumento(forms.ModelForm):
     NAME = 'documento_form'
     SUBMIT = 'documento_submit'
+
     class Meta:
         model = Documento
-        fields = ('tramite','tipo_documento','file')
+        fields = ('tipo_documento', 'file')
+        widgets = {
+            'tipo_documento': forms.HiddenInput()
+        }
 
     def __init__(self, *args, **kwargs):
         super(FormularioDocumento, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        #self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit('documento_submit', 'Guardar'))
+
+
+def FormularioDocumentoSetFactory(tipos):
+    return formset_factory(FormularioDocumento, max_num=len(tipos), extra=len(tipos))
+    initial = []
+    for t in tipos:
+        initial.append({'tipo_documento': t.pk})
+    if request.method == "POST":
+        return klass(request.POST, initial=initial)
+    return klass(initial=initial)

@@ -12,18 +12,25 @@ class FormularioPersona(forms.ModelForm):
 
     class Meta:
         model = Persona
-        fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil', 'mail')
+        fields = ('dni', 'nombre', 'apellido', 'telefono', 'domicilio', 'telefono', 'cuil', 'mail')
 
     def __init__(self, *args, **kwargs):
         super(FormularioPersona, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
 
+    def clean_dni(self):
+        dato = self.cleaned_data['dni']
+        if Propietario.objects.filter(dni=dato).exists():
+            raise ValidationError('La persona ya existe en el sistema')
+
+        return dato
+
 class FormularioProfesional(FormularioPersona):
     NAME = 'profesional_form'
     SUBMIT = 'profesional_submit'
     matricula = forms.CharField()
-    profesion =forms.CharField()
+    profesion = forms.CharField()
     categorias = forms.ChoiceField(choices=Profesional.CATEGORIAS)
     certificado = forms.ImageField()
 
@@ -31,7 +38,7 @@ class FormularioProfesional(FormularioPersona):
         super(FormularioProfesional, self).__init__(*args, **kwargs)
 
     def save(self, commit=False):
-        persona = super(FormularioProfesional,self).save(commit=commit)
+        persona = super(FormularioProfesional, self).save(commit=commit)
         datos = self.cleaned_data
         p = Profesional(
             profesion= datos['profesion'],
@@ -49,19 +56,17 @@ class FormularioProfesional(FormularioPersona):
             raise ValidationError('Matricula repetida')
         return dato
 
-class FormularioPropietario(forms.ModelForm):
+class FormularioPropietario(FormularioPersona):
     NAME = 'propietario_form'
     SUBMIT = 'propietario_submit'
 
-    class Meta:
-        model = Propietario
-        fields = ('nombre', 'apellido', 'telefono', 'dni', 'domicilio', 'telefono', 'cuil')
-
-    def __init__(self, *args, **kwargs):
-        super(FormularioPropietario, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-
-
+    def save(self, commit=False):
+        persona = super(FormularioPropietario, self).save(commit=commit)
+        p = Propietario()
+        p.save()
+        persona.propietario = p
+        persona.save()
+        return p
 
 
 class FormularioUsuario(AuthenticationForm):
@@ -123,23 +128,3 @@ class FormularioInspector(FormularioUsuarioPersona):
         grupo = Group.objects.get(name='inspector')
         usuario.groups.add(grupo)
         return usuario
-
-class FormularioBusquedaPropietario(forms.Form):
-    NAME = 'busqueda_propietario_form'
-    SUBMIT = 'busqueda_propietario_submit'
-    dni = forms.CharField()
-
-    def __init__(self, *args, **kwargs):
-        super(FormularioBusquedaPropietario, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.add_input(Submit(self.SUBMIT, 'Buscar Propietario'))
-
-    def clean_dni(self):
-        print("Entre al clean")
-        dato = self.cleaned_data['dni']
-        if Propietario.objects.filter(dni=dato).exists():
-            raise ValidationError('El propietario ya existe, no necesita darlo de alta nuevamente')
-
-        return dato
-
-
