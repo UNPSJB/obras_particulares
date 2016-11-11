@@ -29,8 +29,8 @@ class TipoDocumento(models.Model):
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=100)
     activo = models.BooleanField()
-    fecha_alta = models.DateTimeField()
-    fecha_baja = models.DateTimeField(blank=True, null=True)
+    fecha_alta = models.DateField()
+    fecha_baja = models.DateField(blank=True, null=True)
     requerido = models.IntegerField(default=0)
 
     def __str__(self):
