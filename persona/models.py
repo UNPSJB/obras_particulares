@@ -28,6 +28,9 @@ class Propietario(Rol):
     domicilio = models.CharField(max_length=50, blank=True)
     telefono = models.CharField(max_length=15, blank=True)
 
+    def __str__(self):
+        return "{}, {}".format(self.nombre, self.apellido)
+
 
 class Usuario(Rol, AbstractUser):
     PROFESIONAL = "profesional"
