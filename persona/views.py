@@ -5,7 +5,8 @@ from .forms import *
 from django.contrib import messages
 from tipos.forms import *
 from obras_particulares.views import *
-from tramite.forms import Formulario_Iniciar_Tramite
+from tramite.forms import FormularioIniciarTramite
+from documento.forms import FormularioDocumentoSetFactory
 from tramite.models import *
 
 
@@ -13,40 +14,29 @@ def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
 
 def mostrar_profesional(request):
-    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento("INICIAR")
-    tramite_form = Formulario_Iniciar_Tramite()
-    formulario_busqueda_propietario = FormularioBusquedaPropietario()
-    propietario_form = FormularioPropietario()
-    propietario = True
+    usuario = request.user
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
+    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     if request.method == "POST":
 
-        if 'busqueda_propietario_submit' in request.POST:
-
-            formulario_busqueda_propietario = FormularioBusquedaPropietario(request.POST)
-            if formulario_busqueda_propietario.is_valid(): #si no lanza la excepcion entra aca (si no existe)
-                messages.add_message(request, messages.WARNING, 'El propietario no existe debe darlo de alta')
-                propietario_form = FormularioPropietario()
-                propietario = False
-
-            else:   #propietario existe
-                dni_propietario = request.POST['dni']
-                propietario = Propietario.objects.get(dni=dni_propietario)
-                propietario_form = FormularioPropietario(instance=propietario)
-
         if 'tramite_submit' in request.POST:
-
-            tramite_form = Formulario_Iniciar_Tramite(request.POST)
+            tramite_form = FormularioIniciarTramite(request.POST, initial={"profesional": usuario.persona.profesional.pk})
             if tramite_form.is_valid():
-                tramite_form.save()
+                tramite = tramite_form.save()
+                documento_set = FormularioDocumentoSet(request.POST)
+            else:
+                documento_set = FormularioDocumentoSet()
+                propietario_form = FormularioPropietario()
+            print(tramite_form)
 
     else:
-        formulario_busqueda_propietario = FormularioBusquedaPropietario()
-        propietario_form = FormularioPropietario()
+        tramite_form = FormularioIniciarTramite(initial={"profesional": usuario.persona.profesional.pk})
+        documento_set = FormularioDocumentoSet()
+        propietario_form = None
 
-    return render(request, 'persona/profesional/profesional.html',{'busqueda_propietario_form':formulario_busqueda_propietario,
-                                                                   'tipos_de_documentos_requeridos': tipos_de_documentos_requeridos,
-                                                                   'tramite_form': tramite_form,
-                                                                   'propietario_form': propietario_form, "propietario": propietario})
+    return render(request, 'persona/profesional/profesional.html',{'tramite_form': tramite_form,
+                                                                   'propietario_form': propietario_form,
+                                                                   'documento_set': documento_set})
 
 """def mostrar_profesional(request):
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento("INICIAR")

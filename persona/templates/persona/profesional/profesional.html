@@ -35,65 +35,17 @@
 										<div class="row">
 											<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
 												<br>
+												{% crispy tramite_form %}
+												{% crispy documento_set %}
+											</div>
+											<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
 
-												<font class="form-group" color="#337ab7"><h4 align="left">Datos del Propietario:</h4></font>
-
-												{% crispy busqueda_propietario_form %}
-												{% if not propietario %}
+												{% if propietario_form %}
 													{% crispy propietario_form %}
 												{% endif %}
-
-												{%if propietario.nombre != null%}
-
-													<label>Inicio de tramite para: {{ propietario }}</label>
-
-												{% endif %}
-
 											</div>
 											<!---Recorro y muestro la lista de tipos de documentas-->
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-												<br>
-												<font color="#337ab7"><h4 align="left">Datos necesarios para iniciar un tramite:</h4></font>
 
-												{% for tipo_documento in tipos_de_documentos_requeridos %}
-													<div>
-
-														<div class="form-group">
-															<label>{{tipo_documento}}</label>
-															<input class="file" id="" type="file" data-preview-file-type="any"/>
-															<!---<input class="file" id="cach" type="file" data-preview-file-type="any" title="Cargar el Certificado del CACH" required />-->
-															<hr size="5" width="300" align="left">
-														</div>
-
-													</div>
-												{% endfor %}
-											</div>
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-
-												{% crispy tramite_form %}
-													<!---<br>
-													<font color="#337ab7"><h4 align="left">Documentación del trámite:</h4></font>
-													<div class="form-group">
-														<label for="">Certificado de CACH:</label>
-														<input class="file" id="cach" type="file" data-preview-file-type="any" title="Cargar el Certificado del CACH" required />
-													</div>
-													<hr size="5" width="300" align="left">
-													<div class="form-group">
-														<label for="">Planilla Tributaria:</label>
-														<input class="file" id="tributaria" type="file" data-preview-file-type="any" title="Cargar la Planilla Tributaria" />
-													</div>
-													<hr size="5" width="300" align="left">
-													<div class="form-group">
-														<label for="">Planilla Dominial:</label>
-														<input type="file" id="dominial" data-preview-file-type="any" title="Cargar la Planilla Dominial" />
-													</div>
-													<hr size="5" width="300" align="left">
-													<div class="form-group">
-														<label for="">Planos:</label>
-														<input type="file" id="planos" multiple="true" data-preview-file-type="any" title="Cargar los planos de la obra" />
-													</div>
-													<hr size="5" width="300" align="left">-->
-											</div>
 										</div>
 										<div class="container-fluid">
 											<div class="row">

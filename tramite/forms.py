@@ -1,29 +1,37 @@
 from django import forms
+from django.forms import ValidationError
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout
 from .models import *
-from django.forms import ValidationError
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import Group, User
 
-class Formulario_Iniciar_Tramite(forms.ModelForm):
+class FormularioIniciarTramite(forms.ModelForm):
     NAME = 'tramite_form'
     SUBMIT = 'tramite_submit'
+    propietario = forms.CharField()
 
     class Meta:
         model = Tramite
-        fields = ('tipo_obra', 'medidas')
+        fields = ('tipo_obra', 'medidas', 'profesional')
+        widgets = {
+            "profesional": forms.HiddenInput()
+        }
 
     def __init__(self, *args, **kwargs):
-        super(Formulario_Iniciar_Tramite, self).__init__(*args, **kwargs)
+        super(FormularioIniciarTramite, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
 
-    def save(self, commit=False):
+    def clean_propietario(self):
+        dato = self.cleaned_data['propietario']
+        propitario = Propietario.objects.filter(dni=dato).first()
+        if propitario is None:
+            raise ValidationError('La persona no existe en el sistema, debe crearla')
+        return propitario
 
-        tramite = super(Formulario_Iniciar_Tramite, self).save(commit=False)
+    def save(self, commit=False):
+        tramite = super(FormularioIniciarTramite, self).save(commit=False)
         datos = self.cleaned_data
-        propietario =  Propietario(
+        propietario = Propietario(
             dni = datos['dni'],
             nombre = datos['nombre'],
             apellido = datos['apellido'],

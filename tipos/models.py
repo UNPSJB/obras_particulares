@@ -39,15 +39,10 @@ class TipoDocumento(models.Model):
 
     # recibe una accion "visar", "iniciar", etc y devuelve una lista de tipos para esa accion particular
     @staticmethod
-    def get_tipos_documentos_para_momento(momento):
-        argumentos = ["INICIAR", "REVISAR", "CORREGIR", "VISAR", "AGENDAR", "INSPECCIONAR", "PAGAR", "FINALIZAR"]
-        tipos = TipoDocumento.objects.all()
+    def get_tipos_documentos_para_momento(accion):
         devolucion = []
-        for indice in xrange(len(argumentos)):
-            if (momento == argumentos[indice]):
-                valor = 1 << indice
-        for tipo in tipos:
-            if ((tipo.requerido & valor) == valor):
+        for tipo in TipoDocumento.objects.all():
+            if ((tipo.requerido & accion) == accion):
                 devolucion.append(tipo)
         return devolucion
 
