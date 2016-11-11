@@ -6,7 +6,7 @@ from django.forms import ValidationError
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group, User
 
-class FormularioTramite(forms.ModelForm):
+class Formulario_Iniciar_Tramite(forms.ModelForm):
     NAME = 'tramite_form'
     SUBMIT = 'tramite_submit'
 
@@ -15,15 +15,13 @@ class FormularioTramite(forms.ModelForm):
         fields = ('tipo_obra', 'medidas')
 
     def __init__(self, *args, **kwargs):
-        super(FormularioTramite, self).__init__(*args, **kwargs)
+        super(Formulario_Iniciar_Tramite, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
 
     def save(self, commit=False):
 
-        tramite = super(FormularioTramite, self).save(commit=False)
-
-
+        tramite = super(Formulario_Iniciar_Tramite, self).save(commit=False)
         datos = self.cleaned_data
         propietario =  Propietario(
             dni = datos['dni'],
@@ -35,10 +33,5 @@ class FormularioTramite(forms.ModelForm):
         )
 
         propietario.save()
-
-        tramite.propietario = propietario
-
+        tramite.propietario = propietari
         return tramite
-
-
-

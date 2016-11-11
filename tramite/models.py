@@ -12,9 +12,6 @@ class Tramite(models.Model):
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
 
-    # pago = models.BooleanField(initial=False)
-    # colecciones = estados y documentos
-
     def pago_completo(self):
         this.pago = True
 

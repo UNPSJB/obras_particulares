@@ -5,8 +5,8 @@ from .forms import *
 from django.contrib import messages
 from tipos.forms import *
 from obras_particulares.views import *
-from tramite.forms import FormularioTramite
-from tramite.models import Tramite
+from tramite.forms import Formulario_Iniciar_Tramite
+from tramite.models import *
 
 
 def mostrar_inspector(request):
@@ -14,7 +14,7 @@ def mostrar_inspector(request):
 
 def mostrar_profesional(request):
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento("INICIAR")
-    tramite_form = FormularioTramite()
+    tramite_form = Formulario_Iniciar_Tramite()
     formulario_busqueda_propietario = FormularioBusquedaPropietario()
     propietario_form = FormularioPropietario()
     propietario = True
@@ -35,7 +35,7 @@ def mostrar_profesional(request):
 
         if 'tramite_submit' in request.POST:
 
-            tramite_form = FormularioTramite(request.POST)
+            tramite_form = Formulario_Iniciar_Tramite(request.POST)
             if tramite_form.is_valid():
                 tramite_form.save()
 
