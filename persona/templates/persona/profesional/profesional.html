@@ -4,28 +4,40 @@
 
 
 {% block barra %}
-	<div class="list-group">
-		<font face="serif" color="blue" size="2">
-			<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Iniciar Nuevo Trámite</a>
-			<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Cargar correcciones a un Trámite</a>
-			<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
-			<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Modificar mis datos personales</a>
-			<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
+<ul class="sidebar sidebar-1" xmlns="http://www.w3.org/1999/html">
+		<font size="2">
+			<li><a class="current"><font color="tomato">Profesional</font> </a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+				   aria-expanded="false" aria-controls="collapseOne">Iniciar Trámite</a>
+			</li>
+
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
+				   aria-expanded="false" aria-controls="collapseTwo">Cargar correcciones a un Trámite</a>
+			</li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
+				   aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
+			</li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
+				   aria-expanded="false" aria-controls="collapseThree">Modificar mis datos personales</a>
+			</li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"
+				   aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
+			</li>
 		</font>
-	</div>
+	</ul>
 {% endblock %}
 
 		{% block contenido %}
 			<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-			  <div class="panel panel-default">
-			    <div class="panel-heading" role="tab" id="headingOne">
+			  <div class="panel panel-custom">
+			    <div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
 			      <h5 class="panel-title">
 			        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-						<small>Iniciar Nuevo Trámite</small>
+						<font color="#ffffff" size="2">Iniciar Trámite</font>
 			        </a>
 			      </h5>
 			    </div>
-			    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+			    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
 			      <div class="panel-body">
 				      <div class="container-fluid">
 						<div class="row">
@@ -69,30 +81,7 @@
 												{% endfor %}
 											</div>
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-
 												{% crispy tramite_form %}
-													<!---<br>
-													<font color="#337ab7"><h4 align="left">Documentación del trámite:</h4></font>
-													<div class="form-group">
-														<label for="">Certificado de CACH:</label>
-														<input class="file" id="cach" type="file" data-preview-file-type="any" title="Cargar el Certificado del CACH" required />
-													</div>
-													<hr size="5" width="300" align="left">
-													<div class="form-group">
-														<label for="">Planilla Tributaria:</label>
-														<input class="file" id="tributaria" type="file" data-preview-file-type="any" title="Cargar la Planilla Tributaria" />
-													</div>
-													<hr size="5" width="300" align="left">
-													<div class="form-group">
-														<label for="">Planilla Dominial:</label>
-														<input type="file" id="dominial" data-preview-file-type="any" title="Cargar la Planilla Dominial" />
-													</div>
-													<hr size="5" width="300" align="left">
-													<div class="form-group">
-														<label for="">Planos:</label>
-														<input type="file" id="planos" multiple="true" data-preview-file-type="any" title="Cargar los planos de la obra" />
-													</div>
-													<hr size="5" width="300" align="left">-->
 											</div>
 										</div>
 										<div class="container-fluid">
@@ -117,43 +106,66 @@
 			    </div>
 			  </div>
 
-			  <div class="panel panel-default">
-			    <div class="panel-heading" role="tab" id="headingTwo">
+			  <div class="panel panel-custom">
+			    <div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
 			      <h5 class="panel-title">
-			        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-			          <small>Cargar correcciones a un Trámite</small>
+			        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+						<font color="#ffffff" size="2">Cargar correcciones a un Trámite</font>
 			        </a>
 			      </h5>
 			    </div>
 			    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
 			      <div class="panel-body">
-				    <div class="container-fluid">
+				      <div class="container-fluid">
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								<div class="container-fluid">
-									<br>
-									<form action="" class="" >
+									<form action="" class="post-form" method="POST">
 										<div class="row">
 											<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-												<div class="form-group">
-													<label for="">Nro de trámite:</label>
-													<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro. de trámite" title="Ingresar Nro. de trámite" required />
-												</div>
+												<br>
+
+												<font class="form-group" color="#337ab7"><h4 align="left">Datos del Propietario:</h4></font>
+
+												{% crispy busqueda_propietario_form %}
+												{% if not propietario %}
+													{% crispy propietario_form %}
+												{% endif %}
+
+												{%if propietario.nombre != null%}
+
+													<label>Inicio de tramite para: {{ propietario }}</label>
+
+												{% endif %}
+
 											</div>
-											<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-												<div class="form-group">
-													<label for="">Documentos corregidos:</label>
-													<input class="file" id="correcciones"  type="file" data-preview-file-type="any" multiple="true" title="Cargar documentos corregidos" required />
-												</div>
+											<!---Recorro y muestro la lista de tipos de documentas-->
+											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+												<br>
+												<font color="#337ab7"><h4 align="left">Datos necesarios para iniciar un tramite:</h4></font>
+
+												{% for tipo_documento in tipos_de_documentos_requeridos %}
+													<div>
+
+														<div class="form-group">
+															<label>{{tipo_documento}}</label>
+															<input class="file" id="" type="file" data-preview-file-type="any"/>
+															<!---<input class="file" id="cach" type="file" data-preview-file-type="any" title="Cargar el Certificado del CACH" required />-->
+															<hr size="5" width="300" align="left">
+														</div>
+
+													</div>
+												{% endfor %}
 											</div>
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+												{% crispy tramite_form %}
 											</div>
 										</div>
 										<div class="container-fluid">
 											<div class="row">
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-													<button class="btn btn-primary btn-sm" type="submit" title="Envia documentos corregidos">
-														Enviar correcciones
+													<button class="btn btn-primary btn-sm" type="submit" title="Enviar datos y documentacion del tramite">
+														Iniciar Tramite
 													</button>
 													<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
 														Limpiar
@@ -171,11 +183,11 @@
 			    </div>
 			  </div>
 
-			  <div class="panel panel-default">
-			    <div class="panel-heading" role="tab" id="headingFive">
+			  <div class="panel panel-custom">
+			    <div class="panel-heading panel-heading-custom box" role="tab" id="headingFive">
 			      <h5 class="panel-title">
 			        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			          <small>Solicitar final de obra a un Trámite</small>
+			          <font color="#ffffff" size="2">Solicitar final de obra a un Trámite</font>
 			        </a>
 			      </h5>
 			    </div>
@@ -183,53 +195,18 @@
 			      <div class="panel-body">
 				    <div class="container-fluid">
 						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<div class="container-fluid">
-									<br>
-									<form action="" class="" >
-										<div class="row">
-											<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-												<div class="form-group">
-													<label for="">Nro de trámite:</label>
-													<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro. de trámite" title="Ingresar Nro. de trámite" required />
-												</div>
-											</div>
-											<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-												<div class="form-group">
-													<label for="">Documentos de Final de Obra:</label>
-													<input class="file" id="final"  type="file" data-preview-file-type="any" multiple="true" title="Cargar documentos Final de Obra" required />
-												</div>
-											</div>
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											</div>
-										</div>
-										<div class="container-fluid">
-											<div class="row">
-												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-													<button class="btn btn-primary btn-sm" type="submit" title="Envia solicitud de final de obra">
-														Solicitar final de obra
-													</button>
-													<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-														Limpiar
-													</button>
-												</div>
-											</div>
-										</div>
-									</form>
-									<br>
-								</div>
-							</div>
+							aca va un bloque
 						</div>
 					</div>
 			      </div>
 			    </div>
 			  </div>
 
-			  <div class="panel panel-default">
-			    <div class="panel-heading" role="tab" id="headingThree">
+			  <div class="panel panel-custom">
+			    <div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
 			      <h5 class="panel-title">
 			        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-			          <small>Modificar mis datos personales</small>
+			          <font color="#ffffff" size="2">Modificar mis datos personales</font>
 			        </a>
 			      </h5>
 			    </div>
@@ -237,116 +214,36 @@
 			      <div class="panel-body">
 				    <div class="container-fluid">
 						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<div class="container-fluid">
-								<br>
-									<form action="" class="" >
-										<div class="row">
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-													<div class="form-group">
-														<label for="telefono">Nro. de teléfono:</label>
-														<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono"/>
-													</div>
-											</div>
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-													<div class="form-group">
-														<label for="">E-Mail:</label>
-														<input class="form-control input-sm" id="" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail"/>
-													</div>
-											</div>
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-												<label for="">Cambiar Foto de perfil:</label>
-												<br>
-												<input class="file" id="perfil" type="file" data-preview-file-type="any" title="Cargar nueva foto de perfil">
-											</div>
-										</div>
-										<div class="container-fluid">
-											<br>
-											<div class="row">
-												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-													<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
-														Modificar mis datos
-													</button>
-													<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-														Limpiar
-													</button>
-												</div>
-											</div>
-										</div>
-									</form>
-									<br>
-								</div>
-							</div>
+							aca va un bloque
 						</div>
 					</div>
 			      </div>
 			    </div>
 			  </div>
 
-			  <div class="panel panel-default">
-			    <div class="panel-heading" role="tab" id="headingFour">
+			  <div class="panel panel-custom">
+			    <div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
 			      <h5 class="panel-title">
 			        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-			          <small>Consultar estado de mis Trámites</small>
+			          <font color="#ffffff" size="2">Consultar estado de mis Trámites</font>
 			        </a>
 			      </h5>
 			    </div>
+
 			    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
 			      	<div class="panel-body">
 			      		<div class="container-fluid">
-							<div class="row">
-								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						      		 <!-- Table -->
-						      		<div class="table-responsive">
-						  				<table  class="table table-striped table-hover table-condensed">
-						    				<thead>
-										      <tr>
-										        <th>Nro Tramite</th>
-										        <th>Estado</th>
-										        <th>Fecha Iniciado</th>
-										        <th>Descripción</th>
-										        <th>Correcciones</th>
-										        <th>Anexo</th>
-										      </tr>
-										    </thead>
-										    <tbody>
-										      <tr>
-										        <td>1234</td>
-										        <td>Visado</td>
-										        <td>12/01/2016</td>
-										        <td><button>Ver</button></td>
-										        <td><button>Cargar correcciones</button></td>
-										        <td><button>Solicitar final de obra</button></td>
-										      </tr>
-										      <tr>
-										        <td>3456</td>
-										        <td>Aceptado</td>
-										        <td>21/02/2016</td>
-										        <td><button>Ver</button></td>
-										        <td><button>Cargar correcciones</button></td>
-										        <td><button>Solicitar final de obra</button></td>
-										      </tr>
-										      <tr>
-										        <td>4575</td>
-										        <td>Correciones</td>
-										        <td>01/03/2016</td>
-										        <td><button>Ver</button></td>
-										        <td><button>Cargar correcciones</button></td>
-										        <td><button>Solicitar final de obra</button></td>
-										      </tr>
-										    </tbody>
-						  				</table>
-						  			</div>
+								<div class="row">
+									{% block contenido_tramite_estado %}
+										{% include "persona/profesional/consultar_estado_tramite.html" %}
+									{% endblock %}
 								</div>
-				  			</div>
-			   			</div>
+						</div>
 					</div>
-				 </div>
-			   </div>
+				</div>
+			  </div>
 			</div>
-		</div>
-	</div>
-{% endblock %}
+		{% endblock %}
 
 
 {% block scripts %}
@@ -437,3 +334,5 @@
 	</script>
 
 {% endblock %}
+
+
