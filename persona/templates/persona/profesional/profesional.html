@@ -43,7 +43,7 @@
 													{% crispy propietario_form %}
 												{% endif %}
 
-												{%if propietario %}
+												{%if propietario.nombre != null%}
 
 													<label>Inicio de tramite para: {{ propietario }}</label>
 
