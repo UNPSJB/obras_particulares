@@ -15,6 +15,8 @@ urlpatterns = [
     url(r'^director$', views.mostrar_director, name="director"),
     url(r'^administrativo$', views.mostrar_administrativo, name="administrativo"),
     url(r'^administrativo/tramite_listar$', views.tramite_list, name="tramite_listar"),
+    
+
     url(r'^crearusuario/(?P<pk_persona>\d+)/$', views.crear_usuario, name="crear_usuario"),
 
     url(r'^profesional/estado_tramite$', views.consultar_estado_tramite_list, name="estado_tramite")

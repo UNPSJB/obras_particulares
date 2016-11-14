@@ -135,7 +135,7 @@ def crear_usuario(request, pk_persona):
         print("Mando correo de creado")
         send_mail(
             'Usuario habilitado',
-            'Usted ya puede acceder al sistema',
+            'Usted ya puede acceder al sistema: Nombre de usuario: '+persona.mail+' password: '+password,
             'infosopunpsjb@gmail.com',
             [persona.mail],
             fail_silently=False,
@@ -172,7 +172,6 @@ def solicitud_final_obra_list(request):
     tramite = Tramite.objects.all()
     contexto = {'tramites': tramite}
     return render(request, 'persona/administrativo/solicitud_final_obra_list.html', contexto)
-
 
 
 def consultar_estado_tramite_list():
