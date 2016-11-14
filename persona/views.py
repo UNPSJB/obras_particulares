@@ -125,6 +125,7 @@ def mostrar_administrativo(request):
 
 from django.core.mail import send_mail
 
+
 def crear_usuario(request, pk_persona):
     usuario = request.user
     persona = get_object_or_404(Persona, pk=pk_persona)
@@ -140,9 +141,10 @@ def crear_usuario(request, pk_persona):
             [persona.mail],
             fail_silently=False,
         )
-
+        print (password)
     else:
         print("Mando correo informando que se cambio algo en su cuenta de usuario")
+
     return redirect(usuario.get_view_name())
 
 
