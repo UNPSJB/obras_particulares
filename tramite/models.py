@@ -14,19 +14,17 @@ class Tramite(models.Model):
     domicilio = models.CharField(max_length=50,blank=True)
     #pago = models.BooleanField(initial=False)
 
-    def pago_completo(self):
-        self.pago = True
-
-    def save(self, *args, **kwds):
+    
+    def save(self):
         if self.pk is None:
-            t = super(Tramite, self).save(force_insert=True)  # super save
-            Iniciado(tramite=t)
-            return t
+            super(Tramite, self).save(force_insert=True)
+            i = Iniciado(tramite=self)
+            i.save()
+            return self
         else:
-            # estoy en la base y esto es un update
-            return super(Tramite, self).save(force_update=True)  #
+            return super(Tramite, self).save(force_update=True)
 
-    def get_nombre_estado(self):
+    def estado_actual(self):
         return self.estados.last().__class__.__name__.lower()
 
     def quien_lo_inspecciono(self):
@@ -43,13 +41,13 @@ class Estado(models.Model):
     tramite = models.ForeignKey(Tramite, related_name='estados')  # FK related_name=estados
     timestamp = models.DateTimeField(auto_now=True)
 
-    documentos = []  # provisorio
 
     class Meta:
         ordering = ['-timestamp']
 
     def agregar_documentacion(self, tramite, documentos):
         self.documentos.add(documento)  # buscar tramite con fk y asignarle documentos
+
 
 
 class Iniciado(Estado):
@@ -64,8 +62,7 @@ class Iniciado(Estado):
         estado.observacion = observaciones
         return estado
 
-    def __init__(self, tramite):
-        super(Iniciado, self).__init__(tramite)
+
 
 
 class Aceptado(Estado):
