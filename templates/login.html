@@ -1,7 +1,7 @@
 {% load staticfiles %}
 {% load crispy_forms_tags%}
 
-		<form action="{%url "login"%}"method="post">
+		<form action="{%url "login"%}"method="POST">
 			{{ form | crispy }}
 			{% csrf_token %}
 			<input class="btn btn-primary" type="submit" value="login">

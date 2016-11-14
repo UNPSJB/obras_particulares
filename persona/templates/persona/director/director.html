@@ -545,6 +545,18 @@
 	<!-- Esto no se debe borrar-->
 	<script src="{% static 'js/bootstrap.min.js' %}"></script>
 
+	<script type="text/javascript">
+	(function(){
+		$(".datepicker").datepicker({
+				changeDay: true,
+				changeMonth: true,
+				changeYear: true,
+				yearRange: "1990:2030",
+				dateFormat: 'dd/mm/yy'
+		});
+	})();
+	</script>
+
 	<script>
 		$("#perfil").fileinput({
 			showCaption: false,

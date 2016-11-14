@@ -1,6 +1,7 @@
 from django import forms
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
+from crispy_forms.helper import FormHelper, Layout
+from crispy_forms.layout import Submit, Field
+import datetime
 
 from .models import *
 from documento import *
@@ -19,8 +20,16 @@ class FormularioTipoDocumento(forms.ModelForm):
         self.helper = FormHelper()
         #self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.helper.layout = Layout(
+            Field('nombre', placeholder='Nombre'),
+            Field('descripcion', placeholder='Descripcion'),
+            Field('activo', placeholder='Activo'),
+            Field('fecha_alta', placeholder='Fecha alta', css_class='datepicker'),
+            Field('requerido', placeholder='requerido'),
+        )
         self.fields['requerido'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
                                                              choices=TipoDocumento.ACCIONES)
+        
 
     def clean_requerido(self):
         flags = [int(e) for e in self.cleaned_data['requerido']]

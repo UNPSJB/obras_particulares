@@ -31,6 +31,7 @@ class Propietario(Rol):
     def __str__(self):
         return "{}, {}".format(self.nombre, self.apellido)
 
+    __unicode__ = __str__
 
 class Usuario(Rol, AbstractUser):
     PROFESIONAL = "profesional"
@@ -42,6 +43,9 @@ class Usuario(Rol, AbstractUser):
 
     def get_view_name(self):
         return self.groups.first().name
+
+
+from random import choice
 
 class Persona(models.Model):
     SEXOS = [ {'F', 'Femenino'}, {'M', 'Masculino'} ]
@@ -66,7 +70,7 @@ class Persona(models.Model):
         aux_usuario = None
         if self.usuario is None:
             # Hacer una funcion que genere claves aleatorias
-            password = "123456"
+            password = generar_password()
             aux_usuario = Usuario.objects.create_user( username=self.mail,
                                                         email=self.mail,
                                                         password=password)
@@ -82,3 +86,11 @@ class Persona(models.Model):
 
         self.save()
         return created, password, self.usuario
+
+
+def generar_password():
+    longitud = 6
+    valores = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    password = ""
+    password = password.join([choice(valores) for i in range(longitud)])
+    return password

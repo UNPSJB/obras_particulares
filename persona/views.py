@@ -5,48 +5,38 @@ from .forms import *
 from django.contrib import messages
 from tipos.forms import *
 from obras_particulares.views import *
-from tramite.forms import Formulario_Iniciar_Tramite
+from tramite.forms import FormularioIniciarTramite
+from documento.forms import FormularioDocumentoSetFactory
 from tramite.models import *
-
+from django.core.mail import send_mail
 
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
 
 def mostrar_profesional(request):
-    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento("INICIAR")
-    tramite_form = Formulario_Iniciar_Tramite()
-    formulario_busqueda_propietario = FormularioBusquedaPropietario()
-    propietario_form = FormularioPropietario()
-    propietario = True
+    usuario = request.user
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
+    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     if request.method == "POST":
 
-        if 'busqueda_propietario_submit' in request.POST:
-
-            formulario_busqueda_propietario = FormularioBusquedaPropietario(request.POST)
-            if formulario_busqueda_propietario.is_valid(): #si no lanza la excepcion entra aca (si no existe)
-                messages.add_message(request, messages.WARNING, 'El propietario no existe debe darlo de alta')
-                propietario_form = FormularioPropietario()
-                propietario = False
-
-            else:   #propietario existe
-                dni_propietario = request.POST['dni']
-                propietario = Propietario.objects.get(dni=dni_propietario)
-                propietario_form = FormularioPropietario(instance=propietario)
-
         if 'tramite_submit' in request.POST:
-
-            tramite_form = Formulario_Iniciar_Tramite(request.POST)
+            tramite_form = FormularioIniciarTramite(request.POST, initial={"profesional": usuario.persona.profesional.pk})
             if tramite_form.is_valid():
-                tramite_form.save()
+                tramite = tramite_form.save()
+                documento_set = FormularioDocumentoSet(request.POST)
+            else:
+                documento_set = FormularioDocumentoSet()
+                propietario_form = FormularioPropietario()
+            print(tramite_form)
 
     else:
-        formulario_busqueda_propietario = FormularioBusquedaPropietario()
-        propietario_form = FormularioPropietario()
+        tramite_form = FormularioIniciarTramite(initial={"profesional": usuario.persona.profesional.pk})
+        documento_set = FormularioDocumentoSet()
+        propietario_form = None
 
-    return render(request, 'persona/profesional/profesional.html',{'busqueda_propietario_form':formulario_busqueda_propietario,
-                                                                   'tipos_de_documentos_requeridos': tipos_de_documentos_requeridos,
-                                                                   'tramite_form': tramite_form,
-                                                                   'propietario_form': propietario_form, "propietario": propietario})
+    return render(request, 'persona/profesional/profesional.html',{'tramite_form': tramite_form,
+                                                                   'propietario_form': propietario_form,
+                                                                   'documento_set': documento_set})
 
 """def mostrar_profesional(request):
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento("INICIAR")
@@ -133,8 +123,6 @@ def mostrar_administrativo(request):
     return render(request, 'persona/administrativo/administrativo.html', contexto)
 
 
-from django.core.mail import send_mail
-
 def crear_usuario(request, pk_persona):
     usuario = request.user
     persona = get_object_or_404(Persona, pk=pk_persona)
@@ -145,14 +133,15 @@ def crear_usuario(request, pk_persona):
         print("Mando correo de creado")
         send_mail(
             'Usuario habilitado',
-            'Usted ya puede acceder al sistema',
+            'Usted ya puede acceder al sistema: Nombre de usuario: '+persona.mail+' password: '+password,
             'infosopunpsjb@gmail.com',
             [persona.mail],
             fail_silently=False,
         )
-
+        print (password)
     else:
         print("Mando correo informando que se cambio algo en su cuenta de usuario")
+
     return redirect(usuario.get_view_name())
 
 
@@ -161,24 +150,48 @@ def profesional_list(request):
     profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
     contexto = {'personas': profesionales}
     return contexto
-
+    
 def propietario_list(request):
     propietarios = Propietario.objects.all()
     contexto = {'propietarios': propietario}
     return render(request, 'persona/administrativo/propietario_list.html', contexto)
 
-
+# es el de tramites iniciados
 def tramite_list(request):
-    tramite = Tramite.objects.all()
+    tramites = Tramite.objects.all()
+    #tramites = filter(lambda tramite: (tramite.estado is tramite.estado_actual.iniciado), tramites)
     contexto = {'tramites': tramite}
     return render(request, 'persona/administrativo/tramite_list.html', contexto)
+    #return contexto
 
 def tramite_corregidos_list(request):
     tramite = Tramite.objects.all()
     contexto = {'tramites': tramite}
     return render(request, 'persona/administrativo/tramite_corregidos_list.html', contexto)
+    #return contexto
 
 def solicitud_final_obra_list(request):
     tramite = Tramite.objects.all()
     contexto = {'tramites': tramite}
     return render(request, 'persona/administrativo/solicitud_final_obra_list.html', contexto)
+    #return contexto
+
+
+
+def consultar_estado_tramite_list():
+    tramites = Tramite.objects.all()
+    contexto = {'tramites': tramite}
+    return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
+    #return contexto
+
+
+
+def aceptar_tramite(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    #poner la funcion que cambia de estado al tramite
+    return redirect('persona/administrativo/administrativo.html')
+
+def rechazar_tramite(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    #poner la funcion que cambia de estado al tramite
+    return redirect('persona/administrativo/administrativo.html')
