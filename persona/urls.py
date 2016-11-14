@@ -15,7 +15,10 @@ urlpatterns = [
     url(r'^director$', views.mostrar_director, name="director"),
     url(r'^administrativo$', views.mostrar_administrativo, name="administrativo"),
     url(r'^administrativo/tramite_listar$', views.tramite_list, name="tramite_listar"),
-    
+
+    url(r'^rechazar_tramite/(?P<pk_tramite>\d+)/$', views.rechazar_tramite, name="rechazar_tramite"),
+    url(r'^aceptar_tramite/(?P<pk_tramite>\d+)/$', views.aceptar_tramite, name="aceptar_tramite"),
+
 
     url(r'^crearusuario/(?P<pk_persona>\d+)/$', views.crear_usuario, name="crear_usuario"),
 

@@ -8,7 +8,7 @@ from obras_particulares.views import *
 from tramite.forms import FormularioIniciarTramite
 from documento.forms import FormularioDocumentoSetFactory
 from tramite.models import *
-
+from django.core.mail import send_mail
 
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
@@ -123,9 +123,6 @@ def mostrar_administrativo(request):
     return render(request, 'persona/administrativo/administrativo.html', contexto)
 
 
-from django.core.mail import send_mail
-
-
 def crear_usuario(request, pk_persona):
     usuario = request.user
     persona = get_object_or_404(Persona, pk=pk_persona)
@@ -159,24 +156,42 @@ def propietario_list(request):
     contexto = {'propietarios': propietario}
     return render(request, 'persona/administrativo/propietario_list.html', contexto)
 
-
+# es el de tramites iniciados
 def tramite_list(request):
-    tramite = Tramite.objects.all()
+    tramites = Tramite.objects.all()
+    #tramites = filter(lambda tramite: (tramite.estado is tramite.estado_actual.iniciado), tramites)
     contexto = {'tramites': tramite}
     return render(request, 'persona/administrativo/tramite_list.html', contexto)
+    #return contexto
 
 def tramite_corregidos_list(request):
     tramite = Tramite.objects.all()
     contexto = {'tramites': tramite}
     return render(request, 'persona/administrativo/tramite_corregidos_list.html', contexto)
+    #return contexto
 
 def solicitud_final_obra_list(request):
     tramite = Tramite.objects.all()
     contexto = {'tramites': tramite}
     return render(request, 'persona/administrativo/solicitud_final_obra_list.html', contexto)
+    #return contexto
+
 
 
 def consultar_estado_tramite_list():
-    tramite = Tramite.objects.all()
+    tramites = Tramite.objects.all()
     contexto = {'tramites': tramite}
     return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
+    #return contexto
+
+
+
+def aceptar_tramite(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    #poner la funcion que cambia de estado al tramite
+    return redirect('persona/administrativo/administrativo.html')
+
+def rechazar_tramite(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    #poner la funcion que cambia de estado al tramite
+    return redirect('persona/administrativo/administrativo.html')
