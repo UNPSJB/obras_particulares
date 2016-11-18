@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load crispy_forms_tags%}
 
 {% block barra %}
 	<ul class="sidebar sidebar-1">
@@ -11,6 +12,8 @@
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Alta profesional</a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Alta propietario</a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de final de obra</a></li>
+
 			<li><a href="#" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
 					<li><a href="#">Consulta 1</a></li>
@@ -196,6 +199,31 @@
 				</div>
 			</div>
 	  </div>
+
+		<div class="panel">
+	    <div class="panel-heading box" role="tab" id="headingSeven">
+	      <h5 class="panel-title">
+	        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+	          <font color="#ffffff" size="2">Registrar pago</font>
+	        </a>
+	      </h5>
+	    </div>
+	    <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+	      <div class="panel-body">
+		    	<div class="container-fluid">
+		    		<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+									{% crispy archivo_pago_form %}
+								</div>
+							</div>
+		  			</div>
+					</div>
+	     	</div>
+	    </div>
+	  </div>
+
+
 	</div>
 
 {% endblock %}
@@ -212,6 +240,18 @@
 			fileType: "any",
 			maxFileCount: 1,
 			browseLabel: 'Cargar nueva foto de perfil',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
+
+	<script>
+		$("#archivo_pago").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: ".xlsx",
+			maxFileCount: 1,
+			browseLabel: 'Cargar archivo pago',
 			showUpload: false,
 			showRemove: false
 		});

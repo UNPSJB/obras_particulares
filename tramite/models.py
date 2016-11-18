@@ -2,8 +2,17 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 import datetime
+from django.shortcuts import get_object_or_404
+
 from persona.models import *
 from tipos.models import *
+
+from openpyxl import load_workbook
+from django_excel import *
+import pyexcel as pe
+from os.path import basename
+import csv
+from decimal import Decimal
 
 
 class Tramite(models.Model):
@@ -12,9 +21,10 @@ class Tramite(models.Model):
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50,blank=True)
+
     #pago = models.BooleanField(initial=False)
 
-    
+
     def save(self):
         if self.pk is None:
             super(Tramite, self).save(force_insert=True)
@@ -149,3 +159,71 @@ class Inspeccionado(Estado):
 class Finalizado(Estado):
     def __init__(self, tramite):
         super(Finalizado, self).__init__(tramite)
+
+
+class Pago(models.Model):
+    tramite = models.ForeignKey(Tramite)
+    fecha = models.DateField(auto_now=True)
+    monto = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        cabecera = "%s" %self.pk
+        return cabecera
+
+    @classmethod
+    def procesar_pagos(cls, archivo):
+
+        datos = archivo.read()
+
+        #La siguientes linea arma un diccionario para poder recorrer el archivo mejor
+        spliter = lambda datos: [ l.split('"')[:2] for l in datos.splitlines()[1:]]
+
+        datos_diccionario = []
+
+        for idt, monto in spliter(datos):
+            datos_diccionario.append({"id": int(idt[:-1]), "monto": Decimal(monto[1:].replace(".","").replace(",", "."))})
+
+
+        tramites = Tramite.objects.all()
+        print tramites
+
+        for linea in datos_diccionario:
+            try:
+                monto_pagado = linea['monto']
+                id_tramite = int(linea['id'])
+
+                print id_tramite
+
+                tramite = Tramite.objects.get(pk=id_tramite)
+                print tramite
+
+                p = cls(tramite=tramite, monto=monto_pagado)
+                print(p)
+                p.save()
+            except Tramite.DoesNotExist:
+                pass
+
+
+
+
+        #with archivo.read() as csvfile:
+        #    reader = csv.DictReader(arch)
+        #    for row in reader:
+        #        print(row)
+        #        nro_tramite = int(row['Tramite'])
+        #        print(nro_tramite)
+                #tramite = get_object_or_404(Tramite, pk=nro_tramite)
+                #print(tramite)
+        #        monto_pagado = int(row['Monto'])
+        #        print(monto_pagado)
+                #p = cls(tramite=tramite, monto=monto_pagado)
+                #print(p)
+                #p.save()
+                #pagos.append(p)
+
+
+        #para cada linea del archivo genero un pago asociado al tramite
+        #    p = cls(monto=monto, tramite=tramite)
+        #    p.save()
+        #    pagos.append(p)
+        #return pagos

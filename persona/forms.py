@@ -2,6 +2,7 @@ from django import forms
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout
 from .models import *
+from tramite.models import *
 from django.forms import ValidationError
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group, User
@@ -128,3 +129,18 @@ class FormularioInspector(FormularioUsuarioPersona):
         grupo = Group.objects.get(name='inspector')
         usuario.groups.add(grupo)
         return usuario
+
+
+class FormularioArchivoPago(forms.Form):
+
+    NAME = 'archivo_pago_form'
+    SUBMIT = 'archivo_pago_submit'
+    pagos = forms.FileField()
+
+    class Meta:
+        fields= ('file', 'pagos')
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioArchivoPago, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', 'Submit', css_class="btn btn-default"))

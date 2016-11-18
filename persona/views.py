@@ -116,11 +116,27 @@ def alta_persona(request):
         form = FormularioPersona()
     return render(request, 'persona/alta/alta_persona.html', {'form': form})
 
+def registrar_pago_tramite(request):
+
+    print(request.FILES)
+    if request.method == "POST":
+        print("POST")
+        archivo_pago_form = FormularioArchivoPago(request.POST, request.FILES)
+        if archivo_pago_form.is_valid():
+            Pago.procesar_pagos(request.FILES['pagos'])
+    else:
+        archivo_pago_form = FormularioArchivoPago()
+
+    formulario = {'archivo_pago_form' : archivo_pago_form}
+
+    return formulario
+
+
 @login_required(login_url="login")
 @grupo_requerido('administrativo')
 def mostrar_administrativo(request):
-    contexto = profesional_list(request)
-    return render(request, 'persona/administrativo/administrativo.html', contexto)
+    formulario_pago = registrar_pago_tramite(request)
+    return render(request, 'persona/administrativo/administrativo.html', formulario_pago)
 
 
 def crear_usuario(request, pk_persona):
@@ -150,7 +166,7 @@ def profesional_list(request):
     profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
     contexto = {'personas': profesionales}
     return contexto
-    
+
 def propietario_list(request):
     propietarios = Propietario.objects.all()
     contexto = {'propietarios': propietario}
