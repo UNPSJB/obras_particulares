@@ -129,9 +129,9 @@ def registrar_pago_tramite(request):
     else:
         archivo_pago_form = FormularioArchivoPago()
 
-    formulario = {'archivo_pago_form' : archivo_pago_form}
+    #formulario = {'archivo_pago_form' : archivo_pago_form}
 
-    return formulario
+    return archivo_pago_form
 
 
 @login_required(login_url="login")
@@ -143,8 +143,8 @@ def mostrar_administrativo(request):
         "ctxpropietario": propietario_list(request),
         "ctxtramite": tramite_list(request),
         "ctxtramitescorregidos": tramite_corregidos_list(request),
-        "ctxsolicitudesfinalobra": solicitud_final_obra_list(request)
-	"ctxpago" : {formulario_pago = registrar_pago_tramite(request)}    
+        "ctxsolicitudesfinalobra": solicitud_final_obra_list(request),
+	    "ctxpago" : registrar_pago_tramite(request)
 
     }
     return render(request, 'persona/administrativo/administrativo.html', contexto)
@@ -177,7 +177,7 @@ def profesional_list(request):
     profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
     contexto = {'personas': profesionales}
     return contexto
-    
+
 def propietario_list(request):
     propietarios = Propietario.objects.all()
     contexto = {'propietarios': propietarios}
