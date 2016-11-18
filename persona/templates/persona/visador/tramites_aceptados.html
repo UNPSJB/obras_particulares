@@ -1,0 +1,54 @@
+{% block contenido_tramites_aceptados %}
+  <div class="table-responsive">
+      <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+          <!-- Cabecera -->
+          <thead>
+              <tr>
+                  <th>Fecha Inicio</th>
+                  <th>Nro Tramite</th>
+                  <th>Tipo de obra</th>
+                  <th>Profesional</th>
+                  <th>Propietario</th>
+                  <th>M2</th>
+                  <th>Estado</th>
+                  <th>Asignarme</th>
+              </tr>
+          </thead>
+          <!-- Mostramos los datos de las tablas -->
+
+
+
+          <tbody>
+
+          {% if tramites_para_asignar %}
+
+              {% for tramite in tramites_para_asignar%}
+                <tr>
+                    <td>{{ tramite.estado.timestamp}}</td>
+                    <td>{{ tramite.numero }} </td>
+                    <td>{{ tramite.tipo_obra }} </td>
+                    <td>
+                        {{ tramite.profesional.nombre }}
+                        {{ tramite.profesional.apellido }}
+                    </td>
+                    <td>
+                        {{ tramite.propietario.nombre }}
+                        {{ tramite.propietario.apellido }}
+                    </td>
+
+                    <td>{{ tramite.medidas }} </td>
+                    <td>
+                        {{ tramite.estado_actual}}
+
+                    </td>
+
+                    <td align="center">
+                        <a href=""><button type="button" class="btn btn-primary btn-xs" name="Asignarme"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Asignarme</span></button></a>
+                  </td>
+                </tr>
+              {% endfor %}
+          {% endif%}
+          </tbody>
+      </table>
+  </div>
+{% endblock %}

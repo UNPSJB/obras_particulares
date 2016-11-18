@@ -2,6 +2,10 @@ from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
 from . import views
 from tramite.models import *
+from persona.views import ver_un_certificado
+
+
+
 
 urlpatterns = [
 
@@ -22,6 +26,8 @@ urlpatterns = [
 
     url(r'^crearusuario/(?P<pk_persona>\d+)/$', views.crear_usuario, name="crear_usuario"),
 
-    url(r'^profesional/estado_tramite$', views.consultar_estado_tramite_list, name="estado_tramite")
+    url(r'^profesional/estado_tramite$', views.consultar_estado_tramite_list, name="estado_tramite"),
+
+    url(r'^ver_certificado/(?P<pk>\d+)/$', ver_un_certificado.as_view(),name="ver_certificado"),
 
 ]

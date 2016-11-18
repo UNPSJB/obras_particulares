@@ -2,8 +2,6 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
 import datetime
-from django.shortcuts import get_object_or_404
-
 from persona.models import *
 from tipos.models import *
 
@@ -21,10 +19,9 @@ class Tramite(models.Model):
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50,blank=True)
-
     #pago = models.BooleanField(initial=False)
 
-
+    
     def save(self):
         if self.pk is None:
             super(Tramite, self).save(force_insert=True)
@@ -72,6 +69,8 @@ class Iniciado(Estado):
         estado.observacion = observaciones
         return estado
 
+    def __str__(self):
+        return "iniciado"
 
 
 
@@ -203,27 +202,3 @@ class Pago(models.Model):
             except Tramite.DoesNotExist:
                 pass
 
-
-
-
-        #with archivo.read() as csvfile:
-        #    reader = csv.DictReader(arch)
-        #    for row in reader:
-        #        print(row)
-        #        nro_tramite = int(row['Tramite'])
-        #        print(nro_tramite)
-                #tramite = get_object_or_404(Tramite, pk=nro_tramite)
-                #print(tramite)
-        #        monto_pagado = int(row['Monto'])
-        #        print(monto_pagado)
-                #p = cls(tramite=tramite, monto=monto_pagado)
-                #print(p)
-                #p.save()
-                #pagos.append(p)
-
-
-        #para cada linea del archivo genero un pago asociado al tramite
-        #    p = cls(monto=monto, tramite=tramite)
-        #    p.save()
-        #    pagos.append(p)
-        #return pagos

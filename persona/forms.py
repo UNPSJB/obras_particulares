@@ -19,12 +19,12 @@ class FormularioPersona(forms.ModelForm):
         super(FormularioPersona, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        #self.helper.form_tag = False
 
     def clean_dni(self):
         dato = self.cleaned_data['dni']
-        if Propietario.objects.filter(dni=dato).exists():
+        if Persona.objects.filter(dni=dato).exists():
             raise ValidationError('La persona ya existe en el sistema')
-
         return dato
 
 class FormularioProfesional(FormularioPersona):
@@ -68,7 +68,6 @@ class FormularioPropietario(FormularioPersona):
         persona.propietario = p
         persona.save()
         return p
-
 
 class FormularioUsuario(AuthenticationForm):
     NAME = 'usuario_form'

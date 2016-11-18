@@ -26,36 +26,36 @@
 
 {% block contenido %}
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-	  <div class="panel" >
+		<div class="panel" >
 			<div class="panel-heading box" role="tab" id="headingOne">
 			  <h5 class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>
-						<font color="#ffffff" size="2">Tramites iniciados</font>
-			    </a>
-		    </h5>
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>
+					<font color="#ffffff" size="2">Tramites iniciados</font>
+				</a>
+			</h5>
 		  </div>
+		  <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block contenido_tramite %}
+								{% include "persona/administrativo/tramite_list.html" with tramites=ctxtramite.tramites %}
+							{% endblock %}
 
-	    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-      	<div class="panel-body">
-	      	<div class="container-fluid">
-	      		<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	 							{% block contenido_tramite %}
-									{% include "persona/administrativo/tramite_list.html" %}
-								{% endblock %}
-							</div>
-	  				</div>
+						</div>
 					</div>
-      	</div>
-	    </div>
+				</div>
+			</div>
+		  </div>
 		</div>
 
 	  <div class="panel">
 			<div class="panel-heading box" role="tab" id="headingTwo">
 			  <h5 class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite")'>
-					  <font color="#ffffff" size="2">Tramites corregidos</font>
-					</a>
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite")'>
+				  <font color="#ffffff" size="2">Tramites corregidos</font>
+				</a>
 			  </h5>
 			</div>
 	    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
@@ -66,6 +66,9 @@
 								{% block contenido_tramite_corregidos %}
 									{% include "persona/administrativo/tramite_corregidos_list.html" %}
 								{% endblock %}
+
+								<font color=red>revisar esto!!!!</font>
+
 							</div>
 		  			</div>
 					</div>
@@ -89,6 +92,10 @@
 	 							{% block contenido_tramite_final_obra %}
 									{% include "persona/administrativo/solicitud_final_obra_list.html" %}
 								{% endblock %}
+
+								<font color=red>revisar esto!!!!</font>
+
+
 							</div>
 		  			</div>
 					</div>
@@ -110,7 +117,7 @@
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								{% block contenido_profesional %}
-									{% include "persona/administrativo/profesional_list.html" %}
+									{% include "persona/administrativo/profesional_list.html" with personas=ctxprofesional.personas %}
 								{% endblock %}
 							</div>
 		  			</div>
@@ -133,7 +140,7 @@
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								{% block contenido_propietario %}
-									{% include "persona/administrativo/propietario_list.html" %}
+									{% include "persona/administrativo/propietario_list.html" with personas=ctxpropietario.propietarios %}
 								{% endblock %}
 					  		</div>
 						</div>
@@ -161,7 +168,7 @@
 										<div class="row">
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 												<div class="form-group">
-													<label for="telefono">Nro. de teléfono:</label>
+													<label>Nro. de teléfono:</label>
 													<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono"/>
 												</div>
 											</div>

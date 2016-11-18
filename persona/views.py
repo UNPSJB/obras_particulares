@@ -10,6 +10,9 @@ from documento.forms import FormularioDocumentoSetFactory
 from tramite.models import *
 from django.core.mail import send_mail
 
+from tramite.models import Tramite
+from django.views.generic.detail import DetailView
+
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
 
@@ -17,42 +20,44 @@ def mostrar_profesional(request):
     usuario = request.user
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
-    if request.method == "POST":
+    documento_set = None
+    tramite_form = FormularioIniciarTramite()
+    propietario_form = FormularioPropietario()
+    propietario = None
 
-        if 'tramite_submit' in request.POST:
-            tramite_form = FormularioIniciarTramite(request.POST, initial={"profesional": usuario.persona.profesional.pk})
-            if tramite_form.is_valid():
-                tramite = tramite_form.save()
-                documento_set = FormularioDocumentoSet(request.POST)
-            else:
-                documento_set = FormularioDocumentoSet()
-                propietario_form = FormularioPropietario()
-            print(tramite_form)
+    if request.method == "POST":
+        print(request.POST)
+        #pregunto para saber si es la primera vez que se muestra el formulario sino me darian todos los campos en rojo como un error
+        #y cuando venga lleno. ahi entra y lo instancio con los datos, antes no!!
+
+        propietario_form = FormularioPropietario(request.POST)
+        tramite_form = FormularioIniciarTramite(request.POST)
+
+        if propietario_form.has_changed():
+            print "entre al has changed"
+            propietario = propietario_form.save()
+            propietario.save()
+
+        if tramite_form.is_valid():
+            propietario_form = None
+            print "estoy en tramite"
+            tramite = tramite_form.save()
+            tramite.propietario = propietario
+            tramite.save()
+            documento_set = FormularioDocumentoSet(request.POST)
+
+        else:
+            documento_set = FormularioDocumentoSet()
+            print "no cambio"
 
     else:
         tramite_form = FormularioIniciarTramite(initial={"profesional": usuario.persona.profesional.pk})
         documento_set = FormularioDocumentoSet()
         propietario_form = None
 
-    return render(request, 'persona/profesional/profesional.html',{'tramite_form': tramite_form,
+    return render(request, 'persona/profesional/profesional.html', {'tramite_form': tramite_form,
                                                                    'propietario_form': propietario_form,
                                                                    'documento_set': documento_set})
-
-"""def mostrar_profesional(request):
-    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento("INICIAR")
-    tramite_form = FormularioTramite()
-
-    if request.method == "POST":
-        formulario_busqueda_propietario = FormularioBusquedaPropietario(request.POST)
-    else:
-        formulario_busqueda_propietario = FormularioBusquedaPropietario()
-
-    return render(request, 'persona/profesional/profesional.html',
-                  {'busqueda_propietario_form': formulario_busqueda_propietario,
-                   'tipos_de_documentos_requeridos': tipos_de_documentos_requeridos,
-                   'tramite_form': tramite_form,})"""
-
-
 
 def mostrar_jefe_inspector(request):
     return render(request, 'persona/jefe_inspector/jefe_inspector.html')
@@ -66,12 +71,9 @@ def mostrar_propietario(request):
 @login_required(login_url="login")
 @grupo_requerido('visador')
 def mostrar_visador(request):
-    return render(request, 'persona/visador/visador.html')
+    contexto = tramites_aceptados(request)
+    return render(request, 'persona/visador/visador.html', contexto)
 
-@login_required(login_url="login")
-@grupo_requerido('visador')
-def mostrar_visar(request):
-    return render(request, 'persona/visador/visar.html')
 
 
 FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
@@ -135,8 +137,17 @@ def registrar_pago_tramite(request):
 @login_required(login_url="login")
 @grupo_requerido('administrativo')
 def mostrar_administrativo(request):
-    formulario_pago = registrar_pago_tramite(request)
-    return render(request, 'persona/administrativo/administrativo.html', formulario_pago)
+
+    contexto = {
+        "ctxprofesional": profesional_list(request),
+        "ctxpropietario": propietario_list(request),
+        "ctxtramite": tramite_list(request),
+        "ctxtramitescorregidos": tramite_corregidos_list(request),
+        "ctxsolicitudesfinalobra": solicitud_final_obra_list(request)
+	"ctxpago" : {formulario_pago = registrar_pago_tramite(request)}    
+
+    }
+    return render(request, 'persona/administrativo/administrativo.html', contexto)
 
 
 def crear_usuario(request, pk_persona):
@@ -166,39 +177,41 @@ def profesional_list(request):
     profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
     contexto = {'personas': profesionales}
     return contexto
-
+    
 def propietario_list(request):
     propietarios = Propietario.objects.all()
-    contexto = {'propietarios': propietario}
-    return render(request, 'persona/administrativo/propietario_list.html', contexto)
+    contexto = {'propietarios': propietarios}
+    #return render(request, 'persona/administrativo/propietario_list.html', contexto)
+    return contexto
 
 # es el de tramites iniciados
 def tramite_list(request):
     tramites = Tramite.objects.all()
     #tramites = filter(lambda tramite: (tramite.estado is tramite.estado_actual.iniciado), tramites)
-    contexto = {'tramites': tramite}
-    return render(request, 'persona/administrativo/tramite_list.html', contexto)
-    #return contexto
+    contexto = {'tramites': tramites}
+    #return render(request, 'persona/administrativo/tramite_list.html', contexto)
+    return contexto
 
 def tramite_corregidos_list(request):
-    tramite = Tramite.objects.all()
-    contexto = {'tramites': tramite}
-    return render(request, 'persona/administrativo/tramite_corregidos_list.html', contexto)
-    #return contexto
+    tramites = Tramite.objects.all()
+    #tramites = filter(lambda tramite: (tramite.estado_actual is  is not None), personas)
+    contexto = {'tramites': tramites}
+
+    return contexto
 
 def solicitud_final_obra_list(request):
-    tramite = Tramite.objects.all()
-    contexto = {'tramites': tramite}
-    return render(request, 'persona/administrativo/solicitud_final_obra_list.html', contexto)
-    #return contexto
+    tramites = Tramite.objects.all()
+    contexto = {'tramites': tramites}
+    #return render(request, 'persona/administrativo/solicitud_final_obra_list.html', contexto)
+    return contexto
 
 
 
 def consultar_estado_tramite_list():
-    tramites = Tramite.objects.all()
+    tramite = Tramite.objects.all()
     contexto = {'tramites': tramite}
-    return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
-    #return contexto
+    #return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
+    return contexto
 
 
 
@@ -211,3 +224,33 @@ def rechazar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     #poner la funcion que cambia de estado al tramite
     return redirect('persona/administrativo/administrativo.html')
+
+
+class ver_un_certificado(DetailView):
+    model = Persona
+    template_name = 'persona/administrativo/ver_certificado_profesional.html'
+
+    def dispatch(self, *args, **kwargs):
+        return super(ver_un_certificado, self).dispatch(*args, **kwargs)
+
+
+
+
+@login_required(login_url="login")
+@grupo_requerido('visador')
+def mostrar_visar(request):
+    contexto = tramites_aceptados(request)
+    return render(request, 'persona/visador/visar.html', contexto)
+
+
+def tramites_aceptados(request):
+    aceptados = Tramite.objects.all()
+    para_asignar = aceptados
+    contexto = {'tramites_para_asignar': para_asignar}
+    return contexto
+
+def tramites_asignados(request):
+    asignados = Tramite.objects.all()
+    para_visar = asignados
+    contexto = {'tramites_para_visar': para_visar}
+    return contexto
