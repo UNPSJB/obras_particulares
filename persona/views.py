@@ -17,42 +17,45 @@ def mostrar_profesional(request):
     usuario = request.user
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
-    if request.method == "POST":
+    documento_set = None
+    tramite_form = FormularioIniciarTramite()
+    propietario_form = FormularioPropietario()
+    propietario = None
 
-        if 'tramite_submit' in request.POST:
-            tramite_form = FormularioIniciarTramite(request.POST, initial={"profesional": usuario.persona.profesional.pk})
-            if tramite_form.is_valid():
-                tramite = tramite_form.save()
-                documento_set = FormularioDocumentoSet(request.POST)
-            else:
-                documento_set = FormularioDocumentoSet()
-                propietario_form = FormularioPropietario()
-            print(tramite_form)
+    if request.method == "POST":
+        print(request.POST)
+        #pregunto para saber si es la primera vez que se muestra el formulario sino me darian todos los campos en rojo como un error
+        #y cuando venga lleno. ahi entra y lo instancio con los datos, antes no!!
+
+        propietario_form = FormularioPropietario(request.POST)
+        tramite_form = FormularioIniciarTramite(request.POST)
+
+        if propietario_form.has_changed():
+            print "entre al has changed"
+            propietario = propietario_form.save()
+            propietario.save()
+
+        if tramite_form.is_valid():
+            propietario_form = None
+            print "estoy en tramite"
+            tramite = tramite_form.save()
+            tramite.propietario = propietario
+            tramite.save()
+            documento_set = FormularioDocumentoSet(request.POST)
+
+        else:
+            documento_set = FormularioDocumentoSet()
+            print "no cambio"
 
     else:
-        tramite_form = FormularioIniciarTramite(initial={"profesional": usuario.persona.profesional.pk})
+        tramite_form = FormularioIniciarTramite()
         documento_set = FormularioDocumentoSet()
         propietario_form = None
+        print "entreeeeeee"
 
-    return render(request, 'persona/profesional/profesional.html',{'tramite_form': tramite_form,
+    return render(request, 'persona/profesional/profesional.html', {'tramite_form': tramite_form,
                                                                    'propietario_form': propietario_form,
                                                                    'documento_set': documento_set})
-
-"""def mostrar_profesional(request):
-    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento("INICIAR")
-    tramite_form = FormularioTramite()
-
-    if request.method == "POST":
-        formulario_busqueda_propietario = FormularioBusquedaPropietario(request.POST)
-    else:
-        formulario_busqueda_propietario = FormularioBusquedaPropietario()
-
-    return render(request, 'persona/profesional/profesional.html',
-                  {'busqueda_propietario_form': formulario_busqueda_propietario,
-                   'tipos_de_documentos_requeridos': tipos_de_documentos_requeridos,
-                   'tramite_form': tramite_form,})"""
-
-
 
 def mostrar_jefe_inspector(request):
     return render(request, 'persona/jefe_inspector/jefe_inspector.html')
