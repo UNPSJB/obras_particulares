@@ -18,7 +18,7 @@ class FormularioPersona(forms.ModelForm):
         super(FormularioPersona, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.helper.form_tag = False
+        #self.helper.form_tag = False
 
     def clean_dni(self):
         dato = self.cleaned_data['dni']

@@ -13,7 +13,6 @@ class Tramite(models.Model):
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50,blank=True)
     #pago = models.BooleanField(initial=False)
-
     
     def save(self):
         if self.pk is None:
@@ -41,7 +40,6 @@ class Estado(models.Model):
     tramite = models.ForeignKey(Tramite, related_name='estados')  # FK related_name=estados
     timestamp = models.DateTimeField(auto_now=True)
 
-
     class Meta:
         ordering = ['-timestamp']
 
@@ -62,6 +60,8 @@ class Iniciado(Estado):
         estado.observacion = observaciones
         return estado
 
+    def __str__(self):
+        return "iniciado"
 
 
 

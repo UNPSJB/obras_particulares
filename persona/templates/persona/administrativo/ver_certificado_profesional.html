@@ -82,12 +82,16 @@
                                 <br>
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                                        <button class="btn btn-primary btn-sm" type="submit">
-                                            Habilitar Usuario
-                                        </button>
-                                        <button class="btn btn-danger btn-sm" type="submit" title="Envia documentos corregidos">
-                                            No habilitar
-                                        </button>
+                                            <a href="{% url 'administrativo' %}">
+                                                <button type="button" class="btn btn-primary" name="habilitar">
+                                                    Volver
+                                                </button>
+                                            </a>
+                                            <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
+                                                <button type="button" class="btn btn-primary" name="habilitar">
+                                                    Habilitar
+                                                </button>
+                                            </a>
                                     </div>
                                 </div>
                             </div>

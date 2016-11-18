@@ -178,8 +178,9 @@ def tramite_list(request):
 
 def tramite_corregidos_list(request):
     tramites = Tramite.objects.all()
+    #tramites = filter(lambda tramite: (tramite.estado_actual is  is not None), personas)
     contexto = {'tramites': tramites}
-    #return render(request, 'persona/administrativo/tramite_corregidos_list.html', contexto)
+
     return contexto
 
 def solicitud_final_obra_list(request):
@@ -200,7 +201,6 @@ def consultar_estado_tramite_list():
 
 def aceptar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    #poner la funcion que cambia de estado al tramite
     return redirect('persona/administrativo/administrativo.html')
 
 def rechazar_tramite(request, pk_tramite):
@@ -223,7 +223,6 @@ class ver_un_certificado(DetailView):
 @grupo_requerido('visador')
 def mostrar_visar(request):
     contexto = tramites_aceptados(request)
-
     return render(request, 'persona/visador/visar.html', contexto)
 
 

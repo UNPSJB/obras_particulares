@@ -20,18 +20,7 @@ class Profesional(Rol):
     certificado = models.ImageField(upload_to='certificado/', null= True)
 
 class Propietario(Rol):
-    dni = models.CharField(max_length=8, blank=True)
-    apellido = models.CharField(max_length=50, blank=True)
-    nombre = models.CharField(max_length=50, blank=True)
-    mail = models.CharField(max_length=40, blank=True)
-    cuil = models.CharField(max_length=14, blank=True)
-    domicilio = models.CharField(max_length=50, blank=True)
-    telefono = models.CharField(max_length=15, blank=True)
-
-    def __str__(self):
-        return "{}, {}".format(self.nombre, self.apellido)
-
-    __unicode__ = __str__
+    pass
 
 class Usuario(Rol, AbstractUser):
     PROFESIONAL = "profesional"
