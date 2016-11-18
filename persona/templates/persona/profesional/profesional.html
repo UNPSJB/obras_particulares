@@ -76,7 +76,6 @@
 												</div>
 											</div>
 										</div>
-									</form>
 									<br>
 								</div>
 							</div>
@@ -103,9 +102,12 @@
 									<div class="row">
 										<font class="form-group" color="#337ab7"><h4 align="left">Datos del Propietario:</h4></font>
 
-											<form action="{% url 'profesional' %}" class="uniForm" method="POST">
-												{% crispy propietario_form %}
+											<form action="{% url 'profesional' %}" class="uniForm" method="post">
+												{% if propietario_form %}
+													{% crispy propietario_form %}
+												{% endif %}
 												{% crispy tramite_form %}
+												{% crispy documento_set %}
 											</form>
 									</div>
 

@@ -18,7 +18,7 @@ class FormularioPersona(forms.ModelForm):
         super(FormularioPersona, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.helper.form_tag = False
+        #self.helper.form_tag = False
 
     def clean_dni(self):
         dato = self.cleaned_data['dni']
@@ -60,13 +60,31 @@ class FormularioPropietario(FormularioPersona):
     NAME = 'propietario_form'
     SUBMIT = 'propietario_submit'
 
-    def save(self, commit=False):
-        persona = super(FormularioPropietario, self).save(commit=commit)
+    def __init__(self, *args, **kwargs):
+        super(FormularioPropietario, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+
+    def save(self, commit=True):
+        persona = super(FormularioPropietario, self).save(commit=False)
         p = Propietario()
         p.save()
         persona.propietario = p
         persona.save()
         return p
+
+    def obtener_o_crear(self, persona=None):
+        if persona:
+            if persona.propietario:
+                return persona.propietario
+            else:
+                 propietario = Propietario()
+                 propietario.save()
+                 persona.propietario = propietario
+                 return persona.propietario
+
+        elif self.is_valid():
+            return self.save()
 
 class FormularioUsuario(AuthenticationForm):
     NAME = 'usuario_form'
