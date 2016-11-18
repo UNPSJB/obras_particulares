@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import  login_required
+
 from .forms import *
 from django.contrib import messages
 from tipos.forms import *
@@ -9,6 +10,9 @@ from tramite.forms import FormularioIniciarTramite
 from documento.forms import FormularioDocumentoSetFactory
 from tramite.models import *
 from django.core.mail import send_mail
+
+from tramite.models import Tramite
+from django.views.generic.detail import DetailView
 
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
@@ -66,12 +70,9 @@ def mostrar_propietario(request):
 @login_required(login_url="login")
 @grupo_requerido('visador')
 def mostrar_visador(request):
-    return render(request, 'persona/visador/visador.html')
+    contexto = tramites_aceptados(request)
+    return render(request, 'persona/visador/visador.html', contexto)
 
-@login_required(login_url="login")
-@grupo_requerido('visador')
-def mostrar_visar(request):
-    return render(request, 'persona/visador/visar.html')
 
 
 FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
@@ -119,7 +120,14 @@ def alta_persona(request):
 @login_required(login_url="login")
 @grupo_requerido('administrativo')
 def mostrar_administrativo(request):
-    contexto = profesional_list(request)
+
+    contexto = {
+        "ctxprofesional": profesional_list(request),
+        "ctxpropietario": propietario_list(request),
+        "ctxtramite": tramite_list(request),
+        "ctxtramitescorregidos": tramite_corregidos_list(request),
+        "ctxsolicitudesfinalobra": solicitud_final_obra_list(request)
+    }
     return render(request, 'persona/administrativo/administrativo.html', contexto)
 
 
@@ -153,36 +161,37 @@ def profesional_list(request):
     
 def propietario_list(request):
     propietarios = Propietario.objects.all()
-    contexto = {'propietarios': propietario}
-    return render(request, 'persona/administrativo/propietario_list.html', contexto)
+    contexto = {'propietarios': propietarios}
+    #return render(request, 'persona/administrativo/propietario_list.html', contexto)
+    return contexto
 
 # es el de tramites iniciados
 def tramite_list(request):
     tramites = Tramite.objects.all()
     #tramites = filter(lambda tramite: (tramite.estado is tramite.estado_actual.iniciado), tramites)
-    contexto = {'tramites': tramite}
-    return render(request, 'persona/administrativo/tramite_list.html', contexto)
-    #return contexto
+    contexto = {'tramites': tramites}
+    #return render(request, 'persona/administrativo/tramite_list.html', contexto)
+    return contexto
 
 def tramite_corregidos_list(request):
-    tramite = Tramite.objects.all()
-    contexto = {'tramites': tramite}
-    return render(request, 'persona/administrativo/tramite_corregidos_list.html', contexto)
-    #return contexto
+    tramites = Tramite.objects.all()
+    contexto = {'tramites': tramites}
+    #return render(request, 'persona/administrativo/tramite_corregidos_list.html', contexto)
+    return contexto
 
 def solicitud_final_obra_list(request):
-    tramite = Tramite.objects.all()
-    contexto = {'tramites': tramite}
-    return render(request, 'persona/administrativo/solicitud_final_obra_list.html', contexto)
-    #return contexto
+    tramites = Tramite.objects.all()
+    contexto = {'tramites': tramites}
+    #return render(request, 'persona/administrativo/solicitud_final_obra_list.html', contexto)
+    return contexto
 
 
 
 def consultar_estado_tramite_list():
-    tramites = Tramite.objects.all()
+    tramite = Tramite.objects.all()
     contexto = {'tramites': tramite}
-    return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
-    #return contexto
+    #return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
+    return contexto
 
 
 
@@ -195,3 +204,34 @@ def rechazar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     #poner la funcion que cambia de estado al tramite
     return redirect('persona/administrativo/administrativo.html')
+
+
+class ver_un_certificado(DetailView):
+    model = Persona
+    template_name = 'persona/administrativo/ver_certificado_profesional.html'
+
+    def dispatch(self, *args, **kwargs):
+        return super(ver_un_certificado, self).dispatch(*args, **kwargs)
+
+
+
+
+@login_required(login_url="login")
+@grupo_requerido('visador')
+def mostrar_visar(request):
+    contexto = tramites_aceptados(request)
+
+    return render(request, 'persona/visador/visar.html', contexto)
+
+
+def tramites_aceptados(request):
+    aceptados = Tramite.objects.all()
+    para_asignar = aceptados
+    contexto = {'tramites_para_asignar': para_asignar}
+    return contexto
+
+def tramites_asignados(request):
+    asignados = Tramite.objects.all()
+    para_visar = asignados
+    contexto = {'tramites_para_visar': para_visar}
+    return contexto
