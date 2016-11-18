@@ -95,6 +95,11 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
+# Excel readers
+FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
+                        "django_excel.TemporaryExcelFileUploadHandler")
+
+
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
@@ -135,6 +140,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 AUTH_USER_MODEL='persona.Usuario'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Para el envio de email

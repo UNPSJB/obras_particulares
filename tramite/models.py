@@ -5,6 +5,13 @@ import datetime
 from persona.models import *
 from tipos.models import *
 
+from openpyxl import load_workbook
+from django_excel import *
+import pyexcel as pe
+from os.path import basename
+import csv
+from decimal import Decimal
+
 
 class Tramite(models.Model):
     propietario = models.ForeignKey(Propietario,blank=True, null=True,unique=False)
@@ -62,6 +69,8 @@ class Iniciado(Estado):
         estado.observacion = observaciones
         return estado
 
+    def __str__(self):
+        return "iniciado"
 
 
 
@@ -149,3 +158,47 @@ class Inspeccionado(Estado):
 class Finalizado(Estado):
     def __init__(self, tramite):
         super(Finalizado, self).__init__(tramite)
+
+
+class Pago(models.Model):
+    tramite = models.ForeignKey(Tramite)
+    fecha = models.DateField(auto_now=True)
+    monto = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        cabecera = "%s" %self.pk
+        return cabecera
+
+    @classmethod
+    def procesar_pagos(cls, archivo):
+
+        datos = archivo.read()
+
+        #La siguientes linea arma un diccionario para poder recorrer el archivo mejor
+        spliter = lambda datos: [ l.split('"')[:2] for l in datos.splitlines()[1:]]
+
+        datos_diccionario = []
+
+        for idt, monto in spliter(datos):
+            datos_diccionario.append({"id": int(idt[:-1]), "monto": Decimal(monto[1:].replace(".","").replace(",", "."))})
+
+
+        tramites = Tramite.objects.all()
+        print tramites
+
+        for linea in datos_diccionario:
+            try:
+                monto_pagado = linea['monto']
+                id_tramite = int(linea['id'])
+
+                print id_tramite
+
+                tramite = Tramite.objects.get(pk=id_tramite)
+                print tramite
+
+                p = cls(tramite=tramite, monto=monto_pagado)
+                print(p)
+                p.save()
+            except Tramite.DoesNotExist:
+                pass
+

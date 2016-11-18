@@ -8,10 +8,12 @@ class DocumentoInline(admin.TabularInline):
     min_num = 5
 
 class TramiteAdmin(admin.ModelAdmin):
-    inlines = [
-        DocumentoInline
-    ]
+    pass
+    #inlines = [
+    #    DocumentoInline
+    #]
 
 # Register your models here.
 admin.site.register(Tramite, TramiteAdmin)
 admin.site.register(Estado)
+admin.site.register(Pago)
