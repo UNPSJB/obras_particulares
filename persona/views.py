@@ -20,29 +20,22 @@ def mostrar_profesional(request):
     usuario = request.user
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
-    documento_set = None
+    documento_set = FormularioDocumentoSet()
     tramite_form = FormularioIniciarTramite()
     propietario_form = FormularioPropietario()
     propietario = None
 
     if request.method == "POST":
-        print(request.POST)
-        #pregunto para saber si es la primera vez que se muestra el formulario sino me darian todos los campos en rojo como un error
-        #y cuando venga lleno. ahi entra y lo instancio con los datos, antes no!!
-
+        personas = Persona.objects.filter(dni=request.POST["propietario"])
+        persona = personas.exists() and personas.first() or None
+        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         propietario_form = FormularioPropietario(request.POST)
         tramite_form = FormularioIniciarTramite(request.POST)
+        propietario = propietario_form.obtener_o_crear(persona)
 
-        if propietario_form.has_changed():
-            print "entre al has changed"
-            propietario = propietario_form.save()
-            propietario.save()
-
-        if tramite_form.is_valid():
+        if propietario is not None and tramite_form.is_valid() and documento_set.is_valid():
             propietario_form = None
-            print "estoy en tramite"
-            tramite = tramite_form.save()
-            tramite.propietario = propietario
+            tramite = tramite_form.save(propietario=propietario)
             tramite.save()
             documento_set = FormularioDocumentoSet(request.POST)
 
@@ -51,9 +44,10 @@ def mostrar_profesional(request):
             print "no cambio"
 
     else:
-        tramite_form = FormularioIniciarTramite(initial={"profesional": usuario.persona.profesional.pk})
+        tramite_form = FormularioIniciarTramite(initial={'profesional':'1'})
         documento_set = FormularioDocumentoSet()
         propietario_form = None
+        print "entreeeeeee"
 
     return render(request, 'persona/profesional/profesional.html', {'tramite_form': tramite_form,
                                                                    'propietario_form': propietario_form,
@@ -74,6 +68,10 @@ def mostrar_visador(request):
     contexto = tramites_aceptados(request)
     return render(request, 'persona/visador/visador.html', contexto)
 
+@login_required(login_url="login")
+@grupo_requerido('visador')
+def mostrar_visar(request):
+    return render(request, 'persona/visador/visar.html')
 
 
 FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
