@@ -13,6 +13,7 @@ from django.core.mail import send_mail
 from tramite.models import Tramite
 from django.views.generic.detail import DetailView
 
+
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
 
@@ -203,14 +204,37 @@ def solicitud_final_obra_list(request):
     #return render(request, 'persona/administrativo/solicitud_final_obra_list.html', contexto)
     return contexto
 
+def listado_tramites_de_profesional(request):
+    tramites = Tramite.objects.all()
+    personas = Persona.objects.all()
+    usuario = request.user
+
+    print(usuario)
+
+    """devuelve una lista con la persona que esta logueada"""
+
+    lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
+
+    print(lista_de_persona_que_esta_logueada)
+    persona = lista_de_persona_que_esta_logueada.pop()  #Saco de la lista la persona porque no puedo seguir trabajando con una lista
+
+    print(persona)
+
+    """for tramite in tramites:
+        if tramite.profesional == persona_profesional:
+            tramites_de_profesional.append(tramite)
+            print(tramite)"""
 
 
-def consultar_estado_tramite_list():
-    tramite = Tramite.objects.all()
-    contexto = {'tramites': tramite}
-    #return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
+    profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
+
+
+    tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
+    print(tramites_de_profesional)
+    contexto = {'tramites': tramites_de_profesional}
+    print(contexto)
+    return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
     return contexto
-
 
 
 def aceptar_tramite(request, pk_tramite):
@@ -231,15 +255,11 @@ class ver_un_certificado(DetailView):
     def dispatch(self, *args, **kwargs):
         return super(ver_un_certificado, self).dispatch(*args, **kwargs)
 
-
-
-
 @login_required(login_url="login")
 @grupo_requerido('visador')
 def mostrar_visar(request):
     contexto = tramites_aceptados(request)
     return render(request, 'persona/visador/visar.html', contexto)
-
 
 def tramites_aceptados(request):
     aceptados = Tramite.objects.all()

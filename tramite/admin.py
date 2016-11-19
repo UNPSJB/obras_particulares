@@ -5,13 +5,13 @@ from .models import *
 class DocumentoInline(admin.TabularInline):
     model = Documento
     extra = 0
-    min_num = 5
+    min_num = 3
 
 class TramiteAdmin(admin.ModelAdmin):
     pass
-    #inlines = [
-    #    DocumentoInline
-    #]
+    inlines = [
+        DocumentoInline
+    ]
 
 # Register your models here.
 admin.site.register(Tramite, TramiteAdmin)
