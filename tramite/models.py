@@ -6,8 +6,8 @@ from persona.models import *
 from tipos.models import *
 
 from openpyxl import load_workbook
-from django_excel import *
-import pyexcel as pe
+"""from django_excel import *
+import pyexcel as pe"""
 from os.path import basename
 import csv
 from decimal import Decimal

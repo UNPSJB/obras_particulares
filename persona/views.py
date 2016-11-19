@@ -41,13 +41,13 @@ def mostrar_profesional(request):
 
         else:
             documento_set = FormularioDocumentoSet()
-            print "no cambio"
+            print ("no cambio")
 
     else:
         tramite_form = FormularioIniciarTramite(initial={'profesional':'1'})
         documento_set = FormularioDocumentoSet()
         propietario_form = None
-        print "entreeeeeee"
+        print ("entreeeeeee")
 
     return render(request, 'persona/profesional/profesional.html', {'tramite_form': tramite_form,
                                                                    'propietario_form': propietario_form,

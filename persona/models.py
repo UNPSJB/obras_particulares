@@ -19,6 +19,9 @@ class Profesional(Rol):
     categoria = models.IntegerField(choices=CATEGORIAS)
     certificado = models.ImageField(upload_to='certificado/', null= True)
 
+    def __str__(self):
+        return "Matricula: {}, Profesion: {}".format(self.matricula, self.profesion)
+
 class Propietario(Rol):
     pass
 
