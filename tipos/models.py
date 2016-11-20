@@ -34,7 +34,7 @@ class TipoDocumento(models.Model):
     requerido = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.nombre
+        return "{}, {}".format(self.nombre, self.descripcion)
 
 
     # recibe una accion "visar", "iniciar", etc y devuelve una lista de tipos para esa accion particular

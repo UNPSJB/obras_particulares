@@ -19,8 +19,13 @@ class Profesional(Rol):
     categoria = models.IntegerField(choices=CATEGORIAS)
     certificado = models.ImageField(upload_to='certificado/', null= True)
 
+    def __str__(self):
+        return "Matricula: {}, Profesion: {}".format(self.matricula, self.profesion)
+
 class Propietario(Rol):
-    pass
+
+    def __str__(self):
+        return "Soy pepe"
 
 class Usuario(Rol, AbstractUser):
     PROFESIONAL = "profesional"
@@ -75,6 +80,9 @@ class Persona(models.Model):
 
         self.save()
         return created, password, self.usuario
+
+    def get_profesional(self):
+        return self.profesional
 
 
 def generar_password():

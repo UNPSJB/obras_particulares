@@ -26,7 +26,7 @@ urlpatterns = [
 
     url(r'^crearusuario/(?P<pk_persona>\d+)/$', views.crear_usuario, name="crear_usuario"),
 
-    url(r'^profesional/estado_tramite$', views.consultar_estado_tramite_list, name="estado_tramite"),
+    url(r'^profesional/estado_tramite$', views.listado_tramites_de_profesional, name="estado_tramite"),
 
     url(r'^ver_certificado/(?P<pk>\d+)/$', ver_un_certificado.as_view(),name="ver_certificado"),
 
