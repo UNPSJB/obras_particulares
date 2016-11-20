@@ -12,6 +12,8 @@ from os.path import basename
 import csv
 from decimal import Decimal
 
+from django.contrib import messages
+
 
 class Tramite(models.Model):
     propietario = models.ForeignKey(Propietario,blank=True, null=True,unique=False)
@@ -20,8 +22,10 @@ class Tramite(models.Model):
     tipo_obra = models.ForeignKey(TipoObra)
     #domicilio = models.CharField(max_length=50,blank=True)
     #pago = models.BooleanField(initial=False)
+    monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2)
+    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2)
 
-    
+
     def save(self):
         if self.pk is None:
             super(Tramite, self).save(force_insert=True)
@@ -42,6 +46,10 @@ class Tramite(models.Model):
         if hasattr(self.estados[-1], accion):
             metodo = getattr(self.estados[-1], accion)
             self.estados.append(metodo(self, *args, **kwargs))
+
+    def calcular_monto_pagado(self, monto):
+        self.monto_pagado += monto
+        print self.monto_pagado
 
 
 class Estado(models.Model):
@@ -173,32 +181,25 @@ class Pago(models.Model):
     def procesar_pagos(cls, archivo):
 
         datos = archivo.read()
-
         #La siguientes linea arma un diccionario para poder recorrer el archivo mejor
         spliter = lambda datos: [ l.split('"')[:2] for l in datos.splitlines()[1:]]
-
         datos_diccionario = []
 
-        for idt, monto in spliter(datos):
-            datos_diccionario.append({"id": int(idt[:-1]), "monto": Decimal(monto[1:].replace(".","").replace(",", "."))})
+        #Esta linea arma una lista de cadenas de la siguiente forma: {'monto': xxxxxx, 'id': xx}
+        try:
+            for idt, monto in spliter(datos):
+                datos_diccionario.append({"id": int(idt[:-1]), "monto": Decimal(monto[1:].replace(".","").replace(",", "."))})
 
+            for linea in datos_diccionario:
+                try:
+                    monto_pagado = linea['monto']
+                    id_tramite = int(linea['id'])
+                    tramite = Tramite.objects.get(pk=id_tramite)
+                    tramite.calcular_monto_pagado(monto_pagado)
+                    p = cls(tramite=tramite, monto=monto_pagado)
+                    p.save()
+                except Tramite.DoesNotExist:
+                    pass
 
-        tramites = Tramite.objects.all()
-        print tramites
-
-        for linea in datos_diccionario:
-            try:
-                monto_pagado = linea['monto']
-                id_tramite = int(linea['id'])
-
-                print id_tramite
-
-                tramite = Tramite.objects.get(pk=id_tramite)
-                print tramite
-
-                p = cls(tramite=tramite, monto=monto_pagado)
-                print(p)
-                p.save()
-            except Tramite.DoesNotExist:
-                pass
-
+        except ValueError:
+            print('El archivo cargado no tiene el formato correcto.')
