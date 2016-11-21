@@ -21,10 +21,12 @@ class Tramite(models.Model):
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
     #domicilio = models.CharField(max_length=50,blank=True)
-    #pago = models.BooleanField(initial=False)
     monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2)
     monto_pagado = models.DecimalField(max_digits=10, decimal_places=2)
 
+
+    def __str__(self):
+        return "%s" %self.pk
 
     def save(self):
         if self.pk is None:
@@ -49,6 +51,7 @@ class Tramite(models.Model):
 
     def calcular_monto_pagado(self, monto):
         self.monto_pagado += monto
+        self.save()
         print self.monto_pagado
 
 
@@ -174,7 +177,7 @@ class Pago(models.Model):
     monto = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        cabecera = "%s" %self.pk
+        cabecera = '{0} - {1}'.format(self.tramite.pk, self.fecha)
         return cabecera
 
     @classmethod
@@ -199,7 +202,7 @@ class Pago(models.Model):
                     p = cls(tramite=tramite, monto=monto_pagado)
                     p.save()
                 except Tramite.DoesNotExist:
-                    pass
+                    print 'El tramite con numero: {0}, no existe en el sistema. Se ignora su pago.'.format(id_tramite)
 
         except ValueError:
             print('El archivo cargado no tiene el formato correcto.')
