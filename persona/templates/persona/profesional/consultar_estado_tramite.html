@@ -21,9 +21,7 @@
           {% if tramites %}
               {% for tramite in tramites %}
                 <tr>
-                      <td>{{tramite.propietario}}</td>
-                      <td>tramite.propietario.persona.apellido</td>
-                      <td>tramite.propietario.persona.telefono</td>
+                      <td>{{tramite.propietario.pk }}</td>
                       <td>tramite.domicilio</td>
                       <td>tramite.estado</td>
                       <td>{{tramite.medidas}}</td>

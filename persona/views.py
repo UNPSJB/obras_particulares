@@ -9,7 +9,7 @@ from tramite.forms import FormularioIniciarTramite
 from documento.forms import FormularioDocumentoSetFactory
 from tramite.models import *
 from django.core.mail import send_mail
-
+from persona.models import *
 from tramite.models import Tramite
 from django.views.generic.detail import DetailView
 
@@ -25,6 +25,14 @@ def mostrar_profesional(request):
     tramite_form = FormularioIniciarTramite()
     propietario_form = FormularioPropietario()
     propietario = None
+    contexto = listado_tramites_de_profesional(request)
+
+    print("estoy en profesional")
+    print(contexto)
+
+    contexto = {
+        "ctxtramitesprofesional": listado_tramites_de_profesional(request),
+    }
 
     if request.method == "POST":
         personas = Persona.objects.filter(dni=request.POST["propietario"])
@@ -52,7 +60,7 @@ def mostrar_profesional(request):
 
     return render(request, 'persona/profesional/profesional.html', {'tramite_form': tramite_form,
                                                                    'propietario_form': propietario_form,
-                                                                   'documento_set': documento_set})
+                                                                   'documento_set': documento_set}, contexto)
 
 def mostrar_jefe_inspector(request):
     return render(request, 'persona/jefe_inspector/jefe_inspector.html')
@@ -220,12 +228,6 @@ def listado_tramites_de_profesional(request):
 
     print(persona)
 
-    """for tramite in tramites:
-        if tramite.profesional == persona_profesional:
-            tramites_de_profesional.append(tramite)
-            print(tramite)"""
-
-
     profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
 
 
@@ -233,8 +235,9 @@ def listado_tramites_de_profesional(request):
     print(tramites_de_profesional)
     contexto = {'tramites': tramites_de_profesional}
     print(contexto)
+    #return contexto
     return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
-    return contexto
+
 
 
 def aceptar_tramite(request, pk_tramite):
