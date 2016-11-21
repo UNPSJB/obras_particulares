@@ -25,7 +25,10 @@ class Profesional(Rol):
 class Propietario(Rol):
 
     def __str__(self):
-        return ""
+        try:
+            return str(self.persona)
+        except:
+            return "PONEME UNA PERSONA.... ANIMAL"
 
     def obtener_persona(self):
         return Persona.get_self().nombre
@@ -58,7 +61,7 @@ class Persona(models.Model):
     usuario = models.OneToOneField(Usuario, blank=True, null=True)
 
     def __str__(self):
-        return "{}, {}" .format(self.apellido, self.nombre)
+        return "{}, {}, {}" .format(self.apellido, self.nombre, self.telefono)
 
     def crear_usuario(self, *extra_grupos):
         grupos = list(extra_grupos)

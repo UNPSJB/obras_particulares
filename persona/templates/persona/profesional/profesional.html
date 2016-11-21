@@ -172,7 +172,7 @@
 			      		<div class="container-fluid">
 								<div class="row">
 									{% block contenido_tramite_estado %}
-										{% include "persona/profesional/consultar_estado_tramite.html" %}
+										{% include "persona/profesional/consultar_estado_tramite.html" with tramites=ctxtramitesprofesional.tramites_de_profesional %}
 									{% endblock %}
 								</div>
 						</div>

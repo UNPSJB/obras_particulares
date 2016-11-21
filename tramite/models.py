@@ -17,8 +17,13 @@ class TramiteBaseManager(models.Manager):
     pass
 
 class TramiteQuerySet(models.QuerySet):
-    def en_estado(self, estadoKlass):
-        return self.annotate(max_date=models.Max('estados__timestamp')).filter(estados__timestamp=models.F('max_date'), estados__tipo=estadoKlass.TIPO)
+    def ultimo_estado(self):
+        return self.annotate(max_date=models.Max('estados__timestamp')).filter(estados__timestamp=models.F('max_date'))
+
+    def en_estado(self, estados):
+        if type(estados) != list:
+            estados = [estados]
+        return self.ultimo_estado().filter(estados__tipo__in=[ e.TIPO for e in estados])
 
 TramiteManager = TramiteBaseManager.from_queryset(TramiteQuerySet)
 
