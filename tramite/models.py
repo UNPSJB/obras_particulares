@@ -46,10 +46,13 @@ class Tramite(models.Model):
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
     #domicilio = models.CharField(max_length=50,blank=True)
-    #pago = models.BooleanField(initial=False)
-    objects = TramiteManager()
+    monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2)
+    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2)
 
-    @classmethod
+def __str__(self):
+        return "%s" %self.pk    
+
+@classmethod
     def new(cls, usuario, propietario, profesional, tipo_obra, medidas, documentos):
         if any(map(lambda d: d.tipo_documento != TipoDocumento.INICIAR, documentos)):
             raise Exception("Un documento no es de tipo iniciar")
@@ -123,6 +126,7 @@ class Iniciado(Estado):
 
     def __str__(self):
         return "iniciado"
+
 
 
 class Aceptado(Estado):
@@ -216,39 +220,32 @@ class Pago(models.Model):
     monto = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        cabecera = "%s" %self.pk
+        cabecera = '{0} - {1}'.format(self.tramite.pk, self.fecha)
         return cabecera
 
     @classmethod
     def procesar_pagos(cls, archivo):
 
         datos = archivo.read()
-
         #La siguientes linea arma un diccionario para poder recorrer el archivo mejor
         spliter = lambda datos: [ l.split('"')[:2] for l in datos.splitlines()[1:]]
-
         datos_diccionario = []
 
-        for idt, monto in spliter(datos):
-            datos_diccionario.append({"id": int(idt[:-1]), "monto": Decimal(monto[1:].replace(".","").replace(",", "."))})
+        #Esta linea arma una lista de cadenas de la siguiente forma: {'monto': xxxxxx, 'id': xx}
+        try:
+            for idt, monto in spliter(datos):
+                datos_diccionario.append({"id": int(idt[:-1]), "monto": Decimal(monto[1:].replace(".","").replace(",", "."))})
 
+            for linea in datos_diccionario:
+                try:
+                    monto_pagado = linea['monto']
+                    id_tramite = int(linea['id'])
+                    tramite = Tramite.objects.get(pk=id_tramite)
+                    tramite.calcular_monto_pagado(monto_pagado)
+                    p = cls(tramite=tramite, monto=monto_pagado)
+                    p.save()
+                except Tramite.DoesNotExist:
+                    print 'El tramite con numero: {0}, no existe en el sistema. Se ignora su pago.'.format(id_tramite)
 
-        tramites = Tramite.objects.all()
-        print tramites
-
-        for linea in datos_diccionario:
-            try:
-                monto_pagado = linea['monto']
-                id_tramite = int(linea['id'])
-
-                print id_tramite
-
-                tramite = Tramite.objects.get(pk=id_tramite)
-                print tramite
-
-                p = cls(tramite=tramite, monto=monto_pagado)
-                print(p)
-                p.save()
-            except Tramite.DoesNotExist:
-                pass
-
+        except ValueError:
+            print('El archivo cargado no tiene el formato correcto.')
