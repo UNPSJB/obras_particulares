@@ -25,7 +25,10 @@ class Profesional(Rol):
 class Propietario(Rol):
 
     def __str__(self):
-        return "Soy pepe"
+        return ""
+
+    def obtener_persona(self):
+        return Persona.get_self().nombre
 
 class Usuario(Rol, AbstractUser):
     PROFESIONAL = "profesional"
@@ -83,6 +86,10 @@ class Persona(models.Model):
 
     def get_profesional(self):
         return self.profesional
+
+    @classmethod
+    def get_self(self):
+        return self
 
 
 def generar_password():
