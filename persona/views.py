@@ -25,14 +25,15 @@ def mostrar_profesional(request):
     tramite_form = FormularioIniciarTramite()
     propietario_form = FormularioPropietario()
     propietario = None
-    contexto = listado_tramites_de_profesional(request)
-
-    print("estoy en profesional")
-    print(contexto)
 
     contexto = {
         "ctxtramitesprofesional": listado_tramites_de_profesional(request),
     }
+
+    #contexto = listado_tramites_de_profesional(request)
+
+    print("Estoy en mostrar profesional")
+    print(contexto)
 
     if request.method == "POST":
         personas = Persona.objects.filter(dni=request.POST["propietario"])
@@ -217,26 +218,17 @@ def listado_tramites_de_profesional(request):
     personas = Persona.objects.all()
     usuario = request.user
 
-    print(usuario)
-
-    """devuelve una lista con la persona que esta logueada"""
-
     lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
 
-    print(lista_de_persona_que_esta_logueada)
     persona = lista_de_persona_que_esta_logueada.pop()  #Saco de la lista la persona porque no puedo seguir trabajando con una lista
-
-    print(persona)
 
     profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
 
-
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
-    print(tramites_de_profesional)
-    contexto = {'tramites': tramites_de_profesional}
-    print(contexto)
-    #return contexto
-    return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
+
+    contexto = {'tramites_de_profesional': tramites_de_profesional}
+    return contexto
+    #return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
 
 
 
