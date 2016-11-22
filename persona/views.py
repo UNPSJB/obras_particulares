@@ -7,48 +7,41 @@ from tipos.forms import *
 from obras_particulares.views import *
 from tramite.forms import FormularioIniciarTramite
 from documento.forms import FormularioDocumentoSetFactory
+from documento.forms import metodo
 from tramite.models import *
 from django.core.mail import send_mail
-
 from tramite.models import Tramite
 from django.views.generic.detail import DetailView
+#from documento.forms import *
 
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
 
 def mostrar_profesional(request):
-    usuario = request.user
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
-    documento_set = FormularioDocumentoSet()
-    tramite_form = FormularioIniciarTramite()
+    inicial = metodo(tipos_de_documentos_requeridos)
+    documento_set = FormularioDocumentoSet(initial=inicial)
+    tramite_form = FormularioIniciarTramite(initial={'profesional':'1'})
     propietario_form = FormularioPropietario()
-    propietario = None
 
     if request.method == "POST":
         personas = Persona.objects.filter(dni=request.POST["propietario"])
         persona = personas.exists() and personas.first() or None
-        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         propietario_form = FormularioPropietario(request.POST)
         tramite_form = FormularioIniciarTramite(request.POST)
+        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         propietario = propietario_form.obtener_o_crear(persona)
 
         if propietario is not None and tramite_form.is_valid() and documento_set.is_valid():
-            propietario_form = None
             tramite = tramite_form.save(propietario=propietario)
             tramite.save()
-            documento_set = FormularioDocumentoSet(request.POST)
-
-        else:
-            documento_set = FormularioDocumentoSet()
-            print "no cambio"
-
+            for docForm in documento_set:
+                docForm.save(tramite=tramite)
+            tramite_form = FormularioIniciarTramite(initial={'profesional':'1'})
+            propietario_form = None
     else:
-        tramite_form = FormularioIniciarTramite(initial={'profesional':'1'})
-        documento_set = FormularioDocumentoSet()
         propietario_form = None
-        print "entreeeeeee"
-
     return render(request, 'persona/profesional/profesional.html', {'tramite_form': tramite_form,
                                                                    'propietario_form': propietario_form,
                                                                    'documento_set': documento_set})

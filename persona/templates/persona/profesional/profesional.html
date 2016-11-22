@@ -48,17 +48,22 @@
 											<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
 												<br>
 
-												<font class="form-group" color="#337ab7"><h4 align="left">Datos del Propietario:</h4></font>
+												<font class="form-group" color="#337ab7"><h4 align="left">Datos de la Obra:</h4></font>
 
-
+											<form action="{% url 'profesional' %}" class="uniForm" method="post" enctype="multipart/form-data">
+												{% crispy tramite_form %}
+												{% crispy documento_set %}
+										
 											</div>
 											<!---Recorro y muestro la lista de tipos de documentas-->
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 												<br>
-												<font color="#337ab7"><h4 align="left">Datos necesarios para iniciar un tramite:</h4></font>
-
-												
+												{% if propietario_form %}
+													<font color="#337ab7"><h4 align="left">Datos de Nuevo Propietario</h4></font>
+													{% crispy propietario_form %}
+												{% endif %}
 											</div>
+											</form>
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 
 												
@@ -67,12 +72,7 @@
 										<div class="container-fluid">
 											<div class="row">
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-													<button class="btn btn-primary btn-sm" type="submit" title="Enviar datos y documentacion del tramite">
-														Iniciar Tramite
-													</button>
-													<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-														Limpiar
-													</button>
+													
 												</div>
 											</div>
 										</div>
@@ -102,13 +102,6 @@
 									<div class="row">
 										<font class="form-group" color="#337ab7"><h4 align="left">Datos del Propietario:</h4></font>
 
-											<form action="{% url 'profesional' %}" class="uniForm" method="post">
-												{% if propietario_form %}
-													{% crispy propietario_form %}
-												{% endif %}
-												{% crispy tramite_form %}
-												{% crispy documento_set %}
-											</form>
 									</div>
 
 									<br>

@@ -4,6 +4,7 @@ from crispy_forms.layout import Submit, Layout
 from .models import *
 from django.forms import BaseFormSet
 from django.forms import formset_factory
+from documento.models import *
 
 class FormularioDocumento(forms.ModelForm):
     NAME = 'documento_form'
@@ -16,6 +17,12 @@ class FormularioDocumento(forms.ModelForm):
             'tipo_documento': forms.HiddenInput()
         }
 
+    def save(self, commit=True, tramite=None):
+        doc = super(FormularioDocumento, self).save(commit=False)
+        doc.tramite=tramite
+        if commit:
+            doc.save()
+        return doc
 
 class FormularioDocumentosSetBase(BaseFormSet):
     def __init__(self, *args, **kwargs):
@@ -23,15 +30,13 @@ class FormularioDocumentosSetBase(BaseFormSet):
         self.helper = FormHelper()
         self.helper.form_tag = False
 
-
 def FormularioDocumentoSetFactory(tipos):
     return formset_factory(FormularioDocumento,
         formset=FormularioDocumentosSetBase,
         max_num=len(tipos), extra=len(tipos))
-    '''initial = []
+
+def metodo(tipos):
+    initial = []
     for t in tipos:
         initial.append({'tipo_documento': t.pk})
-    if request.method == "POST":
-        return klass(request.POST, initial=initial)
-    return klass(initial=initial)'''
-
+    return initial

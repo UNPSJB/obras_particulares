@@ -18,7 +18,7 @@ class Tramite(models.Model):
     profesional= models.ForeignKey(Profesional,unique=False)
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
-    #domicilio = models.CharField(max_length=50,blank=True)
+    domicilio = models.CharField(max_length=50,blank=True)
     #pago = models.BooleanField(initial=False)
 
     
