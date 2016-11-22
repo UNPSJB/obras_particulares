@@ -82,6 +82,7 @@ class FormularioPropietario(FormularioPersona):
                  propietario = Propietario()
                  propietario.save()
                  persona.propietario = propietario
+                 persona.save()
                  return persona.propietario
 
         elif self.is_valid():

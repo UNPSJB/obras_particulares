@@ -13,7 +13,7 @@ from django.core.mail import send_mail
 from persona.models import *
 from tramite.models import Tramite
 from django.views.generic.detail import DetailView
-#from documento.forms import *
+
 
 def mostrar_inspector(request):
     return render(request, 'persona/inspector/inspector.html', {})
@@ -24,18 +24,13 @@ def mostrar_profesional(request):
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
     documento_set = FormularioDocumentoSet(initial=inicial)
-    tramite_form = FormularioIniciarTramite(initial={'profesional':'1'})
+    tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
     propietario_form = FormularioPropietario()
     propietario = None
 
     contexto = {
         "ctxtramitesprofesional": listado_tramites_de_profesional(request),
     }
-
-    #contexto = listado_tramites_de_profesional(request)
-
-    print("Estoy en mostrar profesional")
-    print(contexto)
 
     if request.method == "POST":
         personas = Persona.objects.filter(dni=request.POST["propietario"])
@@ -47,18 +42,17 @@ def mostrar_profesional(request):
         propietario = propietario_form.obtener_o_crear(persona)
 
         if propietario is not None and tramite_form.is_valid() and documento_set.is_valid():
-            propietario_form = None
-            tramite = tramite_form.save(propietario=propietario)
-            tramite.save()
+            tramite = tramite_form.save(propietario=propietario, commit=False)
+            lista=[]
             for docForm in documento_set:
-                docForm.save(tramite=tramite)
-            tramite_form = FormularioIniciarTramite(initial={'profesional':'1'})
+               lista.append(docForm.save(commit=False))
+            Tramite.new(usuario, propietario, usuario.persona.profesional,request.POST['tipo_obra'],request.POST['medidas'],request.POST['domicilio'],lista)
+            tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
             propietario_form = None
     else:
-        tramite_form = FormularioIniciarTramite(initial={'profesional':'1'})
-        documento_set = FormularioDocumentoSet()
         propietario_form = None
- 
+        print tramite_form  
+
     return render(request, 'persona/profesional/profesional.html', {'tramite_form': tramite_form,
                                                                    'propietario_form': propietario_form,
                                                                    'documento_set': documento_set})

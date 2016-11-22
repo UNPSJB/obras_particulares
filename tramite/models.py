@@ -46,23 +46,23 @@ class Tramite(models.Model):
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50,blank=True)
-    monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2)
-    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2)
+    monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
+    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
 
     def __str__(self):
         return   "Numero de tramite: {} - Profesional: {} - Propietario: {}" .format(self.pk, self.profesional, self.propietario)
 
-@classmethod
-def new(cls, usuario, propietario, profesional, tipo_obra, medidas, documentos):
-    if any(map(lambda d: d.tipo_documento != TipoDocumento.INICIAR, documentos)):
-        raise Exception("Un documento no es de tipo iniciar")
-    t = cls(propietario=propietario, profesional=profesional, medidas=medidas, tipo_obra=tipo_obra)
-    t.save()
-    for doc in documentos:
-        doc.tramite = t
-        doc.save()
-    t.hacer(Tramite.INICIAR, usuario, observacion="Arranca el tramite")
-    return t
+    @classmethod
+    def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio,documentos):
+        if any(map(lambda d: d.tipo_documento.requerido != TipoDocumento.INICIAR, documentos)):
+            raise Exception("Un documento no es de tipo iniciar")
+        t = cls(domicilio=domicilio, propietario=propietario, profesional=profesional, medidas=medidas, tipo_obra=TipoObra.objects.get(pk=tipo_obra))
+        t.save()
+        for doc in documentos:
+            doc.tramite = t
+            doc.save()
+        t.hacer(Tramite.INICIAR, usuario, observacion="Arranca el tramite")
+        return t
 
     def estado(self):
         if self.estados.exists():
