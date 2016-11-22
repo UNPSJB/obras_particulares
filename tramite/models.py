@@ -52,6 +52,9 @@ class Tramite(models.Model):
     def __str__(self):
         return   "Numero de tramite: {} - Profesional: {} - Propietario: {}" .format(self.pk, self.profesional, self.propietario)
 
+    def saldo_restante_a_pagar(self):
+        return self.monto_a_pagar - self.monto_pagado
+
     @classmethod
     def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio,documentos):
         if any(map(lambda d: d.tipo_documento.requerido != TipoDocumento.INICIAR, documentos)):

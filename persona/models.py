@@ -20,7 +20,7 @@ class Profesional(Rol):
     certificado = models.ImageField(upload_to='certificado/', null= True)
 
     def __str__(self):
-        return "Matricula: {}, Profesion: {}".format(self.matricula, self.profesion)
+        return "{} - Matricula: {}, Profesion: {}".format(self.persona, self.matricula, self.profesion)
 
 class Propietario(Rol):
 
@@ -90,9 +90,8 @@ class Persona(models.Model):
     def get_profesional(self):
         return self.profesional
 
-    @classmethod
-    def get_self(self):
-        return self
+    def get_propietario(self):
+        return self.propietario
 
 
 def generar_password():

@@ -86,8 +86,31 @@ def mostrar_jefe_inspector(request):
 
 
 def mostrar_propietario(request):
-    form = FormularioPropietario()
-    return render(request, 'persona/propietario/propietario.html',{'form':form})
+
+    contexto = {
+        "ctxtramitespropietario": listado_tramites_propietario(request)
+    }
+
+    print(contexto)
+
+    return render(request, 'persona/propietario/propietario.html', contexto)
+
+def listado_tramites_propietario(request):
+    tramites = Tramite.objects.all()
+    personas = Persona.objects.all()
+    usuario = request.user
+
+    lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
+
+    persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
+
+    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
+
+    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
+
+    return tramites_de_propietario
+
+
 
 
 @login_required(login_url="login")
@@ -244,12 +267,7 @@ def listado_tramites_de_profesional(request):
 
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
 
-    #contexto = {'tramites_de_profesional': tramites_de_profesional}
     return tramites_de_profesional
-    #return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
-    return contexto
-    #return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
-
 
 
 def aceptar_tramite(request, pk_tramite):
