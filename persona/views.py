@@ -13,8 +13,20 @@ from django.core.mail import send_mail
 from tramite.models import Tramite
 from django.views.generic.detail import DetailView
 
+
+@login_required(login_url="login")
+@grupo_requerido('inspector')
 def mostrar_inspector(request):
-    return render(request, 'persona/inspector/inspector.html', {})
+    contexto = {
+        "ctxtramitesaceptados": tramite_aceptados_list(request),
+    }
+    return render(request, 'persona/inspector/inspector.html',contexto)
+
+def tramite_aceptados_list(request):
+    tramites = Tramite.objects.all()
+    #tramites = filter(lambda tramite: (isinstance(tramite.estado_actual,Iniciado), tramites))
+    contexto = {'tramites': tramites}
+    return contexto
 
 def mostrar_profesional(request):
     usuario = request.user
