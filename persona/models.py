@@ -61,7 +61,7 @@ class Persona(models.Model):
     usuario = models.OneToOneField(Usuario, blank=True, null=True)
 
     def __str__(self):
-        return "{}, {}, {}" .format(self.apellido, self.nombre, self.telefono)
+        return "Apellido: {}, Nombre: {}, Telefono: {}" .format(self.apellido, self.nombre, self.telefono)
 
     def crear_usuario(self, *extra_grupos):
         grupos = list(extra_grupos)
