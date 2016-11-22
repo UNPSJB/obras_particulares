@@ -13,10 +13,22 @@ from django.core.mail import send_mail
 from persona.models import *
 from tramite.models import Tramite
 from django.views.generic.detail import DetailView
+#from documento.forms import *
 
 
+@login_required(login_url="login")
+@grupo_requerido('inspector')
 def mostrar_inspector(request):
-    return render(request, 'persona/inspector/inspector.html', {})
+    contexto = {
+        "ctxtramitesaceptados": tramite_aceptados_list(request),
+    }
+    return render(request, 'persona/inspector/inspector.html',contexto)
+
+def tramite_aceptados_list(request):
+    tramites = Tramite.objects.all()
+    #tramites = filter(lambda tramite: (isinstance(tramite.estado_actual,Iniciado), tramites))
+    contexto = {'tramites': tramites}
+    return contexto
 
 def mostrar_profesional(request):
     usuario = request.user
@@ -28,9 +40,16 @@ def mostrar_profesional(request):
     propietario_form = FormularioPropietario()
     propietario = None
 
-    contexto = {
+    """contexto = {
         "ctxtramitesprofesional": listado_tramites_de_profesional(request),
-    }
+        'tramite_form': tramite_form,
+        'propietario_form': propietario_form,
+        'documento_set': documento_set
+    }"""
+
+    #contexto = listado_tramites_de_profesional(request)
+
+    print("Estoy en mostrar profesional")
 
     if request.method == "POST":
         personas = Persona.objects.filter(dni=request.POST["propietario"])
@@ -51,11 +70,16 @@ def mostrar_profesional(request):
             propietario_form = None
     else:
         propietario_form = None
-        print tramite_form  
 
-    return render(request, 'persona/profesional/profesional.html', {'tramite_form': tramite_form,
-                                                                   'propietario_form': propietario_form,
-                                                                   'documento_set': documento_set})
+    contexto = {
+        "ctxtramitesprofesional": listado_tramites_de_profesional(request),
+        'tramite_form': tramite_form,
+        'propietario_form': propietario_form,
+        'documento_set': documento_set
+    }
+
+
+    return render(request, 'persona/profesional/profesional.html', contexto)
 
 def mostrar_jefe_inspector(request):
     return render(request, 'persona/jefe_inspector/jefe_inspector.html')
@@ -220,7 +244,9 @@ def listado_tramites_de_profesional(request):
 
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
 
-    contexto = {'tramites_de_profesional': tramites_de_profesional}
+    #contexto = {'tramites_de_profesional': tramites_de_profesional}
+    return tramites_de_profesional
+    #return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
     return contexto
     #return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
 

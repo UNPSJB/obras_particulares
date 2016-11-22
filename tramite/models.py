@@ -82,6 +82,8 @@ class Tramite(models.Model):
                 estado_nuevo.save()
         elif estado_actual is None:
             Iniciado(tramite=self, usuario=usuario, *args, **kwargs).save()
+        else:
+            raise Exception("Tramite: La accion solicitada no se pudo realizar")
 
 
 class Estado(models.Model):
@@ -112,6 +114,8 @@ class Estado(models.Model):
     def register(cls, klass):
         cls.TIPOS.append((klass.TIPO, klass.__name__.lower()))
 
+    def __str__(self):
+        return self.__class__.__name__
 
 class Iniciado(Estado):
     TIPO = 1
@@ -122,10 +126,8 @@ class Iniciado(Estado):
         return Aceptado(tramite=tramite)
 
     def rechazar(self, tramite, observacion):
-        return Iniciado(tramite=tramite, observacion=observacion)
+        return Corregio(tramite=tramite, observacion=observacion)
 
-    def __str__(self):
-        return "iniciado"
 
 
 
@@ -141,7 +143,7 @@ class Visado(Estado):
     permiso = models.CharField(max_length=20)
 
     def corregir(self, tramite, observacion):
-        return Corregido(tramite=tramite, observaciones=observacion)
+        return Corregido(tramite=tramite, observacion=observacion)
 
     def agendar(self, tramite, fecha_inspeccion, inspector=None):
         return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
@@ -152,12 +154,9 @@ class Corregido(Estado):
     CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT)
 
-    def __init__(self, tramite, observaciones):
-        super(Corregido, self).__init__(tramite)
-        self.observacion = observaciones
 
-    def corregir(self, documentos, aclaraciones):  # realiza el profesional, self.observaciones ==aclaraciones
-        estado = Corregido(tramite=self.tramite, observaciones=aclaraciones)
+    def corregir(self, documentos, observacion):
+        estado = Corregido(tramite=self.tramite, observacion=observacion)
         estado.agregar_documentacion(documentos=documentos)
         return estado
 
@@ -170,23 +169,12 @@ class Agendado(Estado):
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
     fecha = models.DateTimeField(auto_now=True)
 
-    def inspeccionar(self, tramite, fecha_inspeccion, inspector=None):
-        if inspector is not None and self.inspector is None:
-            self.inspector = inspector
-            self.save()
-        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
+    def inspeccionar(self, tramite):
+        return Inspeccionado(tramite=tramite)
 
-    def asignar_fecha_inspeccion(self, fecha):
-        self.fecha_inspeccion = fecha
-
-    def asignar_inspector(self, inspector):
-        self.inspector = inspector
-
-    def realizar_ultima_inspeccion(self, fecha):
-        self.fecha_inspeccion_final = fecha
 
     def inspeccionar_final(self):
-        if datetime.datetime.now() > self.fecha_inspeccion_final:
+        if datetime.datetime.now() > self.fecha:
             return Inspeccionado(tramite=self.tramite)  # ver si tiene al menos 3 inspecciones--consulta bd
 
     def corregir(self, tramite, observacion):
@@ -195,20 +183,17 @@ class Agendado(Estado):
 
 class Inspeccionado(Estado):
     TIPO = 6
-    def __init__(self, tramite):  # fecha_inspeccion
-        super(Inspeccionado, self).__init__(tramite)
 
-    def solicitar_final_obra(self):  # fecha_inspeccion_final en la solucitud?
+
+    def finalizar(self):#solicitar final de obra
         if self.tramite.pago_completo:  # Tramite.objects.get(pk=tramite.pk).pago_completo
             return Finalizado(self.tramite)
         else:
-            return self
+            raise Exception("Todavia no se puede solicitar el final de obra")
 
 
 class Finalizado(Estado):
     TIPO = 7
-    def __init__(self, tramite):
-        super(Finalizado, self).__init__(tramite)
 
 
 for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, Finalizado]:
