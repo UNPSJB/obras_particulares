@@ -18,7 +18,10 @@ class AltaProfesional(admin.ModelAdmin):
     search_fields = ['matricula','categoria' 'profesion']
     list_display = ('matricula','categoria', 'profesion')
 
+class AltaPropietario(admin.ModelAdmin):
+    pass
+
 admin.site.register(Persona,ALtaPersona)
 admin.site.register(Profesional,AltaProfesional)
-admin.site.register(Propietario)
+admin.site.register(Propietario, AltaPropietario)
 admin.site.register(Usuario)

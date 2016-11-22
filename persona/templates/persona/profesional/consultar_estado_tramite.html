@@ -12,6 +12,7 @@
                   <td>Domicilio terreno</td>
                   <td>Estado del tramite</td>
                   <td>Medidas</td>
+                  <td>Tipo de Obra</td>
                   <td>Ver documentos</td>
               </tr>
           </thead>
@@ -20,12 +21,11 @@
           {% if tramites %}
               {% for tramite in tramites %}
                 <tr>
-                      <td>tramite.propietario.persona.nombre</td>
-                      <td>tramite.propietario.persona.apellido</td>
-                      <td>tramite.propietario.persona.telefono</td>
+                      <td>{{tramite.propietario}}</td>
                       <td>tramite.domicilio</td>
                       <td>tramite.estado</td>
-                      <td>tramite.medidas</td>
+                      <td>{{tramite.medidas}}</td>
+                      <td>{{tramite.tipo_obra}}</td>
                       <td>
                             <a href="#">
                               <button type="button" class="btn btn-primary" name="ver-certificado">

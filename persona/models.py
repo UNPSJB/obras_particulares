@@ -19,8 +19,19 @@ class Profesional(Rol):
     categoria = models.IntegerField(choices=CATEGORIAS)
     certificado = models.ImageField(upload_to='certificado/', null= True)
 
+    def __str__(self):
+        return "Matricula: {}, Profesion: {}".format(self.matricula, self.profesion)
+
 class Propietario(Rol):
-    pass
+
+    def __str__(self):
+        try:
+            return str(self.persona)
+        except:
+            return "PONEME UNA PERSONA.... ANIMAL"
+
+    def obtener_persona(self):
+        return Persona.get_self().nombre
 
 class Usuario(Rol, AbstractUser):
     PROFESIONAL = "profesional"
@@ -50,7 +61,7 @@ class Persona(models.Model):
     usuario = models.OneToOneField(Usuario, blank=True, null=True)
 
     def __str__(self):
-        return "{}, {}" .format(self.apellido, self.nombre)
+        return "{}, {}, {}" .format(self.apellido, self.nombre, self.telefono)
 
     def crear_usuario(self, *extra_grupos):
         grupos = list(extra_grupos)
@@ -75,6 +86,13 @@ class Persona(models.Model):
 
         self.save()
         return created, password, self.usuario
+
+    def get_profesional(self):
+        return self.profesional
+
+    @classmethod
+    def get_self(self):
+        return self
 
 
 def generar_password():
