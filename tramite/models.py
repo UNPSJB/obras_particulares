@@ -86,6 +86,12 @@ class Tramite(models.Model):
             raise Exception("Tramite: La accion solicitada no se pudo realizar")
 
 
+    def calcular_monto_pagado(self, monto):
+        self.monto_pagado += monto
+        self.save()
+        return self.monto_pagado
+
+
 class Estado(models.Model):
     TIPO = 0
     TIPOS = [
