@@ -11,7 +11,7 @@ class FormularioIniciarTramite(forms.ModelForm):
 
     class Meta:
         model = Tramite
-        fields = ('tipo_obra', 'medidas', 'profesional')
+        fields = ('tipo_obra', 'medidas', 'profesional','domicilio')
         widgets = {
             "profesional": forms.HiddenInput()
         }
@@ -21,17 +21,6 @@ class FormularioIniciarTramite(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
         self.helper.form_tag = False
-
-
-    '''def clean_propietario(self, commi=False):
-        dni = self.cleaned_data['propietario']
-        if not Persona.objects.filter(dni=dni).exists() :
-            raise ValidationError('El propietario no existe. Cargalo!!')
-
-        persona = Persona.objects.get(dni=dni)
-        if not (persona.propietario):
-            raise ValidationError('La persona ingresada no es propietario registrado')
-        return dni'''
 
     def save(self, commit=True, propietario=None):
         tramite = super(FormularioIniciarTramite, self).save(commit=False)

@@ -7,9 +7,10 @@ from tipos.forms import *
 from obras_particulares.views import *
 from tramite.forms import FormularioIniciarTramite
 from documento.forms import FormularioDocumentoSetFactory
+from documento.forms import metodo
 from tramite.models import *
 from django.core.mail import send_mail
-
+from persona.models import *
 from tramite.models import Tramite
 from django.views.generic.detail import DetailView
 
@@ -32,10 +33,22 @@ def mostrar_profesional(request):
     usuario = request.user
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
-    documento_set = FormularioDocumentoSet()
-    tramite_form = FormularioIniciarTramite()
+    inicial = metodo(tipos_de_documentos_requeridos)
+    documento_set = FormularioDocumentoSet(initial=inicial)
+    tramite_form = FormularioIniciarTramite(initial={'profesional':'1'})
     propietario_form = FormularioPropietario()
     propietario = None
+
+    """contexto = {
+        "ctxtramitesprofesional": listado_tramites_de_profesional(request),
+        'tramite_form': tramite_form,
+        'propietario_form': propietario_form,
+        'documento_set': documento_set
+    }"""
+
+    #contexto = listado_tramites_de_profesional(request)
+
+    print("Estoy en mostrar profesional")
 
     if request.method == "POST":
         personas = Persona.objects.filter(dni=request.POST["propietario"])
@@ -43,27 +56,32 @@ def mostrar_profesional(request):
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         propietario_form = FormularioPropietario(request.POST)
         tramite_form = FormularioIniciarTramite(request.POST)
+        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         propietario = propietario_form.obtener_o_crear(persona)
 
         if propietario is not None and tramite_form.is_valid() and documento_set.is_valid():
             propietario_form = None
             tramite = tramite_form.save(propietario=propietario)
             tramite.save()
-            documento_set = FormularioDocumentoSet(request.POST)
-
-        else:
-            documento_set = FormularioDocumentoSet()
-            print ("no cambio")
-
+            for docForm in documento_set:
+                docForm.save(tramite=tramite)
+            tramite_form = FormularioIniciarTramite(initial={'profesional':'1'})
+            propietario_form = None
     else:
         tramite_form = FormularioIniciarTramite(initial={'profesional':'1'})
         documento_set = FormularioDocumentoSet()
         propietario_form = None
         print ("entreeeeeee")
 
-    return render(request, 'persona/profesional/profesional.html', {'tramite_form': tramite_form,
-                                                                   'propietario_form': propietario_form,
-                                                                   'documento_set': documento_set})
+    contexto = {
+        "ctxtramitesprofesional": listado_tramites_de_profesional(request),
+        'tramite_form': tramite_form,
+        'propietario_form': propietario_form,
+        'documento_set': documento_set
+    }
+
+
+    return render(request, 'persona/profesional/profesional.html', contexto)
 
 def mostrar_jefe_inspector(request):
     return render(request, 'persona/jefe_inspector/jefe_inspector.html')
@@ -215,11 +233,21 @@ def solicitud_final_obra_list(request):
     #return render(request, 'persona/administrativo/solicitud_final_obra_list.html', contexto)
     return contexto
 
+def listado_tramites_de_profesional(request):
+    tramites = Tramite.objects.all()
+    personas = Persona.objects.all()
+    usuario = request.user
 
+    lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
 
-def consultar_estado_tramite_list():
-    tramite = Tramite.objects.all()
-    contexto = {'tramites': tramite}
+    persona = lista_de_persona_que_esta_logueada.pop()  #Saco de la lista la persona porque no puedo seguir trabajando con una lista
+
+    profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
+
+    tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
+
+    #contexto = {'tramites_de_profesional': tramites_de_profesional}
+    return tramites_de_profesional
     #return render(request, 'persona/profesional/consultar_estado_tramite.html', contexto)
     return contexto
 

@@ -66,8 +66,8 @@ class FormularioPropietario(FormularioPersona):
         self.helper = FormHelper()
         self.helper.form_tag = False
 
-    def save(self, commit=True):
-        persona = super(FormularioPropietario, self).save(commit=False)
+    def save(self, commit=False):
+        persona = super(FormularioPropietario, self).save(commit=commit)
         p = Propietario()
         p.save()
         persona.propietario = p

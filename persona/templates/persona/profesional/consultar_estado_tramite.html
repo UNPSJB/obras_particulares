@@ -6,30 +6,30 @@
           <!-- Cabecera -->
           <thead>
               <tr>
-                  <td>Nombre propietario</td>
+                  <!---<td>Nombre propietario</td>
                   <td>Apellido propietario</td>
                   <td>Telefono propietario</td>
-                  <td>Domicilio terreno</td>
+                  <td>Domicilio terreno</td>-->
+                  <td>Datos del Propietario</td>
                   <td>Estado del tramite</td>
                   <td>Medidas</td>
+                  <td>Tipo de Obra</td>
                   <td>Ver documentos</td>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
           <tbody>
-          {% if tramites %}
-              {% for tramite in tramites %}
+          {% if tramites_de_profesional %}
+              {% for tramite in tramites_de_profesional %}
                 <tr>
-                      <td>tramite.propietario.persona.nombre</td>
-                      <td>tramite.propietario.persona.apellido</td>
-                      <td>tramite.propietario.persona.telefono</td>
-                      <td>tramite.domicilio</td>
-                      <td>tramite.estado</td>
-                      <td>tramite.medidas</td>
+                      <td>{{tramite.propietario}}</td>
+                      <td>{{tramite.estado}}</td>
+                      <td>{{tramite.medidas}}</td>
+                      <td>{{tramite.tipo_obra}}</td>
                       <td>
                             <a href="#">
                               <button type="button" class="btn btn-primary" name="ver-certificado">
-                                Ver certificado
+                                Ver documentos
                               </button>
                             </a>
                       </td>
