@@ -45,7 +45,7 @@ class Tramite(models.Model):
     profesional= models.ForeignKey(Profesional,unique=False)
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
-    #domicilio = models.CharField(max_length=50,blank=True)
+    domicilio = models.CharField(max_length=50,blank=True)
     monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2)
     monto_pagado = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -227,8 +227,10 @@ class Pago(models.Model):
     def procesar_pagos(cls, archivo):
 
         datos = archivo.read()
+
         #La siguientes linea arma un diccionario para poder recorrer el archivo mejor
         spliter = lambda datos: [ l.split('"')[:2] for l in datos.splitlines()[1:]]
+
         datos_diccionario = []
 
         #Esta linea arma una lista de cadenas de la siguiente forma: {'monto': xxxxxx, 'id': xx}
