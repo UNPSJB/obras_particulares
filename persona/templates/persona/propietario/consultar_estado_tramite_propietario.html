@@ -1,0 +1,45 @@
+{% load staticfiles %}
+
+{% block contenido_tramite_estado %}
+  <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+          <!-- Cabecera -->
+          <thead>
+              <tr>
+                  <td>Datos del Profesional</td>
+                  <td>Estado del tramite</td>
+                  <td>Medidas</td>
+                  <td>Tipo de Obra</td>
+                  <td>Monto total a pagar</td>
+                  <td>Total pagado</td>
+                  <td>Total a pagar</td>
+                  <td>Ver documentos</td>
+              </tr>
+          </thead>
+          <!-- Mostramos los datos de las tablas -->
+          <tbody>
+          {% if tramites_de_propietario %}
+              {% for tramite in tramites_de_propietario %}
+                <tr>
+                  <td>{{tramite.profesional}}</td>
+                  <td>{{tramite.estado}}</td>
+                  <td>{{tramite.medidas}}</td>
+                  <td>{{tramite.tipo_obra}}</td>
+                  <td>{{tramite.monto_a_pagar}}</td>
+                  <td>{{tramite.monto_pagado}}</td>
+                  <td>{{ tramite.saldo_restante_a_pagar}}</td>
+
+                  <td>
+                    <a href="#">
+                      <button type="button" class="btn btn-primary" name="ver-certificado">
+                        Ver documentos
+                      </button>
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+          {% endif%}
+          </tbody>
+      </table>
+  </div>
+{% endblock %}
