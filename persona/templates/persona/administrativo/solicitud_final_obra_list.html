@@ -26,10 +26,10 @@
                   <td>{{ tramite.medidas }} </td>
                   <td>{{ tramite.tipoObra }}</td>
                   <td>{{ tramite.estado }}</td>
-                  <td>{{ tramite.profesiona.persona.nombre }}
-                      {{ tramite.profesiona.persona.apellido }}
-                      {{ tramite.profesiona.persona.profesion }}
-                      {{ tramite.profesiona.persona.matricula }}
+                  <td>{{ tramite.profesional.persona.nombre }}
+                      {{ tramite.profesional.persona.apellido }}
+                      {{ tramite.profesional.persona.profesion }}
+                      {{ tramite.profesional.persona.matricula }}
                   </td>
                   <td>{{ persona.propietario.nombre }}
                       {{ persona.propietario.apellido }}
@@ -37,12 +37,12 @@
                   <td>
                     <a href="">
                       <button type="button" class="btn btn-primary" name="ver-certificado">
-                        Ver certificado
+                        Ver documentacion
                       </button>
                     </a>
                   </td>
                   <td>
-                    <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
+                    <a href="{% url 'habilitar_final_obra' pk_tramite=tramite.id %}">
                       <button type="button" class="btn btn-primary" name="habilitar">
                         Habilitar
                       </button>
