@@ -288,7 +288,22 @@ class ver_un_certificado(DetailView):
     def dispatch(self, *args, **kwargs):
         return super(ver_un_certificado, self).dispatch(*args, **kwargs)
 
+"""class ver_documentos_tramite_profesional(DetailView):
+    model = Profesional
+    template_name = 'persona/profesional/vista_de_documentos.html'
 
+    def dispatch(self, *args, **kwargs):
+        return super(ver_documentos_tramite_profesional, self).dispatch(*args, **kwargs)"""
+
+
+def ver_documentos_tramite_profesional(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+
+    print(tramite.documentos)
+
+
+
+    return render(request, 'persona/profesional/vista_de_documentos.html', {'tramite': tramite})
 
 
 @login_required(login_url="login")

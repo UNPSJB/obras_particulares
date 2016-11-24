@@ -20,7 +20,9 @@ class Profesional(Rol):
     certificado = models.ImageField(upload_to='certificado/', null= True)
 
     def __str__(self):
-        return "{} - Matricula: {}, Profesion: {}".format(self.persona, self.matricula, self.profesion)
+        if hasattr(self, "persona"):
+            return "{} - Matricula: {}, Profesion: {}".format(self.persona, self.matricula, self.profesion)
+        return "Matricula: {}, Profesion: {}".format(self.matricula, self.profesion)
 
 class Propietario(Rol):
 

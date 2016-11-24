@@ -6,10 +6,6 @@
           <!-- Cabecera -->
           <thead>
               <tr>
-                  <!---<td>Nombre propietario</td>
-                  <td>Apellido propietario</td>
-                  <td>Telefono propietario</td>
-                  <td>Domicilio terreno</td>-->
                   <td>Datos del Propietario</td>
                   <td>Estado del tramite</td>
                   <td>Medidas</td>
@@ -27,8 +23,8 @@
                       <td>{{tramite.medidas}}</td>
                       <td>{{tramite.tipo_obra}}</td>
                       <td>
-                            <a href="#">
-                              <button type="button" class="btn btn-primary" name="ver-certificado">
+                            <a href="{% url 'ver_documentos_tramite' tramite.pk %}">
+                              <button type="button" class="btn btn-primary" name="ver_documentos_tramite">
                                 Ver documentos
                               </button>
                             </a>
