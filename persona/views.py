@@ -183,7 +183,7 @@ def mostrar_administrativo(request):
     contexto = {
         "ctxprofesional": profesional_list(request),
         "ctxpropietario": propietario_list(request),
-        "ctxtramite": tramite_list(request),
+        "ctxtramitesiniciados": listado_de_tramites_iniciados(request),
         "ctxtramitescorregidos": tramite_corregidos_list(request),
         "ctxsolicitudesfinalobra": solicitud_final_obra_list(request),
 	    "ctxpago" : registrar_pago_tramite(request)
@@ -227,10 +227,10 @@ def propietario_list(request):
     return contexto
 
 # es el de tramites iniciados
-def tramite_list(request):
-    tramites = Tramite.objects.all()
+def listado_de_tramites_iniciados(request):
+    tramites = Tramite.objects.en_estado(Iniciado)
     contexto = {'tramites': tramites}
-    #return render(request, 'persona/administrativo/tramite_list.html', contexto)
+
     return contexto
 
 def tramite_corregidos_list(request):
@@ -275,12 +275,16 @@ class ver_un_certificado(DetailView):
     def dispatch(self, *args, **kwargs):
         return super(ver_un_certificado, self).dispatch(*args, **kwargs)
 
+def ver_documentos_tramite_administrativo(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+
+    return render(request, 'persona/administrativo/vista_de_documentos_administrativo.html', {'tramite': tramite})
+
 
 def ver_documentos_tramite_profesional(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
 
     return render(request, 'persona/profesional/vista_de_documentos.html', {'tramite': tramite})
-
 
 @login_required(login_url="login")
 @grupo_requerido('visador')
