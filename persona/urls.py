@@ -36,8 +36,6 @@ urlpatterns = [
 
     url(r'^ver_certificado/(?P<pk>\d+)/$', ver_un_certificado.as_view(),name="ver_certificado"),
 
-    #url(r'^ver_documentos_tramit/$', ver_documentos_tramite_profesional.as_view(),name="ver_documentos_tramite"),
-
     url(r'^ver_documentos_tramite/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_profesional,name="ver_documentos_tramite"),
 
 ]
