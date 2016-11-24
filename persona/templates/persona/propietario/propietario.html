@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+
 {% block barra %}
-				  	<div class="list-group">
-				  		<font face="serif" color="blue" size="2">
-								<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a>
-								<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
-								<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
-							</font>
-						</div>
+	<div class="list-group">
+		<font face="serif" color="blue" size="2">
+				<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a>
+				<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
+				<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
+			</font>
+		</div>
 {% endblock %}
 
 
@@ -155,6 +156,7 @@
 
 
 {% block scripts %}
+
 	<script>
 		$("#perfil").fileinput({
 			showCaption: false,
