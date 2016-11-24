@@ -90,7 +90,7 @@
 		    		<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 	 							{% block contenido_tramite_final_obra %}
-									{% include "persona/administrativo/solicitud_final_obra_list.html" %}
+									{% include "persona/administrativo/solicitud_final_obra_list.html" with tramites=ctxsolicitudesfinalobra.tramites %}
 								{% endblock %}
 
 								<font color=red>revisar esto!!!!</font>

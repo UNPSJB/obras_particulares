@@ -17,13 +17,12 @@ class TramiteBaseManager(models.Manager):
     pass
 
 class TramiteQuerySet(models.QuerySet):
-    def ultimo_estado(self):
-        return self.annotate(max_date=models.Max('estados__timestamp')).filter(estados__timestamp=models.F('max_date'))
-
     def en_estado(self, estados):
         if type(estados) != list:
             estados = [estados]
-        return self.ultimo_estado().filter(estados__tipo__in=[ e.TIPO for e in estados])
+        return self.annotate(max_id=models.Max('estados__id')).filter(
+            estados__id=models.F('max_id'),
+            estados__tipo__in=[ e.TIPO for e in estados])
 
 TramiteManager = TramiteBaseManager.from_queryset(TramiteQuerySet)
 
@@ -41,6 +40,7 @@ class Tramite(models.Model):
     PAGAR = "pagar"
     # Finalizar la obra esto es cuando se pide un final de obra por el ...
     FINALIZAR = "finalizar"
+    SOLICITAR_FINAL_OBRA = "solicitar_final_obra"
     propietario = models.ForeignKey(Propietario,blank=True, null=True,unique=False)
     profesional= models.ForeignKey(Profesional,unique=False)
     medidas = models.IntegerField()
@@ -48,6 +48,7 @@ class Tramite(models.Model):
     domicilio = models.CharField(max_length=50,blank=True)
     monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
     monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
+    objects = TramiteManager()
 
     def __str__(self):
         return   "Numero de tramite: {} - Profesional: {} - Propietario: {}" .format(self.pk, self.profesional, self.propietario)
@@ -204,6 +205,9 @@ class Inspeccionado(Estado):
         else:
             raise Exception("Todavia no se puede solicitar el final de obra")
 
+
+class FinalObraSolicitado(Estado):
+    TIPO = 8
 
 class Finalizado(Estado):
     TIPO = 7
