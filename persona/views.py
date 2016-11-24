@@ -312,19 +312,15 @@ def solicitud_final_obra_total(request, pk_tramite):
     return redirect('profesional')
 
 def solicitud_final_obra_list(request):
-
     tramites = Tramite.objects.en_estado(Iniciado)
-
     print tramites
-
     contexto = {'tramites': tramites}
-    #return render(request, 'persona/administrativo/solicitud_final_obra_list.html', contexto)
     return contexto
 
 def habilitar_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    #poner la funcion que cambia de estado al tramite
     tramite.hacer(tramite.ACEPTAR, request.user)
     messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
-    contexto = solicitud_final_obra_list(request)
-    return render(request, 'persona/administrativo/administrativo.html', contexto)
+
+    return redirect('administrativo')
+    #return render(request, 'persona/administrativo/administrativo.html')
