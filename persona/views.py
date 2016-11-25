@@ -20,15 +20,23 @@ from django.views.generic.detail import DetailView
 @grupo_requerido('inspector')
 def mostrar_inspector(request):
     contexto = {
-        "ctxtramitesaceptados": tramite_aceptados_list(request),
+        "ctxtramitesvisados": tramite_visados_list(request),
     }
     return render(request, 'persona/inspector/inspector.html',contexto)
 
-def tramite_aceptados_list(request):
-    tramites = Tramite.objects.all()
-    #tramites = filter(lambda tramite: (isinstance(tramite.estado_actual,Iniciado), tramites))
+def tramite_visados_list(request):
+    tramites = Tramite.objects.en_estado(Aceptado)#cambiar a visados cuando etengas tramites visaddos
     contexto = {'tramites': tramites}
     return contexto
+
+def agendar_tramite(request, pk_tramite):
+    print "entro aca perro"
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite.hacer(Tramite.AGENDAR,request.user,tramite) #tramite, fecha_inspeccion, inspector=None
+    return redirect('inspector')
+
+def mostrar_popup_datos_agendar(request,pk_tramite):
+    pass
 
 def mostrar_profesional(request):
     usuario = request.user
