@@ -5,13 +5,11 @@
           <thead>
               <tr>
                   <th>Fecha Inicio</th>
-                  <th>Nro Tramite</th>
                   <th>Tipo de obra</th>
                   <th>Profesional</th>
                   <th>Propietario</th>
-                  <th>M2</th>
-                  <th>Estado</th>
-                  <th>Asignarme</th>
+                  <th>m2</th>
+                  <th>Revisar</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -20,31 +18,22 @@
 
           <tbody>
 
-          {% if tramites_para_asignar %}
+          {% if tramites_para_visar %}
 
-              {% for tramite in tramites_para_asignar%}
+              {% for tramite in tramites_para_visar %}
                 <tr>
                     <td>{{ tramite.estado.timestamp}}</td>
-                    <td>{{ tramite.numero }} </td>
                     <td>{{ tramite.tipo_obra }} </td>
-                    <td>
-                        {{ tramite.profesional.nombre }}
-                        {{ tramite.profesional.apellido }}
-                    </td>
-                    <td>
-                        {{ tramite.propietario.nombre }}
-                        {{ tramite.propietario.apellido }}
-                    </td>
-
+                    <td>{{ tramite.profesional}}</td>
+                    <td>{{ tramite.propietario}}</td>
                     <td>{{ tramite.medidas }} </td>
-                    <td>
-                        {{ tramite.estado_actual}}
-
-                    </td>
-
                     <td align="center">
-                        <a href=""><button type="button" class="btn btn-primary btn-xs" name="Asignarme"><span class="glyphicon glyphicon-pencil" aria-hidden="true"> Asignarme</span></button></a>
-                  </td>
+                        <a href="{% url 'ver_documentos_para_visado' tramite.pk %}">
+                            <button type="button" class="btn btn-primary btn-xs" name="Ver documentos">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver documentos</span>
+                            </button>
+                        </a>
+                    </td>
                 </tr>
               {% endfor %}
           {% endif%}

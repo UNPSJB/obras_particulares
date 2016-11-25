@@ -13,7 +13,6 @@
                   <td>Monto total a pagar</td>
                   <td>Total pagado</td>
                   <td>Total a pagar</td>
-                  <td>Ver documentos</td>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -28,14 +27,6 @@
                   <td>{{tramite.monto_a_pagar}}</td>
                   <td>{{tramite.monto_pagado}}</td>
                   <td>{{ tramite.saldo_restante_a_pagar}}</td>
-
-                  <td>
-                    <a href="#">
-                      <button type="button" class="btn btn-primary" name="ver-certificado">
-                        Ver documentos
-                      </button>
-                    </a>
-                  </td>
                 </tr>
               {% endfor %}
           {% endif%}
