@@ -53,7 +53,7 @@ class TipoObra(models.Model):
     categorias = models.CharField(max_length=100, blank= True, null = True)
 
     def __str__(self):
-        return "%s - %s - Categoria: %s" %(self.nombre, self.descripcion, self.categorias)
+        return "Categoria %s" %(self.nombre)
 
     @staticmethod
     def tipos_para_profesional(categorias):

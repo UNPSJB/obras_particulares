@@ -140,24 +140,21 @@ class Iniciado(Estado):
         return Aceptado(tramite=tramite)
 
     def rechazar(self, tramite, observacion):
-        return Corregio(tramite=tramite, observacion=observacion)
-
-
-
+        return Corregido(tramite=tramite, observacion=observacion)
 
 class Aceptado(Estado):
     TIPO = 2
-    def visar(self, tramite, monto, permiso):
-        return Visado(tramite=tramite, monto=monto, permiso=permiso)
 
-
-class Visado(Estado):
-    TIPO = 3
-    monto = models.FloatField()
-    permiso = models.CharField(max_length=20)
+    def visar(self, tramite, monto):
+        return Visado(tramite=tramite, monto=monto)
 
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
+
+class Visado(Estado):
+    TIPO = 3
+    monto = models.FloatField(blank=True, null=True)
+
 
     def agendar(self, tramite, fecha_inspeccion, inspector=None):
         return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None)

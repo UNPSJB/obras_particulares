@@ -15,7 +15,7 @@ urlpatterns = [
     url(r'^jefeinspector$', views.mostrar_jefe_inspector, name="jefe_inspector"),
     url(r'^propietario$', views.mostrar_propietario, name="propietario"),
     url(r'^visador$', views.mostrar_visador, name="visador"),
-    url(r'^visar$', views.mostrar_visar, name="visar"),
+
     url(r'^altapersona$', views.alta_persona, name="alta_persona"),
     url(r'^director$', views.mostrar_director, name="director"),
     url(r'^administrativo$', views.mostrar_administrativo, name="administrativo"),
@@ -37,5 +37,8 @@ urlpatterns = [
     url(r'^ver_certificado/(?P<pk>\d+)/$', ver_un_certificado.as_view(),name="ver_certificado"),
 
     url(r'^ver_documentos_tramite/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_profesional,name="ver_documentos_tramite"),
-
+    #visado
+    url(r'^ver_documentos_para_visado/(?P<pk_tramite>\d+)/$', views.ver_documentos_para_visado,name="ver_documentos_para_visado"),
+    url(r'^aprobar_visado/(?P<pk_tramite>\d+)/$', views.aprobar_visado, name="aprobar_visado"),
+    url(r'^no_aprobar_visado/(?P<pk_tramite>\d+)/$', views.no_aprobar_visado, name="no_aprobar_visado"),
 ]
