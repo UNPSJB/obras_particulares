@@ -32,16 +32,9 @@
                             </a>
                       </td>
                       <td>
-                            <a href="{% url 'solicitud_final_obra_parcial' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary" name="ver-certificado">
-                                Final obra parcial
-                              </button>
-                            </a>
-                      </td>
-                      <td>
-                            <a href="{% url 'solicitud_final_obra_total' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary" name="ver-certificado">
-                                Final obra total
+                            <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.id %}">
+                              <button type="button" class="btn btn-primary" name="final_obra">
+                                Final obra
                               </button>
                             </a>
                       </td>

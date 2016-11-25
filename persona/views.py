@@ -237,7 +237,6 @@ def tramite_corregidos_list(request):
     tramites = Tramite.objects.all()
     #tramites = filter(lambda tramite: (tramite.estado_actual is  is not None), personas)
     contexto = {'tramites': tramites}
-
     return contexto
 
 
@@ -245,16 +244,12 @@ def listado_tramites_de_profesional(request):
     tramites = Tramite.objects.all()
     personas = Persona.objects.all()
     usuario = request.user
-
     lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-
     persona = lista_de_persona_que_esta_logueada.pop()  #Saco de la lista la persona porque no puedo seguir trabajando con una lista
-
     profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
-
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
-
-    return tramites_de_profesional
+    contexto = {'tramites_de_profesional':tramites_de_profesional}
+    return contexto
 
 
 def aceptar_tramite(request, pk_tramite):
@@ -302,29 +297,26 @@ def tramites_asignados(request):
     return contexto
 
 
-def solicitud_final_obra_parcial(request, pk_tramite):
+def propietario_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    #poner la funcion que cambia de estado al tramite
+    tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
     messages.add_message(request, messages.SUCCESS, 'final de obra parcial solicitado.')
     return redirect('profesional')
 
-def solicitud_final_obra_total(request, pk_tramite):
+def profesional_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    #poner la funcion que cambia de estado al tramite
-
+    tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
     messages.add_message(request, messages.SUCCESS, 'final de obra total solicitado.')
     return redirect('profesional')
 
 def solicitud_final_obra_list(request):
-    tramites = Tramite.objects.en_estado(Iniciado)
+    tramites = Tramite.objects.en_estado(Finalizado)
     print tramites
     contexto = {'tramites': tramites}
     return contexto
 
 def habilitar_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.ACEPTAR, request.user)
+    tramite.hacer(tramite.FINALIZAR, request.user)
     messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
-
     return redirect('administrativo')
-    #return render(request, 'persona/administrativo/administrativo.html')

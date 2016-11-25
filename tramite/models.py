@@ -54,11 +54,16 @@ class Tramite(models.Model):
         return   "Numero de tramite: {} - Profesional: {} - Propietario: {}" .format(self.pk, self.profesional, self.propietario)
 
     def saldo_restante_a_pagar(self):
-
         if self.monto_a_pagar == None:
             return 0
         else:
             return self.monto_a_pagar - self.monto_pagado
+
+    def esta_pagado(self):
+        if ((self.monto_a_pagar - self.monto_pagado) <= 0):
+            return True
+        else:
+            return False
 
     @classmethod
     def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio,documentos):
@@ -184,7 +189,7 @@ class Agendado(Estado):
     fecha = models.DateTimeField(auto_now=True)
 
     def inspeccionar(self, tramite):
-        return Inspeccionado(tramite=tramite)
+        return Agendado(tramite=tramite)
 
 
     def inspeccionar_final(self):
@@ -194,23 +199,34 @@ class Agendado(Estado):
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observaciones=observacion)
 
+    def solicitar_final_obra(self, tramite):
+        return FinalObraSolicitado(tramite=tramite, final_obra_total=False)
+
 
 class Inspeccionado(Estado):
     TIPO = 6
 
 
-    def finalizar(self):#solicitar final de obra
-        if self.tramite.pago_completo:  # Tramite.objects.get(pk=tramite.pk).pago_completo
-            return Finalizado(self.tramite)
+    def solicitar_final_obra(self, tramite):#solicitar final de obra
+        if self.tramite.esta_pagado():  # Tramite.objects.get(pk=tramite.pk).pago_completo
+            return FinalObraSolicitado(tramite=tramite, final_obra_total=True)
         else:
             raise Exception("Todavia no se puede solicitar el final de obra")
 
 
 class FinalObraSolicitado(Estado):
-    TIPO = 8
+    TIPO = 7
+
+    final_obra_total = models.BooleanField(blank=True)
+
+    def finalizar(self):
+        if (self.tramite.monto_pagado >= self.tramite.monto_a_pagar):  # Tramite.objects.get(pk=tramite.pk).pago_completo
+            return Finalizado(self.tramite)
+        else:
+            raise Exception("Todavia no se puede otorgar el final de obra")
 
 class Finalizado(Estado):
-    TIPO = 7
+    TIPO = 8
 
 
 for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, Finalizado]:

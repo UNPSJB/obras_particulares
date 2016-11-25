@@ -29,8 +29,8 @@ urlpatterns = [
 
     url(r'^profesional/estado_tramite$', views.listado_tramites_de_profesional, name="estado_tramite"),
 
-    url(r'^solicitud_final_obra_parcial/(?P<pk_tramite>\d+)/$', views.solicitud_final_obra_parcial, name="solicitud_final_obra_parcial"),
-    url(r'^solicitud_final_obra_total/(?P<pk_tramite>\d+)/$', views.solicitud_final_obra_total, name="solicitud_final_obra_total"),
+    url(r'^solicitud_final_obra_propietario/(?P<pk_tramite>\d+)/$', views.propietario_solicita_final_obra, name="propietario_solicita_final_obra"),
+    url(r'^solicitud_final_obra/(?P<pk_tramite>\d+)/$', views.profesional_solicita_final_obra, name="profesional_solicita_final_obra"),
 
     url(r'^habilitar_final_obra/(?P<pk_tramite>\d+)/$', views.habilitar_final_obra, name="habilitar_final_obra"),
 
