@@ -139,8 +139,11 @@ class Iniciado(Estado):
     def aceptar(self, tramite):
         return Aceptado(tramite=tramite)
 
-    def rechazar(self, tramite, observacion):
+    def rechazar(self, tramite, observacion=None):
         return Corregido(tramite=tramite, observacion=observacion)
+
+
+
 
 class Aceptado(Estado):
     TIPO = 2
@@ -155,6 +158,8 @@ class Visado(Estado):
     TIPO = 3
     monto = models.FloatField(blank=True, null=True)
 
+    def corregir(self, tramite, observacion):
+        return Corregido(tramite=tramite, observacion=observacion)
 
     def agendar(self, tramite, fecha_inspeccion, inspector=None):
         return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
@@ -163,7 +168,7 @@ class Visado(Estado):
 class Corregido(Estado):
     TIPO = 4
     CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
-    observacion = models.CharField(max_length=100, default=CADENA_DEFAULT)
+    observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
 
 
     def corregir(self, documentos, observacion):

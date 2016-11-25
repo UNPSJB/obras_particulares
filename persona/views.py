@@ -105,6 +105,10 @@ def listado_tramites_propietario(request):
 
 
 
+
+
+
+
 FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioTipoDocumento,
     FormularioUsuarioPersona,  #este formulario no se necesitaria, solo se dan de alta visador, inspector y administrativo
@@ -170,10 +174,11 @@ def mostrar_administrativo(request):
     contexto = {
         "ctxprofesional": profesional_list(request),
         "ctxpropietario": propietario_list(request),
-        "ctxtramite": tramite_list(request),
+        "ctxtramitesiniciados": listado_de_tramites_iniciados(request),
         "ctxtramitescorregidos": tramite_corregidos_list(request),
         "ctxsolicitudesfinalobra": solicitud_final_obra_list(request),
 	    "ctxpago" : registrar_pago_tramite(request)
+
     }
     return render(request, 'persona/administrativo/administrativo.html', contexto)
 
@@ -209,11 +214,11 @@ def profesional_list(request):
 def propietario_list(request):
     propietarios = Propietario.objects.all()
     contexto = {'propietarios': propietarios}
-    # David: traer esto del otro proyecto
+    #return render(request, 'persona/administrativo/propietario_list.html', contexto)
     return contexto
 
 # es el de tramites iniciados
-def tramite_list(request):
+def listado_de_tramites_iniciados(request):
     tramites = Tramite.objects.en_estado(Iniciado)
     contexto = {'tramites': tramites}
     return contexto
@@ -242,18 +247,16 @@ def listado_tramites_de_profesional(request):
     return tramites_de_profesional
 
 
-
 def aceptar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.ACEPTAR, request.user)
-    messages.add_message(request, messages.SUCCESS, 'Tramite aceptado')
+    messages.add_message(request, messages.SUCCESS, "Tramite aceptado")
     return redirect('administrativo')
-
-
 
 def rechazar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    #poner la funcion que cambia de estado al tramite
+    tramite.hacer(tramite.RECHAZAR, request.user, "hola")
+    messages.add_message(request, messages.WARNING, 'Tramite rechazado.')
     return redirect('administrativo')
 
 
@@ -264,11 +267,17 @@ class ver_un_certificado(DetailView):
     def dispatch(self, *args, **kwargs):
         return super(ver_un_certificado, self).dispatch(*args, **kwargs)
 
+def ver_documentos_tramite_administrativo(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+
+    return render(request, 'persona/administrativo/vista_de_documentos_administrativo.html', {'tramite': tramite})
+
 
 def ver_documentos_tramite_profesional(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
 
     return render(request, 'persona/profesional/vista_de_documentos.html', {'tramite': tramite})
+
 
 @login_required(login_url="login")
 @grupo_requerido('visador')
