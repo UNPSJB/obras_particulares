@@ -5,6 +5,7 @@ from tramite.models import *
 from persona.views import ver_un_certificado
 from persona.views import ver_documentos_tramite_profesional
 from persona.views import ver_documentos_tramite_administrativo
+from persona.views import aceptar_tramite
 
 
 
@@ -40,5 +41,7 @@ urlpatterns = [
     url(r'^ver_documentos_tramite_profesional/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_profesional, name="ver_documentos_tramite_profesional"),
 
     url(r'^documentos_tramite_administrativo/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_administrativo, name="ver_documentos_tramite_administrativo"),
+
+    url(r'^aceptar_tramite/(?P<pk_tramite>\d+)/$', views.aceptar_tramite, name="aceptar_tramite"),
 
 ]

@@ -49,18 +49,18 @@
                         {% endfor %}
 
                     </div>
-
                 </div>
                 <br>
+                <hr>
                 <td>
-                    <a href="{% url 'ver_documentos_tramite_administrativo' pk_tramite=tramite.id %}">
+                    <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id %}">
                       <button type="button" class="btn btn-primary" name="Aceptar">
                         Aceptar
                       </button>
                     </a>
                 </td>
                 <td>
-                    <a href="{% url 'ver_documentos_tramite_administrativo' pk_tramite=tramite.id %}">
+                    <a href="{% url 'rechazar_tramite' pk_tramite=tramite.id %}">
                       <button type="button" class="btn btn-primary" name="Aceptar">
                         Rechazar
                       </button>

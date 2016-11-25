@@ -259,12 +259,14 @@ def listado_tramites_de_profesional(request):
 
 def aceptar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    #poner la funcion que cambia de estado al tramite
+    tramite.hacer(tramite.ACEPTAR, request.user)
+    messages.add_message(request, messages.SUCCESS, "Tramite aceptado")
     return redirect('administrativo')
 
 def rechazar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    #poner la funcion que cambia de estado al tramite
+    tramite.hacer(tramite.RECHAZAR, request.user, "hola")
+    messages.add_message(request, messages.WARNING, 'Tramite rechazado.')
     return redirect('administrativo')
 
 
