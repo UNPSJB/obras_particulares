@@ -37,35 +37,61 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-                        <h4 style="color: white;">Documentacion del tramite:</h4>
+                        <h4 style="color: tomato;">Documentacion del tramite:</h4>
                         <hr>
 
                         {% for documento in tramite.documentos.all %}
 
-                            <h3 style="color: white;">{{documento.tipo_documento}}</h3>
+                            <h3 style="color: tomato;">{{documento.tipo_documento}}</h3>
 
                             <img id="im0" src="/media/{{documento.file}}" />
 
                         {% endfor %}
 
+                        <hr>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+
+                        <div class="form-group">
+                            <label for="">Observaciones:</label>
+                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                            <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                        <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id  %}">
+                            <button type="button" class="btn btn-primary" name="Aceptar">
+                                Aceptar
+                            </button>
+                        </a>
+
+                        <script>
+
+                            function prueba(){
+                                obs = $("#id_observaciones").val();
+                                id_tramite = $("#id_tramite").val();
+                                url = '/persona/rechazar_tramite/'+id_tramite+'/'+obs;
+                                alert(url);
+
+                                location.href = url;
+                            }
+                        </script>
+
+                        <a href="javascript:prueba();">
+                            <button type="button" class="btn btn-primary" name="Aceptar">
+                                  Rechazar
+                            </button>
+                        </a>
+                        <br>
                     </div>
                 </div>
                 <br>
                 <hr>
-                <td>
-                    <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id %}">
-                      <button type="button" class="btn btn-primary" name="Aceptar">
-                        Aceptar
-                      </button>
-                    </a>
-                </td>
-                <td>
-                    <a href="{% url 'rechazar_tramite' pk_tramite=tramite.id %}">
-                      <button type="button" class="btn btn-primary" name="Aceptar">
-                        Rechazar
-                      </button>
-                    </a>
-                </td>
+
+
             </div>
         </div>
     </div>

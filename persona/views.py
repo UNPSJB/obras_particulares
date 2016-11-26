@@ -253,9 +253,11 @@ def aceptar_tramite(request, pk_tramite):
     messages.add_message(request, messages.SUCCESS, "Tramite aceptado")
     return redirect('administrativo')
 
-def rechazar_tramite(request, pk_tramite):
+def rechazar_tramite(request, pk_tramite, *observaciones):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.RECHAZAR, request.user, "hola")
+    tramite.hacer(tramite.RECHAZAR, request.user, observaciones)
+    print("Antes de mostrar la obs")
+    print(tramite.estado().str())
     messages.add_message(request, messages.WARNING, 'Tramite rechazado.')
     return redirect('administrativo')
 
