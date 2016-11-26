@@ -175,7 +175,6 @@ def mostrar_administrativo(request):
         "ctxprofesional": profesional_list(request),
         "ctxpropietario": propietario_list(request),
         "ctxtramitesiniciados": listado_de_tramites_iniciados(request),
-        "ctxtramitescorregidos": tramite_corregidos_list(request),
         "ctxsolicitudesfinalobra": solicitud_final_obra_list(request),
 	    "ctxpago" : registrar_pago_tramite(request)
 
@@ -223,27 +222,15 @@ def listado_de_tramites_iniciados(request):
     contexto = {'tramites': tramites}
     return contexto
 
-def tramite_corregidos_list(request):
-    tramites = Tramite.objects.all()
-    #tramites = filter(lambda tramite: (tramite.estado_actual is  is not None), personas)
-    contexto = {'tramites': tramites}
-
-    return contexto
-
 
 def listado_tramites_de_profesional(request):
     tramites = Tramite.objects.all()
     personas = Persona.objects.all()
     usuario = request.user
-
     lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-
     persona = lista_de_persona_que_esta_logueada.pop()  #Saco de la lista la persona porque no puedo seguir trabajando con una lista
-
     profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
-
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
-
     return tramites_de_profesional
 
 
@@ -252,6 +239,7 @@ def aceptar_tramite(request, pk_tramite):
     tramite.hacer(tramite.ACEPTAR, request.user)
     messages.add_message(request, messages.SUCCESS, "Tramite aceptado")
     return redirect('administrativo')
+
 
 def rechazar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -263,19 +251,17 @@ def rechazar_tramite(request, pk_tramite):
 class ver_un_certificado(DetailView):
     model = Persona
     template_name = 'persona/administrativo/ver_certificado_profesional.html'
-
     def dispatch(self, *args, **kwargs):
         return super(ver_un_certificado, self).dispatch(*args, **kwargs)
 
+
 def ver_documentos_tramite_administrativo(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-
     return render(request, 'persona/administrativo/vista_de_documentos_administrativo.html', {'tramite': tramite})
 
 
 def ver_documentos_tramite_profesional(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-
     return render(request, 'persona/profesional/vista_de_documentos.html', {'tramite': tramite})
 
 
@@ -285,23 +271,26 @@ def mostrar_visador(request):
     contexto = tramites_aceptados(request)
     return render(request, 'persona/visador/visador.html', contexto)
 
+
 def tramites_aceptados(request):
     aceptados = Tramite.objects.en_estado(Aceptado)
     contexto = {'tramites_para_visar': aceptados}
     return contexto
 
+
 def ver_documentos_para_visado(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite})
 
-def aprobar_visado(request, pk_tramite):
 
+def aprobar_visado(request, pk_tramite):
     usuario = request.user
     monto= 15
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.VISAR, request.user, monto)
     messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')
     return redirect('visador')
+
 
 def no_aprobar_visado(request, pk_tramite):
     usuario = request.user
@@ -311,18 +300,20 @@ def no_aprobar_visado(request, pk_tramite):
     messages.add_message(request, messages.SUCCESS, 'Tramite con visado no aprobado')
     return redirect('visador')
 
+
 def solicitud_final_obra_parcial(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     #poner la funcion que cambia de estado al tramite
     messages.add_message(request, messages.SUCCESS, 'final de obra parcial solicitado.')
     return redirect('profesional')
 
+
 def solicitud_final_obra_total(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     #poner la funcion que cambia de estado al tramite
-
     messages.add_message(request, messages.SUCCESS, 'final de obra total solicitado.')
     return redirect('profesional')
+
 
 def solicitud_final_obra_list(request):
     tramites = Tramite.objects.en_estado(Iniciado)
@@ -330,10 +321,9 @@ def solicitud_final_obra_list(request):
     contexto = {'tramites': tramites}
     return contexto
 
+
 def habilitar_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.ACEPTAR, request.user)
     messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
-
     return redirect('administrativo')
-    #return render(request, 'persona/administrativo/administrativo.html')

@@ -29,8 +29,6 @@
 
 {% block contenido %}
 
-
-
     <div class="container-fluid">
         <div class="panel panel-custom ">
             <div class="container-fluid">
@@ -39,14 +37,29 @@
 
                         <h4 style="color: white;">Documentacion del tramite:</h4>
                         <hr>
-
-                        {% for documento in tramite.documentos.all %}
-
-                            <h3 style="color: white;">{{documento.tipo_documento}}</h3>
-
-                            <img id="im0" src="/media/{{documento.file}}" />
-
-                        {% endfor %}
+                            <div style="padding-left: 30px;">
+                                <h4 style="color: white;">Datos del propietario:</h4>
+                                <p>Nombre y apellido: {{tramite.propietario.persona.nombre}} {{tramite.propietario.persona.apellido}}</p>
+                                <p>Telefono: {{tramite.propietario.persona.telefono}}</p>
+                                <p>Email: {{tramite.propietario.persona.mail}}</p>
+                                <br>
+                                <h4 style="color: white;">Datos del profesional:</h4>
+                                <br>
+                                <p>Profesional: {{tramite.profesional.persona.nombre}}</p>
+                                <p>Categoria: {{tramite.profesional.categoria}}</p>
+                                <p>Nro de matricula: {{tramite.profesional.matricula}}</p>
+                                <h2>Datos Tramite</h2>
+                                <p>Numero: {{tramite.id}}</p>
+                                <p>Medidas: {{tramite.medidas}}</p>
+                                <p>Estado: {{tramite.estado}}</p>
+                                <p>Domicilio: {{tramite.domicilio}}</p>
+                            </div>
+                            {% for documento in tramite.documentos.all %}
+                                <h3 style="color: withe;">Documento: {{documento.tipo_documento.nombre}}</h3>
+                                <h4>Descripcion: {{documento.tipo_documento.descripcion}}</h4>
+                                <br>
+                                <img id="im0" src="/media/{{ documento.file}}" />
+                            {% endfor %}
 
                     </div>
                 </div>
