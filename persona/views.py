@@ -253,11 +253,10 @@ def aceptar_tramite(request, pk_tramite):
     messages.add_message(request, messages.SUCCESS, "Tramite aceptado")
     return redirect('administrativo')
 
-def rechazar_tramite(request, pk_tramite, *observaciones):
+
+def rechazar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.RECHAZAR, request.user, observaciones)
-    print("Antes de mostrar la obs")
-    print(tramite.estado().str())
+    tramite.hacer(tramite.RECHAZAR, request.user, "hola")
     messages.add_message(request, messages.WARNING, 'Tramite rechazado.')
     return redirect('administrativo')
 
@@ -286,6 +285,7 @@ def ver_documentos_tramite_profesional(request, pk_tramite):
 def mostrar_visador(request):
     contexto = tramites_aceptados(request)
     return render(request, 'persona/visador/visador.html', contexto)
+
 
 def tramites_aceptados(request):
     aceptados = Tramite.objects.en_estado(Aceptado)

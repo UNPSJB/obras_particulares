@@ -7,7 +7,6 @@
 		<font size="2">
 			<li><a href="#" class="current"><font color="tomato">Administrativo</font></a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Trámites iniciados</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Tramites corregidos</a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de final de obra</a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Alta profesional</a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Alta propietario</a></li>
@@ -47,32 +46,6 @@
 					</div>
 				</div>
 			</div>
-		  </div>
-		</div>
-
-	  <div class="panel">
-			<div class="panel-heading box" role="tab" id="headingTwo">
-			  <h5 class="panel-title">
-				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite")'>
-				  <font color="#ffffff" size="2">Tramites corregidos</font>
-				</a>
-			  </h5>
-			</div>
-	    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-      	<div class="panel-body">
-		    	<div class="container-fluid">
-		    		<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								{% block contenido_tramite_corregidos %}
-									{% include "persona/administrativo/tramite_corregidos_list.html" %}
-								{% endblock %}
-
-								<font color=red>revisar esto!!!!</font>
-
-							</div>
-		  			</div>
-					</div>
-      	</div>
 		  </div>
 		</div>
 
