@@ -2,11 +2,7 @@ from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
 from . import views
 from tramite.models import *
-from persona.views import ver_un_certificado
-from persona.views import ver_documentos_tramite_profesional
-from persona.views import ver_documentos_tramite_administrativo
-from persona.views import aceptar_tramite
-from persona.views import ver_inspecciones
+from persona.views import *
 
 
 

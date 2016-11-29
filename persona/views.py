@@ -294,6 +294,25 @@ def no_aprobar_visado(request, pk_tramite):
     messages.add_message(request, messages.SUCCESS, 'Tramite con visado no aprobado')
     return redirect('visador')
 
+
+#Inspector en jefe
+def mostrar_jefe_inspector(request):
+    contexto = {
+        "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
+    }
+    return render(request, 'persona/jefe_inspector/jefe_inspector.html',contexto)
+
+
+def tramite_con_inspecciones_list(request):
+    tramites = Tramite.objects.en_estado(Iniciado)
+    contexto = {'tramites': tramites}
+    return contexto
+
+# ve la inspeccion de un tramite o inspecciones hay que ver
+def ver_inspecciones(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html', {'tramite': tramite})
+
 def propietario_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
