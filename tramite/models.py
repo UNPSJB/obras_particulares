@@ -138,6 +138,7 @@ class Estado(models.Model):
     def __str__(self):
         return self.__class__.__name__
 
+
 class Iniciado(Estado):
     TIPO = 1
     CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
@@ -148,8 +149,6 @@ class Iniciado(Estado):
 
     def rechazar(self, tramite,usuario,observacion=None):
         return Corregido(tramite=tramite,usuario=usuario,observacion=observacion)
-
-
 
 
 class Aceptado(Estado):

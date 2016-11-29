@@ -6,6 +6,8 @@ from persona.views import ver_un_certificado
 from persona.views import ver_documentos_tramite_profesional
 from persona.views import ver_documentos_tramite_administrativo
 from persona.views import aceptar_tramite
+from persona.views import ver_inspecciones
+
 
 
 
@@ -45,4 +47,8 @@ urlpatterns = [
     url(r'^ver_documentos_para_visado/(?P<pk_tramite>\d+)/$', views.ver_documentos_para_visado,name="ver_documentos_para_visado"),
     url(r'^aprobar_visado/(?P<pk_tramite>\d+)/$', views.aprobar_visado, name="aprobar_visado"),
     url(r'^no_aprobar_visado/(?P<pk_tramite>\d+)/$', views.no_aprobar_visado, name="no_aprobar_visado"),
+
+    url(r'^vista_de_inspecciones/(?P<pk_tramite>\d+)/$', views.ver_inspecciones, name="ver_inspecciones"),
+
+
 ]

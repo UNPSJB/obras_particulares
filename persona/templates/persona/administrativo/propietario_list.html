@@ -19,26 +19,20 @@
               <!-- Mostramos los datos de las tablas -->
               <tbody>
 
-                  {% for persona in personas %}
+                  {% for propietario in personas %}
                     <tr>
-                      <td>{{ persona.nombre }}</td>
-                      <td>{{ persona.apellido }} </td>
-                      <td>{{ persona.cuil }}</td>
-                      <td>{{ persona.telefono }}</td>
-                      <td>{{ persona.propietario.tramite.profesional.nombre }}
-                            {{ persona.propietario.tramite.profesional.apellido }}
-                            {{ persona.propietario.profesional.matricula }}
-                      </td>
-                      <td>{{ persona.propietario.tramite.id }}</td>
+                      <td>{{ propietario.persona.nombre }}</td>
+                      <td>{{ propietario.persona.apellido }} </td>
+                      <td>{{ propietario.persona.cuil }}</td>
+                      <td>{{ propietario.persona.telefono }}</td>
                       <td>
-                        <a href="">
-                          <button type="button" class="btn btn-primary" name="ver-tramite">
-                            Ver tramite
-                          </button>
-                        </a>
+                            {{ propietario.tramite.profesional.persona.nombre }}
+                            {{ propietario.tramite.profesional.persona.nombre }}
+                            {{ propietario.tramite.profesional.matricula }}
                       </td>
+                      <td>{{ propietario.tramite.id }}</td>
                       <td>
-                        <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
+                        <a href="{% url 'crear_usuario' pk_persona=propietario.id %}">
                           <button type="button" class="btn btn-primary" name="habilitar">
                             Habilitar
                           </button>

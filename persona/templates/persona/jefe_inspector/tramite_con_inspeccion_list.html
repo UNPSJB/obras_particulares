@@ -1,0 +1,50 @@
+{% load staticfiles %}
+
+{% block contenido_tramite_con_inspeccion %}
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+            {% if tramites %}
+            <!-- Cabecera -->
+            <thead>
+                <tr>
+                    <td>Profesional</td>
+                    <td>Medidas</td>
+                    <td>Tipo de Obra</td>
+                    <td>Estado</td>
+                    <td>Direccion obra</td>
+                    <td>Fecha de ultima visita</td>
+                    <td>Revisar</td>
+                </tr>
+            </thead>
+            <!-- Mostramos los datos de las tablas -->
+            <tbody>
+                {% for tramite in tramites %}
+                    <tr>
+                        <td>
+                            {{ tramite.profesional.persona.nombre }}
+                            {{ tramite.profesional.persona.apellido }}
+                            {{ tramite.profesional.profesion }}
+                            {{ tramite.profesional.matricula }}
+                        </td>
+                        <td>{{ tramite.medidas }}</td>
+                        <td>{{ tramite.tipo_obra }}</td>
+                        <td>{{ tramite.estado_actual }}</td>
+                        <td>{{ tramite.domicilio }}</td>
+                        <td>
+                            <a href="{% url 'ver_inspecciones' tramite.pk %}">
+                              <button type="button" class="btn btn-primary" name="Ver-inspecciones">
+                                Ver inspecciones
+                              </button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            {% else %}
+            <h4>No hay tramites con inspecciones</h4>
+            {% endif%}
+        </table>
+    </div>
+{% endblock %}
