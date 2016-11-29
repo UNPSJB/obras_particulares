@@ -40,7 +40,7 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							{% block contenido_tramite %}
-								{% include "persona/administrativo/tramite_list.html" with tramites=ctxtramite.tramites %}
+								{% include "persona/administrativo/tramite_list.html" with tramites=ctxtramitesiniciados.tramites %}
 							{% endblock %}
 
 						</div>
@@ -66,9 +66,6 @@
 								{% block contenido_tramite_corregidos %}
 									{% include "persona/administrativo/tramite_corregidos_list.html" %}
 								{% endblock %}
-
-								<font color=red>revisar esto!!!!</font>
-
 							</div>
 		  			</div>
 					</div>
@@ -92,10 +89,6 @@
 	 							{% block contenido_tramite_final_obra %}
 									{% include "persona/administrativo/solicitud_final_obra_list.html" with tramites=ctxsolicitudesfinalobra.tramites %}
 								{% endblock %}
-
-								<font color=red>revisar esto!!!!</font>
-
-
 							</div>
 		  			</div>
 					</div>

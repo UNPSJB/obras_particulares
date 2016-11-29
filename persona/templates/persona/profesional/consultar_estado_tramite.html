@@ -25,14 +25,14 @@
                       <td>{{tramite.medidas}}</td>
                       <td>{{tramite.tipo_obra}}</td>
                       <td>
-                            <a href="{% url 'ver_documentos_tramite' tramite.pk %}">
+                            <a href="{% url 'ver_documentos_tramite_profesional' tramite.pk %}">
                               <button type="button" class="btn btn-primary" name="ver_documentos_tramite">
                                 Ver documentos
                               </button>
                             </a>
                       </td>
                       <td>
-                            <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.id %}">
+                            <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.pk %}">
                               <button type="button" class="btn btn-primary" name="final_obra">
                                 Final obra
                               </button>

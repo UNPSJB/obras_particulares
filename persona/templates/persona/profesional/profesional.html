@@ -43,7 +43,7 @@
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								<div class="container-fluid">
-									<form action="" class="post-form" method="POST">
+									<form action="" class="post-form" method="POST" enctype="multipart/form-data">
 										<div class="row">
 											<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
 												<br>
@@ -53,7 +53,7 @@
 											<form action="{% url 'profesional' %}" class="uniForm" method="post" enctype="multipart/form-data">
 												{% crispy tramite_form %}
 												{% crispy documento_set %}
-										
+
 											</div>
 											<!---Recorro y muestro la lista de tipos de documentas-->
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
@@ -66,13 +66,13 @@
 											</form>
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 
-												
+
 											</div>
 										</div>
 										<div class="container-fluid">
 											<div class="row">
 												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-													
+
 												</div>
 											</div>
 										</div>
@@ -165,7 +165,7 @@
 			      		<div class="container-fluid">
 							<div class="row">
 								{% block contenido_tramite_estado %}
-									{% include "persona/profesional/consultar_estado_tramite.html" with tramites_de_profesional=ctxtramitesprofesional %}
+									{% include "persona/profesional/consultar_estado_tramite.html" with tramites_de_profesional=ctxtramitesprofesional.tramites_de_profesional %}
 								{% endblock %}
 							</div>
 						</div>
@@ -179,90 +179,18 @@
 {% block scripts %}
 <!-- Esto no se debe borrar-->
 	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
 	<script>
-		$("#perfil").fileinput({
+		$('.file').fileinput({
 			showCaption: false,
 			browseClass: "btn btn-primary btn-sm",
 			fileType: "any",
 			maxFileCount: 1,
-			browseLabel: 'Cargar nueva foto de perfil',
+			browseLabel: 'Seleccionar archivo',
 			showUpload: false,
 			showRemove: false
 		});
 	</script>
 
-	<script>
-		$("#cach").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar Certificado CACH',
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
-
-	<script>
-		$("#tributaria").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar Planilla Tributaria',
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
-
-	<script>
-		$("#dominial").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar Planilla Dominial' ,
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
-
-	<script>
-		$("#planos").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar Planos de Obra',
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
-
-	<script>
-		$("#correcciones").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar documentos corregidos',
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
-
-	<script>
-		$("#final").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar documentos de Final de Obra',
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
 
 {% endblock %}
-
-

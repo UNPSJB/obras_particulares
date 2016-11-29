@@ -110,7 +110,7 @@ class Estado(models.Model):
     TIPOS = [
         (0, "Estado")
     ]
-    tramite = models.ForeignKey(Tramite, related_name='estados')  # FK related_name=estados
+    tramite = models.ForeignKey(Tramite, related_name="estados")  # FK related_name=estados
     tipo = models.PositiveSmallIntegerField(choices=TIPOS)
     usuario = models.ForeignKey(Usuario)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -144,22 +144,24 @@ class Iniciado(Estado):
     def aceptar(self, tramite):
         return Aceptado(tramite=tramite)
 
-    def rechazar(self, tramite, observacion):
-        return Corregio(tramite=tramite, observacion=observacion)
+    def rechazar(self, tramite, observacion=None):
+        return Corregido(tramite=tramite, observacion=observacion)
 
 
 
 
 class Aceptado(Estado):
     TIPO = 2
-    def visar(self, tramite, monto, permiso):
-        return Visado(tramite=tramite, monto=monto, permiso=permiso)
 
+    def visar(self, tramite, monto):
+        return Visado(tramite=tramite, monto=monto)
+
+    def corregir(self, tramite, observacion):
+        return Corregido(tramite=tramite, observacion=observacion)
 
 class Visado(Estado):
     TIPO = 3
-    monto = models.FloatField()
-    permiso = models.CharField(max_length=20)
+    monto = models.FloatField(blank=True, null=True)
 
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
@@ -171,7 +173,7 @@ class Visado(Estado):
 class Corregido(Estado):
     TIPO = 4
     CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
-    observacion = models.CharField(max_length=100, default=CADENA_DEFAULT)
+    observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
 
 
     def corregir(self, documentos, observacion):
@@ -219,9 +221,9 @@ class FinalObraSolicitado(Estado):
 
     final_obra_total = models.BooleanField(blank=True)
 
-    def finalizar(self):
-        if (self.tramite.monto_pagado >= self.tramite.monto_a_pagar):  # Tramite.objects.get(pk=tramite.pk).pago_completo
-            return Finalizado(self.tramite)
+    def finalizar(self, tramite):
+        if (tramite.monto_pagado >= tramite.monto_a_pagar):  # Tramite.objects.get(pk=tramite.pk).pago_completo
+            return Finalizado(tramite=tramite)
         else:
             raise Exception("Todavia no se puede otorgar el final de obra")
 
@@ -229,7 +231,7 @@ class Finalizado(Estado):
     TIPO = 8
 
 
-for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, Finalizado]:
+for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, FinalObraSolicitado, Finalizado]:
     Estado.register(klass)
 
 class Pago(models.Model):

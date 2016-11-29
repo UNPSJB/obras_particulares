@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+
 {% block barra %}
-				  	<div class="list-group">
-				  		<font face="serif" color="blue" size="2">
-								<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a>
-								<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
-								<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
-							</font>
-						</div>
+	<div class="list-group">
+		<font face="serif" color="blue" size="2">
+				<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a>
+				<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
+				<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
+			</font>
+		</div>
 {% endblock %}
 
 
@@ -72,60 +73,6 @@
 		  </div>
 
 		  <div class="panel panel-default">
-			<div class="panel-heading" role="tab" id="headingFive">
-			  <h5 class="panel-title">
-				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-				  <small>Solicitar final de obra a un Trámite</small>
-				</a>
-			  </h5>
-			</div>
-			<div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-			  <div class="panel-body">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<div class="container-fluid">
-								<br>
-								<form action="" class="" >
-									<div class="row">
-										<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<div class="form-group">
-												<label for="">Nro de trámite:</label>
-												<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro. de trámite" title="Ingresar Nro. de trámite" required />
-											</div>
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-											<div class="form-group">
-												<label for="">Constancia de CACH:</label>
-												<input class="file" id="final"  type="file" data-preview-file-type="any" title="Cargar constancia de CACH" required />
-											</div>
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-										</div>
-									</div>
-									<div class="container-fluid">
-										<div class="row">
-											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-												<button class="btn btn-primary btn-sm" type="submit" title="Envia solicitud de final de obra">
-													Solicitar final de obra
-												</button>
-												<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-													Limpiar
-												</button>
-											</div>
-										</div>
-									</div>
-								</form>
-								<br>
-							</div>
-						</div>
-					</div>
-				</div>
-			  </div>
-			</div>
-		  </div>
-
-		  <div class="panel panel-default">
 			<div class="panel-heading" role="tab" id="headingFour">
 			  <h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
@@ -155,6 +102,7 @@
 
 
 {% block scripts %}
+
 	<script>
 		$("#perfil").fileinput({
 			showCaption: false,

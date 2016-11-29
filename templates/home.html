@@ -26,4 +26,16 @@
 {% endblock %}
 
 {% block scripts %}
+
+	<script>
+			$("#id_certificado").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar Certificado',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
 {% endblock %}
