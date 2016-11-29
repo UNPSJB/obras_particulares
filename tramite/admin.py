@@ -9,9 +9,9 @@ class DocumentoInline(admin.TabularInline):
 
 class TramiteAdmin(admin.ModelAdmin):
     pass
-    inlines = [
+    '''inlines = [
         DocumentoInline
-    ]
+    ]'''
 
 # Register your models here.
 admin.site.register(Tramite, TramiteAdmin)

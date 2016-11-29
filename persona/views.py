@@ -20,15 +20,23 @@ from django.views.generic.detail import DetailView
 @grupo_requerido('inspector')
 def mostrar_inspector(request):
     contexto = {
-        "ctxtramitesaceptados": tramite_aceptados_list(request),
+        "ctxtramitesvisados": tramite_visados_list(request),
     }
     return render(request, 'persona/inspector/inspector.html',contexto)
 
-def tramite_aceptados_list(request):
-    tramites = Tramite.objects.all()
-    #tramites = filter(lambda tramite: (isinstance(tramite.estado_actual,Iniciado), tramites))
+def tramite_visados_list(request):
+    tramites = Tramite.objects.en_estado(Aceptado)#cambiar a visados cuando etengas tramites visaddos
     contexto = {'tramites': tramites}
     return contexto
+
+def agendar_tramite(request, pk_tramite):
+    print "entro aca perro"
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite.hacer(Tramite.AGENDAR,request.user,tramite) #tramite, fecha_inspeccion, inspector=None
+    return redirect('inspector')
+
+def mostrar_popup_datos_agendar(request,pk_tramite):
+    pass
 
 def mostrar_profesional(request):
     usuario = request.user
@@ -68,14 +76,10 @@ def mostrar_profesional(request):
         'ctxtramitesprofesional': listado_tramites_de_profesional(request),
         'tramite_form': tramite_form,
         'propietario_form': propietario_form,
-        'documento_set': documento_set,
+        'documento_set': documento_set
     }
 
     return render(request, 'persona/profesional/profesional.html', contexto)
-
-def mostrar_jefe_inspector(request):
-    return render(request, 'persona/jefe_inspector/jefe_inspector.html')
-
 
 def mostrar_propietario(request):
 
@@ -167,7 +171,6 @@ def mostrar_administrativo(request):
         "ctxprofesional": profesional_list(request),
         "ctxpropietario": propietario_list(request),
         "ctxtramitesiniciados": listado_de_tramites_iniciados(request),
-        "ctxtramitescorregidos": tramite_corregidos_list(request),
         "ctxsolicitudesfinalobra": solicitud_final_obra_list(request),
 	    "ctxpago" : registrar_pago_tramite(request)
 
@@ -212,12 +215,6 @@ def propietario_list(request):
 # es el de tramites iniciados
 def listado_de_tramites_iniciados(request):
     tramites = Tramite.objects.en_estado(Iniciado)
-    contexto = {'tramites': tramites}
-    return contexto
-
-def tramite_corregidos_list(request):
-    tramites = Tramite.objects.all()
-    #tramites = filter(lambda tramite: (tramite.estado_actual is  is not None), personas)
     contexto = {'tramites': tramites}
     return contexto
 
@@ -282,7 +279,6 @@ def ver_documentos_para_visado(request, pk_tramite):
     return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite})
 
 def aprobar_visado(request, pk_tramite):
-
     usuario = request.user
     monto= 15
     tramite = get_object_or_404(Tramite, pk=pk_tramite)

@@ -6,6 +6,8 @@ from persona.views import ver_un_certificado
 from persona.views import ver_documentos_tramite_profesional
 from persona.views import ver_documentos_tramite_administrativo
 from persona.views import aceptar_tramite
+from persona.views import ver_inspecciones
+
 
 
 
@@ -22,7 +24,7 @@ urlpatterns = [
     url(r'^administrativo$', views.mostrar_administrativo, name="administrativo"),
     url(r'^administrativo/tramite_listar$', views.listado_de_tramites_iniciados, name="tramite_listar"),
 
-    url(r'^rechazar_tramite/(?P<pk_tramite>\d+)/$', views.rechazar_tramite, name="rechazar_tramite"),
+    url(r'^rechazar_tramite/(?P<pk_tramite>\d+)/.*$', views.rechazar_tramite, name="rechazar_tramite"),
     url(r'^aceptar_tramite/(?P<pk_tramite>\d+)/$', views.aceptar_tramite, name="aceptar_tramite"),
 
 
@@ -41,9 +43,12 @@ urlpatterns = [
 
     url(r'^documentos_tramite_administrativo/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_administrativo, name="ver_documentos_tramite_administrativo"),
 
-    url(r'^aceptar_tramite/(?P<pk_tramite>\d+)/$', views.aceptar_tramite, name="aceptar_tramite"),
     #visado
     url(r'^ver_documentos_para_visado/(?P<pk_tramite>\d+)/$', views.ver_documentos_para_visado,name="ver_documentos_para_visado"),
     url(r'^aprobar_visado/(?P<pk_tramite>\d+)/$', views.aprobar_visado, name="aprobar_visado"),
     url(r'^no_aprobar_visado/(?P<pk_tramite>\d+)/$', views.no_aprobar_visado, name="no_aprobar_visado"),
+
+    url(r'^vista_de_inspecciones/(?P<pk_tramite>\d+)/$', views.ver_inspecciones, name="ver_inspecciones"),
+
+
 ]
