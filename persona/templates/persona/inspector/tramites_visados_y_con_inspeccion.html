@@ -28,10 +28,8 @@
                         <td>{{ tramite.tipo_obra }}</td>
                         <td>{{ tramite.estado }}</td>
                         <td>
-
                             <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                            <input class="form-control input-sm" id="id_fechadeinspeccion" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
-
+                            <input class="form-control input-sm" id="id_fechadeinspeccion_{{tramite.pk}}" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
                         </td>
                         <td>
 
@@ -45,14 +43,14 @@
 
                     <script>
                         function prueba(){
-                            fecha = $("#id_fechadeinspeccion").val();
+                            obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();
+                            alert(obs);
                             id_tramite = $("#id_tramite").val();
-                            url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
+                            url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+obs;
                             alert(url);
                             location.href = url;
                         }
-                        </script>
-
+                    </script>
 
                 {% endfor %}
             {% endif%}

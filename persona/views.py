@@ -13,7 +13,14 @@ from django.core.mail import send_mail
 from persona.models import *
 from tramite.models import Tramite
 from django.views.generic.detail import DetailView
-#from documento.forms import *
+import re
+from datetime import datetime
+
+DATETIME = re.compile("^(\d{4})\-(\d{2})\-(\d{2})\s(\d{2}):(\d{2})$")
+
+def convertidor_de_fechas(fecha):
+
+    return datetime(*[int(n) for n in DATETIME.match(fecha).groups()])
 
 
 @login_required(login_url="login")
@@ -37,7 +44,9 @@ def tramite_visados_list(request):
 
 def agendar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(Tramite.AGENDAR, request.user, tramite, request.GET["msg"]) #tramite, fecha_inspeccion, inspector=None
+    fecha = convertidor_de_fechas(request.GET["msg"])
+    print(fecha)
+    tramite.hacer(Tramite.AGENDAR, request.user, fecha) #tramite, fecha_inspeccion, inspector=None
     return redirect('inspector')
 
 def mostrar_popup_datos_agendar(request,pk_tramite):
