@@ -31,8 +31,13 @@ def mostrar_inspector(request):
     }
     return render(request, 'persona/inspector/inspector.html', contexto)
 
+def tramites_inspeccionados_por_inspector():
+    pass
+
+
+
 def tramites_visados_y_con_inspeccion(request):
-    argumentos = [Visado, ConInspeccion, Aceptado]
+    argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
     print(tramites)
     return tramites
