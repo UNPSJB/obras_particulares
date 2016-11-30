@@ -50,7 +50,7 @@ class Tramite(models.Model):
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50,blank=True)
     monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
-    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
+    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2)
     objects = TramiteManager()
 
     def __str__(self):
@@ -103,7 +103,7 @@ class Tramite(models.Model):
 
 
     def calcular_monto_pagado(self, monto):
-        self.monto_pagado += monto
+        self.monto_pagado = self.monto_pagado + monto
         self.save()
         return self.monto_pagado
 
