@@ -1,6 +1,6 @@
 {% load staticfiles %}
 
-{% block contenido_tramite_visados %}
+{% block contenido_tramites_visados_y_con_inspeccion %}
 
     <div class="table-responsive">
 
@@ -13,7 +13,7 @@
                     <td>Medidas</td>
                     <td>Tipo de Obra</td>
                     <td>Estado</td>
-                    <td>Fecha de visita</td>
+                    <td>Fecha de inspeccion</td>
                     <td>Agendar</td>
                 </tr>
             </thead>
@@ -26,15 +26,34 @@
                         <td>{{ tramite.profesional }} </td>
                         <td>{{ tramite.medidas }}</td>
                         <td>{{ tramite.tipo_obra }}</td>
-                        <td>{{ tramite.estado_actual }}</td>
+                        <td>{{ tramite.estado }}</td>
                         <td>
-                            <a href="{% url 'agendar_tramite' pk_tramite=tramite.id %}">
+
+                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                            <input class="form-control input-sm" id="id_fechadeinspeccion" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
+
+                        </td>
+                        <td>
+
+                            <a href="javascript:prueba();">
                               <button type="button" class="btn btn-primary" name="Agendar">
-                                Aceptar
+                                Agendar
                               </button>
                             </a>
                         </td>
                     </tr>
+
+                    <script>
+                        function prueba(){
+                            fecha = $("#id_fechadeinspeccion").val();
+                            id_tramite = $("#id_tramite").val();
+                            url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
+                            alert(url);
+                            location.href = url;
+                        }
+                        </script>
+
+
                 {% endfor %}
             {% endif%}
 
