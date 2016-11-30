@@ -8,8 +8,8 @@
   <font size="2">
     <li><a href="#" class="current"><font color="tomato">Inspector</font></a></li>
     <div class="list-group">
-      <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Iniciar Inspección</a></li>
-      <li><a data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree" onclick='mostrarSubmenu("sin_submenu")'>Cargar mis Inspecciones</a></li>
+      <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspeccion</a></li>
+      <li><a data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree" onclick='mostrarSubmenu("sin_submenu")'>Cargar Inspeccion</a></li>
       <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis Inspecciones</a></li>
       <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
     </div>
@@ -25,7 +25,7 @@
     <div class="panel-heading box" role="tab" id="headingTwo">
       <h5 class="panel-title">
         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>
-          <font color="#ffffff" size="2">Iniciar Inspeccion</font>
+          <font color="#ffffff" size="2">Agendar para inspeccion</font>
         </a>
       </h5>
     </div>
@@ -34,8 +34,8 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              {% block contenido_tramite_aceptados %}
-                {% include "persona/inspector/tramite_aceptados_list.html" with tramites=ctxtramitesaceptados.tramites %}
+              {% block contenido_tramites_visados_y_con_inspeccion %}
+                {% include "persona/inspector/tramites_visados_y_con_inspeccion.html" with tramites=ctxtramitesvisadosyconinspeccion %}
               {% endblock %}
             </div>
           </div>
@@ -58,21 +58,10 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+              <p style="color: tomato;" >Aca filtro los tramites con en estado inspeccionado que son de el, y creo una vista para que pueda ver el historial de inspecciones</p>
               <!-- Table -->
-              <div class="table-responsive">
-                <table  class="table table-striped table-hover table-condensed">
-                  <thead>
-                    <tr>
-                      <th>Nro Tramite</th>
-                      <th>Profesional</th>
-                      <th>Estado</th>
-                      <th>Fecha Inspección</th>
-                      <th>Dirección</th>
-                      <th>Inspección</th>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
+
             </div>
           </div>
         </div>
@@ -84,7 +73,7 @@
     <div class="panel-heading" role="tab" id="headingthree">
       <h5 class="panel-title">
         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree"  onclick='mostrarSubmenu("sin_submenu")'>
-          <font color="#ffffff" size="2">Cargar mis Inspecciones</font>
+          <font color="#ffffff" size="2">Cargar Inspeccion</font>
         </a>
       </h5>
     </div>
@@ -97,6 +86,8 @@
               <div class="table-responsive">
                 <table  class="table table-striped table-hover table-condensed">
                   <thead>
+
+                  <p style="color: tomato;" >Aca filtro los tramites agendados que son de el, y creo una vista para que pueda adjuntar la planilla de inspeccion</p>
                     <tr>
                       <th>Nro Tramite</th>
                       <th>Fecha Inspección</th>

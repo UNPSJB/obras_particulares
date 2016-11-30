@@ -1,0 +1,63 @@
+{% load staticfiles %}
+
+{% block contenido_tramites_visados_y_con_inspeccion %}
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+            <!-- Cabecera -->
+            <thead>
+                <tr>
+                    <td>Propietario</td>
+                    <td>Profesional</td>
+                    <td>Medidas</td>
+                    <td>Tipo de Obra</td>
+                    <td>Estado</td>
+                    <td>Fecha de inspeccion</td>
+                    <td>Agendar</td>
+                </tr>
+            </thead>
+            <!-- Mostramos los datos de las tablas -->
+            <tbody>
+            {% if tramites %}
+                {% for tramite in tramites %}
+                    <tr>
+                        <td>{{ tramite.propietario }}</td>
+                        <td>{{ tramite.profesional }} </td>
+                        <td>{{ tramite.medidas }}</td>
+                        <td>{{ tramite.tipo_obra }}</td>
+                        <td>{{ tramite.estado }}</td>
+                        <td>
+
+                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                            <input class="form-control input-sm" id="id_fechadeinspeccion" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
+
+                        </td>
+                        <td>
+
+                            <a href="javascript:prueba();">
+                              <button type="button" class="btn btn-primary" name="Agendar">
+                                Agendar
+                              </button>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <script>
+                        function prueba(){
+                            fecha = $("#id_fechadeinspeccion").val();
+                            id_tramite = $("#id_tramite").val();
+                            url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
+                            alert(url);
+                            location.href = url;
+                        }
+                        </script>
+
+
+                {% endfor %}
+            {% endif%}
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

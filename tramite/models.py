@@ -4,6 +4,9 @@ from django.utils import timezone
 import datetime
 from persona.models import *
 from tipos.models import *
+from django import template
+
+register = template.Library()
 
 from openpyxl import load_workbook
 """from django_excel import *
@@ -47,18 +50,23 @@ class Tramite(models.Model):
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50,blank=True)
     monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
-    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
+    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2)
     objects = TramiteManager()
 
     def __str__(self):
         return   "Numero de tramite: {} - Profesional: {} - Propietario: {}" .format(self.pk, self.profesional, self.propietario)
 
     def saldo_restante_a_pagar(self):
-
         if self.monto_a_pagar == None:
             return 0
         else:
             return self.monto_a_pagar - self.monto_pagado
+
+    def esta_pagado(self):
+        if ((self.monto_a_pagar - self.monto_pagado) <= 0):
+            return True
+        else:
+            return False
 
     @classmethod
     def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio,documentos):
@@ -95,7 +103,7 @@ class Tramite(models.Model):
 
 
     def calcular_monto_pagado(self, monto):
-        self.monto_pagado += monto
+        self.monto_pagado = self.monto_pagado + monto
         self.save()
         return self.monto_pagado
 
@@ -118,8 +126,9 @@ class Estado(models.Model):
             self.tipo = self.__class__.TIPO
         super(Estado, self).save(*args, **kwargs)
 
-    def agregar_documentacion(self, tramite, documentos):
-        self.tramite.documentos.add(documento)  # buscar tramite con fk y asignarle documentos
+    def agregar_documentacion(self,documentos_requeridos):
+        self.tramite.documentos.add(documento)
+
 
     def related(self):
         return self.__class__ != Estado and self or getattr(self, self.get_tipo_display())
@@ -138,25 +147,22 @@ class Estado(models.Model):
 class Iniciado(Estado):
     TIPO = 1
     CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
-    observacion = models.CharField(max_length=100, default=CADENA_DEFAULT)
+    observacion = models.CharField(max_length=100, default=CADENA_DEFAULT,blank=True)
 
     def aceptar(self, tramite):
         return Aceptado(tramite=tramite)
 
-    def rechazar(self, tramite, observacion=None):
+    def rechazar(self, tramite, observacion):
+        print (observacion)
         return Corregido(tramite=tramite, observacion=observacion)
-
-
 
 
 class Aceptado(Estado):
     TIPO = 2
 
-    def visar(self, tramite, monto):
-        return Visado(tramite=tramite, monto=monto)
+    def visar(self,tramite, monto):
+        return Visado(tramite=tramite,monto=monto)
 
-    def corregir(self, tramite, observacion):
-        return Corregido(tramite=tramite, observacion=observacion)
 
 class Visado(Estado):
     TIPO = 3
@@ -175,51 +181,66 @@ class Corregido(Estado):
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
 
 
-    def corregir(self, documentos, observacion):
-        estado = Corregido(tramite=self.tramite, observacion=observacion)
-        estado.agregar_documentacion(documentos=documentos)
-        return estado
-
-    def aceptar(self):
-        return Aceptado(tramite=self.tramite)
-
+    def corregir(self, tramite, documentos, observacion=None):
+        e = Iniciado(tramite=tramite, observacion=observacion)
+        e.save()
+        e.agregar_documentacion(documentos_requeridos=documentos)
+        return e
 
 class Agendado(Estado):
     TIPO = 5
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
-    fecha = models.DateTimeField(auto_now=True)
+    fecha = models.DateTimeField(blank=False)
+
+    def inspeccionar(self, tramite, fecha_inspeccion, inspector=None):
+        return ConInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=inspector)
+
+
+class ConInspeccion(Estado):
+    TIPO = 9
+    fecha = models.DateTimeField(blank=False)
+    inspector = models.ForeignKey(Usuario, null=True, blank=True)
+
+
+    def solicitar_final_obra(self, tramite):
+        return FinalObraSolicitado(tramite=tramite, final_obra_total=False)
+
+    def agendar(self, tramite, fecha_inspeccion, inspector=None):
+        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
     def inspeccionar(self, tramite):
         return Inspeccionado(tramite=tramite)
 
-
-    def inspeccionar_final(self):
-        if datetime.datetime.now() > self.fecha:
-            return Inspeccionado(tramite=self.tramite)  # ver si tiene al menos 3 inspecciones--consulta bd
-
     def corregir(self, tramite, observacion):
-        return Corregido(tramite=tramite, observaciones=observacion)
-
+        return Corregido(tramite=tramite, observacion=observacion)
 
 class Inspeccionado(Estado):
     TIPO = 6
 
 
-    def finalizar(self):#solicitar final de obra
-        if self.tramite.pago_completo:  # Tramite.objects.get(pk=tramite.pk).pago_completo
-            return Finalizado(self.tramite)
+    def solicitar_final_obra(self, tramite):#solicitar final de obra
+        if self.tramite.esta_pagado():  # Tramite.objects.get(pk=tramite.pk).pago_completo
+            return FinalObraSolicitado(tramite=tramite, final_obra_total=True)
         else:
             raise Exception("Todavia no se puede solicitar el final de obra")
 
 
 class FinalObraSolicitado(Estado):
-    TIPO = 8
-
-class Finalizado(Estado):
     TIPO = 7
 
+    final_obra_total = models.BooleanField(blank=True)
 
-for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, Finalizado]:
+    def finalizar(self, tramite):
+        if (tramite.monto_pagado >= tramite.monto_a_pagar):  # Tramite.objects.get(pk=tramite.pk).pago_completo
+            return Finalizado(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede otorgar el final de obra")
+
+class Finalizado(Estado):
+    TIPO = 8
+
+
+for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, Finalizado, ConInspeccion, FinalObraSolicitado]:
     Estado.register(klass)
 
 class Pago(models.Model):
@@ -259,3 +280,11 @@ class Pago(models.Model):
 
         except ValueError:
             print('El archivo cargado no tiene el formato correcto.')
+
+
+@register.filter(is_safe=True)
+def es_instancia(estado, cadena):
+    if isinstance(estado, cadena):
+        return True
+    else:
+        return False

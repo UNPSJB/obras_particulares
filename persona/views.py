@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import  login_required
-
 from .forms import *
 from django.contrib import messages
 from tipos.forms import *
@@ -21,15 +20,28 @@ from django.views.generic.detail import DetailView
 @grupo_requerido('inspector')
 def mostrar_inspector(request):
     contexto = {
-        "ctxtramitesaceptados": tramite_aceptados_list(request),
+        "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
     }
-    return render(request, 'persona/inspector/inspector.html',contexto)
+    return render(request, 'persona/inspector/inspector.html', contexto)
 
-def tramite_aceptados_list(request):
-    tramites = Tramite.objects.all()
-    #tramites = filter(lambda tramite: (isinstance(tramite.estado_actual,Iniciado), tramites))
+def tramites_visados_y_con_inspeccion(request):
+    argumentos = [Visado, ConInspeccion, Aceptado]
+    tramites = Tramite.objects.en_estado(argumentos)
+    print(tramites)
+    return tramites
+
+def tramite_visados_list(request):
+    tramites = Tramite.objects.en_estado(Visado) #cambiar a visados cuando etengas tramites visaddos
     contexto = {'tramites': tramites}
     return contexto
+
+def agendar_tramite(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite.hacer(Tramite.AGENDAR, request.user, tramite, request.GET["msg"]) #tramite, fecha_inspeccion, inspector=None
+    return redirect('inspector')
+
+def mostrar_popup_datos_agendar(request,pk_tramite):
+    pass
 
 def mostrar_profesional(request):
     usuario = request.user
@@ -66,12 +78,11 @@ def mostrar_profesional(request):
         propietario_form = None
 
     contexto = {
-        "ctxtramitesprofesional": listado_tramites_de_profesional(request),
+        'ctxtramitesprofesional': listado_tramites_de_profesional(request),
         'tramite_form': tramite_form,
         'propietario_form': propietario_form,
         'documento_set': documento_set
     }
-
 
     return render(request, 'persona/profesional/profesional.html', contexto)
 
@@ -173,6 +184,7 @@ def mostrar_administrativo(request):
         "ctxtramitescorregidos": tramite_corregidos_list(request),
         "ctxsolicitudesfinalobra": solicitud_final_obra_list(request),
 	    "ctxpago" : registrar_pago_tramite(request)
+
     }
     return render(request, 'persona/administrativo/administrativo.html', contexto)
 
@@ -229,16 +241,12 @@ def listado_tramites_de_profesional(request):
     tramites = Tramite.objects.all()
     personas = Persona.objects.all()
     usuario = request.user
-
     lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-
     persona = lista_de_persona_que_esta_logueada.pop()  #Saco de la lista la persona porque no puedo seguir trabajando con una lista
-
     profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
-
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
-
-    return tramites_de_profesional
+    contexto = {'tramites_de_profesional': tramites_de_profesional}
+    return contexto
 
 
 def aceptar_tramite(request, pk_tramite):
@@ -249,7 +257,7 @@ def aceptar_tramite(request, pk_tramite):
 
 def rechazar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.RECHAZAR, request.user, "hola")
+    tramite.hacer(tramite.RECHAZAR, request.user, request.GET["msg"])
     messages.add_message(request, messages.WARNING, 'Tramite rechazado.')
     return redirect('administrativo')
 
@@ -296,19 +304,10 @@ def mostrar_visador(request):
 
 def tramites_aceptados(request):
     aceptados = Tramite.objects.en_estado(Aceptado)
-    contexto = {'tramites': aceptados}
-    return contexto
-
-def tramites_visados(request):
-    usuario = request.user
-    estados = Estado.objects.all()
-    tipo = 3 #es el tipo de visado
-    estados_visado = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
-    contexto = {'estados': estados_visado}
+    contexto = {'tramites_para_visar': aceptados}
     return contexto
 
 def ver_documentos_para_visado(request, pk_tramite):
-
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite})
 
@@ -331,28 +330,52 @@ def no_aprobar_visado(request, pk_tramite):
     messages.add_message(request, messages.SUCCESS, 'Tramite con visado no aprobado')
     return redirect('visador')
 
-def solicitud_final_obra_parcial(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    #poner la funcion que cambia de estado al tramite
-    messages.add_message(request, messages.SUCCESS, 'final de obra parcial solicitado.')
-    return redirect('profesional')
 
-def solicitud_final_obra_total(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    #poner la funcion que cambia de estado al tramite
+#Inspector en jefe
+def mostrar_jefe_inspector(request):
+    contexto = {
+        "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
+    }
+    return render(request, 'persona/jefe_inspector/jefe_inspector.html',contexto)
 
-    messages.add_message(request, messages.SUCCESS, 'final de obra total solicitado.')
-    return redirect('profesional')
+
+def tramite_con_inspecciones_list(request):
+    tramites = Tramite.objects.en_estado(Iniciado)
+    contexto = {'tramites': tramites}
+    return contexto
+
+# ve la inspeccion de un tramite o inspecciones hay que ver
+def ver_inspecciones(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html', {'tramite': tramite})
+
+def propietario_solicita_final_obra(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    try:
+        tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
+        messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
+    except:
+        messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
+    finally:
+        return redirect('propietario')
+
+def profesional_solicita_final_obra(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    try:
+        tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
+        messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
+    except:
+        messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
+    finally:
+        return redirect('profesional')
 
 def solicitud_final_obra_list(request):
-    tramites = Tramite.objects.en_estado(Iniciado)
+    tramites = Tramite.objects.en_estado(FinalObraSolicitado)
     contexto = {'tramites': tramites}
     return contexto
 
 def habilitar_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.ACEPTAR, request.user)
+    tramite.hacer(tramite.FINALIZAR, request.user)
     messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
-
     return redirect('administrativo')
-    #return render(request, 'persona/administrativo/administrativo.html')

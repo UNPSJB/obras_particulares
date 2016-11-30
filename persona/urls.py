@@ -2,10 +2,8 @@ from django.conf.urls import include, url
 from django.contrib.auth.decorators import login_required
 from . import views
 from tramite.models import *
-from persona.views import ver_un_certificado
-from persona.views import ver_documentos_tramite_profesional
-from persona.views import ver_documentos_tramite_administrativo
-from persona.views import aceptar_tramite
+from persona.views import *
+
 
 
 
@@ -24,14 +22,16 @@ urlpatterns = [
 
     url(r'^rechazar_tramite/(?P<pk_tramite>\d+)/$', views.rechazar_tramite, name="rechazar_tramite"),
     url(r'^aceptar_tramite/(?P<pk_tramite>\d+)/$', views.aceptar_tramite, name="aceptar_tramite"),
+    url(r'^agendar_tramite/(?P<pk_tramite>\d+)/$', views.agendar_tramite, name="agendar_tramite"),
+
 
 
     url(r'^crearusuario/(?P<pk_persona>\d+)/$', views.crear_usuario, name="crear_usuario"),
 
     url(r'^profesional/estado_tramite$', views.listado_tramites_de_profesional, name="estado_tramite"),
 
-    url(r'^solicitud_final_obra_parcial/(?P<pk_tramite>\d+)/$', views.solicitud_final_obra_parcial, name="solicitud_final_obra_parcial"),
-    url(r'^solicitud_final_obra_total/(?P<pk_tramite>\d+)/$', views.solicitud_final_obra_total, name="solicitud_final_obra_total"),
+    url(r'^solicitud_final_obra_propietario/(?P<pk_tramite>\d+)/$', views.propietario_solicita_final_obra, name="propietario_solicita_final_obra"),
+    url(r'^solicitud_final_obra/(?P<pk_tramite>\d+)/$', views.profesional_solicita_final_obra, name="profesional_solicita_final_obra"),
 
     url(r'^habilitar_final_obra/(?P<pk_tramite>\d+)/$', views.habilitar_final_obra, name="habilitar_final_obra"),
 
@@ -44,12 +44,9 @@ urlpatterns = [
     url(r'^aceptar_tramite/(?P<pk_tramite>\d+)/$', views.aceptar_tramite, name="aceptar_tramite"),
     #visado
     url(r'^ver_documentos_para_visado/(?P<pk_tramite>\d+)/$', views.ver_documentos_para_visado,name="ver_documentos_para_visado"),
-
-
-
     url(r'^aprobar_visado/(?P<pk_tramite>\d+)/$', views.aprobar_visado, name="aprobar_visado"),
     url(r'^no_aprobar_visado/(?P<pk_tramite>\d+)/$', views.no_aprobar_visado, name="no_aprobar_visado"),
 
+    url(r'^vista_de_inspecciones/(?P<pk_tramite>\d+)/$', views.ver_inspecciones, name="ver_inspecciones"),
     url(r'^crearusuario/(?P<pk_propietario>\d+)/$', views.crear_usuario, name="crear_usuario"),
-
 ]
