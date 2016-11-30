@@ -20,8 +20,10 @@ urlpatterns = [
     url(r'^administrativo$', views.mostrar_administrativo, name="administrativo"),
     url(r'^administrativo/tramite_listar$', views.listado_de_tramites_iniciados, name="tramite_listar"),
 
-    url(r'^rechazar_tramite/(?P<pk_tramite>\d+)/.*$', views.rechazar_tramite, name="rechazar_tramite"),
+    url(r'^rechazar_tramite/(?P<pk_tramite>\d+)/$', views.rechazar_tramite, name="rechazar_tramite"),
     url(r'^aceptar_tramite/(?P<pk_tramite>\d+)/$', views.aceptar_tramite, name="aceptar_tramite"),
+    url(r'^agendar_tramite/(?P<pk_tramite>\d+)/$', views.agendar_tramite, name="agendar_tramite"),
+
 
 
     url(r'^crearusuario/(?P<pk_persona>\d+)/$', views.crear_usuario, name="crear_usuario"),

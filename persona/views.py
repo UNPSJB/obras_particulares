@@ -20,19 +20,24 @@ from django.views.generic.detail import DetailView
 @grupo_requerido('inspector')
 def mostrar_inspector(request):
     contexto = {
-        "ctxtramitesvisados": tramite_visados_list(request),
+        "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
     }
-    return render(request, 'persona/inspector/inspector.html',contexto)
+    return render(request, 'persona/inspector/inspector.html', contexto)
+
+def tramites_visados_y_con_inspeccion(request):
+    argumentos = [Visado, ConInspeccion, Aceptado]
+    tramites = Tramite.objects.en_estado(argumentos)
+    print(tramites)
+    return tramites
 
 def tramite_visados_list(request):
-    tramites = Tramite.objects.en_estado(Aceptado)#cambiar a visados cuando etengas tramites visaddos
+    tramites = Tramite.objects.en_estado(Visado) #cambiar a visados cuando etengas tramites visaddos
     contexto = {'tramites': tramites}
     return contexto
 
 def agendar_tramite(request, pk_tramite):
-    print "entro aca perro"
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(Tramite.AGENDAR,request.user,tramite) #tramite, fecha_inspeccion, inspector=None
+    tramite.hacer(Tramite.AGENDAR, request.user, tramite, request.GET["msg"]) #tramite, fecha_inspeccion, inspector=None
     return redirect('inspector')
 
 def mostrar_popup_datos_agendar(request,pk_tramite):
@@ -239,7 +244,7 @@ def aceptar_tramite(request, pk_tramite):
 
 def rechazar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.RECHAZAR, request.user, "hola")
+    tramite.hacer(tramite.RECHAZAR, request.user, request.GET["msg"])
     messages.add_message(request, messages.WARNING, 'Tramite rechazado.')
     return redirect('administrativo')
 
