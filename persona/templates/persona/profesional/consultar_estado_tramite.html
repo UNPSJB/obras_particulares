@@ -2,46 +2,45 @@
 
 {% block contenido_tramite_estado %}
   <div class="table-responsive">
-      <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-          <!-- Cabecera -->
-          <thead>
-              <tr>
-                  <td>Datos del Propietario</td>
-                  <td>Estado del tramite</td>
-                  <td>Medidas</td>
-                  <td>Tipo de Obra</td>
-                  <td>Ver documentos</td>
-                  <td>Final obra parcial</td>
-                  <td>Final obra total</td>
-              </tr>
-          </thead>
-          <!-- Mostramos los datos de las tablas -->
-          <tbody>
-          {% if tramites_de_profesional %}
-              {% for tramite in tramites_de_profesional %}
-                <tr>
-                      <td>{{tramite.propietario}}</td>
-                      <td>{{tramite.estado}}</td>
-                      <td>{{tramite.medidas}}</td>
-                      <td>{{tramite.tipo_obra}}</td>
-                      <td>
-                            <a href="{% url 'ver_documentos_tramite_profesional' tramite.pk %}">
-                              <button type="button" class="btn btn-primary" name="ver_documentos_tramite">
-                                Ver documentos
-                              </button>
-                            </a>
-                      </td>
-                      <td>
-                            <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.pk %}">
-                              <button type="button" class="btn btn-primary" name="final_obra">
-                                Final obra
-                              </button>
-                            </a>
-                      </td>
-                </tr>
-              {% endfor %}
-          {% endif%}
-          </tbody>
-      </table>
+    <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+      <!-- Cabecera -->
+      <thead>
+        <tr>
+          <td>Datos del Propietario</td>
+          <td>Estado del tramite</td>
+          <td>Medidas</td>
+          <td>Tipo de Obra</td>
+          <td>Ver documentos</td>
+          <td>Final obra</td>
+        </tr>
+      </thead>
+      <!-- Mostramos los datos de las tablas -->
+      <tbody>
+      {% if tramites_de_profesional %}
+        {% for tramite in tramites_de_profesional %}
+          <tr>
+            <td>{{tramite.propietario}}</td>
+            <td>{{tramite.estado}}</td>
+            <td>{{tramite.medidas}}</td>
+            <td>{{tramite.tipo_obra}}</td>
+            <td>
+              <a href="{% url 'ver_documentos_tramite_profesional' tramite.pk %}">
+                <button type="button" class="btn btn-primary" name="ver_documentos_tramite">
+                  Ver documentos
+                </button>
+              </a>
+            </td>
+            <td>
+              <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.pk %}">
+                <button type="button" class="btn btn-primary" name="final_obra">
+                  Final obra
+                </button>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      {% endif%}
+      </tbody>
+    </table>
   </div>
 {% endblock %}

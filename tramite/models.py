@@ -4,6 +4,9 @@ from django.utils import timezone
 import datetime
 from persona.models import *
 from tipos.models import *
+from django import template
+
+register = template.Library()
 
 from openpyxl import load_workbook
 """from django_excel import *
@@ -124,12 +127,7 @@ class Estado(models.Model):
         super(Estado, self).save(*args, **kwargs)
 
     def agregar_documentacion(self,documentos_requeridos):
-        if self is not None:
-            for doc in documentos_requeridos:
-                doc.estado = self
-                doc.save()
-        else:
-            raise Exception("Debe guardar el estado del tramite")
+        self.tramite.documentos.add(documento)
 
 
     def related(self):
@@ -150,7 +148,8 @@ class Iniciado(Estado):
     def aceptar(self, tramite):
         return Aceptado(tramite=tramite)
 
-    def rechazar(self, tramite, observacion=None):
+    def rechazar(self, tramite, observacion):
+        print (observacion)
         return Corregido(tramite=tramite, observacion=observacion)
 
 
@@ -277,3 +276,11 @@ class Pago(models.Model):
 
         except ValueError:
             print('El archivo cargado no tiene el formato correcto.')
+
+
+@register.filter(is_safe=True)
+def es_instancia(estado, cadena):
+    if isinstance(estado, cadena):
+        return True
+    else:
+        return False
