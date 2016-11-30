@@ -13,6 +13,7 @@
                   <th>Monto total a pagar</th>
                   <th>Total pagado</th>
                   <th>Total a pagar</th>
+                  <th>Final obra</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -27,6 +28,13 @@
                   <td class="col-xs-2">{{tramite.monto_a_pagar}}</td>
                   <td class="col-xs-2">{{tramite.monto_pagado}}</td>
                   <td class="col-xs-2">{{ tramite.saldo_restante_a_pagar}}</td>
+                  <td align="center" class="col-xs-2">
+                        <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.id %}">
+                          <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
+                            Final obra
+                          </button>
+                        </a>
+                  </td>
                 </tr>
               {% endfor %}
           {% endif%}

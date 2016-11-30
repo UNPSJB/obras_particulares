@@ -12,7 +12,6 @@
                   <th>Tipo</th>
                   <th>Ver documentos</th>
                   <th>Final obra parcial</th>
-                  <th>Final obra total</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -26,25 +25,19 @@
                       <td class="col-xs-1">{{tramite.tipo_obra}}</td>
                       <td align="center" class="col-xs-2">
                             <a href="{% url 'ver_documentos_tramite_profesional' tramite.pk %}">
-                              <button type="button" class="btn btn-primary btn-xs" name="ver_documentos_tramite">
+                              <button type="button" class="btn btn-primary" name="ver_documentos_tramite">
                                 Ver documentos
                               </button>
                             </a>
                       </td>
                       <td align="center" class="col-xs-2">
-                            <a href="{% url 'solicitud_final_obra_parcial' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
-                                Final obra parcial
+                            <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.id %}">
+                              <button type="button" class="btn btn-primary" name="ver-certificado">
+                                Final obra
                               </button>
                             </a>
                       </td>
-                      <td align="center" class="col-xs-2">
-                            <a href="{% url 'solicitud_final_obra_total' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
-                                Final obra total
-                              </button>
-                            </a>
-                      </td>
+
                 </tr>
               {% endfor %}
           {% endif%}
