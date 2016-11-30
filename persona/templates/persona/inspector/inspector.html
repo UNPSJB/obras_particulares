@@ -58,8 +58,10 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-              <p style="color: tomato;" >Aca filtro los tramites con en estado inspeccionado que son de el, y creo una vista para que pueda ver el historial de inspecciones</p>
+              
+              {% block contenido_tramites_inspeccionados %}
+                {% include "persona/inspector/tramites_inspeccionados.html" with estados=ctxtramitesinspeccionados%}
+              {% endblock %}
               <!-- Table -->
 
             </div>

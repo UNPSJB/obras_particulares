@@ -1,0 +1,43 @@
+{% block contenido_tramites_inspeccionados %}
+  <div class="table-responsive">
+      <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+          <!-- Cabecera -->
+          <thead>
+              <tr>
+                  <th>Fecha Inicio</th>
+                  <th>Tipo</th>
+                  <th>Profesional</th>
+                  <th>Propietario</th>
+                  <th>m2</th>
+                  <th>Revisar</th>
+              </tr>
+          </thead>
+          <!-- Mostramos los datos de las tablas -->
+
+
+
+          <tbody>
+
+          {% if estados %}
+
+              {% for estado in estados %}
+                <tr>
+                    <td class="col-xs-2">{{ estado.tramite.medidas}}</td>
+                    <td class="col-xs-1">{{ estado.tramite.tipo_obra }} </td>
+                    <td class="col-xs-4">{{ estado.tramite.profesional}}</td>
+                    <td class="col-xs-4">{{ estado.tramite.propietario}}</td>
+                    <td class="col-xs-1">{{ estado.tramite.medidas }} </td>
+                    <td align="center" class="col-xs-2">
+                        <a href="">
+                            <button type="button" class="btn btn-primary btn-xs" name="Ver documentos">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver documentos</span>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+              {% endfor %}
+          {% endif%}
+          </tbody>
+      </table>
+  </div>
+{% endblock %}
