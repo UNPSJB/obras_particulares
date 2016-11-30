@@ -1,52 +1,5 @@
-<!DOCTYPE html>
 {% load staticfiles %}
 {% load crispy_forms_tags%}
-<html>
 
-	<head>
+{% crispy form %}
 
-	    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
-
-	</head>
-
-	<body>
-
-			{% crispy form %}
-
-
-	            
-
-				<!--  Esto es lo que tiene el crispy, lo puedo maquetar pero si se agregan cambios , eso aca no se refleja, no es dinamico, como el crispy-->  
-				<!-- 
-	            <form method="post">
-	            	<input name="csrfmiddlewaretoken" value="QE8vbFMcrXvWcQTSpEA0ucsHANcCB2rtK5k9gvfhJSE9b1DfrKrBblm7eE1olGmk" type="hidden"> 
-					<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-	            	
-		            	<div id="div_id_username" class="form-group"> 
-		            		<label for="id_username" class="control-label  requiredField">Nombre de usuario:<span class="asteriskField">*</span> </label> 
-		            		<div class="controls ">
-		            			 <input class="textinput textInput form-control input-sm"" id="id_username" maxlength="150" name="username" required="" type="text"> 
-		            			 <p id="hint_id_username" class="help-block">Obligatorio. Longitud máxima de 150 caracteres. Solo puede estar formado por letras, números y los caracteres @/./+/-/_.</p> 
-		            		</div> 
-		            	</div> 
-					</div>
-					<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-		            	<div id="div_id_password" class="form-group"> 
-		            		<label for="id_password" class="control-label  requiredField">Contraseña:<span class="asteriskField">*</span> </label> 
-		            		<div class="controls "> 
-		            			<input class="textinput textInput form-control input-sm"" id="id_password" maxlength="128" name="password" required="" type="text">
-		            		</div> 
-		            	</div> 
-	            	</div>
-	            	<div class="form-group"> 
-	            		<div class="controls "> 
-	            			<input name="guardar_usuario" value="Guardar" class="btn btn-primary" id="submit-id-guardar_usuario" type="submit"> 
-	            		</div> 
-	            	</div>
-	            </form>
-	            -->
-	            
-
-	</body>
-
-</html>

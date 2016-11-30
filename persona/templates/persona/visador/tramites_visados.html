@@ -1,6 +1,6 @@
 {% block contenido_tramites_aceptados %}
   <div class="table-responsive">
-      <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+      <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
           <!-- Cabecera -->
           <thead>
               <tr>
@@ -9,23 +9,26 @@
                   <th>Profesional</th>
                   <th>Propietario</th>
                   <th>m2</th>
-                  <th >Revisar</th>
+                  <th>Revisar</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
+
+
+
           <tbody>
 
-          {% if tramites %}
+          {% if estados %}
 
-              {% for tramite in tramites %}
+              {% for estado in estados %}
                 <tr>
-                    <td class="col-xs-2">{{ tramite.estado.timestamp }}</td>
-                    <td class="col-xs-1">{{ tramite.tipo_obra }} </td>
-                    <td class="col-xs-4">{{ tramite.profesional}}</td>
-                    <td class="col-xs-4">{{ tramite.propietario}}</td>
-                    <td class="col-xs-1">{{ tramite.medidas }} </td>
-                    <td align="center" class="col-xs-1">
-                        <a href="{% url 'ver_documentos_para_visado' tramite.pk %}">
+                    <td class="col-xs-2">{{ estado.tramite.medidas}}</td>
+                    <td class="col-xs-1">{{ estado.tramite.tipo_obra }} </td>
+                    <td class="col-xs-4">{{ estado.tramite.profesional}}</td>
+                    <td class="col-xs-4">{{ estado.tramite.propietario}}</td>
+                    <td class="col-xs-1">{{ estado.tramite.medidas }} </td>
+                    <td align="center" class="col-xs-2">
+                        <a href="">
                             <button type="button" class="btn btn-primary btn-xs" name="Ver documentos">
                                 <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver documentos</span>
                             </button>

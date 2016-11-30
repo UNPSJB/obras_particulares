@@ -19,7 +19,7 @@ class FormularioIniciarTramite(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FormularioIniciarTramite, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
+        #self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
         self.helper.form_tag = False
 
     def save(self, commit=True, propietario=None):

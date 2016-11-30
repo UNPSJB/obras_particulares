@@ -63,7 +63,7 @@ class Persona(models.Model):
     usuario = models.OneToOneField(Usuario, blank=True, null=True)
 
     def __str__(self):
-        return "Apellido: {}, Nombre: {}, Telefono: {}" .format(self.apellido, self.nombre, self.telefono)
+        return "{}, {}" .format(self.apellido, self.nombre)
 
     def crear_usuario(self, *extra_grupos):
         grupos = list(extra_grupos)
@@ -94,7 +94,6 @@ class Persona(models.Model):
 
     def get_propietario(self):
         return self.propietario
-
 
 def generar_password():
     longitud = 6

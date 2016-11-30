@@ -162,3 +162,4 @@ class FormularioArchivoPago(forms.Form):
         super(FormularioArchivoPago, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', 'Submit', css_class="btn btn-default"))
+

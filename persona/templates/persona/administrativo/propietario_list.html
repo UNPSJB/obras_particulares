@@ -1,49 +1,42 @@
 {% load staticfiles %}
 
+
 {% block contenido_propietario %} 
   <div class="table-responsive">
-      <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-          {% if personas %}
-              <!-- Cabecera -->
-              <thead>
-                  <tr>
-                      <td>Nombre</td>
-                      <td>Apellido</td>
-                      <td>CUIL</td>
-                      <td>Telefono</td>
-                      <td>Profesional nombre apellido matricula</td>
-                      <td>Ver datos tramite</td>
-                      <td>Habilitar propietario</td>
-                  </tr>
-              </thead>
-              <!-- Mostramos los datos de las tablas -->
-              <tbody>
+      <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+          <!-- Cabecera -->
+          <thead>
+              <tr>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>CUIL</th>
+                  <th>Telefono</th>
+                  <th>Email</th>
+                  <th>Habilitar propietario</th>
+              </tr>
+          </thead>
+          <!-- Mostramos los datos de las tablas -->
+          <tbody>
+          {% if propietarios %}
+              {% for propietario in propietarios %}
+                <tr>
+                    <td class="col-xs-2">{{ propietario.persona.nombre }}</td>
+                    <td class="col-xs-2">{{ propietario.persona.apellido }} </td>
+                    <td class="col-xs-2">{{ propietario.persona.cuil }}</td>
+                    <td class="col-xs-2">{{ propietario.persona.telefono }}</td>
+                    <td class="col-xs-2">{{ propietario.persona.mail}}</td>
+                    <td align="center" class="col-xs-2">
+                    <a href="{% url 'crear_usuario' pk_propietario=propietario.persona.id %}">
+                      <button type="button" class="btn btn-primary btn-xs" name="habilitar">
+                        Habilitar
+                      </button>
+                    </a>
 
-                  {% for propietario in personas %}
-                    <tr>
-                      <td>{{ propietario.persona.nombre }}</td>
-                      <td>{{ propietario.persona.apellido }} </td>
-                      <td>{{ propietario.persona.cuil }}</td>
-                      <td>{{ propietario.persona.telefono }}</td>
-                      <td>
-                            {{ propietario.tramite.profesional.persona.nombre }}
-                            {{ propietario.tramite.profesional.persona.nombre }}
-                            {{ propietario.tramite.profesional.matricula }}
-                      </td>
-                      <td>{{ propietario.tramite.id }}</td>
-                      <td>
-                        <a href="{% url 'crear_usuario' pk_persona=propietario.id %}">
-                          <button type="button" class="btn btn-primary" name="habilitar">
-                            Habilitar
-                          </button>
-                        </a>
-                      </td>
-                    </tr>
-                  {% endfor %}
-              </tbody>
-          {% else %}
-            <h4>No hay propietarios para habilitar</h4>
-          {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+          {% endif%}
+          </tbody>
       </table>
   </div>
 {% endblock %}

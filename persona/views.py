@@ -11,7 +11,7 @@ from documento.forms import metodo
 from tramite.models import *
 from django.core.mail import send_mail
 from persona.models import *
-from tramite.models import Tramite
+from tramite.models import Tramite, Estado
 from django.views.generic.detail import DetailView
 import re
 from datetime import datetime
@@ -95,6 +95,10 @@ def mostrar_profesional(request):
 
     return render(request, 'persona/profesional/profesional.html', contexto)
 
+def mostrar_jefe_inspector(request):
+    return render(request, 'persona/jefe_inspector/jefe_inspector.html')
+
+
 def mostrar_propietario(request):
 
     contexto = {
@@ -119,7 +123,6 @@ def listado_tramites_propietario(request):
     tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
 
     return tramites_de_propietario
-
 
 FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioTipoDocumento,
@@ -174,6 +177,8 @@ def registrar_pago_tramite(request):
     else:
         archivo_pago_form = FormularioArchivoPago()
 
+    #formulario = {'archivo_pago_form' : archivo_pago_form}
+
     return archivo_pago_form
 
 
@@ -185,6 +190,7 @@ def mostrar_administrativo(request):
         "ctxprofesional": profesional_list(request),
         "ctxpropietario": propietario_list(request),
         "ctxtramitesiniciados": listado_de_tramites_iniciados(request),
+        "ctxtramitescorregidos": tramite_corregidos_list(request),
         "ctxsolicitudesfinalobra": solicitud_final_obra_list(request),
 	    "ctxpago" : registrar_pago_tramite(request)
 
@@ -222,14 +228,21 @@ def profesional_list(request):
 
 def propietario_list(request):
     propietarios = Propietario.objects.all()
-    contexto = {'propietarios': propietarios}
-    #return render(request, 'persona/administrativo/propietario_list.html', contexto)
+    propietarios_sin_usuario = filter(lambda propietario: (propietario.persona.usuario is None and propietario.persona is not None ), propietarios)
+    contexto = {'propietarios': propietarios_sin_usuario}
     return contexto
 
 # es el de tramites iniciados
 def listado_de_tramites_iniciados(request):
     tramites = Tramite.objects.en_estado(Iniciado)
     contexto = {'tramites': tramites}
+    return contexto
+
+def tramite_corregidos_list(request):
+    tramites = Tramite.objects.all()
+    #tramites = filter(lambda tramite: (tramite.estado_actual is  is not None), personas)
+    contexto = {'tramites': tramites}
+
     return contexto
 
 
@@ -280,7 +293,22 @@ def ver_documentos_tramite_profesional(request, pk_tramite):
 @login_required(login_url="login")
 @grupo_requerido('visador')
 def mostrar_visador(request):
-    contexto = tramites_aceptados(request)
+
+    #en esto estoy porque quiero mostra los documentos, pero de visado
+
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.VISAR)
+    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
+    inicial = metodo(tipos_de_documentos_requeridos)
+    documento_set = FormularioDocumentoSet(initial=inicial)
+
+    #...........
+
+
+    contexto = {
+        "ctxtramaceptado": tramites_aceptados(request),
+        "ctxtramvisados": tramites_visados(request),
+        "ctxdoc":documento_set,
+    }
     return render(request, 'persona/visador/visador.html', contexto)
 
 def tramites_aceptados(request):
@@ -293,18 +321,21 @@ def ver_documentos_para_visado(request, pk_tramite):
     return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite})
 
 def aprobar_visado(request, pk_tramite):
+
     usuario = request.user
-    monto= 15
+    monto = float(request.GET['monto_a_pagar'])
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.VISAR, request.user, monto)
+    tramite.hacer(tramite.VISAR, usuario, monto) #sacar el monto del modelo
+    tramite.monto_a_pagar= monto
+    tramite.save()
     messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')
     return redirect('visador')
 
 def no_aprobar_visado(request, pk_tramite):
     usuario = request.user
-    observacion = "esta es la observacion"
+    observacion = request.GET['msg']
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.CORREGIR, request.user, observacion)
+    tramite.hacer(tramite.CORREGIR, usuario, observacion)
     messages.add_message(request, messages.SUCCESS, 'Tramite con visado no aprobado')
     return redirect('visador')
 

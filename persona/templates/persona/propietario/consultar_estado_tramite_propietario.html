@@ -6,14 +6,13 @@
           <!-- Cabecera -->
           <thead>
               <tr>
-                  <td>Datos del Profesional</td>
-                  <td>Estado del tramite</td>
-                  <td>Medidas</td>
-                  <td>Tipo de Obra</td>
-                  <td>Monto total a pagar</td>
-                  <td>Total pagado</td>
-                  <td>Total a pagar</td>
-                  <td>Final obra</td>
+                  <th>Profesional</th>
+                  <th>Estado</th>
+                  <th>Medidas</th>
+                  <th>Tipo</th>
+                  <th>Monto total a pagar</th>
+                  <th>Total pagado</th>
+                  <th>Total a pagar</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -21,20 +20,13 @@
           {% if tramites_de_propietario %}
               {% for tramite in tramites_de_propietario %}
                 <tr>
-                  <td>{{tramite.profesional}}</td>
-                  <td>{{tramite.estado}}</td>
-                  <td>{{tramite.medidas}}</td>
-                  <td>{{tramite.tipo_obra}}</td>
-                  <td>{{tramite.monto_a_pagar}}</td>
-                  <td>{{tramite.monto_pagado}}</td>
-                  <td>{{ tramite.saldo_restante_a_pagar}}</td>
-                  <td>
-                        <a href="{% url 'propietario_solicita_final_obra' pk_tramite=tramite.id %}">
-                          <button type="button" class="btn btn-primary" name="final_obra">
-                            Solicitar final obra
-                          </button>
-                        </a>
-                  </td>
+                  <td class="col-xs-2">{{tramite.profesional}}</td>
+                  <td class="col-xs-1">{{tramite.estado}}</td>
+                  <td class="col-xs-1">{{tramite.medidas}}</td>
+                  <td class="col-xs-2">{{tramite.tipo_obra}}</td>
+                  <td class="col-xs-2">{{tramite.monto_a_pagar}}</td>
+                  <td class="col-xs-2">{{tramite.monto_pagado}}</td>
+                  <td class="col-xs-2">{{ tramite.saldo_restante_a_pagar}}</td>
                 </tr>
               {% endfor %}
           {% endif%}

@@ -50,7 +50,7 @@ class Tramite(models.Model):
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50,blank=True)
     monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
-    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
+    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2)
     objects = TramiteManager()
 
     def __str__(self):
@@ -103,7 +103,7 @@ class Tramite(models.Model):
 
 
     def calcular_monto_pagado(self, monto):
-        self.monto_pagado += monto
+        self.monto_pagado = self.monto_pagado + monto
         self.save()
         return self.monto_pagado
 
@@ -137,6 +137,10 @@ class Estado(models.Model):
     def register(cls, klass):
         cls.TIPOS.append((klass.TIPO, klass.__name__.lower()))
 
+
+    def get_usuario(self):
+        return self.usuario
+
     def __str__(self):
         return self.__class__.__name__
 
@@ -162,7 +166,7 @@ class Aceptado(Estado):
 
 class Visado(Estado):
     TIPO = 3
-    monto = models.FloatField(blank=True, null=True)
+    monto = models.FloatField(blank=True, null=True) #sacar esto , no se usa
 
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)

@@ -4,27 +4,27 @@
 
 
 {% block barra %}
-<ul class="sidebar sidebar-1" xmlns="http://www.w3.org/1999/html">
-		<font size="2">
-			<li><a class="current"><font color="tomato">Profesional</font> </a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
-				   aria-expanded="false" aria-controls="collapseOne">Iniciar Trámite</a>
-			</li>
+<ul class="sidebar sidebar-1">
+	<font size="2">
+		<li><a class="current"><font color="tomato">Profesional</font> </a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+			   aria-expanded="false" aria-controls="collapseOne">Iniciar Trámite</a>
+		</li>
 
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
-				   aria-expanded="false" aria-controls="collapseTwo">Cargar correcciones a un Trámite</a>
-			</li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
-				   aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
-			</li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
-				   aria-expanded="false" aria-controls="collapseThree">Modificar mis datos personales</a>
-			</li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"
-				   aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
-			</li>
-		</font>
-	</ul>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
+			   aria-expanded="false" aria-controls="collapseTwo">Cargar correcciones a un Trámite</a>
+		</li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
+			   aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
+		</li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
+			   aria-expanded="false" aria-controls="collapseThree">Modificar mis datos personales</a>
+		</li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"
+			   aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
+		</li>
+	</font>
+</ul>
 {% endblock %}
 
 		{% block contenido %}
@@ -55,7 +55,6 @@
 												{% crispy documento_set %}
 
 											</div>
-											<!---Recorro y muestro la lista de tipos de documentas-->
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 												<br>
 												{% if propietario_form %}
@@ -194,3 +193,5 @@
 
 
 {% endblock %}
+
+

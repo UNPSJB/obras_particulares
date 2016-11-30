@@ -1,15 +1,15 @@
 {% load staticfiles %}
 
 
-{% block contenido_tramite_final_obra %}
+{% block contenido_tramite_corregidos %}
   <div class="table-responsive">
       <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
           <!-- Cabecera -->
           <thead>
               <tr>
-                  <th>Numero</th>
+                  <!--<th>Numero</th>-->
                   <th>Medidas</th>
-                  <th>Tipo</th>
+                  <th>Tipo de Obra</th>
                   <th>Estado</th>
                   <th>Profesional</th>
                   <th>Propietario</th>
@@ -22,27 +22,27 @@
           {% if tramites %}
               {% for tramite in tramites %}
                 <tr>
-                  <td>{{ tramite.numero }}</td>
-                  <td>{{ tramite.medidas }} </td>
-                  <td>{{ tramite.tipoObra }}</td>
-                  <td>{{ tramite.estado }}</td>
-                  <td>{{ tramite.profesional.persona.nombre }}
-                      {{ tramite.profesional.persona.apellido }}
-                      {{ tramite.profesional.persona.profesion }}
-                      {{ tramite.profesional.persona.matricula }}
+                  <!--<td>{{ tramite.numero }}</td>-->
+                  <td class="col-xs-1">{{ tramite.medidas }} </td>
+                  <td class="col-xs-1">{{ tramite.tipoObra }}</td>
+                  <td class="col-xs-1">{{ tramite.estado }}</td>
+                  <td class="col-xs-3">{{ tramite.profesiona.persona.nombre }}
+                      {{ tramite.profesiona.persona.apellido }}
+                      {{ tramite.profesiona.persona.profesion }}
+                      {{ tramite.profesiona.persona.matricula }}
                   </td>
-                  <td>{{ persona.propietario.nombre }}
+                  <td class="col-xs-3">{{ persona.propietario.nombre }}
                       {{ persona.propietario.apellido }}
-                  </td>
-                  <td>
+                  </td >
+                  <td align="center" class="col-xs-2">
                     <a href="">
                       <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
-                        Ver documentacion
+                        Ver certificado
                       </button>
                     </a>
                   </td>
-                  <td>
-                    <a href="{% url 'habilitar_final_obra' pk_tramite=tramite.id %}">
+                  <td align="center" class="col-xs-2">
+                    <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
                       <button type="button" class="btn btn-primary btn-xs" name="habilitar">
                         Habilitar
                       </button>
