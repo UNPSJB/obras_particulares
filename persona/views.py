@@ -316,6 +316,14 @@ def tramites_aceptados(request):
     contexto = {'tramites_para_visar': aceptados}
     return contexto
 
+def tramites_visados(request):
+    usuario = request.user
+    estados = Estado.objects.all()
+    tipo = 3 #es el tipo de visado
+    estados_visado = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
+    contexto = {'estados': estados_visado}
+    return contexto
+
 def ver_documentos_para_visado(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite})
