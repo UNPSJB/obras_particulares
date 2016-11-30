@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load crispy_forms_tags%}
 
 {% block estilos %}
 
@@ -34,7 +35,7 @@
                                     <font color="#337ab7" size="4">{{documento.tipo_documento}}</font>
                                     <form action="">
                                         <p align="right" >
-                                        <a href="#" class="btn btn-primary"><span class="glyphicon glyphicon-save-file">Descargar</span></a>
+                                        <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save-file"></i><span> Descargar</span></a>
                                         </p>
                                     </form>
                                 </div>
@@ -44,44 +45,59 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="container-fluid">
                             <div class="row">
-                                <hr>
 
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="">Monto:</label>
-                                                <input class="form-control input-sm" id="id_monto" name="" type="text" placeholder="Ingresar monto" title="Ingresar monto" maxlength="9" />
-                                            </div>
+                                        <div class="form-group">
+                                            <label for="id_monto_a_pagar">Monto:</label>
+                                            <input type="hidden" id="id_tram" value="{{tramite.id}}">
+                                            <input class="form-control input-sm" id="id_monto_a_pagar" name="" type="text" placeholder="Ingresar monto" title="Monto" maxlength="10" onChange="validarSiNumero(this.value);"/>
                                         </div>
-                                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                                            <div class="form-group">
-                                                <label for="">Correcciones:</label>
-                                                <input class="file" id="id_correcciones" type="file"  data-preview-file-type="any" title="Cargar Planilla de Visado"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="container-fluid">
-                                        <br>
-                                        <div class="row">
-                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                                                <a href="{% url 'aprobar_visado' tramite.pk %}">
-                                                    <button class="btn btn-primary btn-sm" type="submit" title="Envia documentos corregidos">
-                                                        Aprobar visado
-                                                    </button>
-                                                </a>
-                                                <a href="{% url 'no_aprobar_visado' tramite.pk %}">
-                                                    <button class="btn btn-danger btn-sm" type="submit" title="Envia documentos corregidos">
-                                                        Enviar correcciones
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                <br>
+                                        <script>
+                                            function aprobar(){
+                                                monto = $("#id_monto_a_pagar").val();
+                                                id_tram = $("#id_tram").val();
+                                                url = '/persona/aprobar_visado/'+id_tram+'/?monto_a_pagar='+monto;
+                                                location.href = url;
+                                            }
+                                        </script>
+
+                                        <a href="javascript:aprobar();">
+                                            <button class="btn btn-primary btn-sm" type="submit" title="Aprobar el visado">
+                                                Aprobar visado
+                                            </button>
+                                        </a>
+
+
+
+                                        <div class="form-group">
+                                            <label for="">Observaciones:</label>
+                                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                                            <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                                        </div>
+
+
+
+                                        <script>
+                                            function noaprobar(){
+                                                obs = $("#id_observaciones").val();
+                                                id_tramite = $("#id_tramite").val();
+                                                url = '/persona/no_aprobar_visado/'+id_tramite+'/?msg='+obs;
+                                                location.href = url;
+                                            }
+                                        </script>
+
+                                        <a href="javascript:noaprobar();">
+                                            <button class="btn btn-danger btn-sm" type="submit" title="Envia Planilla de visado">
+                                                Enviar correcciones
+                                            </button>
+                                        </a>
+
+
+-
+
                             </div>
                         </div>
-                     </div>
+                    </div>
                 </div>
             </div>
         </div>

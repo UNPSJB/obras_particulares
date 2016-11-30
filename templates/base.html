@@ -17,6 +17,9 @@
 	<script src="{% static 'js/bootstrap.min.js' %}"></script>
 	<script src="{% static 'js/jquery-ui.min.js' %}"></script>
 
+	<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.min.css' %}"/>
+
 	{% block estilos %}
 
 	{% endblock %}
@@ -110,12 +113,52 @@
 
 </body>
 
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+	<script>
+		window.setTimeout(function() {
+			$(".alert").fadeTo(250, 0).slideUp(250, function(){
+				$(this).remove();
+			});
+		}, 2000);
+	</script>
+
 	<script>
 		$('.textinput').addClass('input-sm');
 	</script>
 
 	<script>
+		$('.form-control').addClass('input-sm');
+	</script>
+
+	<script>
 		$('.clearablefileinput').addClass('file');
+	</script>
+
+	<script>
+		$(document).ready(function()
+		{
+		var table = $('.table').DataTable( {
+		"language": {
+		url: "/static/localizacion/es_ES.json"
+		}
+		} );
+
+		$('#tabla tbody').on( 'click', 'tr', function()
+		{
+		if ($(this).hasClass('selected') )
+		{
+		$(this).removeClass('selected');
+
+		}
+		else
+		{
+		table.$('tr.selected').removeClass('selected');
+		$(this).addClass('selected');
+		}
+		});
+
+		});
 	</script>
 
 	{% block scripts %}

@@ -2,23 +2,24 @@
 {% load staticfiles %}
 
 {% block barra %}
-	<div class="list-group">
-		<font face="serif" color="blue" size="2">
-				<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a>
-				<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
-				<a class="list-group-item" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
-			</font>
-		</div>
+<ul class="sidebar sidebar-1">
+	<font size="2">
+		<li><a class="current"><font color="tomato">Propietario</font> </a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a></li>
+	</font>
+</ul>
 {% endblock %}
 
 
 {% block contenido %}
 		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-		  <div class="panel panel-default">
-			<div class="panel-heading" role="tab" id="headingOne">
+		  <div class="panel panel-custom">
+			<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
 			  <h5 class="panel-title">
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-				  <small>Modificar mis datos personales</small>
+				  <font color="#ffffff" size="2">Modificar mis datos personales</font>
 				</a>
 			  </h5>
 			</div>
@@ -72,11 +73,11 @@
 			</div>
 		  </div>
 
-		  <div class="panel panel-default">
-			<div class="panel-heading" role="tab" id="headingFive">
+		  <div class="panel panel-custom">
+			<div class="panel-heading panel-heading-custom box" role="tab" id="headingFive">
 			  <h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-				  <small>Solicitar final de obra a un Trámite</small>
+				  <font color="#ffffff" size="2">Solicitar final de obra a un Trámite</font>
 				</a>
 			  </h5>
 			</div>
@@ -126,11 +127,11 @@
 			</div>
 		  </div>
 
-		  <div class="panel panel-default">
-			<div class="panel-heading" role="tab" id="headingFour">
+		  <div class="panel panel-custom">
+			<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
 			  <h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-				  <small>Consultar estado de mis Trámites</small>
+				  <font color="#ffffff" size="2">Consultar estado de mis Trámites</font>
 				</a>
 			  </h5>
 			</div>

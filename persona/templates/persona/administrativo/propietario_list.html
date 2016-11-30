@@ -3,46 +3,35 @@
 
 {% block contenido_propietario %} 
   <div class="table-responsive">
-      <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+      <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
           <!-- Cabecera -->
           <thead>
               <tr>
-                  <td>Nombre</td>
-                  <td>Apellido</td>
-                  <td>CUIL</td>
-                  <td>Telefono</td>
-                  <td>Profesional nombre apellido matricula</td>
-                  <td>Ver datos tramite</td>
-                  <td>Habilitar propietario</td>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>CUIL</th>
+                  <th>Telefono</th>
+                  <th>Email</th>
+                  <th>Habilitar propietario</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
           <tbody>
-          {% if personas %}
-              {% for persona in personas %}
+          {% if propietarios %}
+              {% for propietario in propietarios %}
                 <tr>
-                  <td>{{ persona.nombre }}</td>
-                  <td>{{ persona.apellido }} </td>
-                  <td>{{ persona.cuil }}</td>
-                  <td>{{ persona.telefono }}</td>
-                  <td>{{ persona.propietario.tramite.profesional.nombre }}
-                        {{ persona.propietario.tramite.profesional.apellido }}
-                        {{ persona.propietario.profesional.matricula }}
-                  </td>
-                  <td>{{ persona.propietario.tramite.id }}</td>
-                  <td>
-                    <a href="">
-                      <button type="button" class="btn btn-primary" name="ver-tramite">
-                        Ver tramite
-                      </button>
-                    </a>
-                  </td>
-                  <td>
-                    <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
-                      <button type="button" class="btn btn-primary" name="habilitar">
+                    <td class="col-xs-2">{{ propietario.persona.nombre }}</td>
+                    <td class="col-xs-2">{{ propietario.persona.apellido }} </td>
+                    <td class="col-xs-2">{{ propietario.persona.cuil }}</td>
+                    <td class="col-xs-2">{{ propietario.persona.telefono }}</td>
+                    <td class="col-xs-2">{{ propietario.persona.mail}}</td>
+                    <td align="center" class="col-xs-2">
+                    <a href="{% url 'crear_usuario' pk_propietario=propietario.persona.id %}">
+                      <button type="button" class="btn btn-primary btn-xs" name="habilitar">
                         Habilitar
                       </button>
                     </a>
+
                   </td>
                 </tr>
               {% endfor %}

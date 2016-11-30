@@ -128,6 +128,10 @@ class Estado(models.Model):
     def register(cls, klass):
         cls.TIPOS.append((klass.TIPO, klass.__name__.lower()))
 
+
+    def get_usuario(self):
+        return self.usuario
+
     def __str__(self):
         return self.__class__.__name__
 
@@ -156,7 +160,7 @@ class Aceptado(Estado):
 
 class Visado(Estado):
     TIPO = 3
-    monto = models.FloatField(blank=True, null=True)
+    monto = models.FloatField(blank=True, null=True) #sacar esto , no se usa
 
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)

@@ -10,7 +10,7 @@
 			<li><a href="#" class="current"><font color="tomato">Visador</font></a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Iniciar Visado</a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar mis Visados</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree">Cargar mis Visados</a></li>
+			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree">Cargar mis Visados</a></li>-->
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a></li>
 			<li><a href="#" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
@@ -43,7 +43,7 @@
 								<div class="row">
 									<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
 										{% block contenido_tramites_aceptados%}
-											{% include "persona/visador/tramites_aceptados.html" with tramites=ctxtramaceptados.tramites %}
+											{% include "persona/visador/tramites_aceptados.html" with tramites=ctxtramaceptado.tramites%}
 										{% endblock %}
 									</div>
 								</div>
@@ -69,12 +69,17 @@
 			<div class="panel-body">
 				<div class="container-fluid">
 					<div class="row">
-						ver si va esto!!!!!
+						{% block contenido_tramites_visados%}
+							{% include "persona/visador/tramites_visados.html" with estados=ctxtramvisados.estados%}
+						{% endblock %}
 					</div>
 				</div>
 			</div>
 		 </div>
 	   </div>
+
+
+		<!--
 
 	   <div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingthree">
@@ -89,7 +94,7 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							 <!-- Table -->
+
 							<div class="table-responsive">
 								<table  class="table table-striped table-hover table-condensed" style="background: white;">
 									<thead>
@@ -128,7 +133,7 @@
 			</div>
 		 </div>
 	   </div>
-
+	-->
 	  <div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
 		  <h5 class="panel-title">
@@ -144,7 +149,9 @@
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<div class="container-fluid">
 						<br>
-							<form action="" class="" >
+
+{{ctxdoc}}
+							<!--<form action="" class="" >
 								<div class="row">
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 											<div class="form-group">
@@ -178,6 +185,7 @@
 									</div>
 								</div>
 							</form>
+							-->
 							<br>
 						</div>
 					</div>
@@ -218,5 +226,9 @@
 			}
 		}
 	</script>
+
+
+
+
 
 {% endblock %}

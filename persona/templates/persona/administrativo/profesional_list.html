@@ -7,15 +7,15 @@
           <!-- Cabecera -->
           <thead>
               <tr>
-                  <td>Nombre</td>
-                  <td>Apellido</td>
-                  <td>CUIL</td>
-                  <td>Telefono</td>
-                  <td>Profesion</td>
-                  <td>Categoria</td>
-                  <td>Matricula</td>
-                  <td>Ver certificados</td>
-                  <td>Habilitar profesional</td>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>CUIL</th>
+                  <th>Telefono</th>
+                  <th>Profesion</th>
+                  <th>Categoria</th>
+                  <th>Matricula</th>
+                  <th>Ver certificados</th>
+                  <th>Habilitar profesional</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -23,23 +23,23 @@
           {% if personas %}
               {% for persona in personas %}
                 <tr>
-                  <td>{{ persona.nombre }}</td>
-                  <td>{{ persona.apellido }} </td>
-                  <td>{{ persona.cuil }}</td>
-                  <td>{{ persona.telefono }}</td>
-                  <td>{{ persona.profesional.profesion }}</td>
-                  <td>{{ persona.profesional.categoria }}</td>
-                  <td>{{ persona.profesional.matricula }}</td>
-                  <td>
+                  <td class="col-xs-1">{{ persona.nombre }}</td>
+                  <td class="col-xs-1">{{ persona.apellido }} </td>
+                  <td class="col-xs-1">{{ persona.cuil }}</td>
+                  <td class="col-xs-1">{{ persona.telefono }}</td>
+                  <td class="col-xs-1">{{ persona.profesional.profesion }}</td>
+                  <td class="col-xs-1">{{ persona.profesional.categoria }}</td>
+                  <td class="col-xs-1">{{ persona.profesional.matricula }}</td>
+                  <td align="center" class="col-xs-2">
                         <a href="{% url 'ver_certificado' pk=persona.id %}">
-                          <button type="" class="btn btn-primary input-sm" name="ver certificado">
+                          <button type="" class="btn btn-primary btn-xs" name="ver certificado">
                               Ver Certificado
                           </button>
                         </a>
                   </td>
-                  <td>
+                  <td align="center" class="col-xs-2">
                     <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
-                      <button type="button" class="btn btn-primary" name="habilitar">
+                      <button type="button" class="btn btn-primary btn-xs" name="habilitar">
                         Habilitar
                       </button>
                     </a>

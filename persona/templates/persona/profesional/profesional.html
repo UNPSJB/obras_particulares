@@ -4,27 +4,27 @@
 
 
 {% block barra %}
-<ul class="sidebar sidebar-1" xmlns="http://www.w3.org/1999/html">
-		<font size="2">
-			<li><a class="current"><font color="tomato">Profesional</font> </a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
-				   aria-expanded="false" aria-controls="collapseOne">Iniciar Trámite</a>
-			</li>
+<ul class="sidebar sidebar-1">
+	<font size="2">
+		<li><a class="current"><font color="tomato">Profesional</font> </a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
+			   aria-expanded="false" aria-controls="collapseOne">Iniciar Trámite</a>
+		</li>
 
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
-				   aria-expanded="false" aria-controls="collapseTwo">Cargar correcciones a un Trámite</a>
-			</li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
-				   aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
-			</li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
-				   aria-expanded="false" aria-controls="collapseThree">Modificar mis datos personales</a>
-			</li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"
-				   aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
-			</li>
-		</font>
-	</ul>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
+			   aria-expanded="false" aria-controls="collapseTwo">Cargar correcciones a un Trámite</a>
+		</li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
+			   aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
+		</li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
+			   aria-expanded="false" aria-controls="collapseThree">Modificar mis datos personales</a>
+		</li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"
+			   aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
+		</li>
+	</font>
+</ul>
 {% endblock %}
 
 		{% block contenido %}
@@ -43,40 +43,29 @@
 						<div class="row">
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								<div class="container-fluid">
-									<form action="" class="post-form" method="POST">
-										<div class="row">
+									<div class="row">
+										<form action="{% url 'profesional' %}" class="uniForm" method="post" enctype="multipart/form-data">
 											<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-												<br>
-
 												<font class="form-group" color="#337ab7"><h4 align="left">Datos de la Obra:</h4></font>
-
-											<form action="{% url 'profesional' %}" class="uniForm" method="post" enctype="multipart/form-data">
-												{% crispy tramite_form %}
-												{% crispy documento_set %}
-										
+													{% crispy tramite_form %}
 											</div>
-											<!---Recorro y muestro la lista de tipos de documentas-->
 											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-												<br>
+												<font class="form-group" color="#337ab7"><h4 align="left">Documentos:</h4></font>
+													{% crispy documento_set %}
+											</div>
+											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 												{% if propietario_form %}
 													<font color="#337ab7"><h4 align="left">Datos de Nuevo Propietario</h4></font>
 													{% crispy propietario_form %}
 												{% endif %}
 											</div>
-											</form>
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-
-												
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+												<input type="submit" name="tramite_submit" value="Guardar Tramite" class="btn btn-primary" id="submit-id-tramite_submit">
 											</div>
-										</div>
-										<div class="container-fluid">
-											<div class="row">
-												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-													
-												</div>
-											</div>
-										</div>
+										</form>
+									</div>
 									<br>
+									</form>
 								</div>
 							</div>
 						</div>
@@ -192,6 +181,17 @@
 		});
 	</script>
 
+	<script>
+
+    	$(function () {
+
+            if($("#id_propietario").val().length >1)
+            {
+                $('#collapseOne').collapse();
+            }
+        });
+
+	</script>
 
 {% endblock %}
 

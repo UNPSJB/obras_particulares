@@ -7,14 +7,14 @@
           <!-- Cabecera -->
           <thead>
               <tr>
-                  <td>Numero</td>
-                  <td>Medidas</td>
-                  <td>Tipo de Obra</td>
-                  <td>Estado</td>
-                  <td>Profesional</td>
-                  <td>Propietario</td>
-                  <td>Ver datos tramite</td>
-                  <td>Habilitar final de obra</td>
+                  <th>Numero</th>
+                  <th>Medidas</th>
+                  <th>Tipo</th>
+                  <th>Estado</th>
+                  <th>Profesional</th>
+                  <th>Propietario</th>
+                  <th>Ver datos tramite</th>
+                  <th>Habilitar final de obra</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -36,14 +36,14 @@
                   </td>
                   <td>
                     <a href="">
-                      <button type="button" class="btn btn-primary" name="ver-certificado">
+                      <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
                         Ver documentacion
                       </button>
                     </a>
                   </td>
                   <td>
                     <a href="{% url 'habilitar_final_obra' pk_tramite=tramite.id %}">
-                      <button type="button" class="btn btn-primary" name="habilitar">
+                      <button type="button" class="btn btn-primary btn-xs" name="habilitar">
                         Habilitar
                       </button>
                     </a>

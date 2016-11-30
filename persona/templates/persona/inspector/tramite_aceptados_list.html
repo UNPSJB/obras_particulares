@@ -8,13 +8,13 @@
             <!-- Cabecera -->
             <thead>
                 <tr>
-                    <td>Propietario</td>
-                    <td>Profesional</td>
-                    <td>Medidas</td>
-                    <td>Tipo de Obra</td>
-                    <td>Estado</td>
-                    <td>Rechazar</td>
-                    <td>Aceptar</td>
+                    <th>Propietario</th>
+                    <th>Profesional</th>
+                    <th>Medidas</th>
+                    <th>Tipo de Obra</th>
+                    <th>Estado</th>
+                    <th>Rechazar</th>
+                    <th>Aceptar</th>
                 </tr>
             </thead>
             <!-- Mostramos los datos de las tablas -->
@@ -22,21 +22,21 @@
             {% if tramites %}
                 {% for tramite in tramites %}
                     <tr>
-                        <td>{{ tramite.propietario }}</td>
-                        <td>{{ tramite.profesional }} </td>
-                        <td>{{ tramite.medidas }}</td>
-                        <td>{{ tramite.tipo_obra }}</td>
-                        <td>{{ tramite.estado_actual }}</td>
-                        <td>
+                        <td class="col-xs-3">{{ tramite.propietario }}</td>
+                        <td class="col-xs-3">{{ tramite.profesional }} </td>
+                        <td class="col-xs-1">{{ tramite.medidas }}</td>
+                        <td class="col-xs-1">{{ tramite.tipo_obra }}</td>
+                        <td class="col-xs-2">{{ tramite.estado_actual }}</td>
+                        <td align="center" class="col-xs-2">
                             <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary" name="Rechazar">
+                              <button type="button" class="btn btn-primary btn-xs" name="Rechazar">
                                 Rechazar
                               </button>
                             </a>
                         </td>
-                        <td>
+                        <td align="center" class="col-xs-2">
                             <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary" name="Aceptar">
+                              <button type="button" class="btn btn-primary btn-xs" name="Aceptar">
                                 Aceptar
                               </button>
                             </a>

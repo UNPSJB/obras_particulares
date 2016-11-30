@@ -12,7 +12,7 @@
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Alta profesional</a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Alta propietario</a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de final de obra</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Registrar pagos</a></li>
 
 			<li><a href="#" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
@@ -59,22 +59,19 @@
 			  </h5>
 			</div>
 	    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-      	<div class="panel-body">
-		    	<div class="container-fluid">
-		    		<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								{% block contenido_tramite_corregidos %}
-									{% include "persona/administrativo/tramite_corregidos_list.html" %}
-								{% endblock %}
-
-								<font color=red>revisar esto!!!!</font>
-
-							</div>
-		  			</div>
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block contenido_tramite_corregidos %}
+								{% include "persona/administrativo/tramite_corregidos_list.html" %}
+							{% endblock %}
+						</div>
 					</div>
-      	</div>
-		  </div>
+				</div>
+			</div>
 		</div>
+	  </div>
 
 	  <div class="panel">
 	    <div class="panel-heading box" role="tab" id="headingFive">
@@ -88,17 +85,13 @@
 	      <div class="panel-body">
 		    	<div class="container-fluid">
 		    		<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-	 							{% block contenido_tramite_final_obra %}
-									{% include "persona/administrativo/solicitud_final_obra_list.html" with tramites=ctxsolicitudesfinalobra.tramites %}
-								{% endblock %}
-
-								<font color=red>revisar esto!!!!</font>
-
-
-							</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block contenido_tramite_final_obra %}
+								{% include "persona/administrativo/solicitud_final_obra_list.html" with tramites=ctxsolicitudesfinalobra.tramites %}
+							{% endblock %}
+						</div>
 		  			</div>
-					</div>
+				</div>
 	     	</div>
 	    </div>
 	  </div>
@@ -112,17 +105,17 @@
 	      </h5>
 	    </div>
 	    <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
-	      <div class="panel-body">
+			<div class="panel-body">
 		   		<div class="container-fluid">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								{% block contenido_profesional %}
-									{% include "persona/administrativo/profesional_list.html" with personas=ctxprofesional.personas %}
-								{% endblock %}
-							</div>
-		  			</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block contenido_profesional %}
+								{% include "persona/administrativo/profesional_list.html" with personas=ctxprofesional.personas %}
+							{% endblock %}
+						</div>
 					</div>
-	      </div>
+				</div>
+	      	</div>
 	    </div>
 	  </div>
 
@@ -135,17 +128,17 @@
 	      </h5>
 	    </div>
 	    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-	      <div class="panel-body">
+			<div class="panel-body">
 		    	<div class="container-fluid">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								{% block contenido_propietario %}
-									{% include "persona/administrativo/propietario_list.html" with personas=ctxpropietario.propietarios %}
-								{% endblock %}
-					  		</div>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block contenido_propietario %}
+								{% include "persona/administrativo/propietario_list.html" with propietarios=ctxpropietario.propietarios %}
+							{% endblock %}
 						</div>
+					</div>
 		  		</div>
-				</div>
+		  	</div>
 	    </div>
 	  </div>
 
@@ -237,8 +230,6 @@
 
 {% block scripts %}
 
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
-
 
 	<script>
 		$("#perfil").fileinput({
@@ -253,12 +244,12 @@
 	</script>
 
 	<script>
-		$("#archivo_pago").fileinput({
+		$("#id_pagos").fileinput({
 			showCaption: false,
 			browseClass: "btn btn-primary btn-sm",
-			fileType: ".xlsx",
+			fileType: "any",
 			maxFileCount: 1,
-			browseLabel: 'Cargar archivo pago',
+			browseLabel: 'Cargar pagos de permisos',
 			showUpload: false,
 			showRemove: false
 		});
