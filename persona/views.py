@@ -427,11 +427,14 @@ def ver_inspecciones(request, pk_tramite):
 
 
 def ver_historial_tramite(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    pk = int(pk_tramite)
     estados = Estado.objects.all()
-    estados_tramite = filter(lambda e: e.tramite == pk_tramite, estados)
-    contexto = {'estados_tramite', estados_tramite}
-    return render(request, 'persona/propietario/ver_historial_tramite.html', contexto)
+    estados_de_tramite = filter(lambda e: (e.tramite.pk == 2), estados)
+    for e in estados:
+        print e
+
+    contexto = {'estados_de_tramite': estados_de_tramite}
+    return render(request, 'persona/propietario/ver_historial_tramite.html',contexto)
 
 
 def tramites_corregidos(request):
@@ -469,16 +472,12 @@ def aceptar_inspeccion(request, pk_tramite):
     return redirect('inspector')
 
 
-
-
 def enviar_correcciones(request, pk_tramite):
 
     usuario = request.user
     archivos = request.GET['msg']
     observacion = "Este tramite ya tiene los archivos corregidos cargados"
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-
-
     tramite.hacer(tramite.CORREGIR, request.user, observacion)
     messages.add_message(request, messages.SUCCESS, 'Tramite con documentos corregidos y enviados')
     return redirect('profesional')
