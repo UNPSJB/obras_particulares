@@ -118,6 +118,7 @@ class Estado(models.Model):
     usuario = models.ForeignKey(Usuario)
     timestamp = models.DateTimeField(auto_now_add=True)
 
+
     class Meta:
         get_latest_by = 'timestamp'
 
@@ -180,11 +181,11 @@ class Corregido(Estado):
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
 
 
-    def corregir(self, tramite, documentos, observacion=None):
-        e = Iniciado(tramite=tramite, observacion=observacion)
-        e.save()
-        e.agregar_documentacion(documentos_requeridos=documentos)
-        return e
+    def corregir(self, tramite, observacion=None):
+        #e = Iniciado(tramite=tramite, observacion=observacion)
+        #e.agregar_documentacion(documentos_requeridos=documentos)
+        #return e
+        return Iniciado(tramite=tramite, observacion=observacion)
 
 class Agendado(Estado):
     TIPO = 5
