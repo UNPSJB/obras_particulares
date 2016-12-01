@@ -137,6 +137,7 @@ def listado_tramites_propietario(request):
 
     return tramites_de_propietario
 
+
 FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioTipoDocumento,
     FormularioUsuarioPersona,  #este formulario no se necesitaria, solo se dan de alta visador, inspector y administrativo
@@ -365,24 +366,6 @@ def no_aprobar_visado(request, pk_tramite):
     return redirect('visador')
 
 
-#Inspector en jefe
-def mostrar_jefe_inspector(request):
-    contexto = {
-        "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
-    }
-    return render(request, 'persona/jefe_inspector/jefe_inspector.html',contexto)
-
-
-def tramite_con_inspecciones_list(request):
-    tramites = Tramite.objects.en_estado(Iniciado)
-    contexto = {'tramites': tramites}
-    return contexto
-
-# ve la inspeccion de un tramite o inspecciones hay que ver
-def ver_inspecciones(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html', {'tramite': tramite})
-
 def propietario_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
@@ -408,8 +391,29 @@ def solicitud_final_obra_list(request):
     contexto = {'tramites': tramites}
     return contexto
 
+
 def habilitar_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.FINALIZAR, request.user)
     messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
     return redirect('administrativo')
+
+
+#Inspector en jefe
+def mostrar_jefe_inspector(request):
+    contexto = {
+        "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
+    }
+    return render(request, 'persona/jefe_inspector/jefe_inspector.html',contexto)
+
+
+def tramite_con_inspecciones_list(request):
+    tramites = Tramite.objects.en_estado(ConInspeccion)
+    contexto = {'tramites': tramites}
+    return contexto
+
+
+# ve la inspeccion de un tramite o inspecciones
+def ver_inspecciones(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html', {'tramite': tramite})

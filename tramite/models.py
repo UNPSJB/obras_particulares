@@ -50,7 +50,7 @@ class Tramite(models.Model):
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50,blank=True)
     monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
-    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2)
+    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2,blank=True,null=True)
     objects = TramiteManager()
 
     def __str__(self):
@@ -200,7 +200,6 @@ class ConInspeccion(Estado):
     TIPO = 9
     fecha = models.DateTimeField(blank=False)
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
-
 
     def solicitar_final_obra(self, tramite):
         return FinalObraSolicitado(tramite=tramite, final_obra_total=False)

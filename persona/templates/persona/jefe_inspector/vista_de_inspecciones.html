@@ -1,27 +1,15 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load crispy_forms_tags%}
 
 {% block estilos %}
-
-    <style>
-
-    *{font-family:Verdana, Arial, Helvetica, sans-serif}
-
-    #im0{
-        position: relative;
-        margin: 0 5% 0 auto;
-        border: 5px solid #fff;
-        border-radius: 10px;
-        box-shadow: 1px 1px 5px rgba(50,50,50 0.5);
-    }
-    </style>
 
 {% endblock %}
 
 {% block barra %}
 	<ul class="sidebar sidebar-1">
 		<font size="2">
-			<li><a href="#" class="current"><font color="tomato">Jefe Inspector</font></a></li>
+			<li><a href="#" class="current"><font color="tomato">Inspeccion</font></a></li>
 		</font>
 	</ul>
 {% endblock %}
@@ -29,40 +17,39 @@
 
 {% block contenido %}
 
+
     <div class="container-fluid">
         <div class="panel panel-custom ">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                        <h4
-                            style="color: white;">Inspecciones del tramite:  {{ tramite.numero }} Id: {{ tramite.id }}
-                        </h4>
+                        <h4 style="color: white;">Datos del tramite:</h4>
                         <hr>
-                            <div style="padding-left: 30px;">
-                                <h4 style="color: white;">Datos del propietario:</h4>
-                                <p>Nombre y apellido: {{tramite.propietario.persona.nombre}} {{tramite.propietario.persona.apellido}}</p>
-                                <p>Telefono: {{tramite.propietario.persona.telefono}}</p>
-                                <p>Email: {{tramite.propietario.persona.mail}}</p>
-                                <br>
-                                <h4 style="color: white;">Datos del profesional:</h4>
-                                <br>
-                                <p>Profesional: {{tramite.profesional.persona.nombre}}</p>
-                                <p>Categoria: {{tramite.profesional.categoria}}</p>
-                                <p>Nro de matricula: {{tramite.profesional.matricula}}</p>
-                                <h2>Datos Tramite</h2>
-                                <p>Numero: {{tramite.id}}</p>
-                                <p>Medidas: {{tramite.medidas}}</p>
-                                <p>Estado: {{tramite.estado}}</p>
-                                <p>Domicilio: {{tramite.domicilio}}</p>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <h3>Domicilio del tramite: {{tramite.domicilio}}</h3>
+                                    <h3>Inspector que la realizo: {{tramite.estado.inspector}}</h3>
+                                    <h3>Fecha realizada: {{tramite.estado.fecha }}</h3>
+                                    <h3>Prueba tipo: {{tramite.estado.TIPO}}</h3>
+                                    <hr>
+                                </div>
                             </div>
-                            {% for documento in tramite. %}
-                                <h3 style="color: withe;">Documento: {{documento.tipo_documento.nombre}}</h3>
-                                <h4>Descripcion: {{documento.tipo_documento.descripcion}}</h4>
-                                <br>
-                                <img id="im0" src="/media/{{ documento.file}}" />
-                            {% endfor %}
-
+                                <h4 style="color: white;">Documentos de la inspeccion:</h4>
+                                    {% for documento in tramite.documentos.all %}
+                                        <div class="col-md-3">
+                                            <div class="thumbnail">
+                                                <a href=/media/{{documento.file}}" class="thumbnail ">
+                                                    <img src="/media/{{documento.file}}" class="img">
+                                                </a>
+                                                <font color="#337ab7" size="4">{{documento.tipo_documento}}</font>
+                                                <form action="">
+                                                    <p align="right" >
+                                                    <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save-file"></i><span> Descargar</span></a>
+                                                    </p>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
                     </div>
                 </div>
             </div>
@@ -72,71 +59,15 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script>
-    function t(id){return document.getElementById(id);}
-    function addEvent(obj,fun,type){
-        if(obj.addEventListener){
-            obj.addEventListener(type,fun,false);
-        }else if(obj.attachEvent){
-            var f=function(){
-                fun.call(obj,window.event);
-            }
-            obj.attachEvent('on'+type,f);
-            obj[fun.toString()+type]=f;
-        }else{
-            obj['on'+type]=fun;
-        }
-    }
-    function getPos(e){
-        var ev=e || window.event;
-        var obj=ev.target || ev.srcElement;
-        obj.style.position='relative';
-        posX=ev.layerX || ev.offsetX || 0;
-        posY=ev.layerY || ev.offsetY || 0;
-        return {x:posX,y:posY}
-    }
-    function css(id,prop){
-        if(window.getComputedStyle){
-            return document.defaultView.getComputedStyle(t(id),null).getPropertyValue(prop);
-        }else{
-            var re = /(-([a-z]){1})/g;
-            if (prop == 'float') prop = 'styleFloat';
-            if (re.test(prop)) {
-                prop = prop.replace(re, function () {
-                    return arguments[2].toUpperCase();
-                });
-            }
-            return t(id).currentStyle[prop] ? t(id).currentStyle[prop] : null;
-        }
-    }
-    function cambiar(pos,rel,e,a,a2,w,h){
-        var al=parseInt(a);
-        var al2=parseInt(a2);
-        if(pos.x<(al/2)/rel)
-            pos.x=(al/2)/rel;
-        if(pos.y<(al2/2)/rel)
-            pos.y=(al2/2)/rel;
-        if(pos.x>(w)-(al/2)/rel)
-            pos.x=(w)-(al/2)/rel;
-        if(pos.y>(h)-(al2/2)/rel)
-            pos.y=(h)-(al2/2)/rel;
-        t('im').style.left=-(rel*pos.x)+(al/2)+'px';
-        t('im').style.top=-(rel*pos.y)+(al2/2)+'px';
-    }
-    onload=function(){
-        addEvent(
-            t('im0'),
-            function(e){
-                var al2=css('lupa','height');
-                var al=css('lupa','width');
-                var pos=getPos(e);
-                cambiar(pos,(t('im').width)/this.width,e,al,al2,this.width,this.height);
-            },
-            'mousemove'
-        );
-    }
-    </script>
+		$("#id_correcciones").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar Planilla de Visado',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
 {% endblock %}
-
-</html>
