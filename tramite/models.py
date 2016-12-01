@@ -192,13 +192,12 @@ class Agendado(Estado):
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
     fecha = models.DateTimeField(blank=False)
 
-    def inspeccionar(self, tramite, fecha_inspeccion, inspector=None):
-        return ConInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=inspector)
+    def inspeccionar(self, tramite, inspector=None):
+        return ConInspeccion(tramite=tramite, inspector=inspector)
 
 
 class ConInspeccion(Estado):
     TIPO = 9
-    fecha = models.DateTimeField(blank=False)
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
 
 

@@ -435,15 +435,33 @@ def tramites_corregidos(request):
     profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
     tipo = 4
-    tram_corregidos = filter(
-        lambda tramite: (tramite.estado().tipo == tipo), tramites_de_profesional)
-    print tram_corregidos
+    tram_corregidos = filter(lambda tramite: (tramite.estado().tipo == tipo), tramites_de_profesional)
     contexto = {'tramites': tram_corregidos}
     return contexto
 
 def ver_documentos_corregidos(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/profesional/ver_documentos_corregidos.html', {'tramite': tramite})
+
+def cargar_inspeccion(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/inspector/cargar_inspeccion.html', {'tramite': tramite})
+
+def rechazar_inspeccion(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite.hacer(Tramite.INSPECCIONAR, request.user)
+    tramite.hacer(Tramite.CORREGIR, request.user, request.GET["msg"])
+    messages.add_message(request, messages.ERROR, 'Inspeccion rechazada')
+    return redirect('inspector')
+
+def aceptar_inspeccion(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite.hacer(Tramite.INSPECCIONAR, request.user)
+    messages.add_message(request, messages.SUCCESS, 'Inspeccion aprobada')
+    return redirect('inspector')
+
+
+
 
 def enviar_correcciones(request, pk_tramite):
 
