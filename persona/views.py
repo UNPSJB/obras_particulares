@@ -28,10 +28,17 @@ def convertidor_de_fechas(fecha):
 def mostrar_inspector(request):
     contexto = {
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
-        "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request)
+        "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
+        "ctxtramitesagendados": tramites_agendados_por_inspector(request)
     }
     return render(request, 'persona/inspector/inspector.html', contexto)
 
+def tramites_agendados_por_inspector(request):
+    usuario = request.user
+    estados = Estado.objects.all()
+    tipo = 5
+    estados_agendados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
+    return estados_agendados
 
 def tramites_inspeccionados_por_inspector(request):
 
@@ -361,24 +368,6 @@ def no_aprobar_visado(request, pk_tramite):
     return redirect('visador')
 
 
-#Inspector en jefe
-def mostrar_jefe_inspector(request):
-    contexto = {
-        "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
-    }
-    return render(request, 'persona/jefe_inspector/jefe_inspector.html',contexto)
-
-
-def tramite_con_inspecciones_list(request):
-    tramites = Tramite.objects.en_estado(Iniciado)
-    contexto = {'tramites': tramites}
-    return contexto
-
-# ve la inspeccion de un tramite o inspecciones hay que ver
-def ver_inspecciones(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html', {'tramite': tramite})
-
 def propietario_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
@@ -409,6 +398,33 @@ def habilitar_final_obra(request, pk_tramite):
     tramite.hacer(tramite.FINALIZAR, request.user)
     messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
     return redirect('administrativo')
+
+
+
+#Inspector en jefe
+def mostrar_jefe_inspector(request):
+    contexto = {
+        "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
+    }
+    return render(request, 'persona/jefe_inspector/jefe_inspector.html',contexto)
+
+
+def tramite_con_inspecciones_list(request):
+    tramites = Tramite.objects.en_estado(ConInspeccion)
+    contexto = {'tramites': tramites}
+    return contexto
+
+
+# ve la inspeccion de un tramite o inspecciones
+def ver_inspecciones(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html', {'tramite': tramite})
+
+
+def ver_historial_tramite(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/propietario/ver_historial_tramite.html', {'tramite': tramite})
+
 
 def tramites_corregidos(request):
     tramites = Tramite.objects.all()

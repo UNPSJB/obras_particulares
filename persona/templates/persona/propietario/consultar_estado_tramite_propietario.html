@@ -14,6 +14,7 @@
                   <th>Total pagado</th>
                   <th>Total a pagar</th>
                   <th>Final obra</th>
+                  <th>historial tramite</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -34,6 +35,13 @@
                             Final obra
                           </button>
                         </a>
+                  </td>
+                  <td align="center" class="col-xs-2">
+                    <a href="{% url 'ver_historial_tramite' pk_tramite=tramite.id %}">
+                      <button type="button" class="btn btn-primary btn-xs" name="ver-historial">
+                        Historial del tramite
+                      </button>
+                    </a>
                   </td>
                 </tr>
               {% endfor %}

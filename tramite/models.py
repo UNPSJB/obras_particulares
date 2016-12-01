@@ -170,7 +170,7 @@ class Aceptado(Estado):
 
 class Visado(Estado):
     TIPO = 3
-
+    
     def agendar(self, tramite, fecha_inspeccion, inspector=None):
         return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
@@ -213,7 +213,6 @@ class ConInspeccion(Estado):
 
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
-
 
 class Inspeccionado(Estado):
     TIPO = 6

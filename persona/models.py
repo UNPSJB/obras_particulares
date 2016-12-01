@@ -24,8 +24,8 @@ class Profesional(Rol):
             return "{} - Matricula: {}, Profesion: {}".format(self.persona, self.matricula, self.profesion)
         return "Matricula: {}, Profesion: {}".format(self.matricula, self.profesion)
 
-class Propietario(Rol):
 
+class Propietario(Rol):
     def __str__(self):
         try:
             return str(self.persona)
@@ -34,6 +34,7 @@ class Propietario(Rol):
 
     def obtener_persona(self):
         return Persona.get_self().nombre
+
 
 class Usuario(Rol, AbstractUser):
     PROFESIONAL = "profesional"

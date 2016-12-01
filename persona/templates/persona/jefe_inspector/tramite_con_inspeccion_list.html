@@ -6,49 +6,38 @@
 
         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
             <!-- Cabecera -->
-            <thead>
-                <tr>
-                    <th>Propietario</th>
-                    <th>Profesional</th>
-                    <th>Medidas</th>
-                    <th>Tipo de Obra</th>
-                    <th>Estado</th>
-                    <th>Rechazar</th>
-                    <th>Aceptar</th>
-                </tr>
-            </thead>
-            <!-- Mostramos los datos de las tablas -->
-            <tbody>
             {% if tramites %}
-                {% for tramite in tramites %}
-                    <tr>
-                        <td class="col-xs-3">{{ tramite.propietario }}</td>
-                        <td class="col-xs-3">{{ tramite.profesional }} </td>
-                        <td class="col-xs-1">{{ tramite.medidas }}</td>
-                        <td class="col-xs-1">{{ tramite.tipo_obra }}</td>
-                        <td class="col-xs-2">{{ tramite.estado_actual }}</td>
-                        <td align="center" class="col-xs-2">
-                            <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary btn-xs" name="Rechazar">
-                                Rechazar
-                              </button>
-                            </a>
-                        </td>
-                        <td align="center" class="col-xs-2">
-                            <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary btn-xs" name="Aceptar">
-                                Aceptar
-                              </button>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
+                <thead>
+                        <th>Propietario</th>
+                        <th>Profesional</th>
+                        <th>Medidas</th>
+                        <th>Tipo de Obra</th>
+                        <th>Estado</th>
+                        <th>Ver Inspecciones</th>
+                </thead>
+                <!-- Mostramos los datos de las tablas -->
+                <tbody>
+                    {% for tramite in tramites %}
+                        <tr>
+                            <td>{{ tramite.propietario }}</td>
+                            <td>{{ tramite.profesional }} </td>
+                            <td>{{ tramite.medidas }}</td>
+                            <td>{{ tramite.tipo_obra }}</td>
+                            <td>{{ tramite.estado }}</td>
+                            <td>
+                                <a href="{% url 'ver_inspecciones' pk_tramite=tramite.id %}">
+                                  <button type="button" class="btn btn-primary btn-xs" name="Ver-Inspecciones">
+                                    Ver-inspecciones
+                                  </button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
             </tbody>
             {% else %}
-            <h4>No hay tramites con inspecciones</h4>
+                <h4>No hay tramites con inspecciones</h4>
             {% endif%}
-
-            </tbody>
         </table>
     </div>
 {% endblock %}
