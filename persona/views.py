@@ -71,7 +71,7 @@ def agendar_inspeccion_final(request,pk_tramite):
     tramite = get_object_or_404(Tramite,pk=pk_tramite)
     fecha = convertidor_de_fechas(request.GET["msg"])
     tramite.hacer(Tramite.AGENDAR, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user)
-    return redirect('jefeinspector')
+    return redirect('jefe_inspector')
 
 def mostrar_profesional(request):
     usuario = request.user
@@ -118,8 +118,10 @@ def mostrar_profesional(request):
     return render(request, 'persona/profesional/profesional.html', contexto)
 
 def mostrar_jefe_inspector(request):
-    
-    return render(request, 'persona/jefe_inspector/jefe_inspector.html')
+    contexto = {
+        "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
+    }
+    return render(request, 'persona/jefe_inspector/jefe_inspector.html', contexto)
 
 
 def mostrar_propietario(request):
