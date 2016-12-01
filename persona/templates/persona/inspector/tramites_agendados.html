@@ -1,0 +1,47 @@
+{% block contenido_tramites_agendados %}
+  <div class="table-responsive">
+      <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+          <!-- Cabecera -->
+          <thead>
+              <tr>
+                  <th>Fecha Inicio</th>
+                  <th>Tipo de obra</th>
+                  <th>Profesional</th>
+                  <th>Propietario</th>
+                  <th>Medidas en m2</th>
+                  <th>Estado</th>
+                  <th>Revisar</th>
+              </tr>
+          </thead>
+          <!-- Mostramos los datos de las tablas -->
+
+
+
+          <tbody>
+
+          {% if estados %}
+
+              {% for estado in estados %}
+                <tr>
+                    <td class="col-xs-2">{{ estado.tramite.medidas}}</td>
+                    <td class="col-xs-1">{{ estado.tramite.tipo_obra }} </td>
+                    <td class="col-xs-4">{{ estado.tramite.profesional}}</td>
+                    <td class="col-xs-4">{{ estado.tramite.propietario}}</td>
+                    <td class="col-xs-1">{{ estado.tramite.medidas }} </td>
+                    <td class="col-xs-1">{{estado.tramite.estado}}</td>
+                    <td align="center" class="col-xs-2">
+
+                        <a href="{% url 'ver_documentos_tramite_profesional' estado.tramite.pk %}">
+                          <button type="button" class="btn btn-primary" name="Agendar">
+                            Ver documentos
+                          </button>
+                        </a>
+
+                    </td>
+                </tr>
+              {% endfor %}
+          {% endif%}
+          </tbody>
+      </table>
+  </div>
+{% endblock %}

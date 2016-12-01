@@ -28,10 +28,17 @@ def convertidor_de_fechas(fecha):
 def mostrar_inspector(request):
     contexto = {
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
-        "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request)
+        "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
+        "ctxtramitesagendados": tramites_agendados_por_inspector(request)
     }
     return render(request, 'persona/inspector/inspector.html', contexto)
 
+def tramites_agendados_por_inspector(request):
+    usuario = request.user
+    estados = Estado.objects.all()
+    tipo = 5
+    estados_agendados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
+    return estados_agendados
 
 def tramites_inspeccionados_por_inspector(request):
 
@@ -40,8 +47,6 @@ def tramites_inspeccionados_por_inspector(request):
     tipo = 9
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
     return estados_inspeccionados
-
-
 
 def tramites_visados_y_con_inspeccion(request):
     argumentos = [Visado, ConInspeccion]

@@ -83,21 +83,10 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <!-- Table -->
-              <div class="table-responsive">
-                <table  class="table table-striped table-hover table-condensed">
-                  <thead>
-
-                  <p style="color: tomato;" >Aca filtro los tramites agendados que son de el, y creo una vista para que pueda adjuntar la planilla de inspeccion</p>
-                    <tr>
-                      <th>Nro Tramite</th>
-                      <th>Fecha Inspección</th>
-                      <th>Dirección</th>
-                      <th>Inspección</th>
-                    </tr>
-                  </thead>
-                </table>
-              </div>
+              {% block contenido_tramites_agendados %}
+                {% include "persona/inspector/tramites_inspeccionados.html" with estados=ctxtramitesagendados %}
+              {% endblock %}
+            </div>
             </div>
           </div>
         </div>
