@@ -233,6 +233,7 @@ def crear_usuario(request, pk_persona):
     return redirect(usuario.get_view_name())
 
 
+
 def profesional_list(request):
     personas = Persona.objects.all()
     profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
@@ -307,14 +308,11 @@ def ver_documentos_tramite_profesional(request, pk_tramite):
 @grupo_requerido('visador')
 def mostrar_visador(request):
 
-    #en esto estoy porque quiero mostra los documentos, pero de visado
 
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.VISAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
     documento_set = FormularioDocumentoSet(initial=inicial)
-
-    #...........
 
 
     contexto = {
@@ -326,7 +324,7 @@ def mostrar_visador(request):
 
 def tramites_aceptados(request):
     aceptados = Tramite.objects.en_estado(Aceptado)
-    contexto = {'tramites_para_visar': aceptados}
+    contexto = {'tramites': aceptados}
     return contexto
 
 def tramites_visados(request):
@@ -348,9 +346,8 @@ def ver_documentos_visados(request, pk_tramite):
 def aprobar_visado(request, pk_tramite):
 
     usuario = request.user
-    monto = float(request.GET['monto_a_pagar'])
+    monto = request.GET['monto_a_pagar']
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.VISAR, usuario, monto) #sacar el monto del modelo
     tramite.monto_a_pagar= monto
     tramite.save()
     messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')
@@ -359,6 +356,9 @@ def aprobar_visado(request, pk_tramite):
 def no_aprobar_visado(request, pk_tramite):
     usuario = request.user
     observacion = request.GET['msg']
+    print ("-------------------------------------------------")
+    print observacion
+    print ("-------------------------------------------------")
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.CORREGIR, usuario, observacion)
     messages.add_message(request, messages.SUCCESS, 'Tramite con visado no aprobado')
