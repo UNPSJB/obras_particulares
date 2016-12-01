@@ -48,8 +48,6 @@ def tramites_inspeccionados_por_inspector(request):
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
     return estados_inspeccionados
 
-
-
 def tramites_visados_y_con_inspeccion(request):
     argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
@@ -148,6 +146,7 @@ def listado_tramites_propietario(request):
     tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
 
     return tramites_de_propietario
+
 
 FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioTipoDocumento,
@@ -400,12 +399,12 @@ def solicitud_final_obra_list(request):
     contexto = {'tramites': tramites}
     return contexto
 
+
 def habilitar_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.FINALIZAR, request.user)
     messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
     return redirect('administrativo')
-
 
 
 #Inspector en jefe
@@ -424,13 +423,22 @@ def tramite_con_inspecciones_list(request):
 
 # ve la inspeccion de un tramite o inspecciones
 def ver_inspecciones(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html', {'tramite': tramite})
+    pk = int(pk_tramite)
+    estados = Estado.objects.all()
+    print pk
+    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
+    estados = filter(lambda e: (e.tipo == 9), estados_de_tramite)
+    contexto = {'estados': estados}
+    return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html',contexto)
+
 
 
 def ver_historial_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/propietario/ver_historial_tramite.html', {'tramite': tramite})
+    estados = Estado.objects.all()
+    estados_tramite = filter(lambda e: e.tramite == pk_tramite, estados)
+    contexto = {'estados_tramite', estados_tramite}
+    return render(request, 'persona/propietario/ver_historial_tramite.html', contexto)
 
 
 def tramites_corregidos(request):

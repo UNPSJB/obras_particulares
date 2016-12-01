@@ -19,7 +19,7 @@
 {% block barra %}
 	<ul class="sidebar sidebar-1">
 		<font size="2">
-			<li><a href="#" class="current"><font color="tomato">Administrativo</font></a></li>
+			<li><a href="#" class="current"><font color="tomato">Propietario</font></a></li>
 		</font>
 	</ul>
 {% endblock %}
@@ -34,53 +34,32 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <h4 style="color: tomato;">Datos del tramite:</h4>
+                            <hr>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                            <h3>Profesional {{tramite}}</h3>
+                                            <h3>Estado: {{tramite.estado}}</h3>
+                                            <h3>Fecha realizada: {{tramite.estado }}</h3>
+                                            <h3>Prueba tipo: {{tramite.estado.TIPO}}</h3>
+                                            <hr>
+                                    </div>
+                                </div>
+                            <h4 style="color: tomato;">Documentacion del tramite:</h4>
+                            {% for documento in estados_tramite.tramite.documentos.all %}
 
-                        <h4 style="color: tomato;">Documentacion del tramite:</h4>
-                        <hr>
+                                <h3 style="color: tomato;">{{documento.tipo_documento}}</h3>
 
-                        {% for documento in tramite.documentos.all %}
+                                <img id="im0" src="/media/{{documento.file}}" />
 
-                            <h3 style="color: tomato;">{{documento.tipo_documento}}</h3>
-
-                            <img id="im0" src="/media/{{documento.file}}" />
-
-                        {% endfor %}
-
-                        <hr>
+                            {% endfor %}
+                            <hr>
                     </div>
 
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-
-                        <div class="form-group">
-                            <label for="">Observaciones:</label>
-                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                            <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
-                        </div>
-                    </div>
-
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                        <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id  %}">
-                            <button type="button" class="btn btn-primary" name="Aceptar">
-                                Aceptar
+                        <a href="{% url 'propietario'  %}">
+                            <button type="button" class="btn btn-primary" name="Volver">
+                                Volver
                             </button>
-                        </a>
-
-                        <script>
-                            function prueba(){
-                                obs = $("#id_observaciones").val();
-                                id_tramite = $("#id_tramite").val();
-                                url = '/persona/rechazar_tramite/'+id_tramite+'/?msg='+obs;
-                                alert(url);
-                                location.href = url;
-                            }
-                        </script>
-
-                        <a href="javascript:prueba();">
-                            <button type="button" class="btn btn-primary" name="Aceptar">
-                                  Rechazar
-                            </button>
-                        </a>
                         <br>
                     </div>
                 </div>
