@@ -48,6 +48,8 @@ def tramites_inspeccionados_por_inspector(request):
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
     return estados_inspeccionados
 
+
+
 def tramites_visados_y_con_inspeccion(request):
     argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
@@ -111,7 +113,8 @@ def mostrar_profesional(request):
         'ctxtramitesprofesional': listado_tramites_de_profesional(request),
         'tramite_form': tramite_form,
         'propietario_form': propietario_form,
-        'documento_set': documento_set
+        'documento_set': documento_set,
+        'ctxtramcorregidos':tramites_corregidos(request)
     }
 
     return render(request, 'persona/profesional/profesional.html', contexto)
@@ -144,7 +147,6 @@ def listado_tramites_propietario(request):
     tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
 
     return tramites_de_propietario
-
 
 FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioTipoDocumento,
@@ -397,12 +399,12 @@ def solicitud_final_obra_list(request):
     contexto = {'tramites': tramites}
     return contexto
 
-
 def habilitar_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.FINALIZAR, request.user)
     messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
     return redirect('administrativo')
+
 
 
 #Inspector en jefe
@@ -428,3 +430,53 @@ def ver_inspecciones(request, pk_tramite):
 def ver_historial_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/propietario/ver_historial_tramite.html', {'tramite': tramite})
+
+
+def tramites_corregidos(request):
+    tramites = Tramite.objects.all()
+    personas = Persona.objects.all()
+    usuario = request.user
+    lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
+    persona = lista_de_persona_que_esta_logueada.pop()  #Saco de la lista la persona porque no puedo seguir trabajando con una lista
+    profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
+    tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
+    tipo = 4
+    tram_corregidos = filter(lambda tramite: (tramite.estado().tipo == tipo), tramites_de_profesional)
+    contexto = {'tramites': tram_corregidos}
+    return contexto
+
+def ver_documentos_corregidos(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/profesional/ver_documentos_corregidos.html', {'tramite': tramite})
+
+def cargar_inspeccion(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/inspector/cargar_inspeccion.html', {'tramite': tramite})
+
+def rechazar_inspeccion(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite.hacer(Tramite.INSPECCIONAR, request.user)
+    tramite.hacer(Tramite.CORREGIR, request.user, request.GET["msg"])
+    messages.add_message(request, messages.ERROR, 'Inspeccion rechazada')
+    return redirect('inspector')
+
+def aceptar_inspeccion(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite.hacer(Tramite.INSPECCIONAR, request.user)
+    messages.add_message(request, messages.SUCCESS, 'Inspeccion aprobada')
+    return redirect('inspector')
+
+
+
+
+def enviar_correcciones(request, pk_tramite):
+
+    usuario = request.user
+    archivos = request.GET['msg']
+    observacion = "Este tramite ya tiene los archivos corregidos cargados"
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+
+
+    tramite.hacer(tramite.CORREGIR, request.user, observacion)
+    messages.add_message(request, messages.SUCCESS, 'Tramite con documentos corregidos y enviados')
+    return redirect('profesional')
