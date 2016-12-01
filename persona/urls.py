@@ -49,4 +49,6 @@ urlpatterns = [
     url(r'^ver_documentos_visados/(?P<pk_tramite>\d+)/$', views.ver_documentos_visados,name="ver_documentos_visados"),
     url(r'^vista_de_inspecciones/(?P<pk_tramite>\d+)/$', views.ver_inspecciones, name="ver_inspecciones"),
     url(r'^crearusuario/(?P<pk_propietario>\d+)/$', views.crear_usuario, name="crear_usuario"),
+
+    url(r'^ver_historial_tramite/(?P<pk_tramite>\d+)/$', views.ver_historial_tramite, name="ver_historial_tramite"),
 ]

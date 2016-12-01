@@ -28,10 +28,17 @@ def convertidor_de_fechas(fecha):
 def mostrar_inspector(request):
     contexto = {
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
-        "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request)
+        "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
+        "ctxtramitesagendados": tramites_agendados_por_inspector(request)
     }
     return render(request, 'persona/inspector/inspector.html', contexto)
 
+def tramites_agendados_por_inspector(request):
+    usuario = request.user
+    estados = Estado.objects.all()
+    tipo = 5
+    estados_agendados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
+    return estados_agendados
 
 def tramites_inspeccionados_por_inspector(request):
 
@@ -39,15 +46,11 @@ def tramites_inspeccionados_por_inspector(request):
     estados = Estado.objects.all()
     tipo = 9
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
-    contexto = {'estados': estados_inspeccionados}
-    return contexto
-
-
+    return estados_inspeccionados
 
 def tramites_visados_y_con_inspeccion(request):
     argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
-    print(tramites)
     return tramites
 
 def tramite_visados_list(request):
@@ -58,7 +61,6 @@ def tramite_visados_list(request):
 def agendar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     fecha = convertidor_de_fechas(request.GET["msg"])
-    print(fecha)
     tramite.hacer(Tramite.AGENDAR, request.user, fecha) #tramite, fecha_inspeccion, inspector=None
     return redirect('inspector')
 
@@ -234,6 +236,7 @@ def crear_usuario(request, pk_persona):
     return redirect(usuario.get_view_name())
 
 
+
 def profesional_list(request):
     personas = Persona.objects.all()
     profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
@@ -308,14 +311,11 @@ def ver_documentos_tramite_profesional(request, pk_tramite):
 @grupo_requerido('visador')
 def mostrar_visador(request):
 
-    #en esto estoy porque quiero mostra los documentos, pero de visado
 
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.VISAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
     documento_set = FormularioDocumentoSet(initial=inicial)
-
-    #...........
 
 
     contexto = {
@@ -327,7 +327,7 @@ def mostrar_visador(request):
 
 def tramites_aceptados(request):
     aceptados = Tramite.objects.en_estado(Aceptado)
-    contexto = {'tramites_para_visar': aceptados}
+    contexto = {'tramites': aceptados}
     return contexto
 
 def tramites_visados(request):
@@ -349,9 +349,9 @@ def ver_documentos_visados(request, pk_tramite):
 def aprobar_visado(request, pk_tramite):
 
     usuario = request.user
-    monto = float(request.GET['monto_a_pagar'])
+    monto = request.GET['monto_a_pagar']
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.VISAR, usuario, monto) #sacar el monto del modelo
+    tramite.hacer(tramite.VISAR, usuario)  # sacar el monto del modelo
     tramite.monto_a_pagar= monto
     tramite.save()
     messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')
@@ -417,3 +417,8 @@ def tramite_con_inspecciones_list(request):
 def ver_inspecciones(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html', {'tramite': tramite})
+
+
+def ver_historial_tramite(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/propietario/ver_historial_tramite.html', {'tramite': tramite})

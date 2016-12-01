@@ -50,7 +50,7 @@ class Tramite(models.Model):
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50,blank=True)
     monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
-    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2,blank=True,null=True)
+    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
     objects = TramiteManager()
 
     def __str__(self):
@@ -142,7 +142,7 @@ class Estado(models.Model):
         return self.usuario
 
     def __str__(self):
-        return self.__class__.__name__
+        return "{} - Usuario: {} - Tipo: {}" .format(self.__class__.__name__, self.usuario, self.tipo)
 
 class Iniciado(Estado):
     TIPO = 1
@@ -160,17 +160,16 @@ class Iniciado(Estado):
 class Aceptado(Estado):
     TIPO = 2
 
-    def visar(self,tramite, monto):
-        return Visado(tramite=tramite,monto=monto)
-
-
-class Visado(Estado):
-    TIPO = 3
-    monto = models.FloatField(blank=True, null=True) #sacar esto , no se usa
+    def visar(self, tramite):
+        return Visado(tramite=tramite)
 
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
 
+
+class Visado(Estado):
+    TIPO = 3
+    
     def agendar(self, tramite, fecha_inspeccion, inspector=None):
         return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
@@ -200,6 +199,7 @@ class ConInspeccion(Estado):
     TIPO = 9
     fecha = models.DateTimeField(blank=False)
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
+
 
     def solicitar_final_obra(self, tramite):
         return FinalObraSolicitado(tramite=tramite, final_obra_total=False)
