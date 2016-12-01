@@ -67,6 +67,12 @@ def agendar_tramite(request, pk_tramite):
 def mostrar_popup_datos_agendar(request,pk_tramite):
     pass
 
+def agendar_inspeccion_final(request,pk_tramite):
+    tramite = get_object_or_404(Tramite,pk=pk_tramite)
+    fecha = convertidor_de_fechas(request.GET["msg"])
+    tramite.hacer(Tramite.AGENDAR,request.user,fecha)
+    return redirect('jefeinspector')
+
 def mostrar_profesional(request):
     usuario = request.user
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
