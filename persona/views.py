@@ -38,7 +38,12 @@ def tramites_agendados_por_inspector(request):
     estados = Estado.objects.all()
     tipo = 5
     estados_agendados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
-    return estados_agendados
+    argumentos = [Visado, ConInspeccion]
+    tramites = Tramite.objects.en_estado(Agendado)
+    tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
+    print (tramites_del_inspector)
+    contexto = {"tramites_del_inspector": tramites_del_inspector}
+    return tramites_del_inspector
 
 def tramites_inspeccionados_por_inspector(request):
 
@@ -46,7 +51,10 @@ def tramites_inspeccionados_por_inspector(request):
     estados = Estado.objects.all()
     tipo = 9
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
-    return estados_inspeccionados
+    tramites = Tramite.objects.en_estado(Inspeccionado)
+    tramites_inspeccionados = filter(lambda t: t.estado().usuario == usuario, tramites)
+    contexto = {"tramites_inspeccionados": tramites_inspeccionados}
+    return tramites_inspeccionados
 
 def tramites_visados_y_con_inspeccion(request):
     argumentos = [Visado, ConInspeccion]
@@ -313,8 +321,8 @@ def ver_documentos_tramite_administrativo(request, pk_tramite):
 
 def ver_documentos_tramite_profesional(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-
-    return render(request, 'persona/profesional/vista_de_documentos.html', {'tramite': tramite})
+    contexto = {'tramite': tramite}
+    return render(request, 'persona/profesional/vista_de_documentos.html', contexto)
 
 
 @login_required(login_url="login")
@@ -404,9 +412,13 @@ def solicitud_final_obra_list(request):
 
 def habilitar_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.FINALIZAR, request.user)
-    messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
-    return redirect('administrativo')
+    try:
+        tramite.hacer(tramite.FINALIZAR, request.user)
+        messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
+    except:
+        messages.add_message(request, messages.ERROR, 'No puede otorgar final de obra total para ese tramite.')
+    finally:
+        return redirect('administrativo')
 
 
 #Inspector en jefe
