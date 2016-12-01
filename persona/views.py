@@ -438,10 +438,7 @@ def ver_inspecciones(request, pk_tramite):
 def ver_historial_tramite(request, pk_tramite):
     pk = int(pk_tramite)
     estados = Estado.objects.all()
-    estados_de_tramite = filter(lambda e: (e.tramite.pk == 2), estados)
-    for e in estados:
-        print e
-
+    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
     contexto = {'estados_de_tramite': estados_de_tramite}
     return render(request, 'persona/propietario/ver_historial_tramite.html',contexto)
 
