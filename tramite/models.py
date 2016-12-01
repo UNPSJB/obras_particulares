@@ -160,15 +160,15 @@ class Iniciado(Estado):
 class Aceptado(Estado):
     TIPO = 2
 
-    def visar(self,tramite, monto):
-        return Visado(tramite=tramite,monto=monto)
+    def visar(self, tramite):
+        return Visado(tramite=tramite)
+
+    def corregir(self, tramite, observacion):
+        return Corregido(tramite=tramite, observacion=observacion)
 
 
 class Visado(Estado):
     TIPO = 3
-
-    def corregir(self, tramite, observacion):
-        return Corregido(tramite=tramite, observacion=observacion)
 
     def agendar(self, tramite, fecha_inspeccion, inspector=None):
         return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None)

@@ -348,6 +348,7 @@ def aprobar_visado(request, pk_tramite):
     usuario = request.user
     monto = request.GET['monto_a_pagar']
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite.hacer(tramite.VISAR, usuario)  # sacar el monto del modelo
     tramite.monto_a_pagar= monto
     tramite.save()
     messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')
@@ -356,9 +357,6 @@ def aprobar_visado(request, pk_tramite):
 def no_aprobar_visado(request, pk_tramite):
     usuario = request.user
     observacion = request.GET['msg']
-    print ("-------------------------------------------------")
-    print observacion
-    print ("-------------------------------------------------")
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.CORREGIR, usuario, observacion)
     messages.add_message(request, messages.SUCCESS, 'Tramite con visado no aprobado')
