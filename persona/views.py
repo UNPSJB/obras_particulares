@@ -39,15 +39,13 @@ def tramites_inspeccionados_por_inspector(request):
     estados = Estado.objects.all()
     tipo = 9
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
-    contexto = {'estados': estados_inspeccionados}
-    return contexto
+    return estados_inspeccionados
 
 
 
 def tramites_visados_y_con_inspeccion(request):
     argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
-    print(tramites)
     return tramites
 
 def tramite_visados_list(request):
@@ -58,7 +56,6 @@ def tramite_visados_list(request):
 def agendar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     fecha = convertidor_de_fechas(request.GET["msg"])
-    print(fecha)
     tramite.hacer(Tramite.AGENDAR, request.user, fecha) #tramite, fecha_inspeccion, inspector=None
     return redirect('inspector')
 
