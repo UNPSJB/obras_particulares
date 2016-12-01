@@ -13,9 +13,6 @@
                   <th>Revisar</th>
               </tr>
           </thead>
-          <!-- Mostramos los datos de las tablas -->
-
-
 
           <tbody>
 
@@ -31,7 +28,7 @@
                     <td class="col-xs-1">{{estado.tramite.estado}}</td>
                     <td align="center" class="col-xs-2">
 
-                        <a href="{% url 'ver_documentos_tramite_profesional' estado.tramite.pk %}">
+                        <a href="{% url 'cargar_inspeccion' pk_tramite=estado.tramite.id %}">
                           <button type="button" class="btn btn-primary" name="Agendar">
                             Ver documentos
                           </button>
