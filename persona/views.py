@@ -341,6 +341,10 @@ def ver_documentos_para_visado(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite})
 
+def ver_documentos_visados(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/visador/ver_documentos_visados.html', {'tramite': tramite})
+
 def aprobar_visado(request, pk_tramite):
 
     usuario = request.user
