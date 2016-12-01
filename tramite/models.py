@@ -142,7 +142,7 @@ class Estado(models.Model):
         return self.usuario
 
     def __str__(self):
-        return self.__class__.__name__
+        return "{} - Usuario: {} - Tipo: {}" .format(self.__class__.__name__, self.usuario, self.tipo)
 
 class Iniciado(Estado):
     TIPO = 1
@@ -213,6 +213,7 @@ class ConInspeccion(Estado):
 
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
+
 
 class Inspeccionado(Estado):
     TIPO = 6
