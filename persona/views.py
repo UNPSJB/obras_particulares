@@ -415,10 +415,19 @@ def tramite_con_inspecciones_list(request):
 
 # ve la inspeccion de un tramite o inspecciones
 def ver_inspecciones(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html', {'tramite': tramite})
+    pk = int(pk_tramite)
+    estados = Estado.objects.all()
+    print pk
+    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
+    estados = filter(lambda e: (e.tipo == 9), estados_de_tramite)
+    contexto = {'estados': estados}
+    return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html',contexto)
+
 
 
 def ver_historial_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/propietario/ver_historial_tramite.html', {'tramite': tramite})
+    estados = Estado.objects.all()
+    estados_tramite = filter(lambda e: e.tramite == pk_tramite, estados)
+    contexto = {'estados_tramite', estados_tramite}
+    return render(request, 'persona/propietario/ver_historial_tramite.html', contexto)

@@ -23,19 +23,23 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <h4 style="color: white;">Datos del tramite:</h4>
+                        <h4 style="color: white;">Inspecciones:</h4>
                         <hr>
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <h3>Domicilio del tramite: {{tramite.domicilio}}</h3>
-                                    <h3>Inspector que la realizo: {{tramite.estado.inspector}}</h3>
-                                    <h3>Fecha realizada: {{tramite.estado.fecha }}</h3>
-                                    <h3>Prueba tipo: {{tramite.estado.TIPO}}</h3>
-                                    <hr>
+                        {% for estado in estados %}
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <h4 style="color: white;">Datos del tramite:</h4>
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <h3>Id del Tramite: {{estado.tramite.pk}}</h3>
+                                        <h3>Domicilio del tramite: {{estado.tramite.domicilio}}</h3>
+                                        <h3>Inspector que la realizo: {{estado.tramite.estado}}</h3>
+                                        <h3>Prueba tipo: {{estado.tramite.estado.TIPO}}</h3>
+                                        <hr>
+                                    </div>
                                 </div>
-                            </div>
                                 <h4 style="color: white;">Documentos de la inspeccion:</h4>
-                                    {% for documento in tramite.documentos.all %}
+                                    {% for documento in estado.tramite.documentos.all %}
                                         <div class="col-md-3">
                                             <div class="thumbnail">
                                                 <a href=/media/{{documento.file}}" class="thumbnail ">
@@ -50,6 +54,7 @@
                                             </div>
                                         </div>
                                     {% endfor %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>
