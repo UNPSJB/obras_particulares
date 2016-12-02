@@ -92,6 +92,8 @@ def agendar_inspeccion_final(request,pk_tramite):
     tramite.hacer(Tramite.AGENDAR, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user)
     return redirect('jefe_inspector')
 
+@login_required(login_url="login")
+@grupo_requerido('profesional')
 def mostrar_profesional(request):
     usuario = request.user
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
@@ -136,13 +138,16 @@ def mostrar_profesional(request):
 
     return render(request, 'persona/profesional/profesional.html', contexto)
 
+@login_required(login_url="login")
+@grupo_requerido('jefeinspector')
 def mostrar_jefe_inspector(request):
     contexto = {
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
     }
     return render(request, 'persona/jefe_inspector/jefe_inspector.html', contexto)
 
-
+@login_required(login_url="login")
+@grupo_requerido('propietario')
 def mostrar_propietario(request):
 
     contexto = {
@@ -369,14 +374,15 @@ def ver_documentos_para_visado(request, pk_tramite):
 
     if request.method == "POST":
 
-        archivos = request.FILES
         observacion = request.POST["observaciones"]
         tram = request.POST['tram']
         monto_permiso = request.POST['monto']
 
         if "Envia Planilla de visado" in request.POST:
-            for doc in documento_set:
-                print ("falta guardar archivos")
+            documento_set = FormularioDocumentoSet(request.POST, request.FILES)
+            if documento_set.is_valid():
+                for docForm in documento_set:
+                    docForm.save(tramite=tramite)
             no_aprobar_visado(request, tram, observacion)
         else:
             aprobar_visado(request, tram, monto_permiso)
@@ -446,7 +452,7 @@ def habilitar_final_obra(request, pk_tramite):
         return redirect('administrativo')
 
 
-#Inspector en jefe
+
 def mostrar_jefe_inspector(request):
     contexto = {
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
@@ -521,7 +527,7 @@ def cargar_inspeccion(request, pk_tramite):
 
                 if "aceptar_tramite" in request.POST:
                     print ("acepte el tramite")
-                    aceptar_tramite(request, pk_tramite)
+                    aceptar_inspeccion(request, pk_tramite)
                 elif "rechazar_tramite" in request.POST:
                     print ("rechace el tramite")
                     rechazar_inspeccion(request, pk_tramite)
