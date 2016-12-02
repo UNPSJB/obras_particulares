@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import  login_required
+
+import documento
 from .forms import *
 from django.contrib import messages
 from tipos.forms import *
@@ -29,7 +31,8 @@ def mostrar_inspector(request):
     contexto = {
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
         "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
-        "ctxtramitesagendados": tramites_agendados_por_inspector(request)
+        "ctxtramitesagendados": tramites_agendados_por_inspector(request),
+
     }
     return render(request, 'persona/inspector/inspector.html', contexto)
 
@@ -38,6 +41,7 @@ def tramites_agendados_por_inspector(request):
     estados = Estado.objects.all()
     tipo = 5
     estados_agendados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
+
     return estados_agendados
 
 def tramites_inspeccionados_por_inspector(request):
@@ -418,7 +422,7 @@ def tramite_con_inspecciones_list(request):
 def ver_inspecciones(request, pk_tramite):
     pk = int(pk_tramite)
     estados = Estado.objects.all()
-    print pk
+    print(pk)
     estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
     estados = filter(lambda e: (e.tipo == 9), estados_de_tramite)
     contexto = {'estados': estados}
@@ -453,12 +457,33 @@ def ver_documentos_corregidos(request, pk_tramite):
 
 def cargar_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/inspector/cargar_inspeccion.html', {'tramite': tramite})
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INSPECCIONAR)
+    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
+    inicial = metodo(tipos_de_documentos_requeridos)
+    documento_set = FormularioDocumentoSet(initial=inicial)
+
+    if request.method == "POST":
+        print("entre al post")
+        if documento_set.is_valid():
+            documento_set = FormularioDocumentoSet(request.POST, request.FILES)
+            for docForm in documento_set:
+                print("holaaaaaaaaaaaaaaaaaaaaaaaaa")
+                docForm.tramite = tramite
+                docForm.save()
+
+            if "aceptar_tramite" in request.POST:
+                aceptar_tramite(request, pk_tramite)
+
+            elif "rechazar_tramite" in request.POST:
+                rechazar_tramite(request, pk_tramite)
+        else:
+            print("no entre al if")
+    return render(request, 'persona/inspector/cargar_inspeccion.html', {'tramite': tramite, 'ctxdocumentoset': documento_set})
 
 def rechazar_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.INSPECCIONAR, request.user)
-    tramite.hacer(Tramite.CORREGIR, request.user, request.GET["msg"])
+    tramite.hacer(Tramite.CORREGIR, request.user, request.GET["msg"])  #request.POST["observaciones"]
     messages.add_message(request, messages.ERROR, 'Inspeccion rechazada')
     return redirect('inspector')
 
@@ -467,9 +492,6 @@ def aceptar_inspeccion(request, pk_tramite):
     tramite.hacer(Tramite.INSPECCIONAR, request.user)
     messages.add_message(request, messages.SUCCESS, 'Inspeccion aprobada')
     return redirect('inspector')
-
-
-
 
 def enviar_correcciones(request, pk_tramite):
 
