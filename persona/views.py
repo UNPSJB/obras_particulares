@@ -476,20 +476,22 @@ def cargar_inspeccion(request, pk_tramite):
     inicial = metodo(tipos_de_documentos_requeridos)
     documento_set = FormularioDocumentoSet(initial=inicial)
 
+
+    id_tramite = int(pk_tramite)
+
     if request.method == "POST":
         print("entre al post")
+        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            documento_set = FormularioDocumentoSet(request.POST, request.FILES)
             for docForm in documento_set:
-                print("holaaaaaaaaaaaaaaaaaaaaaaaaa")
-                docForm.tramite = tramite
-                docForm.save()
+                docForm.save(tramite=tramite)
 
-            if "aceptar_tramite" in request.POST:
-                aceptar_tramite(request, pk_tramite)
-
-            elif "rechazar_tramite" in request.POST:
-                rechazar_tramite(request, pk_tramite)
+                if "aceptar_tramite" in request.POST:
+                    print ("acepte el tramite")
+                    aceptar_tramite(request, pk_tramite)
+                elif "rechazar_tramite" in request.POST:
+                    print ("rechace el tramite")
+                    rechazar_inspeccion(request, pk_tramite)
         else:
             print("no entre al if")
     return render(request, 'persona/inspector/cargar_inspeccion.html', {'tramite': tramite, 'ctxdocumentoset': documento_set})

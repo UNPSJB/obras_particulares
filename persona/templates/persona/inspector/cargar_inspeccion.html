@@ -26,7 +26,7 @@
                         <hr>
                         {% for documento in tramite.documentos.all %}
                             <div class="col-md-3">
-				                				<div class="thumbnail ">
+                                <div class="thumbnail ">
                                     <a href="/media/{{documento.file}}" class="thumbnail ">
                                         <img src="/media/{{documento.file}}" class="img-thumbnail" width="200" height="200">
                                     </a>
@@ -56,11 +56,11 @@
                                             <input class="form-control input-sm" id="id_observaciones" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
                                         </div>
 
-                                        <!---<button type="button" class="btn btn-primary" type="submit" name="Aceptar">
+                                        <!---<button class="btn btn-primary" type="submit" name="Aceptar">
                                             Aprobar inspeccion
                                         </button>
 
-                                        <button type="button" class="btn btn-primary" type="submit" name="Aceptar">
+                                        <button class="btn btn-primary" type="submit" name="Aceptar">
                                             Rechazar inspeccion
                                         </button>-->
 
