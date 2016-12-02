@@ -103,7 +103,10 @@ class Tramite(models.Model):
 
 
     def calcular_monto_pagado(self, monto):
-        self.monto_pagado = self.monto_pagado + monto
+        if (self.monto_pagado<=0):
+            self.monto_pagado = monto
+        else:
+            self.monto_pagado = self.monto_pagado + monto
         self.save()
         return self.monto_pagado
 

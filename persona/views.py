@@ -562,7 +562,7 @@ def aceptar_inspeccion(request, pk_tramite):
 def enviar_correcciones(request, pk_tramite):
 
     usuario = request.user
-    archivos = request.GET['msg']
+    #archivos = request.GET['msg']
     observacion = "Este tramite ya tiene los archivos corregidos cargados"
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
 
