@@ -143,7 +143,7 @@ class Estado(models.Model):
         return self.usuario
 
     def __str__(self):
-        return "{} - Usuario: {} - Tipo: {}" .format(self.__class__.__name__, self.usuario, self.tipo)
+        return "{} - Usuario: {}" .format(self.__class__.__name__, self.usuario)
 
 class Iniciado(Estado):
     TIPO = 1
@@ -181,13 +181,12 @@ class Corregido(Estado):
     TIPO = 4
     CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
-
-
     def corregir(self, tramite, observacion=None):
         #e = Iniciado(tramite=tramite, observacion=observacion)
         #e.agregar_documentacion(documentos_requeridos=documentos)
         #return e
         return Iniciado(tramite=tramite, observacion=observacion)
+
 
 class Agendado(Estado):
     TIPO = 5
@@ -214,6 +213,10 @@ class ConInspeccion(Estado):
 
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
+
+    def __str__(self):
+        return str(self.__class__.__name__)
+
 
 class Inspeccionado(Estado):
     TIPO = 6

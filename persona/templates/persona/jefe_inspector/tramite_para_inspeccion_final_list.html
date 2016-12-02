@@ -9,10 +9,12 @@
             <!-- Cabecera -->
             <thead>
                 <tr>
+                    <th>Propietario</th>
                     <th>Profesional</th>
                     <th>Medidas</th>
                     <th>Tipo de Obra</th>
                     <th>Direccion obra</th>
+                    <th>Fecha</th>
                     <th>Agendar</th>
                 </tr>
             </thead>
@@ -20,6 +22,7 @@
             <tbody>
                 {% for tramite in tramites %}
                     <tr>
+                        <td>{{ tramite.propietario }}</td>
                         <td>
                             {{ tramite.profesional.persona.nombre }}
                             {{ tramite.profesional.persona.apellido }}
@@ -30,16 +33,34 @@
                         <td>{{ tramite.tipo_obra }}</td>
                         <td>{{ tramite.domicilio }}</td>
                         <td>
+                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                            <input class="form-control input-sm" id="id_fechadeinspeccion_{{tramite.pk}}" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
+                        </td>
+                        <td>
+
+                            <a href="javascript:prueba();">
                               <button type="button" class="btn btn-primary" name="Agendar">
                                 Agendar
                               </button>
                             </a>
                         </td>
+
+                        <script>
+                            function prueba(){
+                                obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();
+                                alert(obs);
+                                id_tramite = $("#id_tramite").val();
+                                url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+obs;
+                                alert(url);
+                                location.href = url;
+                            }
+                        </script>
+
                     </tr>
                 {% endfor %}
             </tbody>
             {% else %}
-            <h4>No hay tramites con inspecciones</h4>
+            <font color="tomato" size="3">No hay tramites disponibles para agendar</font>
             {% endif%}
         </table>
     </div>
