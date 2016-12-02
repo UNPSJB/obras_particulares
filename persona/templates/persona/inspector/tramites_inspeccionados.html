@@ -19,20 +19,20 @@
 
           <tbody>
 
-            {% if tramites_inspeccionados %}
+          {% if estados %}
 
-                {% for tramite in tramites_inspeccionados %}
-                  <tr>
-                      <td class="col-xs-2">{{ tramite.medidas}}</td>
-                      <td class="col-xs-1">{{ tramite.tipo_obra }} </td>
-                      <td class="col-xs-4">{{ tramite.profesional}}</td>
-                      <td class="col-xs-4">{{ tramite.propietario}}</td>
-                      <td class="col-xs-1">{{ tramite.medidas }} </td>
-                      <td class="col-xs-1">{{ tramite.estado}}</td>
-                      <td align="center" class="col-xs-2">
+              {% for estado in estados %}
+                <tr>
+                    <td class="col-xs-2">{{ estado.tramite.medidas}}</td>
+                    <td class="col-xs-1">{{ estado.tramite.tipo_obra }} </td>
+                    <td class="col-xs-4">{{ estado.tramite.profesional}}</td>
+                    <td class="col-xs-4">{{ estado.tramite.propietario}}</td>
+                    <td class="col-xs-1">{{ estado.tramite.medidas }} </td>
+                    <td class="col-xs-1">{{estado.tramite.estado}}</td>
+                    <td align="center" class="col-xs-2">
 
-                        <a href="{% url 'ver_documentos_tramite_profesional' pk_tramite=tramite.id %}">
-                          <button type="button" class="btn btn-primary" name="Ver_doc">
+                        <a href="{% url 'ver_documentos_tramite_profesional' estado.tramite.pk %}">
+                          <button type="button" class="btn btn-primary" name="Agendar">
                             Ver documentos
                           </button>
                         </a>
@@ -44,4 +44,4 @@
           </tbody>
       </table>
   </div>
-{% endblock %}
+{% endblock %}gti

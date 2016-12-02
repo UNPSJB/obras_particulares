@@ -51,11 +51,11 @@ def tramites_agendados_por_inspector(request):
     usuario = request.user
     estados = Estado.objects.all()
     tipo = 5
-    estados_agendados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
+    #estados_agendados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
     argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(Agendado)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
-    print (tramites_del_inspector)
+    #print (tramites_del_inspector)
     contexto = {"tramites_del_inspector": tramites_del_inspector}
     return tramites_del_inspector
 
@@ -65,6 +65,8 @@ def tramites_inspeccionados_por_inspector(request):
     estados = Estado.objects.all()
     tipo = 9
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
+    e = estados_inspeccionados[0]
+    print(e.tramite)
     return estados_inspeccionados
 
 def tramites_visados_y_con_inspeccion(request):
@@ -521,7 +523,7 @@ def cargar_inspeccion(request, pk_tramite):
 
                 if "aceptar_tramite" in request.POST:
                     print ("acepte el tramite")
-                    aceptar_tramite(request, pk_tramite)
+                    aceptar_inspeccion(request, pk_tramite)
                 elif "rechazar_tramite" in request.POST:
                     print ("rechace el tramite")
                     rechazar_inspeccion(request, pk_tramite)
@@ -532,7 +534,7 @@ def cargar_inspeccion(request, pk_tramite):
 def rechazar_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.INSPECCIONAR, request.user)
-    tramite.hacer(Tramite.CORREGIR, request.user, request.GET["msg"])  #request.POST["observaciones"]
+    tramite.hacer(Tramite.CORREGIR, request.user, request.POST["observaciones"])  #request.POST["observaciones"]
     messages.add_message(request, messages.ERROR, 'Inspeccion rechazada')
     return redirect('inspector')
 
@@ -541,8 +543,6 @@ def aceptar_inspeccion(request, pk_tramite):
     tramite.hacer(Tramite.INSPECCIONAR, request.user)
     messages.add_message(request, messages.SUCCESS, 'Inspeccion aprobada')
     return redirect('inspector')
-
-
 
 
 def enviar_correcciones(request, pk_tramite):
