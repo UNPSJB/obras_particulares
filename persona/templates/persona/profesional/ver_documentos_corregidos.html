@@ -46,32 +46,22 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <hr>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div class="form-group">
-                                        <label for="">Cargar Documentos corregidos:</label>
-                                        <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                                        <input class="file" id="id_correcciones"  type="file" data-preview-file-type="any" multiple="true" title="Cargar documentos corregidos" required />
+                                <form action="" method="post" enctype="multipart/form-data">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="form-group">
+                                            <label for="">Cargar Documentos corregidos:</label>
+                                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                                            <input class="file" id="id_correcciones"  type="file" data-preview-file-type="any" multiple="true" title="Cargar documentos corregidos" required />
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                                    <script>
-                                        function noaprobar(){
-                                            obs = $("#id_correcciones").val();
-                                            id_tramite = $("#id_tramite").val();
-                                            url = '/persona/enviar_correcciones/'+id_tramite+'/?msg='+obs;
-                                            alert (url)
-                                            location.href = url;
-                                        }
-                                    </script>
-
-                                    <a href="javascript:noaprobar();">
-                                        <button class="btn btn-primary btn-sm" type="submit" title="Envia Planilla de visado">
-                                            Enviar correcciones
-                                        </button>
-                                    <br>
-                                    </a>
-                                    <br>
-                                </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                                            <button class="btn btn-primary btn-sm" type="submit" title="Envia Planilla de visado">
+                                                Enviar correcciones
+                                            </button>
+                                        <br>
+                                        <br>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>

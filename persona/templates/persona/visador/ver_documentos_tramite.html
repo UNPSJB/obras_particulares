@@ -43,57 +43,58 @@
                         {% endfor %}
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+
                         <div class="container-fluid">
                             <div class="row">
+                                <!--
+                                <div class="form-group">
+                                    <label for="id_monto_a_pagar">Monto:</label>
+                                    <input type="hidden" id="id_tram" value="{{tramite.id}}">
+                                    <input class="form-control input-sm" id="id_monto_a_pagar" name="" type="number" step="any"  placeholder="Ingresar monto" title="Monto" maxlength="10"/>
+                                </div>
 
-                                        <div class="form-group">
-                                            <label for="id_monto_a_pagar">Monto:</label>
-                                            <input type="hidden" id="id_tram" value="{{tramite.id}}">
-                                            <input class="form-control input-sm" id="id_monto_a_pagar" name="" type="text" placeholder="Ingresar monto" title="Monto" maxlength="10" onChange="validarSiNumero(this.value);"/>
-                                        </div>
+                                <script>
+                                    function aprobar(){
+                                        monto = $("#id_monto_a_pagar").val();
+                                        id_tram = $("#id_tram").val();
+                                        url = '/persona/aprobar_visado/'+id_tram+'/?monto_a_pagar='+monto;
+                                        location.href = url;
+                                    }
+                                </script>
 
-                                        <script>
-                                            function aprobar(){
-                                                monto = $("#id_monto_a_pagar").val();
-                                                id_tram = $("#id_tram").val();
-                                                url = '/persona/aprobar_visado/'+id_tram+'/?monto_a_pagar='+monto;
-                                                alert (url)
-                                                location.href = url;
-                                            }
-                                        </script>
+                                <a href="javascript:aprobar();">
+                                    <button class="btn btn-primary btn-sm" type="submit" title="Aprobar el visado">
+                                        Aprobar visado
+                                    </button>
+                                </a>
+                                -->
+                                <form action="" method="post" enctype="multipart/form-data">
 
-                                        <a href="javascript:aprobar();">
-                                            <button class="btn btn-primary btn-sm" type="submit" title="Aprobar el visado">
-                                                Aprobar visado
-                                            </button>
-                                        </a>
+                                     <div class="form-group">
+                                        <label for="id_monto_a_pagar">Monto:</label>
+                                        <input type="hidden" id="id_tram" value="{{tramite.id}}">
+                                        <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" maxlength="10" value="ingresar monto"/>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" type="submit" title="Aprobar el visado" name="Aprobar el visado">
+                                        Aprobar visado
+                                    </button>
 
+                                    <hr>
+                                    {{ctxdoc }}
+                                    <br>
+                                    <div class="form-group">
+                                        <label>Observaciones:</label>
+                                        <input type="hidden" id="id_tramite" value="{{tramite.id}}" name="tram">
+                                        <input class="form-control input-sm" id="id_observaciones" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                                    </div>
 
+                                    <button class="btn btn-danger btn-sm" type="submit" title="Envia Planilla de visado" name="Envia Planilla de visado">
+                                        Enviar correcciones
+                                    </button>
 
-                                        <div class="form-group">
-                                            <label for="">Observaciones:</label>
-                                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                                            <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
-                                        </div>
-
-
-
-                                        <script>
-                                            function noaprobar(){
-                                                obs = $("#id_observaciones").val();
-                                                id_tramite = $("#id_tramite").val();
-                                                url = '/persona/no_aprobar_visado/'+id_tramite+'/?msg='+obs;
-                                                alert (url)
-                                                location.href = url;
-                                            }
-                                        </script>
-
-                                        <a href="javascript:noaprobar();">
-                                            <button class="btn btn-danger btn-sm" type="submit" title="Envia Planilla de visado">
-                                                Enviar correcciones
-                                            </button>
-                                        </a>
-
+                                    <br><br>
+                                </form>
 
                             </div>
                         </div>
