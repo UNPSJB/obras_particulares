@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import  login_required
+from reportlab.lib.styles import getSampleStyleSheet
+
 from .forms import *
 from django.contrib import messages
 from tipos.forms import *
@@ -15,6 +17,18 @@ from tramite.models import Tramite, Estado
 from django.views.generic.detail import DetailView
 import re
 from datetime import datetime
+from django.views.generic.base import TemplateView
+from openpyxl import Workbook
+from django.http.response import HttpResponse
+
+
+from django.views.generic import View
+from django.conf import settings
+from io import BytesIO
+from reportlab.pdfgen import canvas
+from reportlab.platypus import SimpleDocTemplate, Paragraph, TableStyle, Table
+from reportlab.lib import colors
+from reportlab.lib.units import cm
 
 DATETIME = re.compile("^(\d{4})\-(\d{2})\-(\d{2})\s(\d{2}):(\d{2})$")
 
@@ -38,7 +52,12 @@ def tramites_agendados_por_inspector(request):
     estados = Estado.objects.all()
     tipo = 5
     estados_agendados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
-    return estados_agendados
+    argumentos = [Visado, ConInspeccion]
+    tramites = Tramite.objects.en_estado(Agendado)
+    tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
+    print (tramites_del_inspector)
+    contexto = {"tramites_del_inspector": tramites_del_inspector}
+    return tramites_del_inspector
 
 def tramites_inspeccionados_por_inspector(request):
 
@@ -80,8 +99,9 @@ def cargar_inspeccion_final(request,pk_tramite):
 def aceptar_inspeccion_final(request,pk_tramite):
     print"entreee a aceptar"
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(Tramite.INSPECCIONAR, request.user)#agendado->ConInspeccion
-    tramite.hacer(Tramite.INSPECCIONAR, request.user)#ConInspeccion->Inspeccionado
+    u = request.user
+    tramite.hacer(Tramite.INSPECCIONAR, usuario=u, inspector=u)#agendado->ConInspeccion
+    tramite.hacer(Tramite.INSPECCIONAR, usuario=u)#ConInspeccion->Inspeccionado
     messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada')
     return redirect('jefe_inspector')
 
@@ -326,25 +346,17 @@ def ver_documentos_tramite_administrativo(request, pk_tramite):
 
 def ver_documentos_tramite_profesional(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-
-    return render(request, 'persona/profesional/vista_de_documentos.html', {'tramite': tramite})
+    contexto = {'tramite': tramite}
+    return render(request, 'persona/profesional/vista_de_documentos.html', contexto)
 
 
 @login_required(login_url="login")
 @grupo_requerido('visador')
 def mostrar_visador(request):
 
-
-    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.VISAR)
-    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
-    inicial = metodo(tipos_de_documentos_requeridos)
-    documento_set = FormularioDocumentoSet(initial=inicial)
-
-
     contexto = {
         "ctxtramaceptado": tramites_aceptados(request),
         "ctxtramvisados": tramites_visados(request),
-        "ctxdoc":documento_set,
     }
     return render(request, 'persona/visador/visador.html', contexto)
 
@@ -362,29 +374,51 @@ def tramites_visados(request):
     return contexto
 
 def ver_documentos_para_visado(request, pk_tramite):
+
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.VISAR)
+    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
+    inicial = metodo(tipos_de_documentos_requeridos)
+    documento_set = FormularioDocumentoSet(initial=inicial)
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite})
+
+    if request.method == "POST":
+
+        archivos = request.FILES
+        observacion = request.POST["observaciones"]
+        tram = request.POST['tram']
+        monto_permiso = request.POST['monto']
+
+        if "Envia Planilla de visado" in request.POST:
+            for doc in documento_set:
+                print ("falta guardar archivos")
+            no_aprobar_visado(request, tram, observacion)
+        else:
+            aprobar_visado(request, tram, monto_permiso)
+    else:
+        return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite, 'ctxdoc': documento_set})
+    return redirect('visador')
 
 def ver_documentos_visados(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/visador/ver_documentos_visados.html', {'tramite': tramite})
 
-def aprobar_visado(request, pk_tramite):
+def aprobar_visado(request, pk_tramite, monto):
 
     usuario = request.user
-    monto = request.GET['monto_a_pagar']
+    monto_permiso = monto
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.VISAR, usuario)  # sacar el monto del modelo
-    tramite.monto_a_pagar= monto
+    tramite.monto_a_pagar= monto_permiso
     tramite.save()
     messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')
     return redirect('visador')
 
-def no_aprobar_visado(request, pk_tramite):
+def no_aprobar_visado(request, pk_tramite, observacion):
+
     usuario = request.user
-    observacion = request.GET['msg']
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.CORREGIR, usuario, observacion)
+    obs = observacion
+    tramite.hacer(tramite.CORREGIR, usuario, obs)
     messages.add_message(request, messages.SUCCESS, 'Tramite con visado no aprobado')
     return redirect('visador')
 
@@ -417,9 +451,13 @@ def solicitud_final_obra_list(request):
 
 def habilitar_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.FINALIZAR, request.user)
-    messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
-    return redirect('administrativo')
+    try:
+        tramite.hacer(tramite.FINALIZAR, request.user)
+        messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
+    except:
+        messages.add_message(request, messages.ERROR, 'No puede otorgar final de obra total para ese tramite.')
+    finally:
+        return redirect('administrativo')
 
 
 
@@ -435,7 +473,7 @@ def tramite_con_inspecciones_list(request):
 def ver_inspecciones(request, pk_tramite):
     pk = int(pk_tramite)
     estados = Estado.objects.all()
-    print pk
+    print(pk)
     estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
     estados = filter(lambda e: (e.tipo == 9), estados_de_tramite)
     contexto = {'estados': estados}
@@ -444,11 +482,11 @@ def ver_inspecciones(request, pk_tramite):
 
 
 def ver_historial_tramite(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    pk = int(pk_tramite)
     estados = Estado.objects.all()
-    estados_tramite = filter(lambda e: e.tramite == pk_tramite, estados)
-    contexto = {'estados_tramite', estados_tramite}
-    return render(request, 'persona/propietario/ver_historial_tramite.html', contexto)
+    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
+    contexto = {'estados_de_tramite': estados_de_tramite}
+    return render(request, 'persona/propietario/ver_historial_tramite.html',contexto)
 
 
 def tramites_corregidos(request):
@@ -466,16 +504,44 @@ def tramites_corregidos(request):
 
 def ver_documentos_corregidos(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/profesional/ver_documentos_corregidos.html', {'tramite': tramite})
+    if request.method == "POST":
+        print ("falta guardar documentos")
+        enviar_correcciones(request, pk_tramite)
+    else:
+        return render(request, 'persona/profesional/ver_documentos_corregidos.html', {'tramite': tramite})
+    return redirect('profesional')
 
 def cargar_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/inspector/cargar_inspeccion.html', {'tramite': tramite})
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INSPECCIONAR)
+    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
+    inicial = metodo(tipos_de_documentos_requeridos)
+    documento_set = FormularioDocumentoSet(initial=inicial)
+
+
+    id_tramite = int(pk_tramite)
+
+    if request.method == "POST":
+        print("entre al post")
+        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
+        if documento_set.is_valid():
+            for docForm in documento_set:
+                docForm.save(tramite=tramite)
+
+                if "aceptar_tramite" in request.POST:
+                    print ("acepte el tramite")
+                    aceptar_tramite(request, pk_tramite)
+                elif "rechazar_tramite" in request.POST:
+                    print ("rechace el tramite")
+                    rechazar_inspeccion(request, pk_tramite)
+        else:
+            print("no entre al if")
+    return render(request, 'persona/inspector/cargar_inspeccion.html', {'tramite': tramite, 'ctxdocumentoset': documento_set})
 
 def rechazar_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.INSPECCIONAR, request.user)
-    tramite.hacer(Tramite.CORREGIR, request.user, request.GET["msg"])
+    tramite.hacer(Tramite.CORREGIR, request.user, request.GET["msg"])  #request.POST["observaciones"]
     messages.add_message(request, messages.ERROR, 'Inspeccion rechazada')
     return redirect('inspector')
 
@@ -499,3 +565,79 @@ def enviar_correcciones(request, pk_tramite):
     tramite.hacer(tramite.CORREGIR, request.user, observacion)
     messages.add_message(request, messages.SUCCESS, 'Tramite con documentos corregidos y enviados')
     return redirect('profesional')
+
+
+class ReporteTramitesAceptadosExcel(TemplateView):
+    def get(self, request, *args, **kwargs):
+
+        tramites = Tramite.objects.en_estado(Aceptado)
+        wb = Workbook()
+        ws = wb.active
+        ws['B1'] = 'REPORTE DE TRAMITES ACEPTADOS'
+        ws.merge_cells('B1:F1')
+        #ws['B2'] = 'FECHA_INICIO'
+        ws['C2'] = 'TIPO_DE_OBRA'
+        ws['D2'] = 'PROFESIONAL'
+        ws['E2'] = 'PROPIETARIO'
+        ws['F2'] = 'MEDIDAS'
+        cont = 3
+
+        for tramite in tramites:
+            #ws.cell(row=cont, column=2).value = convertidor_de_fechas(tramite.estado.timestamp)
+            #ws.cell(row=cont, column=2).value = tramite.estado.timestamp
+            ws.cell(row=cont, column=3).value = str(tramite.tipo_obra)
+            ws.cell(row=cont, column=4).value = str(tramite.profesional)
+            ws.cell(row=cont, column=5).value = str(tramite.propietario)
+            ws.cell(row=cont, column=6).value = tramite.medidas
+
+            cont = cont + 1
+
+        nombre_archivo = "ReportePersonasExcel.xlsx"
+
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+
+        return response
+
+class ReporteTramitesAceptadosPdf(View):
+
+    def cabecera(self,pdf):
+
+        archivo_imagen = settings.MEDIA_ROOT+'/imagenes/Escudobanner.png'
+        pdf.drawImage(archivo_imagen, 40, 750, 120, 90,preserveAspectRatio=True)
+        pdf.setFont("Helvetica", 16)
+        pdf.drawString(180, 790, u"SISTEMA OBRAS PARTICULARES")
+        pdf.setFont("Helvetica", 14)
+        pdf.drawString(178, 770, u"Reporte De Tramites Iniciados Para Visar")
+
+    def get(self, request, *args, **kwargs):
+        response = HttpResponse(content_type='application/pdf')
+        buffer = BytesIO()
+        pdf = canvas.Canvas(buffer)
+        self.cabecera(pdf)
+        y = 550
+        self.tabla(pdf, y)
+        pdf.showPage()
+        pdf.save()
+        pdf = buffer.getvalue()
+        buffer.close()
+        response.write(pdf)
+        return response
+
+    def tabla(self, pdf, y):
+
+        encabezados = ('TIPO_DE_OBRA', 'PROFESIONAL', 'PROPIETARIO', 'MEDIDAS')
+        detalles = [(tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.medidas) for tramite in
+                    Tramite.objects.en_estado(Aceptado)]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[4 * cm, 4 * cm, 4 * cm, 3 * cm])
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (3, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black),
+                ('FONTSIZE', (0, 0), (-1, -1), 10),
+            ]
+        ))
+        detalle_orden.wrapOn(pdf, 800, 600)
+        detalle_orden.drawOn(pdf, 60, y)

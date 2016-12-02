@@ -19,12 +19,12 @@
               {% for tramite in tramites %}
                 <tr>
                       <td class="col-xs-3">{{tramite.propietario}}</td>
-                      <td class="col-xs-1">{{tramite.estado}}</td>
-                      <td class="col-xs-1">{{tramite.medidas}}</td>
-                      <td class="col-xs-1">{{tramite.tipo_obra}}</td>
+                      <td class="col-xs-2">{{tramite.estado}}</td>
+                      <td class="col-xs-2">{{tramite.medidas}}</td>
+                      <td class="col-xs-2">{{tramite.tipo_obra}}</td>
                       <td align="center" class="col-xs-2">
                             <a href="{% url 'ver_documentos_corregidos' tramite.pk %}">
-                              <button type="button" class="btn btn-primary" name="ver_documentos_corregidos">
+                              <button type="button" class="btn btn-primary btn-sm" name="ver_documentos_corregidos">
                                 Ver documentos
                               </button>
                             </a>
