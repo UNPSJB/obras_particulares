@@ -167,6 +167,8 @@ class Aceptado(Estado):
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
 
+    def __str__(self):
+        return self.__class__.__name__
 
 class Visado(Estado):
     TIPO = 3
@@ -221,7 +223,7 @@ class Inspeccionado(Estado):
         if self.tramite.esta_pagado():  # Tramite.objects.get(pk=tramite.pk).pago_completo
             return FinalObraSolicitado(tramite=tramite, final_obra_total=True)
         else:
-            raise Exception("Todavia no se puede solicitar el final de obra")
+            return FinalObraSolicitado(tramite=tramite, final_obra_total=False)
 
 
 class FinalObraSolicitado(Estado):
