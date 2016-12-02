@@ -19,6 +19,8 @@ class FormularioDocumento(forms.ModelForm):
 
     def save(self, commit=True, tramite=None):
         doc = super(FormularioDocumento, self).save(commit=False)
+        if tramite:
+            doc.tramite = tramite
         if commit:
             doc.save()
         return doc
