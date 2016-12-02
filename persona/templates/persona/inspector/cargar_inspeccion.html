@@ -26,8 +26,8 @@
                         <hr>
                         {% for documento in tramite.documentos.all %}
                             <div class="col-md-3">
-				                <div class="thumbnail ">
-                                    <a href=/media/{{documento.file}}" class="thumbnail ">
+				                				<div class="thumbnail ">
+                                    <a href="/media/{{documento.file}}" class="thumbnail ">
                                         <img src="/media/{{documento.file}}" class="img-thumbnail" width="200" height="200">
                                     </a>
                                     <font color="#337ab7" size="4">{{documento.tipo_documento}}</font>

@@ -1,8 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import  login_required
-
-import documento
 from .forms import *
 from django.contrib import messages
 from tipos.forms import *
@@ -31,8 +29,7 @@ def mostrar_inspector(request):
     contexto = {
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
         "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
-        "ctxtramitesagendados": tramites_agendados_por_inspector(request),
-
+        "ctxtramitesagendados": tramites_agendados_por_inspector(request)
     }
     return render(request, 'persona/inspector/inspector.html', contexto)
 
@@ -41,8 +38,12 @@ def tramites_agendados_por_inspector(request):
     estados = Estado.objects.all()
     tipo = 5
     estados_agendados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
-
-    return estados_agendados
+    argumentos = [Visado, ConInspeccion]
+    tramites = Tramite.objects.en_estado(Agendado)
+    tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
+    print (tramites_del_inspector)
+    contexto = {"tramites_del_inspector": tramites_del_inspector}
+    return tramites_del_inspector
 
 def tramites_inspeccionados_por_inspector(request):
 
@@ -70,6 +71,12 @@ def agendar_tramite(request, pk_tramite):
 
 def mostrar_popup_datos_agendar(request,pk_tramite):
     pass
+
+def agendar_inspeccion_final(request,pk_tramite):
+    tramite = get_object_or_404(Tramite,pk=pk_tramite)
+    fecha = convertidor_de_fechas(request.GET["msg"])
+    tramite.hacer(Tramite.AGENDAR, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user)
+    return redirect('jefe_inspector')
 
 def mostrar_profesional(request):
     usuario = request.user
@@ -116,7 +123,10 @@ def mostrar_profesional(request):
     return render(request, 'persona/profesional/profesional.html', contexto)
 
 def mostrar_jefe_inspector(request):
-    return render(request, 'persona/jefe_inspector/jefe_inspector.html')
+    contexto = {
+        "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
+    }
+    return render(request, 'persona/jefe_inspector/jefe_inspector.html', contexto)
 
 
 def mostrar_propietario(request):
@@ -308,8 +318,8 @@ def ver_documentos_tramite_administrativo(request, pk_tramite):
 
 def ver_documentos_tramite_profesional(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-
-    return render(request, 'persona/profesional/vista_de_documentos.html', {'tramite': tramite})
+    contexto = {'tramite': tramite}
+    return render(request, 'persona/profesional/vista_de_documentos.html', contexto)
 
 
 @login_required(login_url="login")
@@ -399,9 +409,13 @@ def solicitud_final_obra_list(request):
 
 def habilitar_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.FINALIZAR, request.user)
-    messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
-    return redirect('administrativo')
+    try:
+        tramite.hacer(tramite.FINALIZAR, request.user)
+        messages.add_message(request, messages.SUCCESS, 'final de obra habilitado.')
+    except:
+        messages.add_message(request, messages.ERROR, 'No puede otorgar final de obra total para ese tramite.')
+    finally:
+        return redirect('administrativo')
 
 
 #Inspector en jefe
@@ -431,11 +445,11 @@ def ver_inspecciones(request, pk_tramite):
 
 
 def ver_historial_tramite(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    pk = int(pk_tramite)
     estados = Estado.objects.all()
-    estados_tramite = filter(lambda e: e.tramite == pk_tramite, estados)
-    contexto = {'estados_tramite', estados_tramite}
-    return render(request, 'persona/propietario/ver_historial_tramite.html', contexto)
+    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
+    contexto = {'estados_de_tramite': estados_de_tramite}
+    return render(request, 'persona/propietario/ver_historial_tramite.html',contexto)
 
 
 def tramites_corregidos(request):
@@ -492,6 +506,7 @@ def aceptar_inspeccion(request, pk_tramite):
     tramite.hacer(Tramite.INSPECCIONAR, request.user)
     messages.add_message(request, messages.SUCCESS, 'Inspeccion aprobada')
     return redirect('inspector')
+
 
 def enviar_correcciones(request, pk_tramite):
 
