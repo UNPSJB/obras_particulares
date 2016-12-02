@@ -2,66 +2,49 @@
 
 {% block contenido_tramite_inspeccion_final %}
 
-    <div class="table-responsive">
+<div class="table-responsive">
+    <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+        <!-- Cabecera -->
+        {% if estados %}
+        <thead>
+            <tr>
+                <th>Fecha Inicio</th>
+                <th>Tipo de obra</th>
+                <th>Profesional</th>
+                <th>Propietario</th>
+                <th>Medidas en m2</th>
+                <th>Estado</th>
+                <th>Revisar</th>
+            </tr>
+        </thead>
 
-        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-            {% if tramites %}
-            <!-- Cabecera -->
-            <thead>
-                <tr>
-                    <th>Propietario</th>
-                    <th>Profesional</th>
-                    <th>Medidas</th>
-                    <th>Tipo de Obra</th>
-                    <th>Direccion obra</th>
-                    <th>Fecha</th>
-                    <th>Agendar</th>
-                </tr>
-            </thead>
-            <!-- Mostramos los datos de las tablas -->
-            <tbody>
-                {% for tramite in tramites %}
-                    <tr>
-                        <td>{{ tramite.propietario }}</td>
-                        <td>
-                            {{ tramite.profesional.persona.nombre }}
-                            {{ tramite.profesional.persona.apellido }}
-                            {{ tramite.profesional.profesion }}
-                            {{ tramite.profesional.matricula }}
-                        </td>
-                        <td>{{ tramite.medidas }}</td>
-                        <td>{{ tramite.tipo_obra }}</td>
-                        <td>{{ tramite.domicilio }}</td>
-                        <td>
-                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                            <input class="form-control input-sm" id="id_fechadeinspeccion_{{tramite.pk}}" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
-                        </td>
-                        <td>
+        <tbody>
 
-                            <a href="javascript:prueba();">
-                              <button type="button" class="btn btn-primary" name="Agendar">
-                                Agendar
-                              </button>
-                            </a>
-                        </td>
 
-                        <script>
-                            function prueba(){
-                                obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();
-                                alert(obs);
-                                id_tramite = $("#id_tramite").val();
-                                url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+obs;
-                                alert(url);
-                                location.href = url;
-                            }
-                        </script>
 
-                    </tr>
-                {% endfor %}
-            </tbody>
-            {% else %}
-            <font color="tomato" size="3">No hay tramites disponibles para agendar</font>
-            {% endif%}
-        </table>
-    </div>
+            {% for estado in estados %}
+              <tr>
+                  <td class="col-xs-2">{{ estado.tramite.medidas}}</td>
+                  <td class="col-xs-1">{{ estado.tramite.tipo_obra }} </td>
+                  <td class="col-xs-4">{{ estado.tramite.profesional}}</td>
+                  <td class="col-xs-4">{{ estado.tramite.propietario}}</td>
+                  <td class="col-xs-1">{{ estado.tramite.medidas }} </td>
+                  <td class="col-xs-1">{{estado.tramite.estado}}</td>
+                  <td align="center" class="col-xs-2">
+
+                      <a href="{% url 'cargar_inspeccion_final' pk_tramite=estado.tramite.id %}">
+                        <button type="button" class="btn btn-primary" name="Agendar">
+                          Ver documentos
+                        </button>
+                      </a>
+
+                  </td>
+              </tr>
+            {% endfor %}
+        </tbody>
+        {% else %}
+        <font color="tomato" size="3">No hay tramites disponibles para inspeccionar</font>
+        {% endif %}
+    </table>
+</div>
 {% endblock %}

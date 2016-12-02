@@ -51,11 +51,11 @@ def tramites_agendados_por_inspector(request):
     usuario = request.user
     estados = Estado.objects.all()
     tipo = 5
-    estados_agendados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
+    #estados_agendados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
     argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(Agendado)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
-    print (tramites_del_inspector)
+    #print (tramites_del_inspector)
     contexto = {"tramites_del_inspector": tramites_del_inspector}
     return tramites_del_inspector
 
@@ -90,6 +90,19 @@ def agendar_inspeccion_final(request,pk_tramite):
     tramite = get_object_or_404(Tramite,pk=pk_tramite)
     fecha = convertidor_de_fechas(request.GET["msg"])
     tramite.hacer(Tramite.AGENDAR, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user)
+    return redirect('jefe_inspector')
+
+def cargar_inspeccion_final(request,pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/jefe_inspector/cargar_inspeccion_final.html', {'tramite': tramite})
+
+def aceptar_inspeccion_final(request,pk_tramite):
+    print"entreee a aceptar"
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    u = request.user
+    tramite.hacer(Tramite.INSPECCIONAR, usuario=u, inspector=u)#agendado->ConInspeccion
+    tramite.hacer(Tramite.INSPECCIONAR, usuario=u)#ConInspeccion->Inspeccionado
+    messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada')
     return redirect('jefe_inspector')
 
 @login_required(login_url="login")
@@ -143,6 +156,7 @@ def mostrar_profesional(request):
 def mostrar_jefe_inspector(request):
     contexto = {
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
+        "ctxtramitesagendados": tramites_agendados_por_inspector(request),
     }
     return render(request, 'persona/jefe_inspector/jefe_inspector.html', contexto)
 
@@ -453,12 +467,6 @@ def habilitar_final_obra(request, pk_tramite):
 
 
 
-def mostrar_jefe_inspector(request):
-    contexto = {
-        "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
-    }
-    return render(request, 'persona/jefe_inspector/jefe_inspector.html',contexto)
-
 
 def tramite_con_inspecciones_list(request):
     tramites = Tramite.objects.en_estado(ConInspeccion)
@@ -538,7 +546,7 @@ def cargar_inspeccion(request, pk_tramite):
 def rechazar_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.INSPECCIONAR, request.user)
-    tramite.hacer(Tramite.CORREGIR, request.user, request.GET["msg"])  #request.POST["observaciones"]
+    tramite.hacer(Tramite.CORREGIR, request.user, request.POST["observaciones"])  #request.POST["observaciones"]
     messages.add_message(request, messages.ERROR, 'Inspeccion rechazada')
     return redirect('inspector')
 
