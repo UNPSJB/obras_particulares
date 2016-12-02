@@ -1,0 +1,46 @@
+{% block contenido_tramites_agendados_jefe_inspector %}
+  <div class="table-responsive">
+      <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+          <!-- Cabecera -->
+          <thead>
+              <tr>
+                  <th>Fecha Inicio</th>
+                  <th>Tipo de obra</th>
+                  <th>Profesional</th>
+                  <th>Propietario</th>
+                  <th>Medidas en m2</th>
+                  <th>Estado</th>
+                  <th>Revisar</th>
+              </tr>
+          </thead>
+
+          <tbody>
+
+          {% if estados %}
+
+              {% for estado in estados %}
+                <tr>
+                    <td class="col-xs-2">{{ estado.tramite.medidas}}</td>
+                    <td class="col-xs-1">{{ estado.tramite.tipo_obra }} </td>
+                    <td class="col-xs-4">{{ estado.tramite.profesional}}</td>
+                    <td class="col-xs-4">{{ estado.tramite.propietario}}</td>
+                    <td class="col-xs-1">{{ estado.tramite.medidas }} </td>
+                    <td class="col-xs-1">{{estado.tramite.estado}}</td>
+                    <td align="center" class="col-xs-2">
+
+                        <a href="{% url 'cargar_inspeccion_final' pk_tramite=estado.tramite.id %}">
+                          <button type="button" class="btn btn-primary" name="Agendar">
+                            Ver documentos
+                          </button>
+                        </a>
+
+                    </td>
+                </tr>
+              {% endfor %}
+          {% else %}
+            <font color="tomato" size="3">No hay tramites disponibles para inspeccionar</font>
+          {% endif%}
+          </tbody>
+      </table>
+  </div>
+{% endblock %}

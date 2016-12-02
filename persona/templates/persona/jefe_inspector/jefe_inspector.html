@@ -36,7 +36,7 @@
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               {% block contenido_tramite_inspeccion_final %}
-                {% include "persona/jefe_inspector/tramite_para_inspeccion_final_list.html" with tramites=ctxtramitesconinspeccion.tramites %}
+                {% include "persona/jefe_inspector/tramite_con_inspeccion_list.html" with tramites=ctxtramitesconinspeccion.tramites %}
               {% endblock %}
             </div>
           </div>
@@ -61,9 +61,7 @@
         		<div class="container-fluid">
           			<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-					  		{% block contenido_tramite_con_inspecciones %}
-								{% include "persona/jefe_inspector/tramite_con_inspeccion_list.html" with tramites=ctxtramitesconinspeccion.tramites %}
-					  		{% endblock %}
+					  		consultar otra inspecciones
 						</div>
           			</div>
         		</div>
@@ -105,7 +103,9 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              bloque
+              {% block contenido_tramites_agendados_jefe_inspector %}
+                {% include "persona/jefe_inspector/tramites_agendados_jefe_inspector.html" with estados=ctxtramitesagendados %}
+              {% endblock %}
             </div>
           </div>
         </div>

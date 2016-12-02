@@ -8,36 +8,58 @@
             <!-- Cabecera -->
             {% if tramites %}
                 <thead>
-                        <th>Propietario</th>
-                        <th>Profesional</th>
-                        <th>Medidas</th>
-                        <th>Tipo de Obra</th>
-                        <th>Estado</th>
-                        <th>Ver Inspecciones</th>
-                </thead>
+                  <th>Propietario</th>
+                  <th>Profesional</th>
+                  <th>Medidas</th>
+                  <th>Tipo de Obra</th>
+                  <th>Direccion obra</th>
+                  <th>Fecha</th>
+                  <th>Agendar</th>
+                </thead>              
                 <!-- Mostramos los datos de las tablas -->
                 <tbody>
                     {% for tramite in tramites %}
                         <tr>
                             <td>{{ tramite.propietario }}</td>
-                            <td>{{ tramite.profesional }} </td>
+                            <td>
+                                {{ tramite.profesional.persona.nombre }}
+                                {{ tramite.profesional.persona.apellido }}
+                                {{ tramite.profesional.profesion }}
+                                {{ tramite.profesional.matricula }}
+                            </td>
                             <td>{{ tramite.medidas }}</td>
                             <td>{{ tramite.tipo_obra }}</td>
-                            <td>{{ tramite.estado }}</td>
+                            <td>{{ tramite.domicilio }}</td>
                             <td>
-                                <a href="{% url 'ver_inspecciones' pk_tramite=tramite.id %}">
-                                  <button type="button" class="btn btn-primary btn-xs" name="Ver-Inspecciones">
-                                    Ver-inspecciones
+                                <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                                <input class="form-control input-sm" id="id_fechadeinspeccion_{{tramite.pk}}" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
+                            </td>
+                            <td>
+
+                                <a href="javascript:prueba();">
+                                  <button type="button" class="btn btn-primary" name="Agendar">
+                                    Agendar
                                   </button>
                                 </a>
                             </td>
+
+                            <script>
+                                function prueba(){
+                                    obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();
+                                    alert(obs);
+                                    id_tramite = $("#id_tramite").val();
+                                    url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+obs;
+                                    alert(url);
+                                    location.href = url;
+                                }
+                            </script>
+
                         </tr>
                     {% endfor %}
                 </tbody>
-            </tbody>
-            {% else %}
-                <h4>No hay tramites con inspecciones</h4>
-            {% endif%}
-        </table>
-    </div>
-{% endblock %}
+                {% else %}
+                  <font color="tomato" size="3">No hay tramites disponibles para agendar</font>
+                {% endif%}
+            </table>
+        </div>
+    {% endblock %}

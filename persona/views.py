@@ -73,6 +73,18 @@ def agendar_inspeccion_final(request,pk_tramite):
     tramite.hacer(Tramite.AGENDAR, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user)
     return redirect('jefe_inspector')
 
+def cargar_inspeccion_final(request,pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/jefe_inspector/cargar_inspeccion_final.html', {'tramite': tramite})
+
+def aceptar_inspeccion_final(request,pk_tramite):
+    print"entreee a aceptar"
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite.hacer(Tramite.INSPECCIONAR, request.user)#agendado->ConInspeccion
+    tramite.hacer(Tramite.INSPECCIONAR, request.user)#ConInspeccion->Inspeccionado
+    messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada')
+    return redirect('jefe_inspector')
+
 def mostrar_profesional(request):
     usuario = request.user
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
@@ -120,6 +132,7 @@ def mostrar_profesional(request):
 def mostrar_jefe_inspector(request):
     contexto = {
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
+        "ctxtramitesagendados": tramites_agendados_por_inspector(request),
     }
     return render(request, 'persona/jefe_inspector/jefe_inspector.html', contexto)
 
@@ -409,12 +422,7 @@ def habilitar_final_obra(request, pk_tramite):
     return redirect('administrativo')
 
 
-#Inspector en jefe
-def mostrar_jefe_inspector(request):
-    contexto = {
-        "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
-    }
-    return render(request, 'persona/jefe_inspector/jefe_inspector.html',contexto)
+
 
 
 def tramite_con_inspecciones_list(request):
