@@ -7,6 +7,7 @@
         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
             <!-- Cabecera -->
             {% if tramites %}
+            <tr>
                 <thead>
                   <th>Propietario</th>
                   <th>Profesional</th>
@@ -15,7 +16,8 @@
                   <th>Direccion obra</th>
                   <th>Fecha</th>
                   <th>Agendar</th>
-                </thead>              
+                </thead>
+            </tr>
                 <!-- Mostramos los datos de las tablas -->
                 <tbody>
                     {% for tramite in tramites %}

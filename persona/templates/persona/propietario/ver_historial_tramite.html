@@ -45,16 +45,18 @@
                                                 <hr>
                                         </div>
                                     </div>
+                                <hr>
                                 <h3 style="color: tomato;">Documentacion del tramite:</h3>
+
                                 {% for documento in estado.tramite.documentos.all %}
 
                                     <h5 style="color:white;">{{documento.tipo_documento}}</h5>
 
-                                    <img id="im0" src="/media/{{documento.file}}" style="width:800px;" />
+                                    <img id="im0" src="/media/{{documento.file}}" style="width:600px;" />
 
                                 {% endfor %}
-                                <hr>
                             {% endfor %}
+
                     </div>
 
                         <a href="{% url 'propietario'  %}">

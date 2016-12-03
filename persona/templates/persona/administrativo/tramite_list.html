@@ -8,6 +8,7 @@
             <!-- Cabecera -->
             <thead>
                 <tr>
+                    <th>Numero de tramite</th>
                     <th>Propietario</th>
                     <th>Profesional</th>
                     <th>Medidas</th>
@@ -23,6 +24,7 @@
             {% if tramites %}
                 {% for tramite in tramites %}
                     <tr>
+                        <td class="col-xs-3">{{ tramite.id }}</td>
                         <td class="col-xs-3">{{ tramite.propietario }}</td>
                         <td class="col-xs-3">{{ tramite.profesional }} </td>
                         <td class="col-xs-1">{{ tramite.medidas }}</td>
