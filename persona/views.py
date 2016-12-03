@@ -228,6 +228,7 @@ def alta_persona(request):
             persona.save()
     else:
         form = FormularioPersona()
+
     return render(request, 'persona/alta/alta_persona.html', {'form': form})
 
 def registrar_pago_tramite(request):
@@ -562,11 +563,9 @@ def aceptar_inspeccion(request, pk_tramite):
 def enviar_correcciones(request, pk_tramite):
 
     usuario = request.user
-    archivos = request.GET['msg']
+    #archivos = request.GET['msg']
     observacion = "Este tramite ya tiene los archivos corregidos cargados"
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-
-
     tramite.hacer(tramite.CORREGIR, request.user, observacion)
     messages.add_message(request, messages.SUCCESS, 'Tramite con documentos corregidos y enviados')
     return redirect('profesional')

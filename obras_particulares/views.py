@@ -29,7 +29,9 @@ def home(request):
         if form.is_valid():
             profesional = form.save()
             profesional.save()
-            messages.add_message(request, messages.SUCCESS, "Soliciud de Registro Enviada")
+            messages.add_message(request, messages.SUCCESS, "Solicitud de Registro Enviada")
+        else:
+            messages.add_message(request, messages.SUCCESS, "Solicitud de NO Registro Enviada - Comuniquese con el administrador")
     else:
         form = FormularioProfesional()
     return render(request, 'home.html',{'login_usuario_form': forms.FormularioLogin(),'form':form})

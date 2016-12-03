@@ -51,11 +51,11 @@ class Usuario(Rol, AbstractUser):
 from random import choice
 
 class Persona(models.Model):
-    SEXOS = [ {'F', 'Femenino'}, {'M', 'Masculino'} ]
-    dni =  models.CharField(max_length = 8, unique = True)
-    apellido  = models.CharField(max_length = 50)
+    SEXOS = [{'F', 'Femenino'}, {'M', 'Masculino'}]
+    dni = models.IntegerField(unique = True)
+    apellido = models.CharField(max_length = 50)
     nombre = models.CharField(max_length = 50)
-    mail = models.CharField(max_length = 40)
+    mail = models.EmailField(max_length = 40)
     cuil = models.CharField(max_length = 14)    #el ultimo numero va a ser 00..09
     domicilio = models.CharField(max_length = 50)
     telefono = models.CharField(max_length = 15)
