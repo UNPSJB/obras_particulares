@@ -30,11 +30,12 @@ def home(request):
             profesional = form.save()
             profesional.save()
             messages.add_message(request, messages.SUCCESS, "Solicitud de Registro Enviada")
+            return redirect('home')
         else:
             messages.add_message(request, messages.SUCCESS, "Solicitud de NO Registro Enviada - Comuniquese con el administrador")
     else:
         form = FormularioProfesional()
-    return render(request, 'home.html',{'login_usuario_form': forms.FormularioLogin(),'form':form})
+    return render(request, 'home.html', {'login_usuario_form': forms.FormularioLogin(), 'form': form})
 
 
 def grupo_requerido(*grupos):
