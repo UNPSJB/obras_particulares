@@ -30,6 +30,7 @@ def home(request):
             profesional = form.save()
             profesional.save()
             messages.add_message(request, messages.SUCCESS, "Solicitud de Registro Enviada")
+            form = FormularioProfesional()
         else:
             messages.add_message(request, messages.SUCCESS, "Solicitud de NO Registro Enviada - Comuniquese con el administrador")
     else:
