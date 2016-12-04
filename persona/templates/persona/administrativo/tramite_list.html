@@ -8,7 +8,7 @@
             <!-- Cabecera -->
             <thead>
                 <tr>
-                    <th>Numero de tramite</th>
+                    <th>Nro de tramite</th>
                     <th>Propietario</th>
                     <th>Profesional</th>
                     <th>Medidas</th>
@@ -24,7 +24,7 @@
             {% if tramites %}
                 {% for tramite in tramites %}
                     <tr>
-                        <td class="col-xs-3">{{ tramite.id }}</td>
+                        <td class="col-xs-1">{{ tramite.id }}</td>
                         <td class="col-xs-3">{{ tramite.propietario }}</td>
                         <td class="col-xs-3">{{ tramite.profesional }} </td>
                         <td class="col-xs-1">{{ tramite.medidas }}</td>
@@ -46,7 +46,7 @@
                         </td>-->
                         <td align="center" class="col-xs-2">
                             <a href="{% url 'ver_documentos_tramite_administrativo' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary btn-xs" name="Aceptar">
+                              <button type="button" class="btn btn-primary btn-sm" name="Aceptar">
                                 Ver documentos
                               </button>
                             </a>

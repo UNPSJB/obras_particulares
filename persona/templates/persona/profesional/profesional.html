@@ -10,175 +10,152 @@
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
 			   aria-expanded="false" aria-controls="collapseOne">Iniciar Trámite</a>
 		</li>
-
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
 			   aria-expanded="false" aria-controls="collapseTwo">Cargar correcciones a un Trámite</a>
 		</li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
-			   aria-expanded="false" aria-controls="collapseFive">Solicitar final de obra a un Trámite</a>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"
+			   aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
 		</li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
 			   aria-expanded="false" aria-controls="collapseThree">Modificar mis datos personales</a>
-		</li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"
-			   aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
 		</li>
 	</font>
 </ul>
 {% endblock %}
 
-		{% block contenido %}
-			<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-			  <div class="panel panel-custom">
-			    <div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
-			      <h5 class="panel-title">
-			        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-						<font color="#ffffff" size="2">Iniciar Trámite</font>
-			        </a>
-			      </h5>
-			    </div>
-			    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-			      <div class="panel-body">
-				      <div class="container-fluid">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<div class="container-fluid">
-									<form action="{% url 'profesional' %}" class="uniForm" method="post" enctype="multipart/form-data">
-										<div class="row">
+{% block contenido %}
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+	  <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
+		  <h5 class="panel-title">
+			<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+				<font color="#ffffff" size="2">Iniciar Trámite</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+		  <div class="panel-body">
+			  <div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="container-fluid">
+							<form action="{% url 'profesional' %}" class="uniForm" method="post" enctype="multipart/form-data">
+								<div class="row">
 
-											<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-												<font class="form-group" color="#337ab7"><h4 align="left">Datos de la Obra:</h4></font>
+									<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
+										<font class="form-group" color="#337ab7"><h4 align="left">Datos de la Obra:</h4></font>
 
-													{% crispy tramite_form %}
-											</div>
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-												<font class="form-group" color="#337ab7"><h4 align="left">Documentos:</h4></font>
-													{% crispy documento_set %}
-
-											</div>
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-												{% if propietario_form %}
-													<font color="#337ab7"><h4 align="left">Datos de Nuevo Propietario</h4></font>
-													{% crispy propietario_form %}
-												{% endif %}
-											</div>
-
-											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-												<input type="submit" name="tramite_submit" value="Guardar Tramite" class="btn btn-primary" id="submit-id-tramite_submit">
-											</div>
-											</form>
-
-										</div>
-										<div class="container-fluid">
-											<div class="row">
-												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-
-												</div>
-
-											</div>
-										</form>
-
-										</div>
-									<br>
-								</div>
-							</div>
-						</div>
-					</div>
-			      </div>
-			    </div>
-			  </div>
-
-			  <div class="panel panel-custom">
-			    <div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
-			      <h5 class="panel-title">
-			        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-						<font color="#ffffff" size="2">Cargar correcciones a un Trámite</font>
-			        </a>
-			      </h5>
-			    </div>
-			    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-			      <div class="panel-body">
-				      <div class="container-fluid">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<div class="container-fluid">
-									<div class="row">
-										{% block contenido_tramites_corregidos%}
-											{% include "persona/profesional/tramites_corregidos.html" with tramites=ctxtramcorregidos.tramites%}
-										{% endblock %}
+											{% crispy tramite_form %}
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+										<font class="form-group" color="#337ab7"><h4 align="left">Documentos:</h4></font>
+											{% crispy documento_set %}
 
 									</div>
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+										{% if propietario_form %}
+											<font color="#337ab7"><h4 align="left">Datos de Nuevo Propietario</h4></font>
+											{% crispy propietario_form %}
+										{% endif %}
+									</div>
 
-									<br>
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+										<input type="submit" name="tramite_submit" value="Guardar Tramite" class="btn btn-primary" id="submit-id-tramite_submit">
+									</div>
+									</form>
+
 								</div>
-							</div>
-						</div>
-					</div>
-			      </div>
-			    </div>
-			  </div>
+								<div class="container-fluid">
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
 
-			  <div class="panel panel-custom">
-			    <div class="panel-heading panel-heading-custom box" role="tab" id="headingFive">
-			      <h5 class="panel-title">
-			        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			          <font color="#ffffff" size="2">Solicitar final de obra a un Trámite</font>
-			        </a>
-			      </h5>
-			    </div>
-			    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-			      <div class="panel-body">
-				    <div class="container-fluid">
-						<div class="row">
-							aca va un bloque
-						</div>
-					</div>
-			      </div>
-			    </div>
-			  </div>
+										</div>
 
-			  <div class="panel panel-custom">
-			    <div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
-			      <h5 class="panel-title">
-			        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-			          <font color="#ffffff" size="2">Modificar mis datos personales</font>
-			        </a>
-			      </h5>
-			    </div>
-			    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-			      <div class="panel-body">
-				    <div class="container-fluid">
-						<div class="row">
-							aca va un bloque
-						</div>
-					</div>
-			      </div>
-			    </div>
-			  </div>
+									</div>
+								</form>
 
-			  <div class="panel panel-custom">
-			    <div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
-			      <h5 class="panel-title">
-			        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-			          <font color="#ffffff" size="2">Consultar estado de mis Trámites</font>
-			        </a>
-			      </h5>
-			    </div>
-
-			    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-			      	<div class="panel-body">
-			      		<div class="container-fluid">
-							<div class="row">
-								{% block contenido_tramite_estado %}
-									{% include "persona/profesional/consultar_estado_tramite.html" with tramites_de_profesional=ctxtramitesprofesional.tramites_de_profesional %}
-								{% endblock %}
-							</div>
+								</div>
+							<br>
 						</div>
 					</div>
 				</div>
-			  </div>
 			</div>
-		{% endblock %}
+		  </div>
+		</div>
+	  </div>
+
+	  <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
+		  <h5 class="panel-title">
+			<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+				<font color="#ffffff" size="2">Cargar correcciones a un Trámite</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+		  <div class="panel-body">
+			  <div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="container-fluid">
+							<div class="row">
+								{% block contenido_tramites_corregidos%}
+									{% include "persona/profesional/tramites_corregidos.html" with tramites=ctxtramcorregidos.tramites%}
+								{% endblock %}
+
+							</div>
+
+							<br>
+						</div>
+					</div>
+				</div>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+			  <font color="#ffffff" size="2">Consultar estado de mis Trámites</font>
+			</a>
+		  </h5>
+		</div>
+
+		<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						{% block contenido_tramite_estado %}
+							{% include "persona/profesional/consultar_estado_tramite.html" with tramites_de_profesional=ctxtramitesprofesional.tramites_de_profesional %}
+						{% endblock %}
+					</div>
+				</div>
+			</div>
+		</div>
+	  </div>
+
+	  <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+			  <font color="#ffffff" size="2">Modificar mis datos personales</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+					aca va un bloque
+				</div>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+{% endblock %}
 
 
 {% block scripts %}

@@ -4,12 +4,12 @@
           <!-- Cabecera -->
           <thead>
               <tr>
+                  <th>Nro de tramite</th>
                   <th>Fecha Inicio</th>
                   <th>Tipo de obra</th>
                   <th>Profesional</th>
                   <th>Propietario</th>
                   <th>Medidas en m2</th>
-                  <th>Estado</th>
                   <th>Revisar</th>
               </tr>
           </thead>
@@ -20,20 +20,18 @@
 
               {% for tramite in tramites_del_inspector %}
                 <tr>
-                    <td class="col-xs-2">{{ tramite.medidas}}</td>
+                    <td class="col-xs-1">{{ tramite.id}}</td>
+                    <td class="col-xs-1">{{ tramite.estado.timestamp}}</td>
                     <td class="col-xs-1">{{ tramite.tipo_obra }} </td>
                     <td class="col-xs-4">{{ tramite.profesional}}</td>
                     <td class="col-xs-4">{{ tramite.propietario}}</td>
                     <td class="col-xs-1">{{ tramite.medidas }} </td>
-                    <td class="col-xs-1">{{ tramite.estado}}</td>
                     <td align="center" class="col-xs-2">
-
                         <a href="{% url 'cargar_inspeccion' pk_tramite=tramite.id %}">
                           <button type="button" class="btn btn-primary" name="Agendar">
                             Ver documentos
                           </button>
                         </a>
-
                     </td>
                 </tr>
               {% endfor %}

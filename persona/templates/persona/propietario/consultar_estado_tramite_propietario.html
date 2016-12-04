@@ -6,7 +6,7 @@
           <!-- Cabecera -->
           <thead>
               <tr>
-                  <th>Numero de tramite</th>
+                  <th>Nro de tramite</th>
                   <th>Profesional</th>
                   <th>Estado</th>
                   <th>Medidas</th>
@@ -15,7 +15,7 @@
                   <th>Total pagado</th>
                   <th>Total a pagar</th>
                   <th>Final obra</th>
-                  <th>historial tramite</th>
+                  <th>Historial tramite</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -23,7 +23,7 @@
           {% if tramites_de_propietario %}
               {% for tramite in tramites_de_propietario %}
                 <tr>
-                  <td class="col-xs-2">{{tramite.id}}</td>
+                  <td class="col-xs-1">{{tramite.id}}</td>
                   <td class="col-xs-2">{{tramite.profesional}}</td>
                   <td class="col-xs-1">{{tramite.estado}}</td>
                   <td class="col-xs-1">{{tramite.medidas}}</td>

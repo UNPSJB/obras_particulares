@@ -1,13 +1,8 @@
-{% load staticfiles %}
-
-{% block contenido_tramite_inspeccion_final %}
-
 <div class="table-responsive">
     <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-        <!-- Cabecera -->
-        {% if estados %}
         <thead>
             <tr>
+                <th>Nro de tramite</th>
                 <th>Fecha Inicio</th>
                 <th>Tipo de obra</th>
                 <th>Profesional</th>
@@ -19,21 +14,20 @@
         </thead>
 
         <tbody>
-
-
-
+        {% if estados %}
             {% for estado in estados %}
               <tr>
-                  <td class="col-xs-2">{{ estado.tramite.medidas}}</td>
+                  <td class="col-xs-1">{{ estado.tramite.id}}</td>
+                  <td class="col-xs-1">{{ estado.tramite.medidas}}</td>
                   <td class="col-xs-1">{{ estado.tramite.tipo_obra }} </td>
-                  <td class="col-xs-4">{{ estado.tramite.profesional}}</td>
-                  <td class="col-xs-4">{{ estado.tramite.propietario}}</td>
+                  <td class="col-xs-3">{{ estado.tramite.profesional}}</td>
+                  <td class="col-xs-2">{{ estado.tramite.propietario}}</td>
                   <td class="col-xs-1">{{ estado.tramite.medidas }} </td>
                   <td class="col-xs-1">{{estado.tramite.estado}}</td>
                   <td align="center" class="col-xs-2">
 
                       <a href="{% url 'cargar_inspeccion_final' pk_tramite=estado.tramite.id %}">
-                        <button type="button" class="btn btn-primary" name="Agendar">
+                        <button type="button" class="btn btn-primary btn-sm" name="Agendar">
                           Ver documentos
                         </button>
                       </a>
@@ -42,9 +36,7 @@
               </tr>
             {% endfor %}
         </tbody>
-        {% else %}
-        <font color="tomato" size="3">No hay tramites disponibles para inspeccionar</font>
         {% endif %}
     </table>
 </div>
-{% endblock %}
+

@@ -6,28 +6,28 @@
 {% block barra %}
 <ul class="sidebar sidebar-1">
   <font size="2">
-    <li><a href="#" class="current"><font color="tomato">Inspector</font></a></li>
-    <div class="list-group">
+      <li><a href="#" class="current"><font color="tomato">Inspector</font></a></li>
       <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspeccion</a></li>
       <li><a data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree" onclick='mostrarSubmenu("sin_submenu")'>Cargar Inspeccion</a></li>
       <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis Inspecciones</a></li>
       <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
-    </div>
   </font>
 </ul>
 {% endblock %}
 
 {% block contenido %}
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-  <div class="panel">
+
+
+  <div class="panel ">
     <div class="panel-heading box" role="tab" id="headingTwo">
       <h5 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>
-          <font color="#ffffff" size="2">Agendar para inspeccion</font>
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  onclick='mostrarSubmenu("sin_submenu")'>
+          <font color="#ffffff" size="2">Agendar Inspección</font>
         </a>
       </h5>
     </div>
-    <div id="collapseTwo" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo">
+    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
       <div class="panel-body">
         <div class="container-fluid">
           <div class="row">
@@ -42,9 +42,8 @@
     </div>
   </div>
 
-
   <div class="panel ">
-    <div class="panel-heading" role="tab" id="headingFour">
+    <div class="panel-heading box" role="tab" id="headingFour">
       <h5 class="panel-title">
         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour"  onclick='mostrarSubmenu("sin_submenu")'>
           <font color="#ffffff" size="2">Consultar mis Inspecciones</font>
@@ -69,7 +68,7 @@
   </div>
 
   <div class="panel ">
-    <div class="panel-heading" role="tab" id="headingthree">
+    <div class="panel-heading box" role="tab" id="headingthree">
       <h5 class="panel-title">
         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree"  onclick='mostrarSubmenu("sin_submenu")'>
           <font color="#ffffff" size="2">Cargar Inspeccion</font>
@@ -110,7 +109,7 @@
                     <div class="row">
                       <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                         <div class="form-group">
-                          <label for="telefono">Nro. de teléfono:</label>
+                          <label>Nro. de teléfono:</label>
                           <input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono" maxlength="13" />
                         </div>
                       </div>
@@ -148,40 +147,24 @@
         </div>
       </div>
     </div>
-  </div>
+</div>
 
 {% endblock %}
 
 
 {% block scripts %}
-<!-- Esto no se debe borrar-->
-<script src="bootstrap/js/bootstrap.min.js"></script>
 
-</body>
 
-<script>
-$("#perfil").fileinput({
-  showCaption: false,
-  browseClass: "btn btn-primary btn-sm",
-  fileType: "any",
-  maxFileCount: 1,
-  browseLabel: 'Cargar nueva foto de perfil',
-  showUpload: false,
-  showRemove: false
-});
-</script>
-
-<script>
-$("#final").fileinput({
-  showCaption: false,
-  browseClass: "btn btn-primary btn-sm",
-  fileType: "any",
-  maxFileCount: 1,
-  browseLabel: 'Cargar constancia de CACH',
-  showUpload: false,
-  showRemove: false
-});
-</script>
-
+  <script>
+    $("#perfil").fileinput({
+      showCaption: false,
+      browseClass: "btn btn-primary btn-sm",
+      fileType: "any",
+      maxFileCount: 1,
+      browseLabel: 'Cargar nueva foto de perfil',
+      showUpload: false,
+      showRemove: false
+    });
+  </script>
 
 {% endblock%}

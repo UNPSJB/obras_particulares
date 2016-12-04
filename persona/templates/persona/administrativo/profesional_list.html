@@ -32,14 +32,14 @@
                   <td class="col-xs-1">{{ persona.profesional.matricula }}</td>
                   <td align="center" class="col-xs-2">
                         <a href="{% url 'ver_certificado' pk=persona.id %}">
-                          <button type="" class="btn btn-primary btn-xs" name="ver certificado">
+                          <button type="" class="btn btn-primary btn-sm" name="ver certificado">
                               Ver Certificado
                           </button>
                         </a>
                   </td>
                   <td align="center" class="col-xs-2">
                     <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
-                      <button type="button" class="btn btn-primary btn-xs" name="habilitar">
+                      <button type="button" class="btn btn-primary btn-sm" name="habilitar">
                         Habilitar
                       </button>
                     </a>

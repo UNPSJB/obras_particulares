@@ -1,67 +1,60 @@
-{% load staticfiles %}
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
 
-{% block contenido_tramite_aceptados %}
-
-    <div class="table-responsive">
-
-        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-            <!-- Cabecera -->
-            {% if tramites %}
+        <thead>
             <tr>
-                <thead>
-                  <th>Propietario</th>
-                  <th>Profesional</th>
-                  <th>Medidas</th>
-                  <th>Tipo de Obra</th>
-                  <th>Direccion obra</th>
-                  <th>Fecha</th>
-                  <th>Agendar</th>
-                </thead>
+                <th>Nro de tramite</th>
+                <th>Propietario</th>
+                <th>Profesional</th>
+                <th>Medidas</th>
+                <th>Tipo de Obra</th>
+                <th>Direccion obra</th>
+                <th>Fecha</th>
+                <th>Agendar</th>
             </tr>
-                <!-- Mostramos los datos de las tablas -->
-                <tbody>
-                    {% for tramite in tramites %}
-                        <tr>
-                            <td>{{ tramite.propietario }}</td>
-                            <td>
-                                {{ tramite.profesional.persona.nombre }}
-                                {{ tramite.profesional.persona.apellido }}
-                                {{ tramite.profesional.profesion }}
-                                {{ tramite.profesional.matricula }}
-                            </td>
-                            <td>{{ tramite.medidas }}</td>
-                            <td>{{ tramite.tipo_obra }}</td>
-                            <td>{{ tramite.domicilio }}</td>
-                            <td>
-                                <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                                <input class="form-control input-sm" id="id_fechadeinspeccion_{{tramite.pk}}" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
-                            </td>
-                            <td>
+        </thead>
 
-                                <a href="javascript:prueba();">
-                                  <button type="button" class="btn btn-primary" name="Agendar">
-                                    Agendar
-                                  </button>
-                                </a>
-                            </td>
+        <tbody>
+            {% if tramites %}
+                {% for tramite in tramites %}
+                    <tr>
+                        <td>{{ tramite.id }}</td>
+                        <td>{{ tramite.propietario }}</td>
+                        <td>
+                            {{ tramite.profesional.persona.nombre }}
+                            {{ tramite.profesional.persona.apellido }}
+                            {{ tramite.profesional.profesion }}
+                            {{ tramite.profesional.matricula }}
+                        </td>
+                        <td>{{ tramite.medidas }}</td>
+                        <td>{{ tramite.tipo_obra }}</td>
+                        <td>{{ tramite.domicilio }}</td>
+                        <td>
+                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                            <input class="form-control input-sm" id="id_fechadeinspeccion_{{tramite.pk}}" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
+                        </td>
+                        <td>
+                            <a href="javascript:prueba();">
+                              <button type="button" class="btn btn-primary btn-sm" name="Agendar">
+                                Agendar
+                              </button>
+                            </a>
+                        </td>
 
-                            <script>
-                                function prueba(){
-                                    obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();
-                                    alert(obs);
-                                    id_tramite = $("#id_tramite").val();
-                                    url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+obs;
-                                    alert(url);
-                                    location.href = url;
-                                }
-                            </script>
+                        <script>
+                            function prueba(){
+                                obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();
+                                alert(obs);
+                                id_tramite = $("#id_tramite").val();
+                                url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+obs;
+                                alert(url);
+                                location.href = url;
+                            }
+                        </script>
 
-                        </tr>
-                    {% endfor %}
-                </tbody>
-                {% else %}
-                  <font color="tomato" size="3">No hay tramites disponibles para agendar</font>
-                {% endif%}
-            </table>
-        </div>
-    {% endblock %}
+                    </tr>
+                {% endfor %}
+            {% endif%}
+        </tbody>
+    </table>
+</div>

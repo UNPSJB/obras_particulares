@@ -6,6 +6,7 @@
           <!-- Cabecera -->
           <thead>
               <tr>
+                  <th>Nro de tramite</th>
                   <th>Propietario</th>
                   <th>Estado</th>
                   <th>Medidas</th>
@@ -18,17 +19,18 @@
           {% if tramites %}
               {% for tramite in tramites %}
                 <tr>
-                      <td class="col-xs-3">{{tramite.propietario}}</td>
-                      <td class="col-xs-2">{{tramite.estado}}</td>
-                      <td class="col-xs-2">{{tramite.medidas}}</td>
-                      <td class="col-xs-2">{{tramite.tipo_obra}}</td>
-                      <td align="center" class="col-xs-2">
+                    <td class="col-xs-1">{{tramite.id}}</td>
+                    <td class="col-xs-3">{{tramite.propietario}}</td>
+                    <td class="col-xs-2">{{tramite.estado}}</td>
+                    <td class="col-xs-2">{{tramite.medidas}}</td>
+                    <td class="col-xs-2">{{tramite.tipo_obra}}</td>
+                    <td align="center" class="col-xs-2">
                             <a href="{% url 'ver_documentos_corregidos' tramite.pk %}">
                               <button type="button" class="btn btn-primary btn-sm" name="ver_documentos_corregidos">
                                 Ver documentos
                               </button>
                             </a>
-                      </td>
+                    </td>
                 </tr>
               {% endfor %}
           {% endif%}

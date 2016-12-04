@@ -4,6 +4,7 @@
           <!-- Cabecera -->
           <thead>
               <tr>
+                  <th>Nro de tramite</th>
                   <th>Fecha Inicio</th>
                   <th>Tipo de obra</th>
                   <th>Profesional</th>
@@ -17,13 +18,13 @@
           <tbody>
 
           {% if tramites %}
-
               {% for tramite in tramites %}
                 <tr>
-                    <td class="col-xs-2">{{ tramite.medidas}}</td>
+                    <td class="col-xs-1">{{ tramite.id}}</td>
+                    <td class="col-xs-1">{{ tramite.medidas}}</td>
                     <td class="col-xs-1">{{ tramite.tipo_obra }} </td>
-                    <td class="col-xs-4">{{ tramite.profesional}}</td>
-                    <td class="col-xs-4">{{ tramite.propietario}}</td>
+                    <td class="col-xs-3">{{ tramite.profesional}}</td>
+                    <td class="col-xs-2">{{ tramite.propietario}}</td>
                     <td class="col-xs-1">{{ tramite.medidas }} </td>
                     <td class="col-xs-1">{{tramite.estado}}</td>
                     <td align="center" class="col-xs-2">
@@ -37,8 +38,6 @@
                     </td>
                 </tr>
               {% endfor %}
-          {% else %}
-            <font color="tomato" size="3">No hay tramites disponibles para inspeccionar</font>
           {% endif%}
           </tbody>
       </table>
