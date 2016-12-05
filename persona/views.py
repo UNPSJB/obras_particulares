@@ -145,6 +145,7 @@ def mostrar_profesional(request):
         propietario_form = None
 
     contexto = {
+        'documentos_requeridos': tipos_de_documentos_requeridos,
         'ctxtramitesprofesional': listado_tramites_de_profesional(request),
         'tramite_form': tramite_form,
         'propietario_form': propietario_form,

@@ -48,7 +48,23 @@
 											{% crispy tramite_form %}
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-										<font class="form-group" color="#337ab7"><h4 align="left">Documentos:</h4></font>
+										<font class="form-group" color="#337ab7"><h4 align="left">Documentos requeridos:</h4></font>
+
+											{% for documento in documentos_requeridos %}
+
+												<font class="" color="#337ab7">
+
+													<span class="glyphicon glyphicon-paperclip " style="font-size:medium;" aria-hidden="true">
+														{{documento}}
+													</span>
+
+												</font>
+
+											{% endfor %}
+
+											<br>
+											<br>
+
 											{% crispy documento_set %}
 
 									</div>
