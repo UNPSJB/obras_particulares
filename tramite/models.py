@@ -57,7 +57,7 @@ class Tramite(models.Model):
         return   "Numero de tramite: {} - Profesional: {} - Propietario: {}" .format(self.pk, self.profesional, self.propietario)
 
     def saldo_restante_a_pagar(self):
-        if self.monto_a_pagar == None:
+        if self.monto_a_pagar == None or self.monto_pagado == None:
             return 0
         else:
             return self.monto_a_pagar - self.monto_pagado
