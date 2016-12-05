@@ -12,28 +12,43 @@
 {% endblock %}
 
 {% block contenido %}
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
 		<div class="panel panel-custom">
-			<div class="panel-heading" role="tab" id="headingFive">
-			</div>
 			<div class="container-fluid" id="alta_usuario">
 				<div class ="row">
-					<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						    <legend style = "color: tomato">Registrarse como Profesional en el Municipio</legend>
-							{% block alta_tipo_documento %}
-								{% include "persona/alta/alta_profesional.html" with form=form %}
-							{% endblock %}
-					</div>
+					<!--<legend style = "color: tomato">Registrarse como Profesional en el Municipio</legend>-->
+					{% block alta_tipo_documento %}
+						{% include "persona/alta/alta_profesional.html" with form=form %}
+					{% endblock %}
+					<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							<div id="persona"></div>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							<div id="profesional"></div>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							<div id="documentos"></div>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+							<div id="boton">
+								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+									Limpiar
+								</button>
+							</div>
+							<br>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>
-	</div>
+
 {% endblock %}
 
 {% block scripts %}
 
 	<script>
-			$("#id_certificado").fileinput({
+		$("#id_certificado").fileinput({
 			showCaption: false,
 			browseClass: "btn btn-primary btn-sm",
 			fileType: "any",
@@ -43,4 +58,22 @@
 			showRemove: false
 		});
 	</script>
+
+	<script>
+		$('#div_id_dni').appendTo('#persona');
+		$('#div_id_nombre').appendTo('#persona');
+		$('#div_id_apellido').appendTo('#persona');
+		$('#div_id_telefono').appendTo('#persona');
+		$('#div_id_domicilio').appendTo('#persona');
+		$('#div_id_cuil').appendTo('#profesional');
+		$('#div_id_mail').appendTo('#profesional');
+		$('#div_id_matricula').appendTo('#profesional');
+		$('#div_id_profesion').appendTo('#profesional');
+		$('#div_id_categorias').appendTo('#profesional');
+		$('#div_id_certificado').appendTo('#documentos');
+		$('#submit-id-profesional_submit').appendTo('#boton');
+
+		$('.btn').addClass('btn-sm');
+	</script>
+
 {% endblock %}

@@ -1,8 +1,21 @@
 {% load staticfiles %}
 {% load crispy_forms_tags%}
 
-		<form action="{%url "login"%}"method="POST">
-			{{ form | crispy }}
-			{% csrf_token %}
-			<input class="btn btn-primary" type="submit" value="login">
-		</form>
+
+	<style>
+		#div_id_username .control-label {
+  			display:none;
+			}
+		#div_id_password .control-label {
+  			display:none;
+			}
+
+	</style>
+
+
+
+	<form action="{%url "login"%}" method="POST" >
+		{{ form | crispy }}
+		{% csrf_token %}
+		<input class="btn btn-primary btn-sm" type="submit" value="Ingresar">
+	</form>

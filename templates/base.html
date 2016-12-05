@@ -56,9 +56,9 @@
 								{% if user.is_active%}
 									<div id="user-tools">
 										<form >
-											<label>Usuario:</label>
+											<label style="margin-right: 3px;">Usuario:</label>
 											<strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>
-											<a href="{%url "logout"%}" class="btn btn-primary">Salir</a>
+											<a href="{%url "logout"%}" class="btn btn-primary btn-sm" style="margin-left: 3px;">Salir</a>
 										</form>
 									</div>
 								{% else %}
@@ -160,6 +160,10 @@
 
 		});
 	</script>
+
+
+
+
 
 	{% block scripts %}
 
