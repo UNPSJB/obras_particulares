@@ -117,54 +117,54 @@ class FormularioUsuario(AuthenticationForm):
         self.helper.add_input(Submit('submit', 'Submit', css_class="btn btn-default"))
 
 
+
 class FormularioUsuarioPersona(FormularioPersona):
     NAME = 'usuario_persona_form'
     SUBMIT = 'usuario_persona_submit'
     usuario = forms.CharField()
     password = forms.CharField()
 
+    #ver como armo esto automaticamente y como lo saco fuera para que todos lo conoscan, lo uso mas abajo
+
+    grupos = {
+        ('1', 'director'),
+        ('2', 'administrativo'),
+        ('3', 'visador'),
+        ('4', 'inspector'),
+        ('7', 'jefeinspector')}
+
+    grupo = forms.TypedMultipleChoiceField(grupos)
+
     def __init__(self, *args, **kwargs):
         super(FormularioUsuarioPersona, self).__init__(*args, **kwargs)
-
-    def save(self, commit = False):
-        persona = super(FormularioUsuarioPersona, self).save(commit = False)
-        datos = self.cleaned_data
-        persona.usuario = Usuario.objects.create_user(username = datos['usuario'],
-                                                      email = datos['mail'],
-                                                      password = datos['password'],)
-        persona.usuario.save()
-        persona.save()
-        return persona.usuario
-
-
-class FormularioAdministrativo(FormularioUsuarioPersona):
-    NAME = 'administrativo_form'
-    SUBMIT = 'administrativo_submit'
+        self.fields['usuario'].widget.attrs['placeholder'] = "Ingresar Nombre Usuario"
+        self.fields['password'].widget.attrs['placeholder'] = "Ingresar Contrasena"
 
     def save(self, commit=False):
-        usuario = super(FormularioAdministrativo, self).save(commit=False)
-        grupo = Group.objects.get(name='administrativo')
-        usuario.groups.add(grupo)
-        return usuario
+        persona = super(FormularioUsuarioPersona, self).save(commit=False)
+        datos = self.cleaned_data
+        persona.usuario = Usuario.objects.create_user(username=datos['usuario'],
+                                                      email=datos['mail'],
+                                                      password=datos['password'],
+                                                      )
 
-class FormularioVisador(FormularioUsuarioPersona):
-    NAME = 'visador_form'
-    SUBMIT = 'visador_submit'
+        grupos = {
+            ('1', 'director'),
+            ('2', 'administrativo'),
+            ('3', 'visador'),
+            ('4', 'inspector'),
+            ('7', 'jefeinspector')}
 
-    def save(self, commit = False):
-        usuario = super(FormularioVisador, self).save(commit=False)
-        grupo = Group.objects.get(name = 'visador')
-        usuario.groups.add(grupo)
-        return usuario
+        grupo_post = datos['grupo']
 
-class FormularioInspector(FormularioUsuarioPersona):
-    NAME = 'inspector_form'
-    SUBMIT = 'inspector_submit'
-
-    def save(self, commit = False):
-        usuario = super(FormularioInspector, self).save(commit=False)
-        grupo = Group.objects.get(name='inspector')
-        usuario.groups.add(grupo)
+        for g in grupos:
+            for gp in grupo_post:
+                if g[0] == gp:
+                    persona.usuario.save()
+                    persona.save()
+                    usuario = persona.usuario
+                    usuario.groups.add(gp)
+                    messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
         return usuario
 
 

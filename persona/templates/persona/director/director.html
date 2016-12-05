@@ -11,9 +11,9 @@
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("tareasUsuario"),opcionesUsuario("nada")'>Usuarios</a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="tareasUsuario">
 					<!--<li><a href="#" onclick='opcionesUsuario("alta_usuario")'>Crear usuario</a></li>-->
-					<li><a href="#" onclick='opcionesUsuario("alta_administrativo")'>Crear administrativo</a></li>
-					<li><a href="#" onclick='opcionesUsuario("alta_visador")'>Crear visador</a></li>
-					<li><a href="#" onclick='opcionesUsuario("alta_inspector")'>Crear inspector</a></li>
+					<li><a href="#" onclick='opcionesUsuario("alta_usuario")'>Crear Usuario</a></li>
+					<!--<li><a href="#" onclick='opcionesUsuario("alta_visador")'>Crear visador</a></li>
+					<li><a href="#" onclick='opcionesUsuario("alta_inspector")'>Crear inspector</a></li>-->
 					<li><a href="#" onclick='opcionesUsuario("modificar_usuario_grupo")'>Cambiar usuario de grupo</a></li>
 				</ul>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite"),opcionesDatosTramite("nada")'>Datos tramite</a></li>
@@ -52,16 +52,16 @@
 							<select class="form-control input-sm" id="opcionesDelUsuario" name="Opciones de usuario" onChange="opcionesUsuario(this.value);">
 								<option selected value="nada"> ¿Que desea hacer? </option>
 								<!--<option value="alta_usuario">Crear usuario</option>-->
-								<option value="alta_administrativo">Crear Administrativo</option>
-								<option value="alta_visador">Crear Visador</option>
-								<option value="alta_inspector">Crear inspector</option>
+								<option value="alta_usuario">Crear Usuario</option>
+								<!--<option value="alta_visador">Crear Visador</option>
+								<option value="alta_inspector">Crear inspector</option>-->
 								<option value="modificar_usuario_grupo">Cambiar usuario de grupo</option>
 							</select>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="container-fluid" id="alta_usuario" style="display: none;">
+			<!--<div class="container-fluid" id="alta_usuario" style="display: none;">
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<hr>
@@ -73,43 +73,30 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			  <div class="container-fluid" id="alta_administrativo" style="display: none;">
+			</div>-->
+			  <div class="container-fluid" id="alta_usuario" style="display: none;">
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<hr>
-						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-							<label>Soy el form de administrativo</label>>
+						<div style="display:none">
 							{% block alta_administrativo %}
-								{% crispy administrativo_form %}
+								{% crispy usuario_persona_form %}
 							{% endblock %}
 						</div>
-					</div>
-				</div>
-			  </div>
-			  <div class="container-fluid" id="alta_visador" style="display: none;">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<hr>
-						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-							<label>Soy el form de visador</label>
-							{% block alta_visador %}
-								{% crispy visador_form %}
-							{% endblock %}
-						</div>
-					</div>
-				</div>
-			  </div>
-			  <div class="container-fluid" id="alta_inspector" style="display: none;">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<hr>
-						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-							<label>Soy el form de inspector</label>
-							{% block alta_inspector %}
-								{% crispy inspector_form %}
-							{% endblock %}
-						</div>
+						<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+							<div id="persona_administrativo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="profesional_administrativo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="usuario_administrativo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="boton_administrativo" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+									Limpiar
+								</button>
+							</div>
+							<br>
+						</form>
 					</div>
 				</div>
 			  </div>
@@ -332,12 +319,10 @@
 		</div>
 	  </div>
 	</div>
+
 {% endblock %}
 
 {% block scripts %}
-
-	<!-- Esto no se debe borrar-->
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
 
 	<script type="text/javascript">
 	(function(){
@@ -396,42 +381,17 @@
 		function opcionesUsuario(id) {
 			if (id == "nada") {
 				$("#alta_usuario").hide();
-				$("#alta_administrativo").hide();
 				$("#modificar_usuario_grupo").hide();
-				$("#alta_inspector").hide();
-				$("#alta_visador").hide();
 				$("#" + "opcionesDelUsuario").val('nada');
 			}
-			if (id == "alta_inspector"){
-				$("#alta_inspector").show();
-				$("#alta_usuario").hide();
+			if (id == "alta_usuario"){
+				$("#alta_usuario").show();
 				$("#modificar_usuario_grupo").hide();
-				$("#alta_administrativo").hide();
-				$("#alta_visador").hide();
-				$("#" + "opcionesDelUsuario").val('alta_inspector');
-			}
-			if (id == "alta_administrativo"){
-				$("#alta_administrativo").show();
-				$("#alta_usuario").hide();
-				$("#alta_inspector").hide();
-				$("#alta_visador").hide();
-				$("#modificar_usuario_grupo").hide();
-				$("#" + "opcionesDelUsuario").val('alta_administrativo');
-			}
-			if (id == "alta_visador"){
-				$("#alta_visador").show();
-				$("#alta_usuario").hide();
-				$("#alta_inspector").hide();
-				$("#modificar_usuario_grupo").hide();
-				$("#alta_administrativo").hide();
-				$("#" + "opcionesDelUsuario").val('alta_visador');
+				$("#" + "opcionesDelUsuario").val('alta_usuario');
 			}
 			if (id == "modificar_usuario_grupo") {
 				$("#alta_usuario").hide();
 				$("#modificar_usuario_grupo").show();
-				$("#alta_administrativo").hide();
-				$("#alta_inspector").hide();
-				$("#alta_visador").hide();
 				//esto es por si dejo los submenu
 				$("#" + "opcionesDelUsuario").val('modificar_usuario_grupo');
 			}
@@ -478,86 +438,37 @@
 		}
 	</script>
 
-	<script type="text/javascript">
-		$(document).ready(function() {
+	<script>
 
-		$('input[name=password]').keyup(function() {
-			// set password variable
-			var pswd = $(this).val();
-			//validate the length
-		if ( pswd.length < 6 ) {
-			$('#length').removeClass('valid').addClass('invalid');
-		} else {
-			$('#length').removeClass('invalid').addClass('valid');
-		}
-		//validate letter
-		if ( pswd.match(/[A-z]/) ) {
-			$('#letter').removeClass('invalid').addClass('valid');
-		} else {
-			$('#letter').removeClass('valid').addClass('invalid');
-		}
+		$('#div_id_dni').appendTo('#persona_administrativo');
+		$('#div_id_nombre').appendTo('#persona_administrativo');
+		$('#div_id_apellido').appendTo('#persona_administrativo');
+		$('#div_id_telefono').appendTo('#persona_administrativo');
+		$('#div_id_domicilio').appendTo('#profesional_administrativo');
+		$('#div_id_cuil').appendTo('#profesional_administrativo');
+		$('#div_id_mail').appendTo('#profesional_administrativo');
+		$('#div_id_matricula').appendTo('#profesional_administrativo');
+		$('#div_id_usuario').appendTo('#usuario_administrativo');
+		$('#div_id_password').appendTo('#usuario_administrativo');
+		$('#div_id_grupo').appendTo('#usuario_administrativo')
+		$('#submit-id-usuario_persona_submit').appendTo('#boton_administrativo');
 
-		//validate capital letter
-		if ( pswd.match(/[A-Z]/) ) {
-			$('#capital').removeClass('invalid').addClass('valid');
-		} else {
-			$('#capital').removeClass('valid').addClass('invalid');
-		}
 
-		//validate number
-		if ( pswd.match(/\d/) ) {
-			$('#number').removeClass('invalid').addClass('valid');
-		} else {
-			$('#number').removeClass('valid').addClass('invalid');
-		}
+		$('#id_password').removeAttr("type");
+		$('#id_password').attr("type","password");
 
-		}).focus(function() {
-			$('#pswd_info').show();
-		}).blur(function() {
-			$('#pswd_info').hide();
+		$('.selectmultiple').attr( "size", "6" );
+		$('.selectmultiple').append($('<option>',{value:0, text:'Seleccione un grupo'}));
+		$('.selectmultiple > option[value="0"]').attr('selected', 'selected');
+
+		var selectList = $('#id_grupo option');
+		selectList.sort(function(a,b){
+			a = a.value;
+			b = b.value;
+			return a-b;
 		});
+		$('#id_grupo').html(selectList);
 
-		});
-	</script>
-
-	<!--habilita el verificar contraseña-->
-	<script type="text/javascript">
-		function activarVerificar(input, inputParaActivar){
-
-			var valInput=input.value;
-			var idVerificar=document.getElementById(inputParaActivar).id;
-
-			if(valInput.length > 5 && valInput.match(/[A-z]/) && valInput.match(/[A-Z]/) && valInput.match(/\d/)){
-				$("#"+ idVerificar).removeAttr("disabled");
-			}else{
-				$("#pswd2").attr('disabled', 'disabled');
-			}
-		}
-
-	</script>
-
-	<script type="text/javascript">
-		$(document).ready(function() {
-
-		$('input[name=pswd2]').keyup(function() {
-			// set password variable
-			var pswd2 = $(this).val();
-			var pass = $('[name=password]');
-			var valorPass = pass.val();
-		//validate text
-		if (pswd2==valorPass) {
-			$('#equals').removeClass('invalid').addClass('valid');
-		} else {
-			$('#equals').removeClass('valid').addClass('invalid');
-		}
-
-		}).focus(function() {
-			$('#pswd2_info').show();
-		}).blur(function() {
-			$('#pswd2_info').hide();
-		});
-
-		});
 	</script>
 
 {% endblock %}

@@ -196,10 +196,6 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioUsuarioPersona,  #este formulario no se necesitaria, solo se dan de alta visador, inspector y administrativo
     FormularioTipoObra,
     FormularioTipoDocumento,
-    FormularioAdministrativo,
-    FormularioInspector,
-    FormularioVisador
-
 ]}
 
 @login_required(login_url="login")
@@ -207,6 +203,7 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
 def mostrar_director(request):
     usuario = request.user
     values = {}
+
     for form_name, submit_name in FORMS_DIRECTOR:
         KlassForm = FORMS_DIRECTOR[(form_name, submit_name)]
         if request.method == "POST" and submit_name in request.POST:
