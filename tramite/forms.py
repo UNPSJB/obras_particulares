@@ -21,6 +21,10 @@ class FormularioIniciarTramite(forms.ModelForm):
         self.helper = FormHelper()
         #self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
         self.helper.form_tag = False
+        self.fields['tipo_obra'].widget.attrs['placeholder'] = "Ingresar Tipo de Obra"
+        self.fields['medidas'].widget.attrs['placeholder'] = "Ingresar Medidas en m2"
+        self.fields['profesional'].widget.attrs['placeholder'] = "Ingresar DNI del Profesional"
+
 
     def save(self, commit=True, propietario=None):
         tramite = super(FormularioIniciarTramite, self).save(commit=False)

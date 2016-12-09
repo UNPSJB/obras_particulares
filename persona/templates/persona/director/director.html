@@ -203,11 +203,23 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<hr>
-							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
 								{% block alta_tipo_documento %}
 									{% crispy tipo_documento_form %}
 								{% endblock %}
 							</div>
+							<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+								<div id="tipo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+								</div>
+								<div id="requerido_para" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+								</div>
+								<div id="boton_tipo" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+										Limpiar
+									</button>
+								</div>
+								<br>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -215,11 +227,26 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<hr>
-							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
 								{% block alta_tipo_de_obra %}
 									{% crispy tipo_obra_form %}
 								{% endblock %}
 							</div>
+							<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+								<div id="nombre_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+								</div>
+								<div id="desc_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+								</div>
+								<div id="categoria_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+								</div>
+								<div id="boton_tipo_obra" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+										Limpiar
+									</button>
+								</div>
+								<br>
+							</form>
+
 						</div>
 					</div>
 			  	</div>
@@ -453,7 +480,6 @@
 		$('#div_id_grupo').appendTo('#usuario_administrativo')
 		$('#submit-id-usuario_persona_submit').appendTo('#boton_administrativo');
 
-
 		$('#id_password').removeAttr("type");
 		$('#id_password').attr("type","password");
 
@@ -468,6 +494,20 @@
 			return a-b;
 		});
 		$('#id_grupo').html(selectList);
+
+
+		$('#alta_tipo_documento #div_id_nombre').appendTo('#tipo')
+		$('#alta_tipo_documento #div_id_descripcion').appendTo('#tipo')
+		$('#div_id_activo').appendTo('#tipo')
+		$('#div_id_fecha_alta').appendTo('#tipo')
+		$('#div_id_requerido').appendTo('#requerido_para')
+		$('#submit-id-tipo_documento_submit').appendTo('#boton_tipo')
+
+
+		$('#alta_tipo_de_obra #div_id_nombre').appendTo('#nombre_tipo_obra')
+		$('#alta_tipo_de_obra #div_id_descripcion').appendTo('#desc_tipo_obra')
+		$('#alta_tipo_de_obra #div_id_categorias').appendTo('#categoria_tipo_obra')
+		$('#submit-id-tipo_obra_submit').appendTo('#boton_tipo_obra')
 
 	</script>
 

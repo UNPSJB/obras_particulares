@@ -211,9 +211,11 @@ def mostrar_director(request):
             _form = KlassForm(request.POST)
             if _form.is_valid():
                 _form.save()
+                messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
                 return redirect(usuario.get_view_name())
             else:
                 values["submit_name"] = submit_name
+                messages.add_message(request, messages.ERROR, "La accion solicitada no a podido ser ejecutada")
             values[form_name] = _form
         else:
             values[form_name] = KlassForm()

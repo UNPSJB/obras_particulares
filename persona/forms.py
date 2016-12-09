@@ -21,9 +21,7 @@ class FormularioPersona(forms.ModelForm):
         super(FormularioPersona, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit(self.SUBMIT, 'Enviar Solicitud'))
-
         #self.helper.form_tag = False
-
         for field_name in self.fields:
             field = self.fields.get(field_name)
             if field:
@@ -33,7 +31,7 @@ class FormularioPersona(forms.ModelForm):
         self.fields['mail'].widget.attrs['placeholder'] = "Ingresar Mail"
         self.fields['dni'].widget.attrs['placeholder'] = "Ingresar Dni"
         self.fields['dni'].widget.attrs['max'] = "99999999"
-        self.fields['dni'].widget.attrs['min'] = "1"
+        self.fields['dni'].widget.attrs['min'] = "9999999"
         self.fields['cuil'].widget.attrs['pattern'] = "^[0-9]{2}-[0-9]{8}/[0-9]$"
         self.fields['cuil'].widget.attrs['title'] = "Ingresar un cuil con el formato xx-xxxxxxxx/x"
         self.fields['cuil'].widget.attrs['placeholder'] = "Ingresar Cuil - Formato: xx-xxxxxxxx/x"
@@ -138,7 +136,9 @@ class FormularioUsuarioPersona(FormularioPersona):
     def __init__(self, *args, **kwargs):
         super(FormularioUsuarioPersona, self).__init__(*args, **kwargs)
         self.fields['usuario'].widget.attrs['placeholder'] = "Ingresar Nombre Usuario"
+        self.fields['usuario'].widget.attrs['pattern'] = ".{5,}"
         self.fields['password'].widget.attrs['placeholder'] = "Ingresar Contrasena"
+        self.fields['password'].widget.attrs['pattern'] = ".{6,}"
 
     def save(self, commit=False):
         persona = super(FormularioUsuarioPersona, self).save(commit=False)
@@ -164,7 +164,6 @@ class FormularioUsuarioPersona(FormularioPersona):
                     persona.save()
                     usuario = persona.usuario
                     usuario.groups.add(gp)
-                    messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
         return usuario
 
 

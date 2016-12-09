@@ -21,11 +21,10 @@ class FormularioTipoDocumento(forms.ModelForm):
         #self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
         self.helper.layout = Layout(
-            Field('nombre', placeholder='Nombre'),
-            Field('descripcion', placeholder='Descripcion'),
-            Field('activo', placeholder='Activo'),
-            Field('fecha_alta', placeholder='Fecha alta', css_class='datepicker'),
-            Field('requerido', placeholder='requerido'),
+            Field('nombre', placeholder='Ingresar Nombre'),
+            Field('descripcion', placeholder='Ingresar Descripcion'),
+            Field('activo', placeholder='Ingresar Activo'),
+            Field('fecha_alta', placeholder='Ingresar Fecha de Alta', css_class='datepicker'),
         )
         self.fields['requerido'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
                                                              choices=TipoDocumento.ACCIONES)
@@ -47,3 +46,6 @@ class FormularioTipoObra(forms.ModelForm):
         self.helper = FormHelper()
         #self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit('tipo_obra_submit', 'Guardar'))
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
+        self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
+        self.fields['categorias'].widget.attrs['placeholder'] = "Ingresar Categoria/s"
