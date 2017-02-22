@@ -25,37 +25,40 @@
                         <td>{{ tramite.estado }}</td>
                         <td>
                             <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                            <input id="date" type='date' min=''></input>
-                            <script>
-                                var today = new Date();
-                                var dd = today.getDate();
-                                var mm = today.getMonth()+1; //January is 0!
-                                var yyyy = today.getFullYear();
-                                if(dd<10){
-                                        dd='0'+dd
-                                    } 
-                                    if(mm<10){
-                                        mm='0'+mm
-                                    } 
-                                today = yyyy+'-'+mm+'-'+dd;
-                                document.getElementById("date").setAttribute("min", today);
+                            
+                            <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+                            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+                            <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+                           
+                           <script>
+                              $(document).ready(function() {
+                                $('#datepicker').datepicker({
+                                    changeMonth: true,
+                                    changeYear: true,
+                                    dateFormat: 'yy-mm-dd',
+                                    showOn: "button",
+                                    minDate: 0,
+                                    minMonth: 0,
+                                    inline: true
+                                });
+                            });
                             </script>
+                            <input id="datepicker" readonly="true"></input>
                         </td>
                         <td>
-                            <a href="javascript:prueba();">
-                              <button type="button" class="btn btn-primary btn-sm" name="Agendar">
-                                Agendar
+                            <a href="javascript:agregarHora();">
+                              <button type="button" class="btn btn-primary btn-sm" name="Agendar">Agendar
                               </button>
                             </a>
                         </td>
                     </tr>
 
-                    <script>
-                        function prueba(){
+                    <script>A
+                        function agregarHora(){
                             var today = new Date();
                             var Hora = today.getHours();
                             var Minutos = today.getMinutes();
-                            obs = $("#date").val();
+                            obs = $("#datepicker").val();
                             fecha = obs+' '+Hora+':'+Minutos
                             alert(fecha);
                             id_tramite = $("#id_tramite").val();
