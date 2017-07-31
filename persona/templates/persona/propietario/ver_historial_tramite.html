@@ -3,145 +3,215 @@
 
 {% block estilos %}
 
-    <style>
-    *{font-family:Verdana, Arial, Helvetica, sans-serif}
-    #im0{
-        position: relative;
-        margin: 0 5% 0 auto;
-        border: 5px solid #fff;
-        border-radius: 10px;
-        box-shadow: 1px 1px 5px rgba(50,50,50 0.5);
-    }
-    </style>
-
 {% endblock %}
 
 {% block barra %}
 	<ul class="sidebar sidebar-1">
 		<font size="2">
-			<li><a href="#" class="current"><font color="tomato">Propietario</font></a></li>
+			<li><a href="{% url 'propietario'  %}" class="current"><font color="tomato">Propietario</font></a></li>
 		</font>
 	</ul>
 {% endblock %}
 
-
 {% block contenido %}
-
-
-
-    <div class="container-fluid">
-        <div class="panel panel-custom ">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <h4 style="color: tomato;">Datos del tramite:</h4>
-                            <hr>
-                            {% for estado in estados_de_tramite %}
-                                    <div class="row">
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                                <h3>Profesional {{estado.tramite.profesional}}</h3>
-                                                <h3>Estado: {{estado.tipo}}</h3>
-                                                <h3>Prueba tipo: {{estado.tipo.timestamp}}</h3>
-                                                <hr>
-                                        </div>
-                                    </div>
-                                <hr>
-                                <h3 style="color: tomato;">Documentacion del tramite:</h3>
-
-                                {% for documento in estado.tramite.documentos.all %}
-
-                                    <h5 style="color:white;">{{documento.tipo_documento}}</h5>
-
-                                    <img id="im0" src="/media/{{documento.file}}" style="width:600px;" />
-
-                                {% endfor %}
-                            {% endfor %}
-
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	  <div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFive">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+			  <font color="#ffffff" size="2">Historial del tramite</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        {% if tramite.tramite %}
+                                <ol>
+                                    <label>Tramite nro:</label>
+                                    <li>{{tramite.tramite.id}}</li>
+                                    <label>Profesional:</label>
+                                    <li>{{tramite.tramite.profesional}}</li>
+                                    <label>Superficie:</label>
+                                    <li>{{tramite.tramite.medidas}}</li>
+                                    <label>Tipo de obra:</label>
+                                    <li>{{tramite.tramite.tipo_obra}}</li>
+                                    <label>Estado actual:</label>
+                                    <li>{{tramite.tramite.estado}}</li>
+                                </ol>
+                        {% endif%}
                     </div>
-
-                        <a href="{% url 'propietario'  %}">
+                    <el class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                        <canvas id="myChart" height=143></canvas>
+                    </el>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="table-responsive">
+                              <table  class="table-bordered table-striped table-hover">
+                                  <thead>
+                                      <tr>
+                                          <th>Estado</th>
+                                          <th>Usuario</th>
+                                          <th>Fecha</th>
+                                          <th>Progreso</th>
+                                          <th>Ver</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                  {% if estadosp %}
+                                      {% for estado in estadosp.estados_del_tramite %}
+                                        <tr>
+                                            <td class="col-xs-1" align="center">{{estado.tipo}}</td>
+                                            <td class="col-xs-2">{{estado.usuario}}</td>
+                                            <td class="col-xs-2">{{estado.timestamp}}</td>
+                                            <td class="col-xs-6" >
+                                               <div class="progress">
+                                                   <div id="{{estado.tipo}} - {{estado.timestamp}}" class="progress-bar progress-bar-success"  role="progressbar" style="width:0%;">
+                                                       <span>%</span>
+                                                   </div>
+                                               </div>
+                                            </td>
+                                            <td align="center" class="col-xs-1">
+                                                <a href="{% url 'documentos_de_estado' estado.id%}">
+                                                    <button type="button" class="btn btn-primary btn-xs" name="detalle">
+                                                        <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
+                                                    </button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                      {% endfor %}
+                                  {% endif%}
+                                  </tbody>
+                              </table>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                        <a href="javascript:history.back(-1);">
                             <button type="button" class="btn btn-primary" name="Volver">
                                 Volver
                             </button>
-                        <br>
+                        </a>
                     </div>
-                </div>
-                <br>
-                <hr>
-
-
-            </div>
+			    </div>
+			</div>
+          </div>
         </div>
+      </div>
     </div>
 
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
     <script>
-    function t(id){return document.getElementById(id);}
-    function addEvent(obj,fun,type){
-        if(obj.addEventListener){
-            obj.addEventListener(type,fun,false);
-        }else if(obj.attachEvent){
-            var f=function(){
-                fun.call(obj,window.event);
-            }
-            obj.attachEvent('on'+type,f);
-            obj[fun.toString()+type]=f;
-        }else{
-            obj['on'+type]=fun;
-        }
-    }
-    function getPos(e){
-        var ev=e || window.event;
-        var obj=ev.target || ev.srcElement;
-        obj.style.position='relative';
-        posX=ev.layerX || ev.offsetX || 0;
-        posY=ev.layerY || ev.offsetY || 0;
-        return {x:posX,y:posY}
-    }
-    function css(id,prop){
-        if(window.getComputedStyle){
-            return document.defaultView.getComputedStyle(t(id),null).getPropertyValue(prop);
-        }else{
-            var re = /(-([a-z]){1})/g;
-            if (prop == 'float') prop = 'styleFloat';
-            if (re.test(prop)) {
-                prop = prop.replace(re, function () {
-                    return arguments[2].toUpperCase();
-                });
-            }
-            return t(id).currentStyle[prop] ? t(id).currentStyle[prop] : null;
-        }
-    }
-    function cambiar(pos,rel,e,a,a2,w,h){
-        var al=parseInt(a);
-        var al2=parseInt(a2);
-        if(pos.x<(al/2)/rel)
-            pos.x=(al/2)/rel;
-        if(pos.y<(al2/2)/rel)
-            pos.y=(al2/2)/rel;
-        if(pos.x>(w)-(al/2)/rel)
-            pos.x=(w)-(al/2)/rel;
-        if(pos.y>(h)-(al2/2)/rel)
-            pos.y=(h)-(al2/2)/rel;
-        t('im').style.left=-(rel*pos.x)+(al/2)+'px';
-        t('im').style.top=-(rel*pos.y)+(al2/2)+'px';
-    }
-    onload=function(){
-        addEvent(
-            t('im0'),
-            function(e){
-                var al2=css('lupa','height');
-                var al=css('lupa','width');
-                var pos=getPos(e);
-                cambiar(pos,(t('im').width)/this.width,e,al,al2,this.width,this.height);
-            },
-            'mousemove'
-        );
-    }
+        $("[id^='1 -']").css('width', 12 + '%');
+        $("[id^='2 -']").css('width', 25 + '%');
+        $("[id^='3 -']").css('width', 37 + '%');
+        $("[id^='4 -']").css('width', 37 + '%');
+        $("[id^='4 -']").removeClass("progress-bar-success");
+        $("[id^='4 -']").addClass("progress-bar-danger");
+        $("[id^='5 -']").css('width', 50 + '%');
+        $("[id^='9 -']").css('width', 62 + '%');
+        $("[id^='6 -']").css('width', 75 + '%');
+        $("[id^='7 -']").css('width', 82 + '%');
+        $("[id^='8 -']").css('width', 100 + '%');
     </script>
+
+    <script>
+
+        var timeFormat = 'DD/MM/YYYY';
+        var datos = [];
+        var label_fechas = [];
+
+        {% for est in estadosp.estados_del_tramite %}
+          datos.push({{est.tipo}});
+        {% endfor %}
+
+        {% for fe in fecha %}
+            label_fechas.push("{{fe}}");
+        {% endfor %}
+
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label_fechas,
+                datasets: [{
+                label: 'Estado',
+                data: datos,
+                borderColor: "#273746",
+                borderWidth: 3,
+                lineTension: 0.3,
+                pointBorderColor: 'red',
+                pointBackgroundColor: 'red',
+                fill:false,
+            }]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    display: false
+                },
+                title:{
+                    display:true,
+                    text:'Historial de estados del tramite n° {{tramite.tramite.id}}',
+                    fontSize: 14,
+                    padding: 14,
+                    fontColor:"#273746",
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                scales: {
+                    xAxes: [{
+                        type: "time",
+                        time: {
+                            format: timeFormat,
+                            unit: 'week',
+                        },
+                        scaleLabel: {
+                            display: false,
+                            labelString: 'Fecha',
+                        },
+                         ticks: {
+                            fontColor:"#273746",
+                        },
+                        gridLines:{
+                            color:"#eaecee",
+                            zeroLineColor: "#273746",
+                            zeroLineWidth: 2,
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                        },
+                        ticks: {
+                            min: 0,
+                            max: 10,
+                            stepSize: 1,
+                            fontColor:"#273746",
+                        },
+                        gridLines:{
+                            color:"#eaecee",
+                            zeroLineColor: "#273746",
+                            zeroLineWidth: 1,
+                        }
+                    }]
+                }
+            }
+        });
+
+    </script>
+
 {% endblock %}
 
-</html>
+
+

@@ -1,6 +1,5 @@
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-
         <thead>
             <tr>
                 <th>Nro de tramite</th>
@@ -18,25 +17,25 @@
             {% if tramites %}
                 {% for tramite in tramites %}
                     <tr>
-                        <td>{{ tramite.id }}</td>
-                        <td>{{ tramite.propietario }}</td>
-                        <td>
+                        <td class="col-xs-1">{{ tramite.id }}</td>
+                        <td class="col-xs-2">{{ tramite.propietario }}</td>
+                        <td class="col-xs-3">
                             {{ tramite.profesional.persona.nombre }}
                             {{ tramite.profesional.persona.apellido }}
                             {{ tramite.profesional.profesion }}
                             {{ tramite.profesional.matricula }}
                         </td>
-                        <td>{{ tramite.medidas }}</td>
-                        <td>{{ tramite.tipo_obra }}</td>
-                        <td>{{ tramite.domicilio }}</td>
-                        <td>
+                        <td class="col-xs-1">{{ tramite.medidas }}</td>
+                        <td class="col-xs-1">{{ tramite.tipo_obra }}</td>
+                        <td class="col-xs-1">{{ tramite.domicilio }}</td>
+                        <td class="col-xs-1" align="center">
                             <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                            <input class="form-control input-sm" id="id_fechadeinspeccion_{{tramite.pk}}" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
+                            <input class="form-control input-xs" id="id_fechadeinspeccion_{{tramite.pk}}" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
                         </td>
-                        <td>
+                        <td class="col-xs-1" align="center">
                             <a href="javascript:prueba();">
-                              <button type="button" class="btn btn-primary btn-sm" name="Agendar">
-                                Agendar
+                              <button type="button" class="btn btn-primary btn-xs" name="Agendar">
+                                <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>
                               </button>
                             </a>
                         </td>

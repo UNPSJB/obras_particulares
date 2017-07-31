@@ -5,20 +5,11 @@
 
 {% block barra %}
 <ul class="sidebar sidebar-1">
-	<font size="2">
-		<li><a class="current"><font color="tomato">Profesional</font> </a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"
-			   aria-expanded="false" aria-controls="collapseOne">Iniciar Trámite</a>
-		</li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"
-			   aria-expanded="false" aria-controls="collapseTwo">Cargar correcciones a un Trámite</a>
-		</li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"
-			   aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a>
-		</li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree"
-			   aria-expanded="false" aria-controls="collapseThree">Modificar mis datos personales</a>
-		</li>
+		<font size="2"><li><a href="#" class="current"><font color="tomato">Profesional</font></a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Iniciar Trámite</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Cargar correcciones a un Trámite</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Modificar mis datos personales</a></li>
 	</font>
 </ul>
 {% endblock %}
@@ -41,65 +32,42 @@
 						<div class="container-fluid">
 							<form action="{% url 'profesional' %}" class="uniForm" method="post" enctype="multipart/form-data">
 								<div class="row">
-
 									<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-										<font class="form-group" color="#337ab7"><h4 align="left">Datos de la Obra:</h4></font>
-
+										<font class="form-group" color=white><h5 align="left">Datos de la Obra:</h5></font>
 											{% crispy tramite_form %}
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-										<font class="form-group" color="#337ab7"><h4 align="left">Documentos requeridos:</h4></font>
-
-											{% for documento in documentos_requeridos %}
-
-												<font class="" color="#337ab7">
-
-													<span class="glyphicon glyphicon-paperclip " style="font-size:medium;" aria-hidden="true">
-														{{documento}}
-													</span>
-
-												</font>
-
-											{% endfor %}
-
-											<br>
-											<br>
-
+										<font class="form-group" color=white><h5 align="left">Documentos requeridos:</h5></font>
 											{% crispy documento_set %}
-
 									</div>
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 										{% if propietario_form %}
-											<font color="#337ab7"><h4 align="left">Datos de Nuevo Propietario</h4></font>
+											<font color=white><h5 align="left">Datos de Nuevo Propietario</h5></font>
 											{% crispy propietario_form %}
 										{% endif %}
 									</div>
-
 									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
 										<input type="submit" name="tramite_submit" value="Guardar Tramite" class="btn btn-primary" id="submit-id-tramite_submit">
+										<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+											Limpiar
+										</button>
 									</div>
-									</form>
-
 								</div>
-								<div class="container-fluid">
-									<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-
-										</div>
-
-									</div>
-								</form>
-
-								</div>
-							<br>
+							</form>
 						</div>
+						<div class="container-fluid">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+								</div>
+							</div>
+						</div>
+						<br>
 					</div>
 				</div>
+			  </div>
 			</div>
 		  </div>
 		</div>
-	  </div>
-
 	  <div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
 		  <h5 class="panel-title">
@@ -118,9 +86,7 @@
 								{% block contenido_tramites_corregidos%}
 									{% include "persona/profesional/tramites_corregidos.html" with tramites=ctxtramcorregidos.tramites%}
 								{% endblock %}
-
 							</div>
-
 							<br>
 						</div>
 					</div>
@@ -129,7 +95,6 @@
 		  </div>
 		</div>
 	  </div>
-
 	  <div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
 		  <h5 class="panel-title">
@@ -138,7 +103,6 @@
 			</a>
 		  </h5>
 		</div>
-
 		<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
 			<div class="panel-body">
 				<div class="container-fluid">
@@ -151,7 +115,6 @@
 			</div>
 		</div>
 	  </div>
-
 	  <div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
 		  <h5 class="panel-title">
@@ -173,10 +136,25 @@
 
 {% endblock %}
 
-
 {% block scripts %}
-<!-- Esto no se debe borrar-->
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+	<script>
+		$(function () {
+			var cant_doc_requeridos = {{documentos_requeridos|length}};
+  			for(var n = 0; n < cant_doc_requeridos; n++) {
+    			var valorInput = $("input[id='id_form-"+n+"-tipo_documento']").val();
+				{% for documento in documentos_requeridos %}
+					var id = {{documento.id}}
+					if (valorInput == id){
+  						var valorNombreDoc = "{{documento.nombre}}*"
+					}
+				{% endfor %}
+				$("input[id='id_form-"+n+"-tipo_documento']").next("div[id='div_id_form-"+n+"-file']").children("label[for='id_form-"+n+"-file']").empty();
+				$("input[id='id_form-"+n+"-tipo_documento']").next("div[id='div_id_form-"+n+"-file']").children("label[for='id_form-"+n+"-file']").append(valorNombreDoc);
+			}
+		});
+	</script>
+
 
 	<script>
 		$('.file').fileinput({
@@ -191,17 +169,12 @@
 	</script>
 
 	<script>
-
     	$(function () {
-
             if($("#id_propietario").val().length >1)
             {
                 $('#collapseOne').collapse();
             }
         });
-
 	</script>
 
 {% endblock %}
-
-

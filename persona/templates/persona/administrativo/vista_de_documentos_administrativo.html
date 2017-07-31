@@ -3,23 +3,12 @@
 
 {% block estilos %}
 
-    <style>
-    *{font-family:Verdana, Arial, Helvetica, sans-serif}
-    #im0{
-        position: relative;
-        margin: 0 5% 0 auto;
-        border: 5px solid #fff;
-        border-radius: 10px;
-        box-shadow: 1px 1px 5px rgba(50,50,50 0.5);
-    }
-    </style>
-
 {% endblock %}
 
 {% block barra %}
 	<ul class="sidebar sidebar-1">
 		<font size="2">
-			<li><a href="#" class="current"><font color="tomato">Administrativo</font></a></li>
+			<li><a href="javascript:history.back(-1);" class="current"><font color="tomato">Administrativo</font></a></li>
 		</font>
 	</ul>
 {% endblock %}
@@ -27,45 +16,51 @@
 
 {% block contenido %}
 
-
-
-    <div class="container-fluid">
-        <div class="panel panel-custom ">
-            <div class="container-fluid">
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	  <div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFive">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+			  <font color="#ffffff" size="2">Documentacion del tramite</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+		  <div class="panel-body">
+			<div class="container-fluid">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                        <h4 style="color: tomato;">Documentacion del tramite:</h4>
-                        <hr>
-
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
                         {% for documento in tramite.documentos.all %}
-
-                            <h3 style="color: tomato;">{{documento.tipo_documento}}</h3>
-
-                            <img id="im0" src="/media/{{documento.file}}" />
-
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <div class="thumbnail ">
+                                    <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
+                                        <img src="/media/{{documento.file}}" width=300 height=300>
+                                    </a>
+                                    <br>
+                                    <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}} - {{documento.fecha}} </p>
+                                    <form action="">
+                                        <p align="right" >
+                                        <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
+                                        </p>
+                                    </form>
+                                 </div>
+                            </div>
                         {% endfor %}
-
-                        <hr>
                     </div>
-
-                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <hr>
                         <div class="form-group">
                             <label for="">Observaciones:</label>
                             <input type="hidden" id="id_tramite" value="{{tramite.id}}">
                             <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
                         </div>
                     </div>
-
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
                         <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id  %}">
                             <button type="button" class="btn btn-primary" name="Aceptar">
                                 Aceptar
                             </button>
                         </a>
-
                         <script>
                             function prueba(){
                                 obs = $("#id_observaciones").val();
@@ -75,7 +70,6 @@
                                 location.href = url;
                             }
                         </script>
-
                         <a href="javascript:prueba();">
                             <button type="button" class="btn btn-primary" name="Aceptar">
                                   Rechazar
@@ -84,82 +78,14 @@
                         <br>
                     </div>
                 </div>
-                <br>
-                <hr>
-
-
-            </div>
+		    </div>
+          </div>
         </div>
+      </div>
     </div>
 
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script>
-    function t(id){return document.getElementById(id);}
-    function addEvent(obj,fun,type){
-        if(obj.addEventListener){
-            obj.addEventListener(type,fun,false);
-        }else if(obj.attachEvent){
-            var f=function(){
-                fun.call(obj,window.event);
-            }
-            obj.attachEvent('on'+type,f);
-            obj[fun.toString()+type]=f;
-        }else{
-            obj['on'+type]=fun;
-        }
-    }
-    function getPos(e){
-        var ev=e || window.event;
-        var obj=ev.target || ev.srcElement;
-        obj.style.position='relative';
-        posX=ev.layerX || ev.offsetX || 0;
-        posY=ev.layerY || ev.offsetY || 0;
-        return {x:posX,y:posY}
-    }
-    function css(id,prop){
-        if(window.getComputedStyle){
-            return document.defaultView.getComputedStyle(t(id),null).getPropertyValue(prop);
-        }else{
-            var re = /(-([a-z]){1})/g;
-            if (prop == 'float') prop = 'styleFloat';
-            if (re.test(prop)) {
-                prop = prop.replace(re, function () {
-                    return arguments[2].toUpperCase();
-                });
-            }
-            return t(id).currentStyle[prop] ? t(id).currentStyle[prop] : null;
-        }
-    }
-    function cambiar(pos,rel,e,a,a2,w,h){
-        var al=parseInt(a);
-        var al2=parseInt(a2);
-        if(pos.x<(al/2)/rel)
-            pos.x=(al/2)/rel;
-        if(pos.y<(al2/2)/rel)
-            pos.y=(al2/2)/rel;
-        if(pos.x>(w)-(al/2)/rel)
-            pos.x=(w)-(al/2)/rel;
-        if(pos.y>(h)-(al2/2)/rel)
-            pos.y=(h)-(al2/2)/rel;
-        t('im').style.left=-(rel*pos.x)+(al/2)+'px';
-        t('im').style.top=-(rel*pos.y)+(al2/2)+'px';
-    }
-    onload=function(){
-        addEvent(
-            t('im0'),
-            function(e){
-                var al2=css('lupa','height');
-                var al=css('lupa','width');
-                var pos=getPos(e);
-                cambiar(pos,(t('im').width)/this.width,e,al,al2,this.width,this.height);
-            },
-            'mousemove'
-        );
-    }
-    </script>
-{% endblock %}
 
-</html>
+{% endblock %}

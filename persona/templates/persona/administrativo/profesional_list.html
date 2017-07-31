@@ -14,8 +14,8 @@
                   <th>Profesion</th>
                   <th>Categoria</th>
                   <th>Matricula</th>
-                  <th>Ver certificados</th>
-                  <th>Habilitar profesional</th>
+                  <th>Certificado</th>
+                  <th>Profesional</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -23,24 +23,25 @@
           {% if personas %}
               {% for persona in personas %}
                 <tr>
-                  <td class="col-xs-1">{{ persona.nombre }}</td>
-                  <td class="col-xs-1">{{ persona.apellido }} </td>
-                  <td class="col-xs-1">{{ persona.cuil }}</td>
+                  <td class="col-xs-2">{{ persona.nombre }}</td>
+                  <td class="col-xs-2">{{ persona.apellido }} </td>
+                  <td class="col-xs-2">{{ persona.cuil }}</td>
                   <td class="col-xs-1">{{ persona.telefono }}</td>
                   <td class="col-xs-1">{{ persona.profesional.profesion }}</td>
                   <td class="col-xs-1">{{ persona.profesional.categoria }}</td>
                   <td class="col-xs-1">{{ persona.profesional.matricula }}</td>
-                  <td align="center" class="col-xs-2">
+                  <td align="center" class="col-xs-1">
                         <a href="{% url 'ver_certificado' pk=persona.id %}">
-                          <button type="" class="btn btn-primary btn-sm" name="ver certificado">
-                              Ver Certificado
+
+                          <button type="" class="btn btn-primary btn-xs" name="ver certificado">
+                              <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
                           </button>
                         </a>
                   </td>
-                  <td align="center" class="col-xs-2">
+                  <td align="center" class="col-xs-1">
                     <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
-                      <button type="button" class="btn btn-primary btn-sm" name="habilitar">
-                        Habilitar
+                      <button type="button" class="btn btn-primary btn-xs" name="habilitar">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"> Habilitar</span>
                       </button>
                     </a>
                   </td>

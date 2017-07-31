@@ -1,0 +1,60 @@
+{% load staticfiles %}
+
+
+<!-- recibe la lista de usuarios y grupos-->
+
+
+    <div class="container-fluid">
+        <form action="" class="">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Nombre del usuario:</label>
+                        <input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar nuevo nombre del grupo" title="Ingresar nuevo nombre del usuario" maxlength="13" autofocus />
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Grupo seleccionado para el usuario:</label>
+                        <select id='gruposActuales' class="form-control" size="12" onclick='eliminarSeleccionado(this);'>
+                            <optgroup label="Grupo elegido">
+                                <option value="0"></option>
+                                <option value="1">Aca aparecen los grupos que tiene el usuario</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                    <div class="form-group">
+                        <label for="">Grupos disponibles:</label>
+                         <select id='gruposDisponibles' class="form-control" onchange='cargarpermisosSeleccionados(this,"gruposActuales");' title="Seleccionar a que grupo desea asignarlo" size="12">
+                            <optgroup label="Seleccciona un grupo">
+                                <option value='0'></option>
+                                <option value="1">Grupo 1</option>
+                                <option value="2">Grupo 2</option>
+                                <option value="3">Grupo 3</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="container-fluid">
+                <br>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                        <button class="btn btn-primary btn-sm" type="submit" title="Modificar permisos del grupo">
+                            Modificar grupo
+                        </button>
+                        <button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarTodosLosGrupos()">
+                            Limpiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <br>
+    </div>

@@ -2,158 +2,172 @@
 {% load staticfiles %}
 {% load crispy_forms_tags%}
 
-
 {% block barra %}
-<ul class="sidebar sidebar-1">
-  <font size="2">
-      <li><a href="#" class="current"><font color="tomato">Inspector</font></a></li>
-      <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspeccion</a></li>
-      <li><a data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree" onclick='mostrarSubmenu("sin_submenu")'>Cargar Inspeccion</a></li>
-      <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis Inspecciones</a></li>
-      <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
-  </font>
-</ul>
+  <ul class="sidebar sidebar-1">
+    <font size="2">
+		<li><a class="current"><font color="tomato">Inspector</font> </a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspeccion</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Cargar Inspeccion</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis Inspecciones</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
+	</font>
+  </ul>
 {% endblock %}
 
 {% block contenido %}
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 
-  <div class="panel ">
-    <div class="panel-heading box" role="tab" id="headingTwo">
-      <h5 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo"  onclick='mostrarSubmenu("sin_submenu")'>
-          <font color="#ffffff" size="2">Agendar Inspección</font>
-        </a>
-      </h5>
-    </div>
-    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-      <div class="panel-body">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              {% block contenido_tramites_visados_y_con_inspeccion %}
-                {% include "persona/inspector/tramites_visados_y_con_inspeccion.html" with tramites=ctxtramitesvisadosyconinspeccion %}
-              {% endblock %}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+      <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
+		  <h5 class="panel-title">
+			<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>
+				<font color="#ffffff" size="2">Agendar Inspección</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+		  <div class="panel-body">
+			  <div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="container-fluid">
+                           <div class="row">
+                              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                {% block contenido_tramites_visados_y_con_inspeccion %}
+                                  {% include "persona/inspector/tramites_visados_y_con_inspeccion.html" with tramites=ctxtramitesvisadosyconinspeccion %}
+                                {% endblock %}
+                              </div>
+                           </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		  </div>
+		</div>
+	  </div>
 
-  <div class="panel ">
-    <div class="panel-heading box" role="tab" id="headingFour">
-      <h5 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour"  onclick='mostrarSubmenu("sin_submenu")'>
-          <font color="#ffffff" size="2">Consultar mis Inspecciones</font>
-        </a>
-      </h5>
-    </div>
-    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-      <div class="panel-body">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>
+			  <font color="#ffffff" size="2">Cargar Inspeccion</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="container-fluid">
+                          <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                              {% block contenido_tramites_inspeccionados %}
+                                {% include "persona/inspector/tramites_inspeccionados.html" with estados=ctxtramitesinspeccionados%}
+                              {% endblock %}
+                            </div>
+                          </div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		  </div>
+		</div>
+	  </div>
 
-              {% block contenido_tramites_inspeccionados %}
-                {% include "persona/inspector/tramites_inspeccionados.html" with estados=ctxtramitesinspeccionados%}
-              {% endblock %}
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="panel ">
-    <div class="panel-heading box" role="tab" id="headingthree">
-      <h5 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree"  onclick='mostrarSubmenu("sin_submenu")'>
-          <font color="#ffffff" size="2">Cargar Inspeccion</font>
-        </a>
-      </h5>
-    </div>
-    <div id="collapsethree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingthree">
-      <div class="panel-body">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              {% block contenido_tramites_agendados %}
-                {% include "persona/inspector/tramites_agendados.html" with tramites_del_inspector=ctxtramitesagendados %}
-              {% endblock %}
-            </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-heading box" role="tab" id="headinOne">
-        <h5 class="panel-title">
-          <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>
-            <font color="#ffffff" size="2">Datos personales</font>
-          </a>
-        </h5>
-      </div>
-      <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-        <div class="panel-body">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <div class="container-fluid">
-                  <br>
-                  <form action="" class="" >
-                    <div class="row">
-                      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        <div class="form-group">
-                          <label>Nro. de teléfono:</label>
-                          <input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono" maxlength="13" />
+      <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>
+			  <font color="#ffffff" size="2">Consultar mis Inspecciones</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="container-fluid">
+                          <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                              {% block contenido_tramites_agendados %}
+                                {% include "persona/inspector/tramites_agendados.html" with tramites_del_inspector=ctxtramitesagendados %}
+                              {% endblock %}
+                            </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        <div class="form-group">
-                          <label for="">E-Mail:</label>
-                          <input class="form-control input-sm" id="" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail" maxlength="20" />
-                        </div>
-                      </div>
-                      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        <label for="">Cambiar Foto de perfil:</label>
-                        <br>
-                        <input class="file" id="perfil" type="file" data-preview-file-type="any" title="Cargar nueva foto de perfil">
-                      </div>
-                    </div>
-                    <div class="container-fluid">
-                      <br>
-                      <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                          <button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
-                            Modificar mis datos
-                          </button>
-                          <button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-                            Limpiar
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </form>
-                  <br>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+					</div>
+				</div>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	  <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
+		  <h5 class="panel-title">
+			<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>
+				<font color="#ffffff" size="2">Modificar mis datos personales</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="container-fluid">
+                            <br>
+                            <form action="" class="" >
+                              <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                  <div class="form-group">
+                                    <label>Nro. de teléfono:</label>
+                                    <input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono" maxlength="13" />
+                                  </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                  <div class="form-group">
+                                    <label for="">E-Mail:</label>
+                                    <input class="form-control input-sm" id="" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail" maxlength="20" />
+                                  </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                  <label for="">Cambiar Foto de perfil:</label>
+                                  <br>
+                                  <input class="file" id="perfil" type="file" data-preview-file-type="any" title="Cargar nueva foto de perfil">
+                                </div>
+                              </div>
+                              <div class="container-fluid">
+                                <br>
+                                <div class="row">
+                                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                                    <button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
+                                      Modificar mis datos
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+                                      Limpiar
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
+                            <br>
+					    </div>
+					</div>
+				</div>
+			</div>
+		  </div>
+		</div>
+	  </div>
     </div>
-</div>
 
 {% endblock %}
 
 
 {% block scripts %}
-
 
   <script>
     $("#perfil").fileinput({

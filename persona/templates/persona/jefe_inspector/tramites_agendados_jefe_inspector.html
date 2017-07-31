@@ -24,14 +24,13 @@
                     <td class="col-xs-1">{{ tramite.medidas}}</td>
                     <td class="col-xs-1">{{ tramite.tipo_obra }} </td>
                     <td class="col-xs-3">{{ tramite.profesional}}</td>
-                    <td class="col-xs-2">{{ tramite.propietario}}</td>
+                    <td class="col-xs-3">{{ tramite.propietario}}</td>
                     <td class="col-xs-1">{{ tramite.medidas }} </td>
                     <td class="col-xs-1">{{tramite.estado}}</td>
-                    <td align="center" class="col-xs-2">
-
+                    <td class="col-xs-1" align="center" >
                         <a href="{% url 'cargar_inspeccion_final' pk_tramite=tramite.id %}">
-                          <button type="button" class="btn btn-primary" name="Agendar">
-                            Ver documentos
+                          <button type="button" class="btn btn-primary btn-xs" name="ver">
+                            <span class="glyphicon glyphicon-ok" aria-hidden="true"> Documentos</span>
                           </button>
                         </a>
 

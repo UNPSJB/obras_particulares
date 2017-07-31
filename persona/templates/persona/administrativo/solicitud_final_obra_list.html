@@ -13,8 +13,8 @@
                   <th>Estado</th>
                   <th>Profesional</th>
                   <th>Propietario</th>
-                  <th>Ver datos tramite</th>
-                  <th>Habilitar final de obra</th>
+                  <th>Documentos</th>
+                  <th>Final de obra</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -22,29 +22,29 @@
           {% if tramites %}
               {% for tramite in tramites %}
                 <tr>
-                  <td>{{ tramite.numero }}</td>
-                  <td>{{ tramite.medidas }} </td>
-                  <td>{{ tramite.tipoObra }}</td>
-                  <td>{{ tramite.estado }}</td>
-                  <td>{{ tramite.profesional.persona.nombre }}
+                  <td class="col-xs-1">{{ tramite.numero }}</td>
+                  <td class="col-xs-1">{{ tramite.medidas }} </td>
+                  <td class="col-xs-1">{{ tramite.tipoObra }}</td>
+                  <td class="col-xs-1">{{ tramite.estado }}</td>
+                  <td class="col-xs-2">{{ tramite.profesional.persona.nombre }}
                       {{ tramite.profesional.persona.apellido }}
                       {{ tramite.profesional.persona.profesion }}
                       {{ tramite.profesional.persona.matricula }}
                   </td>
-                  <td>{{ persona.propietario.nombre }}
+                  <td class="col-xs-2">{{ persona.propietario.nombre }}
                       {{ persona.propietario.apellido }}
                   </td>
-                  <td>
+                  <td class="col-xs-1">
                     <a href="">
                       <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
-                        Ver documentacion
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
                       </button>
                     </a>
                   </td>
-                  <td>
+                  <td class="col-xs-1">
                     <a href="{% url 'habilitar_final_obra' pk_tramite=tramite.id %}">
-                      <button type="button" class="btn btn-primary btn-sm" name="habilitar">
-                        Habilitar
+                      <button type="button" class="btn btn-primary btn-xs" name="habilitar">
+                        <span class="glyphicon glyphicon-ok" aria-hidden="true"> Habilitar</span>
                       </button>
                     </a>
                   </td>

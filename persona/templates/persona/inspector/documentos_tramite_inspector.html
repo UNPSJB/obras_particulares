@@ -14,7 +14,7 @@
 {% block barra %}
 	<ul class="sidebar sidebar-1">
 		<font size="2">
-			<li><a href="{% url 'profesional'  %}" class="current"><font color="tomato">Profesional</font></a></li>
+			<li><a href="{% url 'inspector'  %}" class="current"><font color="tomato">Inspector</font></a></li>
 		</font>
 	</ul>
 {% endblock %}
@@ -35,22 +35,22 @@
 				<div class="row">
                     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                         {% if tramite.tramite %}
-                                <ol>
-                                    <label>Tramite nro:</label>
-                                    <li>{{tramite.tramite.id}}</li>
-                                    <label>Profesional:</label>
-                                    <li>{{tramite.tramite.profesional}}</li>
-                                    <label>Superficie:</label>
-                                    <li>{{tramite.tramite.medidas}}</li>
-                                    <label>Tipo de obra:</label>
-                                    <li>{{tramite.tramite.tipo_obra}}</li>
-                                    <label>Estado actual:</label>
-                                    <li>{{tramite.tramite.estado}}</li>
-                                </ol>
+                            <ol>
+                                <label>Tramite nro:</label>
+                                <li>{{tramite.tramite.id}}</li>
+                                <label>Profesional:</label>
+                                <li>{{tramite.tramite.profesional}}</li>
+                                <label>Superficie:</label>
+                                <li>{{tramite.tramite.medidas}}</li>
+                                <label>Tipo de obra:</label>
+                                <li>{{tramite.tramite.tipo_obra}}</li>
+                                <label>Estado actual:</label>
+                                <li>{{tramite.tramite.estado}}</li>
+                            </ol>
                         {% endif%}
                     </div>
                     <el class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                        <canvas id="myChart" height=143></canvas>
+                        <canvas id="myChartInspector" height=143></canvas>
                     </el>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="table-responsive">
@@ -72,14 +72,14 @@
                                             <td class="col-xs-2">{{estado.usuario}}</td>
                                             <td class="col-xs-2">{{estado.timestamp}}</td>
                                             <td class="col-xs-6" >
-                                               <div class="progress" style="position: relative; top: 0.7em;">
+                                               <div class="progress">
                                                    <div id="{{estado.tipo}} - {{estado.timestamp}}" class="progress-bar progress-bar-success"  role="progressbar" style="width:0%;">
                                                        <span>%</span>
                                                    </div>
                                                </div>
                                             </td>
                                             <td align="center" class="col-xs-1">
-                                                <a href="{% url 'documento_de_estado' estado.id%}">
+                                                <a href="{% url 'documentos_inspector_estado' estado.id%}">
                                                     <button type="button" class="btn btn-primary btn-xs" name="detalle">
                                                         <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
                                                     </button>
@@ -106,6 +106,7 @@
         </div>
       </div>
     </div>
+
 {% endblock %}
 
 {% block scripts %}
@@ -130,16 +131,16 @@
         var datos = [];
         var label_fechas = [];
 
-        {% for est in estadosp.estados_del_tramite %}
-          datos.push({{est.tipo}});
+        {% for estado in estadosp.estados_del_tramite %}
+            datos.push({{estado.tipo}});
         {% endfor %}
 
-        {% for fe in fecha %}
+        {% for fe in fechas %}
             label_fechas.push("{{fe}}");
         {% endfor %}
 
-        var ctx = document.getElementById("myChart");
-        var myChart = new Chart(ctx, {
+        var ctx = document.getElementById("myChartInspector");
+        var myChartInspector = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: label_fechas,

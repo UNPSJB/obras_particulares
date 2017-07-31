@@ -2,20 +2,20 @@
 
 {% block contenido_tramite_estado %}
   <div class="table-responsive">
-      <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+      <table class="table table-bordered table-striped table-hover table-condensed">
           <!-- Cabecera -->
           <thead>
               <tr>
-                  <th>Nro de tramite</th>
-                  <th>Profesional</th>
-                  <th>Estado</th>
-                  <th>Medidas</th>
-                  <th>Tipo</th>
-                  <th>Monto total a pagar</th>
-                  <th>Total pagado</th>
-                  <th>Total a pagar</th>
-                  <th>Final obra</th>
-                  <th>Historial tramite</th>
+                  <th style="vertical-align: middle;">Nro</th>
+                  <th style="vertical-align: middle;">Profesional</th>
+                  <th style="vertical-align: middle;">Estado</th>
+                  <th style="vertical-align: middle;">Superficie</th>
+                  <th style="vertical-align: middle;">Tipo</th>
+                  <th style="vertical-align: middle;">Monto total</th>
+                  <th style="vertical-align: middle;">Monto pagado</th>
+                  <th style="vertical-align: middle;">Resta pagar</th>
+                  <th style="vertical-align: middle;">Solicitar</th>
+                  <th style="vertical-align: middle;">Historial</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -24,24 +24,24 @@
               {% for tramite in tramites_de_propietario %}
                 <tr>
                   <td class="col-xs-1">{{tramite.id}}</td>
-                  <td class="col-xs-2">{{tramite.profesional}}</td>
+                  <td class="col-xs-3">{{tramite.profesional}}</td>
                   <td class="col-xs-1">{{tramite.estado}}</td>
                   <td class="col-xs-1">{{tramite.medidas}}</td>
-                  <td class="col-xs-2">{{tramite.tipo_obra}}</td>
-                  <td class="col-xs-2">{{tramite.monto_a_pagar}}</td>
-                  <td class="col-xs-2">{{tramite.monto_pagado}}</td>
-                  <td class="col-xs-2">{{ tramite.saldo_restante_a_pagar}}</td>
-                  <td align="center" class="col-xs-2">
+                  <td class="col-xs-1">{{tramite.tipo_obra}}</td>
+                  <td class="col-xs-1">{{tramite.monto_a_pagar}}</td>
+                  <td class="col-xs-1">{{tramite.monto_pagado}}</td>
+                  <td class="col-xs-1">{{ tramite.saldo_restante_a_pagar}}</td>
+                  <td align="center" class="col-xs-1">
                         <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.id %}">
                           <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
-                            Final obra
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"> Final Obra</span>
                           </button>
                         </a>
                   </td>
-                  <td align="center" class="col-xs-2">
-                    <a href="{% url 'ver_historial_tramite' pk_tramite=tramite.id %}">
+                  <td align="center" class="col-xs-1">
+                    <a href="{% url 'ver_historial_tramite' tramite.id %}">
                       <button type="button" class="btn btn-primary btn-xs" name="ver-historial">
-                        Historial del tramite
+                         <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
                       </button>
                     </a>
                   </td>
@@ -51,4 +51,5 @@
           </tbody>
       </table>
   </div>
+
 {% endblock %}

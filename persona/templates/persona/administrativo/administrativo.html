@@ -134,6 +134,11 @@
 							<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 								{% crispy ctxpago %}
 							</div>
+							<div id="boton_pago" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+									Limpiar
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -244,6 +249,11 @@
 				}
 			}
 		}
+	</script>
+
+	<script>
+
+		$('#submit-id-submit').appendTo('#boton_pago');
 	</script>
 
 {% endblock %}

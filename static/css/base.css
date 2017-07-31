@@ -29,7 +29,10 @@ section {
 
 /* degradado de color de fondo */
 
+
 body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
 	min-height: 100vh; width: 100%;
 	xoverflow: hidden;
 	padding-top: 140px;
@@ -37,17 +40,10 @@ body {
 	font-size: 16px;
 	font-family: 'Lato';*/
 
-	background:
+	background:  /*#f8f9f9s;*/
 		radial-gradient(circle at 1.98% 14.97%, #556270, transparent 100%),
 		radial-gradient(circle at 98.02% 52.96%, #FF6B6B, transparent 100%),
 		radial-gradient(circle at 50% 50%, #4a2735, #4a2735 100%);
-
-	/* otro degradado
-	background:
-		background:-webkit-linear-gradient(315deg, #8254EA 0%, #E86DEC 100%);
-  		background: linear-gradient(135deg, #8254EA 0%, #E86DEC 100%);
-        -webkit-font-smoothing: antialiased;
-     */
 }
 
 
@@ -59,6 +55,7 @@ body {
 
 header{
 	background:#2c3e50;
+	/*background:#04142b;*/
 	color: #ffffff;
 	transition: 0.5s;
 }
@@ -123,8 +120,6 @@ header.sticky {
 label {
 	color: tomato;
 }
-
-
 
 a:link {
 	text-decoration:none;
@@ -268,7 +263,7 @@ a:link {
 /* Ocultar asterisco de campo obligatorio*/
 
 .asteriskField {
-    display: none;
+    display: ;
    }
 
 
@@ -319,3 +314,13 @@ a:link {
   -o-transition: all 300ms ease-in-out;
   transition: all 300ms ease-in-out;
 }
+
+/*********** tablas*************/
+.dataTables_wrapper .dataTables_length label{
+    color: white;
+}
+
+.dataTables_filter label {
+    color: white;
+}
+

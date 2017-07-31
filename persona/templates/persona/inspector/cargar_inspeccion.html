@@ -9,7 +9,7 @@
 {% block barra %}
 	<ul class="sidebar sidebar-1">
 		<font size="2">
-			<li><a href="#" class="current"><font color="tomato">Inspector</font></a></li>
+			<li><a href="javascript:history.back(-1);" class="current"><font color="tomato">Inspector</font></a></li>
 		</font>
 	</ul>
 {% endblock %}
@@ -21,21 +21,28 @@
         <div class="panel panel-custom ">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <h4 style="color: white;">Documentos del tramite:</h4>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
+                        <h4>Documentos del tramite:</h4>
                         <hr>
                         {% for documento in tramite.documentos.all %}
-                            <div class="col-md-3">
-                                <div class="thumbnail ">
-                                    <a href="/media/{{documento.file}}" class="thumbnail ">
-                                        <img src="/media/{{documento.file}}" class="img-thumbnail" width="200" height="200">
-                                    </a>
-                                    <font color="#337ab7" size="4">{{documento.tipo_documento}}</font>
-                                    <form action="">
-                                        <p align="right" >
-                                        <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save-file"></i><span> Descargar</span></a>
-                                        </p>
-                                    </form>
+                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <div class="thumbnail ">
+                                            <a id="single_image" href="/media/{{documento.file}}">
+                                                <img src="/media/{{documento.file}}"  width="300" height="300">
+                                            </a>
+                                        <p></p>
+                                        <form action="">
+                                            <p align="right" >
+                                            <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
+                                            </p>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <br>
+                                    <p style="font-family: Verdana, Times, serif; font-size: 17px;"> {{documento.tipo_documento}} </p>
+                                    <p style="font-style: oblique;">Fecha de ingreso: {{documento.fecha}} </p>
                                 </div>
                             </div>
                         {% endfor %}
@@ -44,40 +51,30 @@
                         <div class="container-fluid">
                             <div class="row">
                                 <hr>
-
                                 <!---Boton para adjuntar el documento correspondiente a la inspeccion-->
-                                    <form  method="post" enctype="multipart/form-data">
-
-                                        {{ctxdocumentoset}}
-
-                                        <div class="form-group">
-                                            <label for="">Observaciones:</label>
-                                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                                            <input class="form-control input-sm" id="id_observaciones" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
-                                        </div>
-
-                                        <!---<button class="btn btn-primary" type="submit" name="Aceptar">
-                                            Aprobar inspeccion
-                                        </button>
-
-                                        <button class="btn btn-primary" type="submit" name="Aceptar">
-                                            Rechazar inspeccion
-                                        </button>-->
-
-                                        <input type="submit" name="aceptar_tramite" value="Aceptar Insepccion">
-                                        <input type="submit" name="rechazar_tramite" value="Rechazar Inspeccion">
-
-                                    </form>
+                                <form  method="post" enctype="multipart/form-data">
+                                    {{ctxdocumentoset}}
+                                    <div class="form-group">
+                                        <label for="">Observaciones:</label>
+                                        <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                                        <input class="form-control input-sm" id="id_observaciones" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                                    </div>
+                                    <!---<button class="btn btn-primary" type="submit" name="Aceptar">
+                                        Aprobar inspeccion
+                                    </button>
+                                    <button class="btn btn-primary" type="submit" name="Aceptar">
+                                        Rechazar inspeccion
+                                    </button>-->
+                                    <input type="submit" name="aceptar_tramite" value="Aceptar Insepccion">
+                                    <input type="submit" name="rechazar_tramite" value="Rechazar Inspeccion">
+                                </form>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
 {% endblock %}
 
 {% block scripts %}

@@ -33,8 +33,16 @@ class FormularioPersona(forms.ModelForm):
         self.fields['dni'].widget.attrs['max'] = "99999999"
         self.fields['dni'].widget.attrs['min'] = "9999999"
         self.fields['cuil'].widget.attrs['pattern'] = "^[0-9]{2}-[0-9]{8}/[0-9]$"
-        self.fields['cuil'].widget.attrs['title'] = "Ingresar un cuil con el formato xx-xxxxxxxx/x"
+        self.fields['cuil'].widget.attrs['title'] = "Ingresar Cuil con formato xx-xxxxxxxx/x"
         self.fields['cuil'].widget.attrs['placeholder'] = "Ingresar Cuil - Formato: xx-xxxxxxxx/x"
+        self.fields['dni'].widget.attrs['title'] = "Ingresar Nro de documento"
+        self.fields['nombre'].widget.attrs['title'] = "Ingresar Nombre"
+        self.fields['apellido'].widget.attrs['title'] = "Ingresar Apellido"
+        self.fields['telefono'].widget.attrs['title'] = "Ingresar Nro de Telefono"
+        self.fields['domicilio'].widget.attrs['title'] = "Ingresar Domicilio"
+        self.fields['mail'].widget.attrs['title'] = "Ingresar Mail"
+        self.fields['nombre'].widget.attrs['pattern'] = "[A-Za-z]{0,50}"
+        self.fields['apellido'].widget.attrs['pattern'] = "[A-Za-z]{0,50}"
 
     def clean_dni(self):
         dato = self.cleaned_data['dni']
@@ -54,6 +62,8 @@ class FormularioProfesional(FormularioPersona):
         super(FormularioProfesional, self).__init__(*args, **kwargs)
         self.fields['matricula'].widget.attrs['placeholder'] = "Ingresar Matricula"
         self.fields['profesion'].widget.attrs['placeholder'] = "Ingresar Profesion"
+        self.fields['matricula'].widget.attrs['title'] = "Ingresar Nro de Matricula"
+        self.fields['profesion'].widget.attrs['title'] = "Ingresar Profesion"
 
     def save(self, commit=False):
         persona = super(FormularioProfesional, self).save(commit=commit)
@@ -114,8 +124,6 @@ class FormularioUsuario(AuthenticationForm):
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', 'Submit', css_class="btn btn-default"))
 
-
-
 class FormularioUsuarioPersona(FormularioPersona):
     NAME = 'usuario_persona_form'
     SUBMIT = 'usuario_persona_submit'
@@ -139,14 +147,13 @@ class FormularioUsuarioPersona(FormularioPersona):
         self.fields['usuario'].widget.attrs['pattern'] = ".{5,}"
         self.fields['password'].widget.attrs['placeholder'] = "Ingresar Contrasena"
         self.fields['password'].widget.attrs['pattern'] = ".{6,}"
+        self.fields['usuario'].widget.attrs['title'] = "Ingresar Usuario"
+        self.fields['password'].widget.attrs['title'] = "Ingresar Contrasena"
 
     def save(self, commit=False):
         persona = super(FormularioUsuarioPersona, self).save(commit=False)
         datos = self.cleaned_data
-        persona.usuario = Usuario.objects.create_user(username=datos['usuario'],
-                                                      email=datos['mail'],
-                                                      password=datos['password'],
-                                                      )
+        persona.usuario = Usuario.objects.create_user(username=datos['usuario'], email=datos['mail'], password=datos['password'],)
 
         grupos = {
             ('1', 'director'),
@@ -179,5 +186,5 @@ class FormularioArchivoPago(forms.Form):
     def __init__(self, *args, **kwargs):
         super(FormularioArchivoPago, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.add_input(Submit('submit', 'Submit', css_class="btn btn-default"))
+        self.helper.add_input(Submit('submit', 'Enviar', css_class="btn btn-default"))
 

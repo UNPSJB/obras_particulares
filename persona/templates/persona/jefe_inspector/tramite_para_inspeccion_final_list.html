@@ -24,11 +24,10 @@
                   <td class="col-xs-2">{{ estado.tramite.propietario}}</td>
                   <td class="col-xs-1">{{ estado.tramite.medidas }} </td>
                   <td class="col-xs-1">{{estado.tramite.estado}}</td>
-                  <td align="center" class="col-xs-2">
-
+                  <td align="center" class="col-xs-1">
                       <a href="{% url 'cargar_inspeccion_final' pk_tramite=estado.tramite.id %}">
                         <button type="button" class="btn btn-primary btn-sm" name="Agendar">
-                          Ver documentos
+                          <span class="glyphicon glyphicon-ok" aria-hidden="true"> Documentos</span>
                         </button>
                       </a>
 

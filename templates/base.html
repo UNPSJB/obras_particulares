@@ -16,9 +16,76 @@
 	<script src="{% static 'js/padding.js' %}" type="text/javascript"></script>
 	<script src="{% static 'js/bootstrap.min.js' %}"></script>
 	<script src="{% static 'js/jquery-ui.min.js' %}"></script>
-
-	<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
 	<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.min.css' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.fancybox.css' %}"/>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/ekko-lightbox.min.css' %}"/>
+
+	<style>
+        .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{
+            color: white;
+        }
+    </style>
+
+	<style>
+		table thead tr th {
+		 	text-align: center;
+		 	background-color: #273746;
+		 	color: #fff;
+		}
+    </style>
+
+	<style>
+		ol {
+			background: white;
+			padding: 15px;
+			color: black;
+			border-radius: 4px;
+
+		}
+
+		ol li {
+			background: #eaecee;
+			color: #17202a;
+			border: 0px solid grey;
+			padding: 4.8px;
+			list-style-type: none;
+			border-radius: 3px;
+
+		}
+
+		ol label{
+			color: #273746;
+			margin-top: 5px;
+		}
+
+	</style>
+
+	<style>
+		 table thead tr th {
+		  text-align: center;
+		 }
+
+		el {
+			background: white;
+			border-radius: 4px;
+			max-width: 658px;
+			max-height: 350px;
+		}
+
+		thead {
+			height:30px;
+		}
+
+		table {
+			background: white;
+		}
+
+		.progress {
+		 	position: relative;
+		 	top: 0.7em;
+    	}
+
+</style>
 
 	{% block estilos %}
 
@@ -56,8 +123,8 @@
 								{% if user.is_active%}
 									<div id="user-tools">
 										<form >
-											<label style="margin-right: 3px;">Usuario:</label>
-											<strong>{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>
+											<label style="margin-right: 3px; font-size: 13px;">Usuario:</label>
+											<strong style="	font-size: 13px;">{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>
 											<a href="{%url "logout"%}" class="btn btn-primary btn-sm" style="margin-left: 3px;">Salir</a>
 										</form>
 									</div>
@@ -81,7 +148,7 @@
 						</div>
 					</div>
 				{% endif %}
-	  	</div>
+	  		</div>
 		</header>
 	</nav>
 
@@ -109,11 +176,17 @@
 		</div>
 	</footer>
 
-
-
 </body>
 
 	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/jquery.fancybox.min.js' %}"></script>
+	<script src="{% static 'js/Chart.bundle.min.js' %}"></script>
+	<script src="{% static 'js/jquery.dataTables.min.js' %}"></script>
+	<!--script src="{% static 'js/dataTables.bootstrap.min.js' %}"></script-->
+
+
+
+
 
 	<script>
 		window.setTimeout(function() {
@@ -165,9 +238,26 @@
 		});
 	</script>
 
+    <script>
+        $(document).ready(function() {
+            $("a#single_image").fancybox({
+            	protect: true
+            });
+        });
+    </script>
 
 
-
+	<script>
+    function generarcolor()
+    {
+      long=6;
+      var caracteres = "0123456789ABCDEF";
+      var color = "";
+      for (i=0; i<long; i++) color += caracteres.charAt(Math.floor(Math.random()*caracteres.length));
+      color="#"+color;
+      return color
+    }
+	</script>
 
 	{% block scripts %}
 

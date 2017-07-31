@@ -8,11 +8,9 @@
         *{font-family:Verdana, Arial, Helvetica, sans-serif}
 
         #lupa{
-            width:200px;
-            height:200px;
+            width:300px;
+            height:282px;
             position:relative;
-            border: 5px solid #fff;
-            border-radius: 10px;
             box-shadow: 5px 5px 5px rgba(50,50,50 0.5);
             overflow:hidden;
         }
@@ -27,8 +25,6 @@
             width: auto;
             height: 200px;
             margin: 0 5% 0 auto;
-            border: 5px solid #fff;
-            border-radius: 10px;
             box-shadow: 1px 1px 5px rgba(50,50,50 0.5);
         }
     </style>
@@ -38,7 +34,7 @@
 {% block barra %}
 	<ul class="sidebar sidebar-1">
 		<font size="2">
-			<li><a href="#" class="current"><font color="tomato">Administrativo</font></a></li>
+			<li><a href="javascript:history.back(-1);" class="current"><font color="tomato">Administrativo</font></a></li>
 		</font>
 	</ul>
 {% endblock %}
@@ -46,35 +42,56 @@
 
 {% block contenido %}
 
-    <div class="container-fluid">
-        <div class="panel panel-custom ">
-            <div class="container-fluid">
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	  <div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFive">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+			  <font color="#ffffff" size="2">Datos del profesional</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+		  <div class="panel-body">
+			<div class="container-fluid">
+
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <form action="" >
                             <div class="row" style="color:#fff;">
-                                <div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                                    <h4>Datos del profesional:</h4>
-                                    <br>
-                                    <div style="padding-left: 30px;">
-                                        <p>Nombre: {{persona.nombre}}</p>
-                                        <p>Apellido: {{persona.apellido}}</p>
-                                        <p>Nro de CUIL: {{persona.cuil}}</p>
-                                        <p>Email: {{persona.mail}}</p>
-                                        <p>Profesión: {{persona.profesional.profesion}}</p>
-                                        <p>Categoria: {{persona.profesional.categoria}}</p>
-                                        <p>Nro de matricula: {{persona.profesional.matricula}}</p>
+                                <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <ol>
+                                        <label>Nombre y Apellido:</label>
+                                        <li> {{persona.nombre}} {{persona.apellido}}</li>
+                                        <label>Profesión - Categoria:</label>
+                                        <li> {{persona.profesional.profesion}} - {{persona.profesional.categoria}}</li>
+                                        <label>Nro de matricula</label>
+                                        <li> {{persona.profesional.matricula}}</li>
+                                        <label>Nro de CUIL:</label>
+                                        <li> {{persona.cuil}}</li>
+                                        <label>Email:</label>
+                                        <li> {{persona.mail}}</li>
+                                    </ol>
+                                </div>
+                                <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <div class="thumbnail ">
+                                        <a id="single_image" href="/media/{{persona.profesional.certificado}}"  data-fancybox="images" data-caption="{{documento.tipo_documento}}">
+                                            <img id="im0" src="/media/{{persona.profesional.certificado}}"  width=300 height=300>
+                                        </a>
+                                        <br>
+                                        <p style="color: #17202a; font-style: oblique; text-align: center;">Mover el cursor sobre la imagen</p>
+                                        <form action="">
+                                            <p align="right" >
+                                                <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>Descargar</span></a>
+                                            </p>
+                                        </form>
                                     </div>
                                 </div>
-                                <div class=" col-xs-12 col-sm-12 col-md-5 col-lg-5">
-                                    <h4 >Certificado del CACH:</h4>
-                                    <br>
-                                    <img id="im0" src="/media/{{ persona.profesional.certificado}}" />
-                                </div>
-                                <div class=" col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                                    <font color="#444444"><h4 >Ampliación</h4></font>
-                                    <br>
-                                    <div id="lupa"><img  id="im" src="/media/{{ persona.profesional.certificado}}"/></div>
+                                <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <div class="thumbnail ">
+                                        <div id="lupa"><img  id="im" src="/media/{{ persona.profesional.certificado}}"/></div>
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="container-fluid">
@@ -94,12 +111,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <br>
                         </form>
                     </div>
                 </div>
-            </div>
+  	        </div>
+          </div>
         </div>
+      </div>
     </div>
 
 {% endblock %}

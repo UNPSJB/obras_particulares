@@ -8,13 +8,13 @@
             <!-- Cabecera -->
             <thead>
                 <tr>
-                    <th>Nro de tramite</th>
+                    <th>Nro</th>
                     <th>Propietario</th>
                     <th>Profesional</th>
                     <th>Medidas</th>
                     <th>Tipo</th>
                     <th>Estado</th>
-                    <th>Ver documentacion</th>
+                    <th>Ver</th>
                     <!---<th>Rechazar</th>
                     <th>Aceptar</th>-->
                 </tr>
@@ -26,7 +26,7 @@
                     <tr>
                         <td class="col-xs-1">{{ tramite.id }}</td>
                         <td class="col-xs-3">{{ tramite.propietario }}</td>
-                        <td class="col-xs-3">{{ tramite.profesional }} </td>
+                        <td class="col-xs-4">{{ tramite.profesional }} </td>
                         <td class="col-xs-1">{{ tramite.medidas }}</td>
                         <td class="col-xs-1">{{ tramite.tipo_obra }}</td>
                         <td class="col-xs-1">{{ tramite.estado }}</td>
@@ -44,10 +44,10 @@
                               </button>
                             </a>
                         </td>-->
-                        <td align="center" class="col-xs-2">
+                        <td align="center" class="col-xs-1">
                             <a href="{% url 'ver_documentos_tramite_administrativo' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary btn-sm" name="Aceptar">
-                                Ver documentos
+                              <button type="button" class="btn btn-primary btn-xs" name="Aceptar">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
                               </button>
                             </a>
                         </td>

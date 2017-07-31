@@ -54,7 +54,7 @@ class Tramite(models.Model):
     objects = TramiteManager()
 
     def __str__(self):
-        return   "Numero de tramite: {} - Profesional: {} - Propietario: {}" .format(self.pk, self.profesional, self.propietario)
+        return "Numero de tramite: {} - Profesional: {} - Propietario: {}" .format(self.pk, self.profesional, self.propietario)
 
     def saldo_restante_a_pagar(self):
         if self.monto_a_pagar == None or self.monto_pagado == None:
@@ -146,7 +146,7 @@ class Estado(models.Model):
         return self.usuario
 
     def __str__(self):
-        return "{} - Usuario: {}" .format(self.__class__.__name__, self.usuario)
+        return "{}" .format(self.__class__.__name__)
 
 class Iniciado(Estado):
     TIPO = 1
@@ -201,7 +201,7 @@ class Agendado(Estado):
 
 
 class ConInspeccion(Estado):
-    TIPO = 9
+    TIPO = 6
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
 
 
@@ -222,7 +222,7 @@ class ConInspeccion(Estado):
 
 
 class Inspeccionado(Estado):
-    TIPO = 6
+    TIPO = 7
 
 
     def solicitar_final_obra(self, tramite):#solicitar final de obra
@@ -233,7 +233,7 @@ class Inspeccionado(Estado):
 
 
 class FinalObraSolicitado(Estado):
-    TIPO = 7
+    TIPO = 8
 
     final_obra_total = models.BooleanField(blank=True)
 
@@ -244,7 +244,7 @@ class FinalObraSolicitado(Estado):
             raise Exception("Todavia no se puede otorgar el final de obra")
 
 class Finalizado(Estado):
-    TIPO = 8
+    TIPO = 9
 
 
 for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, Finalizado, ConInspeccion, FinalObraSolicitado]:

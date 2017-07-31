@@ -1,17 +1,21 @@
+{% load staticfiles %}
+
 {% block contenido_tramites_inspeccionados %}
-  <div class="table-responsive">
-      <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-          <!-- Cabecera -->
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+            <!-- Cabecera -->
           <thead>
               <tr>
-                  <th>Nro de tramite</th>
+                  <th>Nro</th>
                   <th>Fecha Inicio</th>
                   <th>Tipo de obra</th>
                   <th>Profesional</th>
                   <th>Propietario</th>
-                  <th>Medidas en m2</th>
+                  <th>Superficie</th>
                   <th>Estado</th>
-                  <th>Revisar</th>
+                  <th>Detalle</th>
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
@@ -22,20 +26,19 @@
 
               {% for estado in estados %}
                 <tr>
-                    <td class="col-xs-2">{{ estado.tramite.id}}</td>
+                    <td class="col-xs-1">{{ estado.tramite.id}}</td>
                     <td class="col-xs-2">{{ estado.tramite.estado.timestamp}}</td>
-                    <td class="col-xs-1">{{ estado.tramite.tipo_obra }} </td>
-                    <td class="col-xs-4">{{ estado.tramite.profesional}}</td>
-                    <td class="col-xs-4">{{ estado.tramite.propietario}}</td>
+                    <td class="col-xs-2">{{ estado.tramite.tipo_obra }} </td>
+                    <td class="col-xs-2">{{ estado.tramite.profesional}}</td>
+                    <td class="col-xs-2">{{ estado.tramite.propietario}}</td>
                     <td class="col-xs-1">{{ estado.tramite.medidas }} </td>
                     <td class="col-xs-1">{{estado.tramite.estado}}</td>
-                    <td class="col-xs-2" align="center">
-                        <a href="{% url 'ver_documentos_tramite_profesional' estado.tramite.pk %}">
-                          <button type="button" class="btn btn-primary btn-sm" name="Agendar">
-                            Ver documentos
+                    <td class="col-xs-1" align="center">
+                        <a href="{% url 'documentos_tramite_inspector' estado.tramite.pk %}">
+                          <button type="button" class="btn btn-primary btn-xs" name="Agendar">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
                           </button>
                         </a>
-
                     </td>
                 </tr>
               {% endfor %}
@@ -43,4 +46,5 @@
           </tbody>
       </table>
   </div>
+
 {% endblock %}

@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
+from random import choice
 
 class Rol(models.Model):
 
@@ -17,11 +18,11 @@ class Profesional(Rol):
     matricula = models.CharField(max_length=10)
     profesion = models.CharField(max_length=10)  # ["Maestro Mayor de Obra", "Ingeniero Civil", "Arquitecto"]
     categoria = models.IntegerField(choices=CATEGORIAS)
-    certificado = models.ImageField(upload_to='certificado/', null= True)
+    certificado = models.ImageField(upload_to='certificado/', null=True)
 
     def __str__(self):
         if hasattr(self, "persona"):
-            return "{} - Matricula: {}, Profesion: {}".format(self.persona, self.matricula, self.profesion)
+            return "{}".format(self.persona)
         return "Matricula: {}, Profesion: {}".format(self.matricula, self.profesion)
 
 
@@ -47,8 +48,8 @@ class Usuario(Rol, AbstractUser):
     def get_view_name(self):
         return self.groups.first().name
 
-
-from random import choice
+    def get_view_groups(self):
+        return self.groups.all()
 
 class Persona(models.Model):
     SEXOS = [{'F', 'Femenino'}, {'M', 'Masculino'}]
@@ -72,11 +73,8 @@ class Persona(models.Model):
         password = ""
         aux_usuario = None
         if self.usuario is None:
-            # Hacer una funcion que genere claves aleatorias
             password = generar_password()
-            aux_usuario = Usuario.objects.create_user( username=self.mail,
-                                                        email=self.mail,
-                                                        password=password)
+            aux_usuario = Usuario.objects.create_user(username=self.mail, email=self.mail, password=password)
             created = True
         self.usuario = aux_usuario
         if self.profesional is not None:
@@ -86,7 +84,6 @@ class Persona(models.Model):
         for nombre in grupos:
             g = Group.objects.get(name=nombre)
             self.usuario.groups.add(g)
-
         self.save()
         return created, password, self.usuario
 

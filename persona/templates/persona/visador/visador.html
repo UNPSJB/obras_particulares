@@ -10,7 +10,6 @@
 			<li><a href="#" class="current"><font color="tomato">Visador</font></a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Iniciar Visado</a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar mis Visados</a></li>
-			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree">Cargar mis Visados</a></li>-->
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a></li>
 			<li><a href="#" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
@@ -41,16 +40,13 @@
 							<form action="" class="" >
 								<div class="row">
 									<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-
-										   <a id="crear_detalle" href="{% url 'reporte_tramites_aceptados_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
-											   <i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
-										   </a>
-
-											<a href="{% url 'reporte_tramites_aceptados_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
-												<i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
-											</a>
+										<a id="crear_detalle" href="{% url 'reporte_tramites_aceptados_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+										   <i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
+										</a>
+										<a href="{% url 'reporte_tramites_aceptados_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
+											<i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
+										</a>
 									</div>
-
 									<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
 										<hr>
 										{% block contenido_tramites_aceptados%}
@@ -209,20 +205,6 @@
 
 {% block scripts %}
 
-	<script src="{% static 'js/bootstrap.min.js' %}"></script>
-
-	<script>
-		$("#perfil").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar constancia de CACH',
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
-
 	<script type="text/javascript">
 		function mostrarSubmenu(subformulario)
 		{
@@ -235,8 +217,16 @@
 		}
 	</script>
 
-
-
-
+	<script>
+		$("#perfil").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar constancia de CACH',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
 
 {% endblock %}

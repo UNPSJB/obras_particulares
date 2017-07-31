@@ -29,6 +29,7 @@ class FormularioDocumentosSetBase(BaseFormSet):
     def __init__(self, *args, **kwargs):
         super(FormularioDocumentosSetBase, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+
         self.helper.form_tag = False
 
 def FormularioDocumentoSetFactory(tipos):
