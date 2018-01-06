@@ -49,10 +49,15 @@ def convertidor_de_fechas(fecha):
 @login_required(login_url="login")
 @grupo_requerido('propietario')
 def mostrar_propietario(request):
+    '''
+    Funcion mostrar_propietario
+    Funcion que se encarga de mostrar los tramites de un propietario determinado
+    :param request: Requerimiento http.
+    :return contexto: lista de tramites del propietario.
+    '''
     contexto = {
         "ctxtramitespropietario": listado_tramites_propietario(request)
     }
-    #print(contexto)
     return render(request, 'persona/propietario/propietario.html', contexto)
 
 def listado_tramites_propietario(request):

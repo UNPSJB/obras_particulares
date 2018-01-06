@@ -4,6 +4,9 @@ from tramite.models import *
 from datetime import datetime
 
 class Documento(models.Model):
+    '''
+    Corresponde al modelo de Documentos.
+    '''
     tipo_documento = models.ForeignKey(TipoDocumento)
     #el estado va a ser momentaneamente null hasta que se agregue al tramite el documento al tramite
     tramite = models.ForeignKey(Tramite, related_name='documentos',null=True,blank=True)

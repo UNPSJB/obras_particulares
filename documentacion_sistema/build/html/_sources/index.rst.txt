@@ -6,7 +6,6 @@ Manual de Usuario Obras Particulares
    :maxdepth: 2
 
    modules/documento/documento
-   modules/persona/persona
 
 .. sidebar:: Cosas
   :subtitle: Subtitulo

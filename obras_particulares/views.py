@@ -8,6 +8,11 @@ from . import forms
 
 
 def login_view(request):
+    '''
+    Funcion login view:
+    Se encarga de loguear un nuevo usuario dentro del sistema
+    :param request: Requerimiento HTTP.
+    '''
     if request.method == 'POST':
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
         if user is not None and user.is_active :
@@ -19,11 +24,22 @@ def login_view(request):
 
 
 def logout_view(request):
+    '''
+    Funcion logout view:
+    Se encarga de cerrar la sesion activa de un usuario dentro del sistema
+    :param request: Requerimiento HTTP.
+    '''
     logout(request)
     return redirect("home")
 
 
 def home(request):
+    '''
+    Funcion home:
+    Se encarga de renderizar un nuevo formulario de ingreso de un profesional en el sistema
+    :param request: Requerimiento HTTP.
+    :return: Devuelve un formulario de profesional.
+    '''
     if request.method == "POST":
         form = FormularioProfesional(request.POST, request.FILES)
         if form.is_valid():
@@ -39,6 +55,12 @@ def home(request):
 
 
 def grupo_requerido(*grupos):
+    '''
+    Funcion grupo requerido:
+    Se encarga de verificar que un usuario posea determinados permisos para acceder a las vistas
+    :param grupos: conjunto de grupos disponibles en el sistema
+    :return: vista a la que puede acceder un usuario.
+    '''
     def view_funct(f):
         def func_wrapped(request, *args, **kwargs):
             usuario = request.user

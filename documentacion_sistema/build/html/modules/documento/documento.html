@@ -1,0 +1,150 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Documento &#8212; documentación de Documentacion de Sistema - </title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../_static/translations.js"></script>
+    <link rel="index" title="Índice" href="../../genindex.html" />
+    <link rel="search" title="Búsqueda" href="../../search.html" />
+    <link rel="prev" title="Manual de Usuario Obras Particulares" href="../../index.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="documento">
+<h1>Documento<a class="headerlink" href="#documento" title="Enlazar permanentemente con este título">¶</a></h1>
+<p>Aqui se detallaran los principales modulos desarrollados dentro de cada aplicacion con la especificacion formal de todos sus metodos</p>
+<ul class="simple">
+<li>Modelos.</li>
+<li>Vistas.</li>
+<li>Formularios.</li>
+</ul>
+<div class="section" id="module-documento.models">
+<span id="models"></span><h2>Models<a class="headerlink" href="#module-documento.models" title="Enlazar permanentemente con este título">¶</a></h2>
+<dl class="class">
+<dt id="documento.models.Documento">
+<em class="property">class </em><code class="descclassname">documento.models.</code><code class="descname">Documento</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#documento.models.Documento" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Corresponde al modelo de Documentos.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-documento.views">
+<span id="views"></span><h2>Views<a class="headerlink" href="#module-documento.views" title="Enlazar permanentemente con este título">¶</a></h2>
+<dl class="function">
+<dt id="documento.views.alta_documento">
+<code class="descclassname">documento.views.</code><code class="descname">alta_documento</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="headerlink" href="#documento.views.alta_documento" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Funcion alta documento:
+Se encarga de la creacion de un nuevo documento.
+:param request: Requerimiento HTTP.
+:return: Devuelve un formulario de documento.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-documento.forms">
+<span id="forms"></span><h2>Forms<a class="headerlink" href="#module-documento.forms" title="Enlazar permanentemente con este título">¶</a></h2>
+<dl class="class">
+<dt id="documento.forms.FormularioDocumento">
+<em class="property">class </em><code class="descclassname">documento.forms.</code><code class="descname">FormularioDocumento</code><span class="sig-paren">(</span><em>data=None</em>, <em>files=None</em>, <em>auto_id='id_%s'</em>, <em>prefix=None</em>, <em>initial=None</em>, <em>error_class=&lt;class 'django.forms.utils.ErrorList'&gt;</em>, <em>label_suffix=None</em>, <em>empty_permitted=False</em>, <em>instance=None</em>, <em>use_required_attribute=None</em><span class="sig-paren">)</span><a class="headerlink" href="#documento.forms.FormularioDocumento" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Formulario necesario para realizar la carga de los nuevos documentos.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="documento.forms.FormularioDocumentoSetFactory">
+<code class="descclassname">documento.forms.</code><code class="descname">FormularioDocumentoSetFactory</code><span class="sig-paren">(</span><em>tipos</em><span class="sig-paren">)</span><a class="headerlink" href="#documento.forms.FormularioDocumentoSetFactory" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Funcion FormularioDocumentoSetFactory:
+Se encarga de crear una ristra de formularios de documento del tipo que reciba como parametro
+:param tipos: tipos de documento a crear
+:return: objeto Formset de documentos.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="documento.forms.FormularioDocumentosSetBase">
+<em class="property">class </em><code class="descclassname">documento.forms.</code><code class="descname">FormularioDocumentosSetBase</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#documento.forms.FormularioDocumentosSetBase" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Fomset de formularios tipo FormularioDocumentosSetBase.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="documento.forms.metodo">
+<code class="descclassname">documento.forms.</code><code class="descname">metodo</code><span class="sig-paren">(</span><em>tipos</em><span class="sig-paren">)</span><a class="headerlink" href="#documento.forms.metodo" title="Enlazar permanentemente con esta definición">¶</a></dt>
+<dd><p>Funcion metodo:
+Funcion que devuelve una lista de tipos de documento junto a su pk correspondiente.
+:param tipos: tipos de documento a utilizar
+:return initial: lista de tipos de documento</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../../index.html" title="capítulo anterior">Manual de Usuario Obras Particulares</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Búsqueda rápida</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Ir a" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Obras Particulares.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../../_sources/modules/documento/documento.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

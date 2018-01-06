@@ -10,6 +10,9 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group, User
 
 class FormularioPersona(forms.ModelForm):
+    '''
+    Formulario para el alta de una nueva persona dentro del sistema
+    '''
     NAME = 'persona_form'
     SUBMIT = 'persona_submit'
 
@@ -45,12 +48,21 @@ class FormularioPersona(forms.ModelForm):
         self.fields['apellido'].widget.attrs['pattern'] = "[A-Za-z]{0,50}"
 
     def clean_dni(self):
+        '''
+        Funcion clean dni:
+        Funcion que controla la el dni cargado en el Formulario de Persona
+        :param self: referencia al objeto
+        :return dni: documento de la persona
+        '''
         dato = self.cleaned_data['dni']
         if Persona.objects.filter(dni=dato).exists():
             raise ValidationError('La persona ya existe en el sistema')
         return dato
 
 class FormularioProfesional(FormularioPersona):
+    '''
+    Formulario para el alta de un nuevo profesional dentro del sistema
+    '''
     NAME = 'profesional_form'
     SUBMIT = 'profesional_submit'
     matricula = forms.CharField()
@@ -66,6 +78,12 @@ class FormularioProfesional(FormularioPersona):
         self.fields['profesion'].widget.attrs['title'] = "Ingresar Profesion"
 
     def save(self, commit=False):
+        '''
+        Funcion save:
+        Funcion para guardar un profesional
+        :param self, commit: self: commit indica si se debe guardar, self es referencia al objeto
+        :return persona: instancia de persona.
+        '''
         persona = super(FormularioProfesional, self).save(commit=commit)
         datos = self.cleaned_data
         p = Profesional(
@@ -79,12 +97,21 @@ class FormularioProfesional(FormularioPersona):
         return p
 
     def clean_matricula(self):
+        '''
+        Funcion clean matricula:
+        Funcion que controla la matricula cargada en el Formulario de Profesional
+        :param self: referencia al objeto
+        :return dato: matricula del profesional
+        '''
         dato = self.cleaned_data['matricula']
         if Profesional.objects.filter(matricula=dato).exists():
             raise ValidationError('Matricula repetida')
         return dato
 
 class FormularioPropietario(FormularioPersona):
+    '''
+    Formulario para el alta de un nuevo propietario dentro del sistema
+    '''
     NAME = 'propietario_form'
     SUBMIT = 'propietario_submit'
 
@@ -94,6 +121,12 @@ class FormularioPropietario(FormularioPersona):
         self.helper.form_tag = False
 
     def save(self, commit=False):
+        '''
+        Funcion save:
+        Funcion para guardar un propietario
+        :param self, commit: self: commit indica si se debe guardar, self es referencia al objeto
+        :return persona: instancia de persona.
+        '''
         persona = super(FormularioPropietario, self).save(commit=commit)
         p = Propietario()
         p.save()
@@ -102,6 +135,12 @@ class FormularioPropietario(FormularioPersona):
         return p
 
     def obtener_o_crear(self, persona=None):
+        '''
+        Funcion obtener o crear:
+        Funcion para obtener o crear si no existe, un nuevo propietario
+        :param self, persona: persona a la que se desea buscar un propietario, self es referencia al objeto
+        :return propietario: instancia de propietario.
+        '''
         if persona:
             if persona.propietario:
                 return persona.propietario
@@ -116,6 +155,9 @@ class FormularioPropietario(FormularioPersona):
             return self.save()
 
 class FormularioUsuario(AuthenticationForm):
+    '''
+    Formulario para el alta de un nuevo usuario dentro del sistema
+    '''
     NAME = 'usuario_form'
     SUBMIT = 'usuario_submit'
 
@@ -125,13 +167,13 @@ class FormularioUsuario(AuthenticationForm):
         self.helper.add_input(Submit('submit', 'Submit', css_class="btn btn-default"))
 
 class FormularioUsuarioPersona(FormularioPersona):
+    '''
+    Formulario para el alta de un nuevo usuario de una persona dentro del sistema
+    '''
     NAME = 'usuario_persona_form'
     SUBMIT = 'usuario_persona_submit'
     usuario = forms.CharField()
     password = forms.CharField()
-
-    #ver como armo esto automaticamente y como lo saco fuera para que todos lo conoscan, lo uso mas abajo
-
     grupos = {
         ('1', 'director'),
         ('2', 'administrativo'),
@@ -151,6 +193,12 @@ class FormularioUsuarioPersona(FormularioPersona):
         self.fields['password'].widget.attrs['title'] = "Ingresar Contrasena"
 
     def save(self, commit=False):
+        '''
+        Funcion save:
+        Funcion para guardar un usuario persona
+        :param self, commit: self: commit indica si se debe guardar, self es referencia al objeto
+        :return usuario: instancia de usuario.
+        '''
         persona = super(FormularioUsuarioPersona, self).save(commit=False)
         datos = self.cleaned_data
         persona.usuario = Usuario.objects.create_user(username=datos['usuario'], email=datos['mail'], password=datos['password'],)
@@ -175,7 +223,9 @@ class FormularioUsuarioPersona(FormularioPersona):
 
 
 class FormularioArchivoPago(forms.Form):
-
+    '''
+    Formulario para el alta de un nuevo archivo de pago dentro del sistema
+    '''
     NAME = 'archivo_pago_form'
     SUBMIT = 'archivo_pago_submit'
     pagos = forms.FileField()
@@ -187,4 +237,3 @@ class FormularioArchivoPago(forms.Form):
         super(FormularioArchivoPago, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', 'Enviar', css_class="btn btn-default"))
-

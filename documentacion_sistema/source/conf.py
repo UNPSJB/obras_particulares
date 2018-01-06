@@ -31,6 +31,16 @@
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
+
+import sys, os
+import django
+
+sys.path.insert(0, os.path.abspath('../..'))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'obras_particulares.settings'
+django.setup()
+
+
+
 extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.doctest']
 
@@ -165,6 +175,3 @@ texinfo_documents = [
      author, 'DocumentaciondeSistema', 'One line description of project.',
      'Miscellaneous'),
 ]
-
-
-

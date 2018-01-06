@@ -4,11 +4,16 @@ from django.contrib.auth.models import AbstractUser, Group
 from random import choice
 
 class Rol(models.Model):
-
+    '''
+    Correspondiente a un rol dentro del sistema
+    '''
     class Meta:
         abstract = True
 
 class Profesional(Rol):
+    '''
+    Correspondiente a un rol profesional dentro del sistema
+    '''
     CATEGORIAS = [
 
         (1, 'Categoria 1'),
@@ -27,6 +32,9 @@ class Profesional(Rol):
 
 
 class Propietario(Rol):
+    '''
+    Correspondiente a un rol propietario dentro del sistema
+    '''
     def __str__(self):
         try:
             return str(self.persona)
@@ -38,6 +46,9 @@ class Propietario(Rol):
 
 
 class Usuario(Rol, AbstractUser):
+    '''
+    Correspondiente a un rol usuario dentro del sistema
+    '''
     PROFESIONAL = "profesional"
     PROPIETARIO = "propietario"
     ADMINISTRATIVO = "administrativo"
@@ -52,6 +63,9 @@ class Usuario(Rol, AbstractUser):
         return self.groups.all()
 
 class Persona(models.Model):
+    '''
+    Correspondiente al modelo de persona dentro del sistema
+    '''
     SEXOS = [{'F', 'Femenino'}, {'M', 'Masculino'}]
     dni = models.IntegerField(unique = True)
     apellido = models.CharField(max_length = 50)
@@ -94,6 +108,11 @@ class Persona(models.Model):
         return self.propietario
 
 def generar_password():
+    '''
+    Funcion generar_password.
+    Funcion que genera una contraseña con valores aleatorios.
+    :return password: contraseña generada.
+    '''
     longitud = 6
     valores = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     password = ""
