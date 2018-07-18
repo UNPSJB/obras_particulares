@@ -3,7 +3,7 @@
 {% load crispy_forms_tags%}
 
 {% block estilos %}
-
+	<link rel="stylesheet" type="text/css" href="{% static perfil %}">
 {% endblock %}
 
 {% block barra %}
@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block contenido %}
-
+    <button type="button" class="btn btn-sm btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn"> <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
 	  <div class="panel">
 		<div class="panel-heading box" role="tab" id="headingFive">
@@ -29,45 +29,43 @@
 		  <div class="panel-body">
 			<div class="container-fluid">
 				<div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                        <canvas id="pieDirectorUsuarios" height="200"></canvas>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <canvas id="chartDirectorUsuarios" height="80" style="padding-left:25px;"></canvas>
                     </div>
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                           <div class="table-responsive">
                               <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
                                   <thead>
                                       <tr>
-                                          <th>Nro</th>
-                                          <th>Propietario</th>
-                                          <th>Profesional</th>
-                                          <th>Estado</th>
-                                          <th>Medidas</th>
-                                          <th>Tipo</th>
-                                          <th>Detalle</th>
+                                          <th>Usuario</th>
+                                          <th>Grupo</th>
+                                          <th>Nombre</th>
+                                          <th>Documento</th>
+                                          <th>Telefono</th>
+                                          <th>Mail</th>
+                                          <th>Domicilio</th>
                                       </tr>
                                   </thead>
                                   <tbody>
-                                  <!--
-                                  {% if todos_los_tramites %}
-                                      {% for tramite in todos_los_tramites %}
+                                  {% if todos_los_usuarios %}
+                                      {% for usuario in todos_los_usuarios %}
                                         <tr>
-                                              <td class="col-xs-1" align="center">{{tramite.id}}</td>
-                                              <td class="col-xs-3">{{tramite.propietario}}</td>
-                                              <td class="col-xs-3">{{tramite.profesional}}</td>
-                                              <td class="col-xs-2">{{tramite.estado}}</td>
-                                              <td class="col-xs-1">{{tramite.medidas}}</td>
-                                              <td class="col-xs-1" align="center">{{tramite.tipo_obra}}</td>
-                                              <td align="center" class="col-xs-1">
-                                                    <a href="{% url 'detalle_de_tramite' tramite.pk %}">
-                                                        <button type="button" class="btn btn-primary btn-xs" name="detalle">
-                                                            <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
-                                                        </button>
-                                                    </a>
-                                              </td>
+                                            <td class="col-xs-2">{{usuario}}</td>
+                                            <td class="col-xs-2">
+                                                {% for gr in usuario.groups.values %}
+                                                    {{gr.name}}
+                                                    <br>
+                                                {% endfor %}
+                                            </td>
+                                            <td class="col-xs-2">{{usuario.persona}}</td>
+                                            <td class="col-xs-1" align="center">{{usuario.persona.dni}}</td>
+                                            <td class="col-xs-1" align="center">{{usuario.persona.telefono}}</td>
+                                            <td class="col-xs-2">{{usuario.persona.mail}}</td>
+                                            <td class="col-xs-2">{{usuario.persona.domicilio}}</td>
                                         </tr>
                                       {% endfor %}
                                   {% endif%}
-                                  -->
+
                                   </tbody>
                               </table>
                           </div>
@@ -96,14 +94,11 @@
       </div>
     </div>
 
-
 {% endblock %}
 
 {% block scripts %}
 
-
     <script>
-
         color = [];
         labelsGrupos = [];
         dataGrupos = [];
@@ -117,35 +112,61 @@
             color.push(generarcolor());
         {% endfor %}
 
-        Chart.defaults.global.defaultFontColor = 'white';
-        var ctx = document.getElementById("pieDirectorUsuarios");
-        var pieDirectorUsuarios = new Chart( ctx, {
-            type: 'pie',
+        var ctx = document.getElementById("chartDirectorUsuarios");
+        var chartDirectorTramites = new Chart( ctx, {
+            type: 'bar',
             data: {
               labels: labelsGrupos,
-              datasets: [{
-                label: "Cantidad de usuarios por grupo",
-                backgroundColor: color,
-                borderColor: "#ffffff",
-                borderWidth: 1,
-                data: dataGrupos
-              }]
+              datasets: [
+                {
+                  backgroundColor: color,
+                  data: dataGrupos
+                }
+              ]
             },
             options: {
                 responsive: true,
                 legend: {
-                    position: 'left',
+                    display: false
                 },
-                title: {
-                    display: true,
-                    text: 'Cantidad de usuarios por grupo',
+                title:{
+                    display:true,
+                    text:'Cantidad de usuarios por grupo',
                     fontSize: 14,
                     padding: 14,
                     fontColor:"#ffffff",
-                  },
-                rotation: -Math.PI,
-                cutoutPercentage: 30,
-                circumference: Math.PI,
+                },
+                scales: {
+                    xAxes: [{
+                        barPercentage: 0.5,
+                        scaleLabel: {
+                            display: true,
+                        },
+                        ticks: {
+                            fontColor:"#ffffff",
+                        },
+                        gridLines:{
+                            color:"#808b96",
+                            zeroLineColor: "#ffffff",
+                            zeroLineWidth: 2,
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                        },
+                        ticks: {
+                            beginAtZero:true,
+                            stepSize: 1,
+                            fontColor:"#ffffff",
+                        },
+                        gridLines:{
+                            color:"#808b96",
+                            zeroLineColor: "#ffffff",
+                            zeroLineWidth: 2,
+                        }
+                    }]
+                }
             }
         });
 

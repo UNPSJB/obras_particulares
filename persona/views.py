@@ -276,9 +276,9 @@ def crear_usuario(request, pk_persona):
     persona = get_object_or_404(Persona, pk=pk_persona)
     creado, password, usuario_creado = persona.crear_usuario()
     if creado:
-        messages.add_message(request, messages.SUCCESS, 'usuario creado.')
+        messages.add_message(request, messages.SUCCESS, 'Profesional fue aceptado y su usuario creado.')
         # Mandar correo al  nuevo usuario con su usurio y clave
-        print("Mando correo de creado")
+        # print("Mando correo de creado")
         send_mail(
             'Usuario habilitado',
             'Usted ya puede acceder al sistema: Nombre de usuario: '+persona.mail+' password: '+password,
@@ -351,8 +351,6 @@ def tramites_visados(request):
 def ver_documentos_para_visado(request, pk_tramite):
 
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.VISAR)
-
-
 
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
@@ -631,7 +629,12 @@ def ver_inspecciones(request, pk_tramite):
 @grupo_requerido('director')
 def mostrar_director(request):
     usuario = request.user
-    values = {}
+    perfil = 'css/' + usuario.persona.perfilCSS
+    values = {
+        "perfil" : perfil,
+        "datos_usuario": empleados(request),
+        'grupos': grupos(request),
+    }
     for form_name, submit_name in FORMS_DIRECTOR:
         KlassForm = FORMS_DIRECTOR[(form_name, submit_name)]
         if request.method == "POST" and submit_name in request.POST:
@@ -655,25 +658,31 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioTipoDocumento,
 ]}
 
-def cambiar_usuario_de_grupo(request):
-    contexto = {
-        "ctxempleados": empleados(request),
-        "ctxgrupos": grupos(request),
-    }
-    return render(request, 'persona/director/cambiar_usuario_de_grupo.html', contexto)
-
 def empleados(request):
-    personas = Persona.objects.all()
-    #empleado = filter(lambda persona: (persona. == ), personas)
-    contexto = {'persona': personas}
-    return contexto
+    personas = Usuario.objects.all()
+    #empleado = filter(lambda persona: (persona. == ), personas)    # OBS: aca tiene que pasar un empleado no cualquir usuario
+    return personas
 
 def grupos(request):
     grupos = Group.objects.all()
-    contexto = {'grupo': grupos}
-    return contexto
+    gruposEmp = []
+    for g in grupos:
+        if str(g) <> 'propietario' and str(g) <> 'profesional':
+            gruposEmp.append(str(g))
+    gruposEmp.sort()
+    return gruposEmp
+
+def cambiar_usuario_grupo(request, usuariosel, grupossel):
+
+    # trabajando en esto DAVID
+    userSel = Usuario.objects.get(username=usuariosel)
+    userSel.persona.modificarGrupo(grupossel)
+    messages.add_message(request, messages.SUCCESS, 'Usuario fue cambiado de grupo')
+    return redirect('director')
 
 def ver_listado_todos_tramites(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
     argumentos = [Iniciado, Aceptado, Visado, Corregido, Agendado, ConInspeccion, Inspeccionado, FinalObraSolicitado]
     tramites = Tramite.objects.en_estado(argumentos)
     estados = []
@@ -684,10 +693,12 @@ def ver_listado_todos_tramites(request):
         if (not estados_cant.has_key(n)):
             estados_cant.setdefault(n, 0);
     estados_datos = estados_cant.values()
-    contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":argumentos}
+    contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":argumentos, "perfil" : perfil}
     return render(request, 'persona/director/vista_de_tramites.html', contexto)
 
 def ver_listado_todos_usuarios(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
     grupos = Group.objects.all()
     label_grupos = []
     for g in grupos:
@@ -702,7 +713,8 @@ def ver_listado_todos_usuarios(request):
         if (not total_usuarios_grupos.has_key(lg)):
             total_usuarios_grupos.setdefault(lg, 0)
     datos_grupos = total_usuarios_grupos.values()
-    return render(request, 'persona/director/vista_de_usuarios.html', {"label_grupos":label_grupos, "datos_grupos":datos_grupos})
+    usuarios = Usuario.objects.all()
+    return render(request, 'persona/director/vista_de_usuarios.html', {'todos_los_usuarios':usuarios, "label_grupos":label_grupos, "datos_grupos":datos_grupos,  "perfil" : perfil})
 
 def detalle_de_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)

@@ -64,12 +64,11 @@ urlpatterns = [
 
     #director -------------------------------------------------------------------------------------------------------
     url(r'^director$', views.mostrar_director, name="director"),
-    url(r'^cambiar_usuario_de_grupo/(?P<pk_persona>\d+)/$', views.cambiar_usuario_de_grupo, name="cambiar_usuario_de_grupo"),
     url(r'^vista_de_tramites$', views.ver_listado_todos_tramites, name="vista_de_tramites"),
     url(r'^detalle_de_tramite/(?P<pk_tramite>\d+)/$', views.detalle_de_tramite, name="detalle_de_tramite"),
     url(r'^documentos_del_estado/(?P<pk_estado>\d+)/$', views.documentos_del_estado, name="documentos_del_estado"),
     url(r'^reporte_tramites_director_excel/', ReporteTramitesDirectorExcel.as_view(), name="reporte_tramites_director_excel"),
     url(r'^reporte_tramites_director_pdf/$', login_required(ReporteTramitesDirectorPdf.as_view()), name="reporte_tramites_director_pdf"),
     url(r'^vista_de_usuarios$', views.ver_listado_todos_usuarios, name="vista_de_usuarios"),
-
+    url(r'^cambiar_usuario_grupo/(?P<usuariosel>\w+)/(?P<grupossel>\w+)/$', views.cambiar_usuario_grupo, name="cambiar_usuario_grupo"),
 ]

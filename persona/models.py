@@ -63,6 +63,11 @@ class Persona(models.Model):
     profesional = models.OneToOneField(Profesional, blank=True, null=True)
     propietario = models.OneToOneField(Propietario, blank=True, null=True)
     usuario = models.OneToOneField(Usuario, blank=True, null=True)
+    perfilCSS = models.CharField(max_length = 10, default="base.css")
+    #perfilFoto = models.ImageField(upload_to='fotoperfil/', null=True)
+
+    def get_view_perfilusuario(self):
+        return self.perfilCSS
 
     def __str__(self):
         return "{}, {}" .format(self.apellido, self.nombre)
@@ -92,6 +97,16 @@ class Persona(models.Model):
 
     def get_propietario(self):
         return self.propietario
+
+    def modificarGrupo(self, grupo):
+
+        for gr in self.usuario.groups.all():
+            print (gr)
+            s = Group.objects.get(name= gr)
+            self.usuario.groups.remove(s)
+        g = Group.objects.get(name=grupo)
+        self.usuario.groups.add(g)
+        return self.usuario
 
 def generar_password():
     longitud = 6

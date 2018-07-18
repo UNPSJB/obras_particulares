@@ -28,21 +28,23 @@ class FormularioPersona(forms.ModelForm):
                 if type(field.widget) in (forms.TextInput, forms.DateInput):
                     field.widget = forms.TextInput(attrs={'placeholder': "Ingresar " + str(field.label)})
 
-        self.fields['mail'].widget.attrs['placeholder'] = "Ingresar Mail"
         self.fields['dni'].widget.attrs['placeholder'] = "Ingresar Dni"
         self.fields['dni'].widget.attrs['max'] = "99999999"
         self.fields['dni'].widget.attrs['min'] = "9999999"
+        self.fields['dni'].widget.attrs['title'] = "Ingresar Nro de documento"
         self.fields['cuil'].widget.attrs['pattern'] = "^[0-9]{2}-[0-9]{8}/[0-9]$"
         self.fields['cuil'].widget.attrs['title'] = "Ingresar Cuil con formato xx-xxxxxxxx/x"
         self.fields['cuil'].widget.attrs['placeholder'] = "Ingresar Cuil - Formato: xx-xxxxxxxx/x"
-        self.fields['dni'].widget.attrs['title'] = "Ingresar Nro de documento"
         self.fields['nombre'].widget.attrs['title'] = "Ingresar Nombre"
-        self.fields['apellido'].widget.attrs['title'] = "Ingresar Apellido"
-        self.fields['telefono'].widget.attrs['title'] = "Ingresar Nro de Telefono"
-        self.fields['domicilio'].widget.attrs['title'] = "Ingresar Domicilio"
-        self.fields['mail'].widget.attrs['title'] = "Ingresar Mail"
         self.fields['nombre'].widget.attrs['pattern'] = "[A-Za-z]{0,50}"
+        self.fields['apellido'].widget.attrs['title'] = "Ingresar Apellido"
         self.fields['apellido'].widget.attrs['pattern'] = "[A-Za-z]{0,50}"
+        self.fields['telefono'].widget.attrs['title'] = "Ingresar Nro de Telefono"
+        self.fields['telefono'].widget.attrs['pattern'] = "^[0-9]{0,15}"
+        self.fields['domicilio'].widget.attrs['title'] = "Ingresar Domicilio"
+        self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50} [0-9]{0,5}$"
+        self.fields['mail'].widget.attrs['title'] = "Ingresar Mail"
+        self.fields['mail'].widget.attrs['placeholder'] = "Ingresar Mail - Formato: xxxxxxx@xxx.xxx"
 
     def clean_dni(self):
         dato = self.cleaned_data['dni']
@@ -130,16 +132,14 @@ class FormularioUsuarioPersona(FormularioPersona):
     usuario = forms.CharField()
     password = forms.CharField()
 
-    #ver como armo esto automaticamente y como lo saco fuera para que todos lo conoscan, lo uso mas abajo
-
-    grupos = {
-        ('1', 'director'),
-        ('2', 'administrativo'),
-        ('3', 'visador'),
-        ('4', 'inspector'),
-        ('7', 'jefeinspector')}
-
-    grupo = forms.TypedMultipleChoiceField(grupos)
+    gruposEmp = set()
+    valor= 1
+    for g in Group.objects.all():
+        e = Group.objects.select_related().get(id=valor)
+        if str(e) <> 'propietario' and str(e) <> 'profesional':
+            gruposEmp.add((str(valor), str(e)))
+        valor += 1
+    grupo = forms.TypedMultipleChoiceField(gruposEmp)
 
     def __init__(self, *args, **kwargs):
         super(FormularioUsuarioPersona, self).__init__(*args, **kwargs)
@@ -155,16 +155,9 @@ class FormularioUsuarioPersona(FormularioPersona):
         datos = self.cleaned_data
         persona.usuario = Usuario.objects.create_user(username=datos['usuario'], email=datos['mail'], password=datos['password'],)
 
-        grupos = {
-            ('1', 'director'),
-            ('2', 'administrativo'),
-            ('3', 'visador'),
-            ('4', 'inspector'),
-            ('7', 'jefeinspector')}
-
         grupo_post = datos['grupo']
 
-        for g in grupos:
+        for g in self.gruposEmp:
             for gp in grupo_post:
                 if g[0] == gp:
                     persona.usuario.save()
@@ -172,7 +165,6 @@ class FormularioUsuarioPersona(FormularioPersona):
                     usuario = persona.usuario
                     usuario.groups.add(gp)
         return usuario
-
 
 class FormularioArchivoPago(forms.Form):
 

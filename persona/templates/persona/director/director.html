@@ -3,6 +3,35 @@
 {% load staticfiles %}
 {% load crispy_forms_tags%}
 
+{% block estilos %}
+	<link rel="stylesheet" type="text/css" href="{% static perfil %}">
+	<style>
+	 /* Style the button that is used to open and close the collapsible content */
+	.collapsible {
+	  background-color: #eee;
+	  color: #444;
+	  cursor: pointer;
+	  padding: 18px;
+	  width: 100%;
+	  border: none;
+	  text-align: left;
+	  outline: none;
+	  font-size: 15px;
+	}
+	/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+	.active, .collapsible:hover {
+	  background-color: #ccc;
+	}
+	/* Style the collapsible content. Note: hidden by default */
+	.content {
+	  padding: 0 18px;
+	  display: none;
+	  overflow: hidden;
+	  background-color: #f1f1f1;
+	}
+	</style>
+{% endblock %}
+
 
 {% block barra %}
 	<ul class="sidebar sidebar-1">
@@ -31,8 +60,8 @@
 {% endblock %}
 
 {% block contenido %}
+	<button type="button" class="btn btn-sm btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn"> <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-
 	  <div class="panel">
 		<div class="panel-heading box" role="tab" id="headingFive">
 		  <h5 class="panel-title">
@@ -47,7 +76,7 @@
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-							<select class="form-control input-sm" id="opcionesDelUsuario" name="Opciones de usuario" onChange="opcionesUsuario(this.value);">
+							<select class="form-control input-sm " id="opcionesDelUsuario" name="Opciones de usuario" onChange="opcionesUsuario(this.value);">
 								<option selected value="nada"> ¿Que desea hacer? </option>
 								<option value="alta_usuario">Crear Usuario</option>
 								<option value="modificar_usuario_grupo">Cambiar usuario de grupo</option>
@@ -88,21 +117,70 @@
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<hr>
 						<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-							<form action="" method="">
-								<select class="form-control input-sm" id="" name="" onChange="" title="Selecciona nombre del grupo que vas a modificar" >
+							<form  action="" method="" onLoad="myOnLoad()">
+								<select class="form-control input-sm" id="usuarios" title="Selecciona nombre del grupo que vas a modificar" onchange="cargarUsuarioSeleccionado()">
 									<option selected value=""> ¿Que usuario desea cambiar? </option>
-									<option value="">Usuario 1</option>
-									<option value="">Usuario 2</option>
-									<option value="">Usuario 3</option>
 								 </select>
 							</form>
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<hr>
-						{% block cambiar_usuario_grupo %}
-							{% include "persona/director/cambiar_usuario_de_grupo.html" %}
-						{% endblock %}
+						<div class="container-fluid">
+							<form action= ""  method="post" enctype="multipart/form-data"> {% csrf_token %}
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+										<div class="form-group">
+											<label for="">Nombre:</label>
+											<input class="form-control input-sm" id="nombreUsuarioS" name="nombreempleado" type="text" placeholder="Nombre del usuario seleccionado" title="Nombre del usuario seleccionado"  disabled/>
+											<br>
+											<label for="">Usuario:</label>
+											<input class="form-control input-sm" id="usuarioS" name="usuarioempleado" type="text" placeholder="Usuario seleccionado" title="Usuario seleccionado"  disabled />
+										</div>
+									</div>
+
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+										<div class="form-group">
+											<label for="">Grupos actuales:</label>
+											 <select id='gruposActuales' class="form-control" title="Grupos asignados al usuario" size="12" style="height: 120px;" disabled>
+												 <option value=""  style="font-weight: bold;"> Grupos del usuario </option>
+												 <option value="">  </option>
+											</select>
+										</div>
+									</div>
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+										<div class="form-group">
+											<label for="">Grupos disponibles:</label>
+											 <select id='gruposDisponibles' class="form-control" title="Seleccionar a que grupo desea asignarlo" size="12" style="height: 120px;" disabled>
+												 <option value="" selected="selected" style="font-weight: bold;"> Seleccione un nuevo grupo </option>
+												 <option value="">  </option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="container-fluid">
+									<br>
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+											<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarTodosLosGrupos()">
+												Limpiar
+											</button>
+											<a href="javascript:enviar();">
+												<button type="button" class="btn btn-primary btn-sm" name="Aceptar">
+													  Modificar grupo
+												</button>
+											</a>
+											<!--a href= "" >
+												<button class="btn btn-primary btn-sm" type="submit" title="Modificar permisos del grupo">
+													Modificar grupo
+												</button>
+											</a-->
+										</div>
+									</div>
+								</div>
+							</form>
+							<br>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -187,28 +265,6 @@
 			</div>
 		</div>
 	  </div>
-		<!--
-	  <div class="panel">
-		<div class="panel-heading box" role="tab" id="headingThree">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>
-			  <font color="#ffffff" size="2">Otorgar final de obra</font>
-			</a>
-		  </h5>
-		</div>
-		<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-		  <div class="panel-body">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-					</div>
-				</div>
-			</div>
-		  </div>
-		</div>
-	  </div>
-		-->
 	  <div class="panel">
 		<div class="panel-heading box" role="tab" id="headingSix">
 		  <h5 class="panel-title">
@@ -357,7 +413,6 @@
 				//esto es por si dejo los submenu
 				$("#" + "opcionesDelUsuario").val('modificar_usuario_grupo');
 			}
-
 		}
 
 		function opcionesDatosTramite(id) {
@@ -379,12 +434,10 @@
 					$("#" + "opcionesDelTramite").val('alta_tipo_de_obra');
 				}
 		}
-
 	</script>
 
 	<script type="text/javascript">
-		function mostrarSubmenu(subformulario)
-		{
+		function mostrarSubmenu(subformulario){
 			if(subformulario=="sin_submenu"){
 				$('.' + "sidebar-2").hide();
 			}
@@ -401,7 +454,6 @@
 	</script>
 
 	<script>
-
 		$('#div_id_dni').appendTo('#persona_administrativo');
 		$('#div_id_nombre').appendTo('#persona_administrativo');
 		$('#div_id_apellido').appendTo('#persona_administrativo');
@@ -414,14 +466,11 @@
 		$('#div_id_password').appendTo('#usuario_administrativo');
 		$('#div_id_grupo').appendTo('#usuario_administrativo')
 		$('#submit-id-usuario_persona_submit').appendTo('#boton_administrativo');
-
 		$('#id_password').removeAttr("type");
 		$('#id_password').attr("type","password");
-
 		$('.selectmultiple').attr( "size", "6" );
 		$('.selectmultiple').append($('<option>',{value:0, text:'Seleccione un grupo'}));
 		$('.selectmultiple > option[value="0"]').attr('selected', 'selected');
-
 		var selectList = $('#id_grupo option');
 		selectList.sort(function(a,b){
 			a = a.value;
@@ -429,28 +478,111 @@
 			return a-b;
 		});
 		$('#id_grupo').html(selectList);
-
 		$('#alta_tipo_documento #div_id_nombre').appendTo('#tipo')
 		$('#alta_tipo_documento #div_id_descripcion').appendTo('#tipo')
-
 		$('#div_id_fecha_alta').appendTo('#tipo')
 		$('#div_id_activo').appendTo('#tipo')
 		$('#div_id_requerido').appendTo('#requerido_para')
 		$('#submit-id-tipo_documento_submit').appendTo('#boton_tipo')
-
 		$('#alta_tipo_de_obra #div_id_nombre').appendTo('#nombre_tipo_obra')
 		$('#alta_tipo_de_obra #div_id_descripcion').appendTo('#desc_tipo_obra')
 		$('#alta_tipo_de_obra #div_id_categorias').appendTo('#categoria_tipo_obra')
 		$('#submit-id-tipo_obra_submit').appendTo('#boton_tipo_obra')
-
 	</script>
 
-	<script type="text/javascript">
-		function cargarpermisosSeleccionados(objeto,selectUsado)
-		{
-			var indexSelect=document.getElementById(objeto.id).selectedIndex;
-			var idUsado=document.getElementById(selectUsado);
-			idUsado.options[idUsado.options.length]=new Option(($("#"+objeto.id+" option:selected").text()),indexSelect);
+	<script>
+		usuarios = [];
+		grupos = [];
+		$(document).ready(function() {
+			{% for dtu in datos_usuario %}
+				usuarios.push("{{dtu.persona.dni}}");
+			{% endfor %}
+			usuarios.sort();
+			for(var i=0; i < usuarios.length; i++){
+				var option = document.createElement("option");
+				$(option).html(usuarios[i]);
+				$(option).appendTo("#usuarios");
+			}
+			var sel = document.getElementById("gruposActuales");
+			len = sel.length - 1 ;
+			for( i = 0;  i < len ; i++) {
+  			    sel.remove(2);
+    		}
+			document.getElementById("nombreUsuarioS").value = '';
+			document.getElementById("usuarioS").value = '';
+			document.getElementById("gruposDisponibles").disabled=true;
+			{% for gr in grupos %}
+				grupos.push("{{gr}}");
+			{% endfor %}
+			grupos.sort();
+			for(var i=0; i < grupos.length; i++){
+				var option = document.createElement("option");
+				$(option).html(grupos[i]);
+				$(option).appendTo("#gruposDisponibles");
+			}
+			document.getElementById("gruposActuales").disabled=true;
+		});
+		function cargarUsuarioSeleccionado() {
+			var sel = document.getElementById("gruposActuales");
+			len = sel.length - 1 ;
+			for( i = 0;  i < len ; i++) {
+  			    sel.remove(2);
+    		}
+			var elements = document.getElementById("gruposDisponibles").options;
+				for(var i = 0; i < elements.length; i++){
+				elements[i].selected = false;
+			}
+			usuario_filtrado_nombre = [];
+			usuario_filtrado_usuario = [];
+			usuario_filtrado_grupo = [];
+    		var x = document.getElementById("usuarios").value;
+			{% for uf in datos_usuario %}
+				if ("{{uf.persona.dni}}" == document.getElementById("usuarios").value){
+					usuario_filtrado_nombre.push("{{uf.persona}}");
+				}
+			{% endfor %}
+			{% for uf in datos_usuario %}
+				if ("{{uf.persona.dni}}" == document.getElementById("usuarios").value){
+					usuario_filtrado_usuario.push("{{uf}}");
+				}
+			{% endfor %}
+			{% for uf in datos_usuario %}
+				if ("{{uf.persona.dni}}" == document.getElementById("usuarios").value){
+					{% for gr in uf.groups.values %}
+						usuario_filtrado_grupo.push("{{gr.name}}");
+					{% endfor %}
+				}
+			{% endfor %}
+    		document.getElementById("nombreUsuarioS").value = usuario_filtrado_nombre[0];
+			document.getElementById("usuarioS").value = usuario_filtrado_usuario[0];
+			for(var i=0; i < usuario_filtrado_grupo.length; i++){
+				var option = document.createElement("option");
+				$(option).html(usuario_filtrado_grupo[i]);
+				$(option).appendTo("#gruposActuales");
+			}
+			document.getElementById("gruposDisponibles").disabled=false;
+ 		}
+	</script>
+
+	<script>
+		function eliminarTodosLosGrupos(){
+			var sel = document.getElementById("gruposActuales");
+			len = sel.length - 1 ;
+			for( i = 0;  i < len ; i++) {
+  			    sel.remove(2);
+    		}
+			document.getElementById("gruposDisponibles").disabled=true;
+			document.getElementById("gruposActuales").disabled=true;
+			document.getElementById("usuarios").value = '';
+		}
+	</script>
+
+	<script>
+		function enviar(){
+			grupossel = $("#gruposDisponibles").val();
+			usuariosel = $("#usuarioS").val();
+			url = '/persona/cambiar_usuario_grupo/'+usuariosel+'/'+grupossel;
+			location.href = url;
 		}
 	</script>
 

@@ -28,8 +28,7 @@ html {
 }
 
 footer {
-	/*background:#268e37;*/
-	 background-image: linear-gradient(to right, #051937, #003253, #004d6c, #006a82, #008793);
+	background:#268e37;
 	color:#fff;
 	position: absolute;
     bottom: 0;
@@ -37,8 +36,7 @@ footer {
 }
 
 .prehead {
-	/*background:#268e37;*/
-	background-image: linear-gradient(to right, #004d7a, #007aa5, #00a7a3, #00ce74, #a8eb12);
+	background:#268e37;
 	color:#fff;
 }
 
@@ -48,15 +46,17 @@ body {
 	min-height: 100vh; width: 100%;
 	xoverflow: hidden;
 	padding-top: 140px;
-    padding-bottom: 40px;
+	padding-bottom: 40px;
 	/*color: whitesmoke;
 	font-size: 16px;
 	font-family: 'Lato';*/
-    background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+    /*background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);*/
+    background-image: linear-gradient(to right top, #4d4d4d, #6c6c6c, #8d8d8d, #afafaf, #d2d2d2);
 	/*background:
 		radial-gradient(circle at 1.98% 14.97%, #556270, transparent 100%),
 		radial-gradient(circle at 98.02% 52.96%, #FF6B6B, transparent 100%),
-		radial-gradient(circle at 50% 50%, #4a2735, #4a2735 100%);*/
+		radial-gradient(circle at 50% 50%, #4a2735, #4a2735 100%);
+    */
 }
 
 
@@ -336,6 +336,8 @@ a:link {
 .dataTables_filter label {
     color: white;
 }
+
+
 
 /*********** boton que comprime sidebar *************/
 

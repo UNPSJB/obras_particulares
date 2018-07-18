@@ -3,7 +3,7 @@
 {% load crispy_forms_tags%}
 
 {% block estilos %}
-
+	<link rel="stylesheet" type="text/css" href="{% static perfil %}">
 {% endblock %}
 
 {% block barra %}
@@ -16,9 +16,7 @@
 
 
 {% block contenido %}
-
-
-
+    <button type="button" class="btn btn-sm btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn"> <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
 	  <div class="panel">
 		<div class="panel-heading box" role="tab" id="headingFive">
