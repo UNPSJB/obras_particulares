@@ -180,3 +180,31 @@ class FormularioArchivoPago(forms.Form):
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', 'Enviar', css_class="btn btn-default"))
 
+class FormularioUsuarioGrupo(forms.Form):
+    NAME = 'usuario_grupo_form'
+    SUBMIT = 'usuario_grupo_submit'
+    usuario_seleccionado = forms.CharField()
+    gruposEmp = set()
+    valor = 1
+    for g in Group.objects.all():
+        e = Group.objects.select_related().get(id=valor)
+        if str(e) <> 'propietario' and str(e) <> 'profesional':
+            gruposEmp.add((str(valor), str(e)))
+        valor += 1
+    grupos_disponibles = forms.TypedMultipleChoiceField(gruposEmp)
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioUsuarioGrupo, self).__init__(*args, **kwargs)
+        self.fields['usuario_seleccionado'].widget.attrs['placeholder'] = "Ingresar Nombre Usuario"
+        self.fields['usuario_seleccionado'].widget.attrs['title'] = "Ingresar Usuario"
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('usuario_grupo_submit', 'Modificar grupo', css_class="btn btn-default"))
+
+    def save(self, commit=False):
+        datos = self.cleaned_data
+        userSel = Usuario.objects.get(username=datos['usuario_seleccionado'])
+        grupo_post = list(datos['grupos_disponibles'])
+        for g in self.gruposEmp:
+            if g[0] == grupo_post[0]:
+                u = userSel.persona.modificarGrupo(g[1])
+        return u

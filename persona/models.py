@@ -99,11 +99,10 @@ class Persona(models.Model):
         return self.propietario
 
     def modificarGrupo(self, grupo):
-
         for gr in self.usuario.groups.all():
-            print (gr)
-            s = Group.objects.get(name= gr)
-            self.usuario.groups.remove(s)
+            s = Group.objects.get(name=gr)
+            if str(s) <> "propietario" and  str(s) <> "profesional":
+                self.usuario.groups.remove(s)
         g = Group.objects.get(name=grupo)
         self.usuario.groups.add(g)
         return self.usuario

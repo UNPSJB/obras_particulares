@@ -126,61 +126,39 @@
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<hr>
-						<div class="container-fluid">
-							<form action= ""  method="post" enctype="multipart/form-data"> {% csrf_token %}
-								<div class="row">
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-										<div class="form-group">
-											<label for="">Nombre:</label>
-											<input class="form-control input-sm" id="nombreUsuarioS" name="nombreempleado" type="text" placeholder="Nombre del usuario seleccionado" title="Nombre del usuario seleccionado"  disabled/>
-											<br>
-											<label for="">Usuario:</label>
-											<input class="form-control input-sm" id="usuarioS" name="usuarioempleado" type="text" placeholder="Usuario seleccionado" title="Usuario seleccionado"  disabled />
-										</div>
-									</div>
-
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-										<div class="form-group">
-											<label for="">Grupos actuales:</label>
-											 <select id='gruposActuales' class="form-control" title="Grupos asignados al usuario" size="12" style="height: 120px;" disabled>
-												 <option value=""  style="font-weight: bold;"> Grupos del usuario </option>
-												 <option value="">  </option>
-											</select>
-										</div>
-									</div>
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-										<div class="form-group">
-											<label for="">Grupos disponibles:</label>
-											 <select id='gruposDisponibles' class="form-control" title="Seleccionar a que grupo desea asignarlo" size="12" style="height: 120px;" disabled>
-												 <option value="" selected="selected" style="font-weight: bold;"> Seleccione un nuevo grupo </option>
-												 <option value="">  </option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="container-fluid">
+						<form action= ""  method="post" enctype="multipart/form-data">
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+								<div class="form-group">
+									<label for="">Nombre:</label>
+									<input class="form-control input-sm" id="nombreUsuarioS" name="nombreempleado" type="text" placeholder="Nombre del usuario seleccionado" title="Nombre del usuario seleccionado"  disabled/>
 									<br>
-									<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-											<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarTodosLosGrupos()">
-												Limpiar
-											</button>
-											<a href="javascript:enviar();">
-												<button type="button" class="btn btn-primary btn-sm" name="Aceptar">
-													  Modificar grupo
-												</button>
-											</a>
-											<!--a href= "" >
-												<button class="btn btn-primary btn-sm" type="submit" title="Modificar permisos del grupo">
-													Modificar grupo
-												</button>
-											</a-->
-										</div>
-									</div>
+									<div id="id_contenedor_usuario_seleccionado"></div>
 								</div>
-							</form>
+							</div>
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+								<div class="form-group">
+									<label for="">Grupos actuales:</label>
+									 <select id='gruposActuales' class="form-control" title="Grupos asignados al usuario" size="12" style="height: 111px;" disabled>
+										 <option value=""  style="font-weight: bold;"> Grupos del usuario </option>
+										 <option value="">  </option>
+									</select>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+								<div class="form-group" id="id_contenedor_grupos_disponibles">
+								</div>
+							</div>
 							<br>
-						</div>
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right" id="id_contenedor_boton_cambiar-grupo">
+								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarTodosLosGrupos()">
+									Limpiar
+								</button>
+							</div>
+							{% block modificar_grupo_usuario %}
+								{% crispy usuario_grupo_form %}
+							{% endblock %}
+						</form>
+						<br>
 					</div>
 				</div>
 			</div>
@@ -468,7 +446,7 @@
 		$('#submit-id-usuario_persona_submit').appendTo('#boton_administrativo');
 		$('#id_password').removeAttr("type");
 		$('#id_password').attr("type","password");
-		$('.selectmultiple').attr( "size", "6" );
+		$('.selectmultiple').attr( "size", "7" );
 		$('.selectmultiple').append($('<option>',{value:0, text:'Seleccione un grupo'}));
 		$('.selectmultiple > option[value="0"]').attr('selected', 'selected');
 		var selectList = $('#id_grupo option');
@@ -488,6 +466,18 @@
 		$('#alta_tipo_de_obra #div_id_descripcion').appendTo('#desc_tipo_obra')
 		$('#alta_tipo_de_obra #div_id_categorias').appendTo('#categoria_tipo_obra')
 		$('#submit-id-tipo_obra_submit').appendTo('#boton_tipo_obra')
+
+		$('#div_id_grupos_disponibles').appendTo('#id_contenedor_grupos_disponibles');
+		$('#div_id_usuario_seleccionado').appendTo('#id_contenedor_usuario_seleccionado');
+		$('#submit-id-usuario_grupo_submit').appendTo('#id_contenedor_boton_cambiar-grupo');
+		var selectList = $('#id_grupos_disponibles option');
+		selectList.sort(function(a,b){
+			a = a.value;
+			b = b.value;
+			return a-b;
+		});
+		$('#id_grupos_disponibles').html(selectList);
+
 	</script>
 
 	<script>
@@ -509,29 +499,18 @@
   			    sel.remove(2);
     		}
 			document.getElementById("nombreUsuarioS").value = '';
-			document.getElementById("usuarioS").value = '';
-			document.getElementById("gruposDisponibles").disabled=true;
-			{% for gr in grupos %}
-				grupos.push("{{gr}}");
-			{% endfor %}
-			grupos.sort();
-			for(var i=0; i < grupos.length; i++){
-				var option = document.createElement("option");
-				$(option).html(grupos[i]);
-				$(option).appendTo("#gruposDisponibles");
-			}
+			document.getElementById("id_usuario_seleccionado").value = '';
+			document.getElementById("id_grupos_disponibles").disabled=true;
 			document.getElementById("gruposActuales").disabled=true;
+			document.getElementById("id_usuario_seleccionado").disabled=true;
 		});
 		function cargarUsuarioSeleccionado() {
+			document.getElementById("id_usuario_seleccionado").disabled=false;
 			var sel = document.getElementById("gruposActuales");
 			len = sel.length - 1 ;
 			for( i = 0;  i < len ; i++) {
   			    sel.remove(2);
     		}
-			var elements = document.getElementById("gruposDisponibles").options;
-				for(var i = 0; i < elements.length; i++){
-				elements[i].selected = false;
-			}
 			usuario_filtrado_nombre = [];
 			usuario_filtrado_usuario = [];
 			usuario_filtrado_grupo = [];
@@ -554,13 +533,13 @@
 				}
 			{% endfor %}
     		document.getElementById("nombreUsuarioS").value = usuario_filtrado_nombre[0];
-			document.getElementById("usuarioS").value = usuario_filtrado_usuario[0];
+			document.getElementById("id_usuario_seleccionado").value = usuario_filtrado_usuario[0];
 			for(var i=0; i < usuario_filtrado_grupo.length; i++){
 				var option = document.createElement("option");
 				$(option).html(usuario_filtrado_grupo[i]);
 				$(option).appendTo("#gruposActuales");
 			}
-			document.getElementById("gruposDisponibles").disabled=false;
+			document.getElementById("id_grupos_disponibles").disabled=false;
  		}
 	</script>
 
@@ -571,19 +550,15 @@
 			for( i = 0;  i < len ; i++) {
   			    sel.remove(2);
     		}
-			document.getElementById("gruposDisponibles").disabled=true;
+			document.getElementById("id_grupos_disponibles").disabled=true;
 			document.getElementById("gruposActuales").disabled=true;
 			document.getElementById("usuarios").value = '';
 		}
 	</script>
 
-	<script>
-		function enviar(){
-			grupossel = $("#gruposDisponibles").val();
-			usuariosel = $("#usuarioS").val();
-			url = '/persona/cambiar_usuario_grupo/'+usuariosel+'/'+grupossel;
-			location.href = url;
-		}
-	</script>
+
+
+
+
 
 {% endblock %}

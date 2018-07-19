@@ -633,7 +633,6 @@ def mostrar_director(request):
     values = {
         "perfil" : perfil,
         "datos_usuario": empleados(request),
-        'grupos': grupos(request),
     }
     for form_name, submit_name in FORMS_DIRECTOR:
         KlassForm = FORMS_DIRECTOR[(form_name, submit_name)]
@@ -656,29 +655,20 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioUsuarioPersona,  #este formulario no se necesitaria, solo se dan de alta visador, inspector y administrativo
     FormularioTipoObra,
     FormularioTipoDocumento,
+    FormularioUsuarioGrupo,
 ]}
 
 def empleados(request):
-    personas = Usuario.objects.all()
+    usuarios = Usuario.objects.all()
+    print(usuarios)
+    for u in usuarios:
+        lista = list(u.groups.values_list('name', flat=True))
+        for i in range(len(lista)):
+            print(lista[i])
+        print("--------------------------------------")
     #empleado = filter(lambda persona: (persona. == ), personas)    # OBS: aca tiene que pasar un empleado no cualquir usuario
-    return personas
-
-def grupos(request):
-    grupos = Group.objects.all()
-    gruposEmp = []
-    for g in grupos:
-        if str(g) <> 'propietario' and str(g) <> 'profesional':
-            gruposEmp.append(str(g))
-    gruposEmp.sort()
-    return gruposEmp
-
-def cambiar_usuario_grupo(request, usuariosel, grupossel):
-
-    # trabajando en esto DAVID
-    userSel = Usuario.objects.get(username=usuariosel)
-    userSel.persona.modificarGrupo(grupossel)
-    messages.add_message(request, messages.SUCCESS, 'Usuario fue cambiado de grupo')
-    return redirect('director')
+    print(usuarios)
+    return usuarios
 
 def ver_listado_todos_tramites(request):
     usuario = request.user
