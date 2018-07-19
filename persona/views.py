@@ -660,15 +660,21 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
 
 def empleados(request):
     usuarios = Usuario.objects.all()
-    print(usuarios)
+    #print(usuarios)
+    #print("--------------------------------------")
+    empleados = []
     for u in usuarios:
         lista = list(u.groups.values_list('name', flat=True))
         for i in range(len(lista)):
-            print(lista[i])
-        print("--------------------------------------")
+            if lista[i]<>'profesional' and lista[i]<>'propietario':
+                if u not in empleados:
+      #              print(lista[i])
+                    empleados.append(u)
+     #   print("--------------------------------------")
     #empleado = filter(lambda persona: (persona. == ), personas)    # OBS: aca tiene que pasar un empleado no cualquir usuario
-    print(usuarios)
-    return usuarios
+    #print("--------------------------------------")
+    #print(empleados)
+    return empleados
 
 def ver_listado_todos_tramites(request):
     usuario = request.user

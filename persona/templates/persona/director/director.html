@@ -477,6 +477,12 @@
 			return a-b;
 		});
 		$('#id_grupos_disponibles').html(selectList);
+		$("#id_grupo").removeAttr("multiple");
+		var a = document.getElementById("id_grupo");
+		a.style.height= '111px';
+		$("#id_grupos_disponibles").removeAttr("multiple");
+		var b = document.getElementById("id_grupos_disponibles");
+		b.style.height= '111px';
 
 	</script>
 
