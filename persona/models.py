@@ -51,6 +51,12 @@ class Usuario(Rol, AbstractUser):
         return self.groups.all()
 
 class Persona(models.Model):
+
+    def url(self,filename):
+        file = str(filename)
+        ruta = "fotoperfil/%s/%s"%(self.usuario, file)
+        return ruta
+
     SEXOS = [{'F', 'Femenino'}, {'M', 'Masculino'}]
     dni = models.IntegerField(unique = True)
     apellido = models.CharField(max_length = 50)
@@ -63,7 +69,7 @@ class Persona(models.Model):
     propietario = models.OneToOneField(Propietario, blank=True, null=True)
     usuario = models.OneToOneField(Usuario, blank=True, null=True)
     perfilCSS = models.CharField(max_length = 10, default="base.css")
-    perfilFoto = models.ImageField(upload_to='fotoperfil/',blank=True, default= 'fotoperfil/silueta_usuario.png')
+    perfilFoto = models.ImageField(upload_to=url, blank=True, default='fotoperfil/silueta_usuario.png')
 
     def get_view_perfilusuario(self):
         return self.perfilCSS
@@ -118,6 +124,7 @@ class Persona(models.Model):
         if telefono:
             self.telefono = telefono
         if imagen:
+            self.perfilFoto.delete()
             self.perfilFoto = imagen
         self.save()
         return self.usuario

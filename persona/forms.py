@@ -218,6 +218,8 @@ class FormularioUsuarioCambiarDatos(forms.Form):
     telefono_usuario = forms.CharField(max_length=15, required=False)
     usuario_nombre = forms.CharField()
     cambiar_foto_de_perfil = forms.ImageField(required=False)
+    nuevo_password = forms.CharField()
+
 
     def __init__(self, *args, **kwargs):
         super(FormularioUsuarioCambiarDatos, self).__init__(*args, **kwargs)
@@ -232,13 +234,14 @@ class FormularioUsuarioCambiarDatos(forms.Form):
         self.fields['domicilio_usuario'].widget.attrs['placeholder'] = "Ingresar Domicilio"
         self.fields['mail_usuario'].widget.attrs['title'] = "Ingresar Mail"
         self.fields['mail_usuario'].widget.attrs['placeholder'] = "Ingresar Mail - Formato: xxxxxxx@xxx.xxx"
+        self.fields['nuevo_password'].widget.attrs['placeholder'] = "Ingresar Contrasena"
+        self.fields['nuevo_password'].widget.attrs['pattern'] = ".{6,}"
+        self.fields['nuevo_password'].widget.attrs['title'] = "Ingresar Contrasena"
         self.helper = FormHelper()
         self.helper.add_input(Submit('usuario_datospersonales_submit', 'Modificar mis datos', css_class="btn btn-default"))
 
     def save(self, commit=False):
         datos = self.cleaned_data
         u = Usuario.objects.get(username=datos['usuario_nombre'])
-        print(u)
         u.persona.modificarUsuario(datos['mail_usuario'], datos['domicilio_usuario'], datos['telefono_usuario'], datos['cambiar_foto_de_perfil'])
-        print(u)
         return u

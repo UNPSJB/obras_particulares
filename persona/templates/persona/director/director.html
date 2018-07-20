@@ -35,7 +35,7 @@
 {% endblock %}
 
 {% block imagenusuario %}
-	<img src= "/media/{{user.persona.perfilFoto}}" width=40 height=40 class="img-circle">
+	<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
 {% endblock %}
 
 {% block barra %}
