@@ -9,12 +9,13 @@ class Rol(models.Model):
         abstract = True
 
 class Profesional(Rol):
-    CATEGORIAS = [
 
+    CATEGORIAS = [
         (1, 'Categoria 1'),
         (2, 'Categoria 2'),
         (3, 'Categoria 3'),
     ]
+
     matricula = models.CharField(max_length=10)
     profesion = models.CharField(max_length=10)  # ["Maestro Mayor de Obra", "Ingeniero Civil", "Arquitecto"]
     categoria = models.IntegerField(choices=CATEGORIAS)
@@ -25,7 +26,6 @@ class Profesional(Rol):
             return "{}".format(self.persona)
         return "Matricula: {}, Profesion: {}".format(self.matricula, self.profesion)
 
-
 class Propietario(Rol):
     def __str__(self):
         try:
@@ -35,7 +35,6 @@ class Propietario(Rol):
 
     def obtener_persona(self):
         return Persona.get_self().nombre
-
 
 class Usuario(Rol, AbstractUser):
     PROFESIONAL = "profesional"
@@ -64,7 +63,7 @@ class Persona(models.Model):
     propietario = models.OneToOneField(Propietario, blank=True, null=True)
     usuario = models.OneToOneField(Usuario, blank=True, null=True)
     perfilCSS = models.CharField(max_length = 10, default="base.css")
-    #perfilFoto = models.ImageField(upload_to='fotoperfil/', null=True)
+    perfilFoto = models.ImageField(upload_to='fotoperfil/',blank=True, default= 'fotoperfil/silueta_usuario.png')
 
     def get_view_perfilusuario(self):
         return self.perfilCSS
@@ -105,6 +104,22 @@ class Persona(models.Model):
                 self.usuario.groups.remove(s)
         g = Group.objects.get(name=grupo)
         self.usuario.groups.add(g)
+        return self.usuario
+
+    def modificarPerfilCSS(self, perfilSeleccionado):
+        self.perfilCSS = perfilSeleccionado
+        return self.perfilCSS
+
+    def modificarUsuario(self, mail, domicilio, telefono, imagen):
+        if mail:
+            self.mail = mail
+        if domicilio:
+            self.domicilio = domicilio
+        if telefono:
+            self.telefono = telefono
+        if imagen:
+            self.perfilFoto = imagen
+        self.save()
         return self.usuario
 
 def generar_password():

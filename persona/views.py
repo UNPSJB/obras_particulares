@@ -637,7 +637,8 @@ def mostrar_director(request):
     for form_name, submit_name in FORMS_DIRECTOR:
         KlassForm = FORMS_DIRECTOR[(form_name, submit_name)]
         if request.method == "POST" and submit_name in request.POST:
-            _form = KlassForm(request.POST)
+            #_form = KlassForm(request.POST)
+            _form = KlassForm(request.POST,request.FILES)
             if _form.is_valid():
                 _form.save()
                 messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
@@ -656,24 +657,18 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioTipoObra,
     FormularioTipoDocumento,
     FormularioUsuarioGrupo,
+    FormularioUsuarioCambiarDatos,
 ]}
 
 def empleados(request):
     usuarios = Usuario.objects.all()
-    #print(usuarios)
-    #print("--------------------------------------")
     empleados = []
     for u in usuarios:
         lista = list(u.groups.values_list('name', flat=True))
         for i in range(len(lista)):
             if lista[i]<>'profesional' and lista[i]<>'propietario':
                 if u not in empleados:
-      #              print(lista[i])
                     empleados.append(u)
-     #   print("--------------------------------------")
-    #empleado = filter(lambda persona: (persona. == ), personas)    # OBS: aca tiene que pasar un empleado no cualquir usuario
-    #print("--------------------------------------")
-    #print(empleados)
     return empleados
 
 def ver_listado_todos_tramites(request):

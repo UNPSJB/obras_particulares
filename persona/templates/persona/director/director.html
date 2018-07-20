@@ -4,7 +4,9 @@
 {% load crispy_forms_tags%}
 
 {% block estilos %}
+
 	<link rel="stylesheet" type="text/css" href="{% static perfil %}">
+
 	<style>
 	 /* Style the button that is used to open and close the collapsible content */
 	.collapsible {
@@ -32,6 +34,9 @@
 	</style>
 {% endblock %}
 
+{% block imagenusuario %}
+	<img src= "/media/{{user.persona.perfilFoto}}" width=40 height=40 class="img-circle">
+{% endblock %}
 
 {% block barra %}
 	<ul class="sidebar sidebar-1">
@@ -95,12 +100,9 @@
 							{% endblock %}
 						</div>
 						<form method="post" enctype="multipart/form-data"> {% csrf_token %}
-							<div id="persona_administrativo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-							</div>
-							<div id="profesional_administrativo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-							</div>
-							<div id="usuario_administrativo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-							</div>
+							<div id="persona_administrativo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+							<div id="profesional_administrativo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+							<div id="usuario_administrativo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
 							<div id="boton_administrativo" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
 								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
 									Limpiar
@@ -145,8 +147,7 @@
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								<div class="form-group" id="id_contenedor_grupos_disponibles">
-								</div>
+								<div class="form-group" id="id_contenedor_grupos_disponibles"></div>
 							</div>
 							<br>
 							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right" id="id_contenedor_boton_cambiar-grupo">
@@ -200,10 +201,8 @@
 								{% endblock %}
 							</div>
 							<form method="post" enctype="multipart/form-data"> {% csrf_token %}
-								<div id="tipo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								</div>
-								<div id="requerido_para" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								</div>
+								<div id="tipo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+								<div id="requerido_para" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
 								<div id="boton_tipo" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
 									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
 										Limpiar
@@ -224,12 +223,9 @@
 								{% endblock %}
 							</div>
 							<form method="post" enctype="multipart/form-data"> {% csrf_token %}
-								<div id="nombre_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								</div>
-								<div id="desc_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								</div>
-								<div id="categoria_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								</div>
+								<div id="nombre_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+								<div id="desc_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+								<div id="categoria_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
 								<div id="boton_tipo_obra" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
 									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
 										Limpiar
@@ -257,42 +253,22 @@
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<div class="container-fluid">
-						<br>
-							<form action="" class="" >
+							<form method='POST' action='{{ action_url }}' enctype="multipart/form-data">
 								<div class="row">
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<div class="form-group">
-												<label>Nro. de teléfono:</label>
-												<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono" maxlength="13" autofocus />
-											</div>
-									</div>
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<div class="form-group">
-												<label for="">E-Mail:</label>
-												<input class="form-control input-sm" id="" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail" maxlength="20" />
-											</div>
-									</div>
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-										<label for="">Cambiar Foto de perfil:</label>
-										<br>
-										<input class="file" id="perfil" type="file" data-preview-file-type="any" title="Cargar nueva foto de perfil">
-									</div>
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_usuario"></div>
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_usuario_dos"></div>
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_foto_perfil_usuario"></div>
 								</div>
-								<div class="container-fluid">
-									<br>
-									<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-											<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
-												Modificar mis datos
-											</button>
-											<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-												Limpiar
-											</button>
-										</div>
-									</div>
+								<div id="contenedor_boton_cambia_datos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+										Limpiar
+									</button>
 								</div>
+								{% block modificar_datospersonales_usuario %}
+									{% crispy usuario_datospersonales_form %}
+								{% endblock %}
+								<br>
 							</form>
-							<br>
 						</div>
 					</div>
 				</div>
@@ -329,18 +305,6 @@
 				dateFormat: 'dd/mm/yy'
 		});
 	})();
-	</script>
-
-	<script>
-		$("#perfil").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar nueva foto de perfil',
-			showUpload: false,
-			showRemove: false
-		});
 	</script>
 
 	<script type="text/javascript">
@@ -432,6 +396,10 @@
 	</script>
 
 	<script>
+		var c = document.getElementById("botonConfiguracion");
+		c.style.display= '';
+		var d = document.getElementById("imagenusuario");
+		d.style.display= '';
 		$('#div_id_dni').appendTo('#persona_administrativo');
 		$('#div_id_nombre').appendTo('#persona_administrativo');
 		$('#div_id_apellido').appendTo('#persona_administrativo');
@@ -483,7 +451,6 @@
 		$("#id_grupos_disponibles").removeAttr("multiple");
 		var b = document.getElementById("id_grupos_disponibles");
 		b.style.height= '111px';
-
 	</script>
 
 	<script>
@@ -562,9 +529,31 @@
 		}
 	</script>
 
+	<script>
+		$("#id_cambiar_foto_de_perfil").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar foto perfil',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
 
-
-
-
+	<script>
+		$('#div_id_usuario_nombre').appendTo('#contenedor_datos_usuario');
+		$('#div_id_mail_usuario').appendTo('#contenedor_datos_usuario');
+		$('#div_id_domicilio_usuario').appendTo('#contenedor_datos_usuario_dos');
+		$('#div_id_telefono_usuario').appendTo('#contenedor_datos_usuario');
+		$('#div_id_cambiar_foto_de_perfil').appendTo('#contenedor_foto_perfil_usuario');
+		$('#submit-id-usuario_datospersonales_submit').appendTo('#contenedor_boton_cambia_datos');
+		var d = document.getElementById("div_id_usuario_nombre");
+		d.style.display= 'none';
+		document.getElementById("id_usuario_nombre").value = '{{user}}';
+		document.getElementById("id_telefono_usuario").value = '{{user.persona.telefono}}';
+		document.getElementById("id_mail_usuario").value = '{{user.persona.mail}}';
+		document.getElementById("id_domicilio_usuario").value = '{{user.persona.domicilio}}';
+	</script>
 
 {% endblock %}

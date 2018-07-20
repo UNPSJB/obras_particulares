@@ -208,3 +208,37 @@ class FormularioUsuarioGrupo(forms.Form):
             if g[0] == grupo_post[0]:
                 u = userSel.persona.modificarGrupo(g[1])
         return u
+
+class FormularioUsuarioCambiarDatos(forms.Form):
+    NAME = 'usuario_datospersonales_form'
+    SUBMIT = 'usuario_datospersonales_submit'
+
+    mail_usuario = forms.EmailField(max_length=40, required=False)
+    domicilio_usuario = forms.CharField(max_length=50, required=False)
+    telefono_usuario = forms.CharField(max_length=15, required=False)
+    usuario_nombre = forms.CharField()
+    cambiar_foto_de_perfil = forms.ImageField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioUsuarioCambiarDatos, self).__init__(*args, **kwargs)
+        self.fields['usuario_nombre'].widget.attrs['placeholder'] = "Ingresar Nombre Usuario"
+        self.fields['usuario_nombre'].widget.attrs['pattern'] = ".{5,}"
+        self.fields['usuario_nombre'].widget.attrs['title'] = "Ingresar Usuario"
+        self.fields['telefono_usuario'].widget.attrs['title'] = "Ingresar Nro de Telefono"
+        self.fields['telefono_usuario'].widget.attrs['pattern'] = "^[0-9]{0,15}"
+        self.fields['telefono_usuario'].widget.attrs['placeholder'] = "Ingresar Nro de Telefono"
+        self.fields['domicilio_usuario'].widget.attrs['title'] = "Ingresar Domicilio"
+        self.fields['domicilio_usuario'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50} [0-9]{0,5}$"
+        self.fields['domicilio_usuario'].widget.attrs['placeholder'] = "Ingresar Domicilio"
+        self.fields['mail_usuario'].widget.attrs['title'] = "Ingresar Mail"
+        self.fields['mail_usuario'].widget.attrs['placeholder'] = "Ingresar Mail - Formato: xxxxxxx@xxx.xxx"
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('usuario_datospersonales_submit', 'Modificar mis datos', css_class="btn btn-default"))
+
+    def save(self, commit=False):
+        datos = self.cleaned_data
+        u = Usuario.objects.get(username=datos['usuario_nombre'])
+        print(u)
+        u.persona.modificarUsuario(datos['mail_usuario'], datos['domicilio_usuario'], datos['telefono_usuario'], datos['cambiar_foto_de_perfil'])
+        print(u)
+        return u
