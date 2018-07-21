@@ -73,16 +73,14 @@ header{
 	transition: 0.5s;
 }
 
-
 img.logo {
 	height: 50px;
-
 }
 
-/* eso es para modifical el header cuando top */
+/* eso es para modificar el header cuando top */
 
 header.sticky {
-	position: fixed;
+	/*position: fixed;*/
 	left: 0; right: 0;
 	height: 60px;
 	padding: 0px 0 10px 0;
@@ -92,7 +90,14 @@ header.sticky {
 
 .sticky img.logo {
 	height: 40px;
+}
 
+.pad18 {
+	padding-top: 18px;
+}
+
+.pad12 {
+	padding-top: 12px;
 }
 
 /* configuracion panel gris*/
@@ -329,9 +334,11 @@ a:link {
 }
 
 /*********** tablas*************/
+
 .dataTables_wrapper .dataTables_length label{
     color: white;
 }
+
 
 .dataTables_filter label {
     color: white;

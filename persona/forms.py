@@ -220,6 +220,9 @@ class FormularioUsuarioCambiarDatos(forms.Form):
     cambiar_foto_de_perfil = forms.ImageField(required=False)
     nuevo_password = forms.CharField()
 
+    oldpassword = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'type': 'password', 'placeholder': 'your old Password', 'class': 'span'}))
+    newpassword1 = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'type': 'password', 'placeholder': 'New Password', 'class': 'span'}))
+    newpassword2 = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'type': 'password', 'placeholder': 'Confirm New Password', 'class': 'span'}))
 
     def __init__(self, *args, **kwargs):
         super(FormularioUsuarioCambiarDatos, self).__init__(*args, **kwargs)
@@ -245,3 +248,10 @@ class FormularioUsuarioCambiarDatos(forms.Form):
         u = Usuario.objects.get(username=datos['usuario_nombre'])
         u.persona.modificarUsuario(datos['mail_usuario'], datos['domicilio_usuario'], datos['telefono_usuario'], datos['cambiar_foto_de_perfil'])
         return u
+
+    def clean(self):
+        if 'newpassword1' in self.cleaned_data and 'newpassword2' in self.cleaned_data:
+            if self.cleaned_data['newpassword1'] != self.cleaned_data['newpassword2']:
+                raise forms.ValidationError(_("The two password fields did not match."))
+        return self.cleaned_data
+

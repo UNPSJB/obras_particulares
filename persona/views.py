@@ -351,17 +351,14 @@ def tramites_visados(request):
 def ver_documentos_para_visado(request, pk_tramite):
 
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.VISAR)
-
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
     documento_set = FormularioDocumentoSet(initial=inicial)
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     if request.method == "POST":
-
         observacion = request.POST["observaciones"]
         tram = request.POST['tram']
         monto_permiso = request.POST['monto']
-
         if "Envia Planilla de visado" in request.POST:
             documento_set = FormularioDocumentoSet(request.POST, request.FILES)
             if documento_set.is_valid():
@@ -428,7 +425,6 @@ class ReporteTramitesAceptadosExcel(TemplateView):
 class ReporteTramitesAceptadosPdf(View):
 
     def get(self, request, *args, **kwargs):
-
         filename = "Informe de tramites.pdf"
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
@@ -836,3 +832,4 @@ def alta_persona(request):
     return render(request, 'persona/alta/alta_persona.html', {'form': form})
 
 #------------------------------------------------------------------------------------------------------------------
+

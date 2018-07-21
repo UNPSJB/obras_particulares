@@ -70,5 +70,4 @@ urlpatterns = [
     url(r'^reporte_tramites_director_excel/', ReporteTramitesDirectorExcel.as_view(), name="reporte_tramites_director_excel"),
     url(r'^reporte_tramites_director_pdf/$', login_required(ReporteTramitesDirectorPdf.as_view()), name="reporte_tramites_director_pdf"),
     url(r'^vista_de_usuarios$', views.ver_listado_todos_usuarios, name="vista_de_usuarios"),
-    #url(r'^cambiar_usuario_grupo/(?P<usuariosel>\w+)/(?P<grupossel>\w+)/$', views.cambiar_usuario_grupo, name="cambiar_usuario_grupo"),
 ]

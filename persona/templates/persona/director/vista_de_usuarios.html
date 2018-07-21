@@ -4,6 +4,16 @@
 
 {% block estilos %}
 	<link rel="stylesheet" type="text/css" href="{% static perfil %}">
+    <style>
+        select {
+            background : white;
+            color : #444444;
+        }
+    </style>
+{% endblock %}
+
+{% block imagenusuario %}
+	<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
 {% endblock %}
 
 {% block barra %}
@@ -169,7 +179,13 @@
                 }
             }
         });
+    </script>
 
+    <script>
+        var c = document.getElementById("botonConfiguracion");
+		c.style.display= '';
+		var d = document.getElementById("imagenusuario");
+		d.style.display= '';
     </script>
 
 {% endblock %}

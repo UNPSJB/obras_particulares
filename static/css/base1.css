@@ -95,6 +95,14 @@ header.sticky {
 
 }
 
+.pad18 {
+	padding-top: 18px;
+}
+
+.pad12 {
+	padding-top: 12px;
+}
+
 /* configuracion panel gris*/
 
 .panel-group > .panel {
