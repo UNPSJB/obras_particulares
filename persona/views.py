@@ -49,11 +49,31 @@ def convertidor_de_fechas(fecha):
 @login_required(login_url="login")
 @grupo_requerido('propietario')
 def mostrar_propietario(request):
-    contexto = {
+    values = {
         "ctxtramitespropietario": listado_tramites_propietario(request)
     }
-    #print(contexto)
-    return render(request, 'persona/propietario/propietario.html', contexto)
+    for form_name, submit_name in FORMS_PROPIETARIO:
+        KlassForm = FORMS_PROPIETARIO[(form_name, submit_name)]
+        if request.method == "POST" and submit_name in request.POST:
+            #_form = KlassForm(request.POST)
+            _form = KlassForm(request.POST,request.FILES)
+            if _form.is_valid():
+                _form.save()
+                messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
+                return redirect(usuario.get_view_name())
+            else:
+                values["submit_name"] = submit_name
+                messages.add_message(request, messages.ERROR, "La accion solicitada no a podido ser ejecutada")
+            values[form_name] = _form
+        else:
+            values[form_name] = KlassForm()
+    return render(request, 'persona/propietario/propietario.html', values)
+
+FORMS_PROPIETARIO = {(k.NAME, k.SUBMIT): k for k in [
+    FormularioUsuarioGrupo,
+    FormularioUsuarioCambiarDatos,
+    FormularioUsuarioContrasenia,
+]}
 
 def listado_tramites_propietario(request):
     tramites = Tramite.objects.all()
@@ -131,7 +151,7 @@ def mostrar_profesional(request):
             messages.add_message(request, messages.WARNING, 'Propietario no existe, debe darlo de alta para iniciar al tramite.')
     else:
         propietario_form = None
-    contexto = {
+    values = {
         'documentos_requeridos': tipos_de_documentos_requeridos,
         'ctxtramitesprofesional': listado_tramites_de_profesional(request),
         'tramite_form': tramite_form,
@@ -139,7 +159,28 @@ def mostrar_profesional(request):
         'documento_set': documento_set,
         'ctxtramcorregidos':tramites_corregidos(request)
     }
-    return render(request, 'persona/profesional/profesional.html', contexto)
+    for form_name, submit_name in FORMS_PROFESIONAL:
+        KlassForm = FORMS_PROFESIONAL[(form_name, submit_name)]
+        if request.method == "POST" and submit_name in request.POST:
+            #_form = KlassForm(request.POST)
+            _form = KlassForm(request.POST,request.FILES)
+            if _form.is_valid():
+                _form.save()
+                messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
+                return redirect(usuario.get_view_name())
+            else:
+                values["submit_name"] = submit_name
+                messages.add_message(request, messages.ERROR, "La accion solicitada no a podido ser ejecutada")
+            values[form_name] = _form
+        else:
+            values[form_name] = KlassForm()
+    return render(request, 'persona/profesional/profesional.html', values)
+
+FORMS_PROFESIONAL = {(k.NAME, k.SUBMIT): k for k in [
+    FormularioUsuarioGrupo,
+    FormularioUsuarioCambiarDatos,
+    FormularioUsuarioContrasenia,
+]}
 
 def listado_tramites_de_profesional(request):
     tramites = Tramite.objects.all()
@@ -190,7 +231,7 @@ def profesional_solicita_final_obra(request, pk_tramite):
 def ver_documentos_corregidos(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     if request.method == "POST":
-        print ("falta guardar documentos")
+        #print ("falta guardar documentos")
         enviar_correcciones(request, pk_tramite)
     else:
         return render(request, 'persona/profesional/ver_documentos_corregidos.html', {'tramite': tramite})
@@ -220,8 +261,7 @@ def documento_de_estado(request, pk_estado):
 @login_required(login_url="login")
 @grupo_requerido('administrativo')
 def mostrar_administrativo(request):
-
-    contexto = {
+    values = {
         "ctxprofesional": profesional_list(request),
         "ctxpropietario": propietario_list(request),
         "ctxtramitesiniciados": listado_de_tramites_iniciados(request),
@@ -229,7 +269,28 @@ def mostrar_administrativo(request):
         "ctxsolicitudesfinalobra": solicitud_final_obra_list(request),
         "ctxpago": registrar_pago_tramite(request)
     }
-    return render(request, 'persona/administrativo/administrativo.html', contexto)
+    for form_name, submit_name in FORMS_ADMINISTRATIVO:
+        KlassForm = FORMS_ADMINISTRATIVO[(form_name, submit_name)]
+        if request.method == "POST" and submit_name in request.POST:
+            #_form = KlassForm(request.POST)
+            _form = KlassForm(request.POST,request.FILES)
+            if _form.is_valid():
+                _form.save()
+                messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
+                return redirect(usuario.get_view_name())
+            else:
+                values["submit_name"] = submit_name
+                messages.add_message(request, messages.ERROR, "La accion solicitada no a podido ser ejecutada")
+            values[form_name] = _form
+        else:
+            values[form_name] = KlassForm()
+    return render(request, 'persona/administrativo/administrativo.html', values)
+
+FORMS_ADMINISTRATIVO = {(k.NAME, k.SUBMIT): k for k in [
+    FormularioUsuarioGrupo,
+    FormularioUsuarioCambiarDatos,
+    FormularioUsuarioContrasenia,
+]}
 
 def profesional_list(request):
     personas = Persona.objects.all()
@@ -260,9 +321,9 @@ def solicitud_final_obra_list(request):
     return contexto
 
 def registrar_pago_tramite(request):
-    print(request.FILES)
+    #print(request.FILES)
     if request.method == "POST":
-        print("POST")
+        #print("POST")
         archivo_pago_form = FormularioArchivoPago(request.POST, request.FILES)
         if archivo_pago_form.is_valid():
             Pago.procesar_pagos(request.FILES['pagos'])
@@ -286,7 +347,7 @@ def crear_usuario(request, pk_persona):
             [persona.mail],
             fail_silently=False,
         )
-        print (password)
+        #print (password)
     else:
         print("Mando correo informando que se cambio algo en su cuenta de usuario")
     return redirect(usuario.get_view_name())
@@ -329,11 +390,32 @@ def ver_documentos_tramite_administrativo(request, pk_tramite):
 @login_required(login_url="login")
 @grupo_requerido('visador')
 def mostrar_visador(request):
-    contexto = {
+    values = {
         "ctxtramaceptado": tramites_aceptados(request),
         "ctxtramvisados": tramites_visados(request),
     }
-    return render(request, 'persona/visador/visador.html', contexto)
+    for form_name, submit_name in FORMS_VISADOR:
+        KlassForm = FORMS_VISADOR[(form_name, submit_name)]
+        if request.method == "POST" and submit_name in request.POST:
+            #_form = KlassForm(request.POST)
+            _form = KlassForm(request.POST,request.FILES)
+            if _form.is_valid():
+                _form.save()
+                messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
+                return redirect(usuario.get_view_name())
+            else:
+                values["submit_name"] = submit_name
+                messages.add_message(request, messages.ERROR, "La accion solicitada no a podido ser ejecutada")
+            values[form_name] = _form
+        else:
+            values[form_name] = KlassForm()
+    return render(request, 'persona/visador/visador.html', values)
+
+FORMS_VISADOR = {(k.NAME, k.SUBMIT): k for k in [
+    FormularioUsuarioGrupo,
+    FormularioUsuarioCambiarDatos,
+    FormularioUsuarioContrasenia,
+]}
 
 def tramites_aceptados(request):
     aceptados = Tramite.objects.en_estado(Aceptado)
@@ -481,12 +563,33 @@ class ReporteTramitesAceptadosPdf(View):
 @login_required(login_url="login")
 @grupo_requerido('inspector')
 def mostrar_inspector(request):
-    contexto = {
+    values = {
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
         "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
         "ctxtramitesagendados": tramites_agendados_por_inspector(request)
     }
-    return render(request, 'persona/inspector/inspector.html', contexto)
+    for form_name, submit_name in FORMS_INSPECTOR:
+        KlassForm = FORMS_INSPECTOR[(form_name, submit_name)]
+        if request.method == "POST" and submit_name in request.POST:
+            #_form = KlassForm(request.POST)
+            _form = KlassForm(request.POST,request.FILES)
+            if _form.is_valid():
+                _form.save()
+                messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
+                return redirect(usuario.get_view_name())
+            else:
+                values["submit_name"] = submit_name
+                messages.add_message(request, messages.ERROR, "La accion solicitada no a podido ser ejecutada")
+            values[form_name] = _form
+        else:
+            values[form_name] = KlassForm()
+    return render(request, 'persona/inspector/inspector.html', values)
+
+FORMS_INSPECTOR = {(k.NAME, k.SUBMIT): k for k in [
+    FormularioUsuarioGrupo,
+    FormularioUsuarioCambiarDatos,
+    FormularioUsuarioContrasenia,
+]}
 
 def tramites_visados_y_con_inspeccion(request):
     argumentos = [Visado, ConInspeccion]
@@ -531,10 +634,10 @@ def cargar_inspeccion(request, pk_tramite):
             for docForm in documento_set:
                 docForm.save(tramite=tramite)
                 if "aceptar_tramite" in request.POST:
-                    print ("acepte el tramite")
+                    #print ("acepte el tramite")
                     aceptar_inspeccion(request, pk_tramite)
                 elif "rechazar_tramite" in request.POST:
-                    print ("rechace el tramite")
+                    #print ("rechace el tramite")
                     rechazar_inspeccion(request, pk_tramite)
         else:
             print("no entre al if")
@@ -580,11 +683,32 @@ def documentos_inspector_estado(request, pk_estado):
 @login_required(login_url="login")
 @grupo_requerido('jefeinspector')
 def mostrar_jefe_inspector(request):
-    contexto = {
+    values = {
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
         "ctxtramitesagendados": tramites_agendados_por_inspector(request),
     }
-    return render(request, 'persona/jefe_inspector/jefe_inspector.html', contexto)
+    for form_name, submit_name in FORMS_JEFEINSPECTOR:
+        KlassForm = FORMS_JEFEINSPECTOR[(form_name, submit_name)]
+        if request.method == "POST" and submit_name in request.POST:
+            #_form = KlassForm(request.POST)
+            _form = KlassForm(request.POST,request.FILES)
+            if _form.is_valid():
+                _form.save()
+                messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
+                return redirect(usuario.get_view_name())
+            else:
+                values["submit_name"] = submit_name
+                messages.add_message(request, messages.ERROR, "La accion solicitada no a podido ser ejecutada")
+            values[form_name] = _form
+        else:
+            values[form_name] = KlassForm()
+    return render(request, 'persona/jefe_inspector/jefe_inspector.html', values)
+
+FORMS_JEFEINSPECTOR = {(k.NAME, k.SUBMIT): k for k in [
+    FormularioUsuarioGrupo,
+    FormularioUsuarioCambiarDatos,
+    FormularioUsuarioContrasenia,
+]}
 
 def tramite_con_inspecciones_list(request):
     tramites = Tramite.objects.en_estado(ConInspeccion)
@@ -654,6 +778,7 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
     FormularioTipoDocumento,
     FormularioUsuarioGrupo,
     FormularioUsuarioCambiarDatos,
+    FormularioUsuarioContrasenia,
 ]}
 
 def empleados(request):

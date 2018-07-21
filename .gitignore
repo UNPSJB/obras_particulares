@@ -2,3 +2,6 @@
 db.sqlite3
 .idea/
 *.orig
+persona/migrations/*
+tipos/migrations/*
+tramite/migrations/*

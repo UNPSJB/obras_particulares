@@ -218,11 +218,6 @@ class FormularioUsuarioCambiarDatos(forms.Form):
     telefono_usuario = forms.CharField(max_length=15, required=False)
     usuario_nombre = forms.CharField()
     cambiar_foto_de_perfil = forms.ImageField(required=False)
-    nuevo_password = forms.CharField()
-
-    oldpassword = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'type': 'password', 'placeholder': 'your old Password', 'class': 'span'}))
-    newpassword1 = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'type': 'password', 'placeholder': 'New Password', 'class': 'span'}))
-    newpassword2 = forms.CharField(max_length=20, widget=forms.TextInput(attrs={'type': 'password', 'placeholder': 'Confirm New Password', 'class': 'span'}))
 
     def __init__(self, *args, **kwargs):
         super(FormularioUsuarioCambiarDatos, self).__init__(*args, **kwargs)
@@ -237,9 +232,6 @@ class FormularioUsuarioCambiarDatos(forms.Form):
         self.fields['domicilio_usuario'].widget.attrs['placeholder'] = "Ingresar Domicilio"
         self.fields['mail_usuario'].widget.attrs['title'] = "Ingresar Mail"
         self.fields['mail_usuario'].widget.attrs['placeholder'] = "Ingresar Mail - Formato: xxxxxxx@xxx.xxx"
-        self.fields['nuevo_password'].widget.attrs['placeholder'] = "Ingresar Contrasena"
-        self.fields['nuevo_password'].widget.attrs['pattern'] = ".{6,}"
-        self.fields['nuevo_password'].widget.attrs['title'] = "Ingresar Contrasena"
         self.helper = FormHelper()
         self.helper.add_input(Submit('usuario_datospersonales_submit', 'Modificar mis datos', css_class="btn btn-default"))
 
@@ -249,9 +241,40 @@ class FormularioUsuarioCambiarDatos(forms.Form):
         u.persona.modificarUsuario(datos['mail_usuario'], datos['domicilio_usuario'], datos['telefono_usuario'], datos['cambiar_foto_de_perfil'])
         return u
 
-    def clean(self):
-        if 'newpassword1' in self.cleaned_data and 'newpassword2' in self.cleaned_data:
-            if self.cleaned_data['newpassword1'] != self.cleaned_data['newpassword2']:
-                raise forms.ValidationError(_("The two password fields did not match."))
-        return self.cleaned_data
+class FormularioUsuarioContrasenia(forms.Form):
+    NAME = 'usuario_contrasenia_form'
+    SUBMIT = 'usuario_contrasenia_submit'
+    #"""
+    #A form that lets a user change set their password without entering the old
+    #password
+    #"""
+    error_messages = {
+        'password_mismatch': ("Los dos campos de contrasena no coinciden."),
+    }
+    usuario_nombre1 = forms.CharField(label=("Nombre de usuario"))
+    new_password1 = forms.CharField(label=("Nuevo password"),widget=forms.PasswordInput)
+    new_password2 = forms.CharField(label=("Confirmar nuevo password"),widget=forms.PasswordInput)
 
+    def __init__(self, *args, **kwargs):
+        super(FormularioUsuarioContrasenia, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(
+        Submit('usuario_contrasenia_submit', 'Modificar password', css_class="btn btn-default"))
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2:
+            if password1 != password2:
+                raise forms.ValidationError(
+                    self.error_messages['password_mismatch'],
+                    code='password_mismatch',
+                )
+        return password2
+
+    def save(self, commit=True):
+        u = Usuario.objects.get(username=self.cleaned_data['usuario_nombre1'])
+        u.set_password(self.cleaned_data['new_password1'])
+        if commit:
+            u.save()
+        return u

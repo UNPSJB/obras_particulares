@@ -311,6 +311,53 @@
 		});
 	</script>
 
+
+	<script>
+		$("#id_cambiar_foto_de_perfil").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar foto perfil',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
+
+	<script>
+		$('#div_id_usuario_nombre').appendTo('#contenedor_datos_usuario');
+		$('#div_id_mail_usuario').appendTo('#contenedor_datos_usuario');
+		$('#div_id_domicilio_usuario').appendTo('#contenedor_datos_usuario_dos');
+		$('#div_id_nuevo_password').appendTo('#contenedor_datos_usuario_dos');
+		$('#div_id_telefono_usuario').appendTo('#contenedor_datos_usuario');
+		$('#div_id_cambiar_foto_de_perfil').appendTo('#contenedor_foto_perfil_usuario');
+		$('#submit-id-usuario_datospersonales_submit').appendTo('#contenedor_boton_cambia_datos');
+		var d = document.getElementById("div_id_usuario_nombre");
+		d.style.display= 'none';
+		document.getElementById("id_usuario_nombre").value = '{{user}}';
+		document.getElementById("id_telefono_usuario").value = '{{user.persona.telefono}}';
+		document.getElementById("id_mail_usuario").value = '{{user.persona.mail}}';
+		document.getElementById("id_domicilio_usuario").value = '{{user.persona.domicilio}}';
+	</script>
+
+	<script>
+		document.getElementById("id_usuario_nombre1").value = '{{user}}';
+		var e = document.getElementById("div_id_usuario_nombre1");
+		e.style.display= 'none';
+		$('#div_id_usuario_nombre1').appendTo('#contenedor_datos_pass1');
+		$('#div_id_new_password1').appendTo('#contenedor_datos_pass1');
+		$('#div_id_new_password2').appendTo('#contenedor_datos_pass2');
+		$('#submit-id-usuario_contrasenia_submit').appendTo('#contenedor_boton_cambia_pass');
+	</script>
+
+	<script>
+		function limpiar1(){
+			document.getElementById("id_usuario_nombre").value = '{{user}}';
+			document.getElementById("id_usuario_nombre1").value = '{{user}}';
+		}
+	</script>
+
+
 	{% block scripts %}
 
 	{% endblock %}

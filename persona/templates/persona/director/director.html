@@ -53,7 +53,11 @@
 					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_obra")'>Crear tipo de obra</a></li>
 				</ul>
 			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Otorgar final de obra</a></li>-->
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
+				<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
+					<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
+					<li><a href="#" onclick='opcionesDatosPersonales("alta_contrasenia")'>Contraseña</a></li>
+				</ul>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
 					<li><a href="vista_de_tramites">Tramites en curso</a></li>
@@ -119,7 +123,7 @@
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<hr>
 						<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-							<form  action="" method="" onLoad="myOnLoad()">
+							<form onLoad="myOnLoad()">
 								<select class="form-control input-sm" id="usuarios" title="Selecciona nombre del grupo que vas a modificar" onchange="cargarUsuarioSeleccionado()">
 									<option selected value=""> ¿Que usuario desea cambiar? </option>
 								 </select>
@@ -131,7 +135,7 @@
 						<form action= ""  method="post" enctype="multipart/form-data">
 							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 								<div class="form-group">
-									<label for="">Nombre:</label>
+									<label>Nombre:</label>
 									<input class="form-control input-sm" id="nombreUsuarioS" name="nombreempleado" type="text" placeholder="Nombre del usuario seleccionado" title="Nombre del usuario seleccionado"  disabled/>
 									<br>
 									<div id="id_contenedor_usuario_seleccionado"></div>
@@ -139,7 +143,7 @@
 							</div>
 							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 								<div class="form-group">
-									<label for="">Grupos actuales:</label>
+									<label>Grupos actuales:</label>
 									 <select id='gruposActuales' class="form-control" title="Grupos asignados al usuario" size="12" style="height: 111px;" disabled>
 										 <option value=""  style="font-weight: bold;"> Grupos del usuario </option>
 										 <option value="">  </option>
@@ -248,24 +252,60 @@
 		  </h5>
 		</div>
 		<div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
-		  <div class="panel-body">
+		   <div class="panel-body">
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+							<select class="form-control input-sm" id="opcionesDeDatosPersonales" name="Opciones de Datos Personales" onChange="opcionesDatosPersonales(this.value);">
+								<option selected value="nada"> ¿Que desea hacer? </option>
+								<option value="alta_tipo_documento">Modificar datos personales</option>
+								<option value="alta_tipo_de_obra">Modificar contrasena</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<hr>
 						<div class="container-fluid">
-							<form method='POST' action='{{ action_url }}' enctype="multipart/form-data">
+							<form method='POST' action='' enctype="multipart/form-data">
 								<div class="row">
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_usuario"></div>
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_usuario_dos"></div>
 									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_foto_perfil_usuario"></div>
 								</div>
 								<div id="contenedor_boton_cambia_datos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+									<button  class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="limpiar1()">
 										Limpiar
 									</button>
 								</div>
 								{% block modificar_datospersonales_usuario %}
 									{% crispy usuario_datospersonales_form %}
+								{% endblock %}
+								<br>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<hr>
+						<div class="container-fluid">
+							<form method='POST' action='' enctype="multipart/form-data">
+								<div class="row">
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_pass1"></div>
+									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_pass2"></div>
+								</div>
+								<div id="contenedor_boton_cambia_pass" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="limpiar1()">
+										Limpiar
+									</button>
+								</div>
+								{% block usuario_contrasenia_form %}
+									{% crispy usuario_contrasenia_form %}
 								{% endblock %}
 								<br>
 							</form>
@@ -290,7 +330,6 @@
 		</div>
 	  </div>
 	</div>
-
 
 {% endblock %}
 
@@ -528,34 +567,6 @@
 			document.getElementById("gruposActuales").disabled=true;
 			document.getElementById("usuarios").value = '';
 		}
-	</script>
-
-	<script>
-		$("#id_cambiar_foto_de_perfil").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar foto perfil',
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
-
-	<script>
-		$('#div_id_usuario_nombre').appendTo('#contenedor_datos_usuario');
-		$('#div_id_mail_usuario').appendTo('#contenedor_datos_usuario');
-		$('#div_id_domicilio_usuario').appendTo('#contenedor_datos_usuario_dos');
-		$('#div_id_nuevo_password').appendTo('#contenedor_datos_usuario_dos');
-		$('#div_id_telefono_usuario').appendTo('#contenedor_datos_usuario');
-		$('#div_id_cambiar_foto_de_perfil').appendTo('#contenedor_foto_perfil_usuario');
-		$('#submit-id-usuario_datospersonales_submit').appendTo('#contenedor_boton_cambia_datos');
-		var d = document.getElementById("div_id_usuario_nombre");
-		d.style.display= 'none';
-		document.getElementById("id_usuario_nombre").value = '{{user}}';
-		document.getElementById("id_telefono_usuario").value = '{{user.persona.telefono}}';
-		document.getElementById("id_mail_usuario").value = '{{user.persona.mail}}';
-		document.getElementById("id_domicilio_usuario").value = '{{user.persona.domicilio}}';
 	</script>
 
 {% endblock %}
