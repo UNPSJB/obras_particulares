@@ -114,6 +114,7 @@ class Persona(models.Model):
 
     def modificarPerfilCSS(self, perfilSeleccionado):
         self.perfilCSS = perfilSeleccionado
+        self.save()
         return self.perfilCSS
 
     def modificarUsuario(self, mail, domicilio, telefono, imagen):

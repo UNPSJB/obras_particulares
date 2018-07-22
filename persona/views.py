@@ -883,7 +883,6 @@ class ReporteTramitesDirectorExcel(TemplateView):
 class ReporteTramitesDirectorPdf(View):
 
     def get(self, request, *args, **kwargs):
-
         filename = "Informe de tramites.pdf"
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
@@ -958,3 +957,14 @@ def alta_persona(request):
 
 #------------------------------------------------------------------------------------------------------------------
 
+# en esto estoy trabajando DAVID
+def cambiar_perfil(request):
+    usuario = request.user
+    if request.method == "POST":
+        print("-----------------------------------------------")
+        estilo = request.POST["estiloCSS"]
+        print("-----------------------------------------------")
+        print(request.POST["estiloCSS"])
+        print("-----------------------------------------------")
+        usuario.persona.modificarPerfilCSS(estilo)
+        return redirect('director')

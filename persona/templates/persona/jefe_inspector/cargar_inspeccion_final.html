@@ -18,9 +18,8 @@
 	</ul>
 {% endblock %}
 
-
 {% block contenido %}
-    <button type="button" class="btn btn-sm btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn"> <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
+    <button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn"> <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
     <div class="container-fluid">
         <div class="panel panel-custom ">
             <div class="container-fluid">
@@ -50,21 +49,19 @@
                                 <hr>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        <label for="">Cargar Documentos corregidos:</label>
+                                        <label>Cargar Documentos corregidos:</label>
                                         <input class="file" id="id_correcciones"  type="file" data-preview-file-type="any" multiple="true" title="Cargar documentos corregidos" required />
                                     </div>
                                 <hr>
 
                                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8">
                                         <div class="form-group">
-                                            <label for="">Observaciones:</label>
+                                            <label>Observaciones:</label>
                                             <input type="hidden" id="id_tramite" value="{{tramite.id}}">
                                             <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
                                         </div>
                                     </div>
-
                                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12">
-
                                         <a href="{% url 'aceptar_inspeccion_final' pk_tramite=tramite.id  %}">
                                             <button type="button" class="btn btn-primary" name="Aceptar">
                                                 Aprobar inspeccion
@@ -77,7 +74,6 @@
                                         </a>
                                     </div>
                                 </div>
-
                                 <script>
                                     function prueba(){
                                         obs = $("#id_observaciones").val();
@@ -87,7 +83,6 @@
                                         location.href = url;
                                     }
                                 </script>
-
                             </div>
                         </div>
                     </div>

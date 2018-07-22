@@ -1,9 +1,7 @@
 {% load staticfiles %}
 
 {% block contenido_tramites_inspeccionados %}
-
     <div class="table-responsive">
-
         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
             <!-- Cabecera -->
           <thead>
@@ -19,11 +17,8 @@
               </tr>
           </thead>
           <!-- Mostramos los datos de las tablas -->
-
           <tbody>
-
           {% if estados %}
-
               {% for estado in estados %}
                 <tr>
                     <td class="col-xs-1">{{ estado.tramite.id}}</td>

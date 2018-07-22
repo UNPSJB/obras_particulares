@@ -4,12 +4,6 @@
 
 {% block estilos %}
 	<link rel="stylesheet" type="text/css" href="{% static perfil %}">
-    <style>
-        select {
-            background : white;
-            color : #444444;
-        }
-    </style>
 {% endblock %}
 
 {% block imagenusuario %}
@@ -25,7 +19,7 @@
 {% endblock %}
 
 {% block contenido %}
-    <button type="button" class="btn btn-sm btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn"> <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
+    <button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn"> <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
 	  <div class="panel">
 		<div class="panel-heading box" role="tab" id="headingFive">
@@ -81,7 +75,6 @@
                           </div>
                         <hr>
                     </div>
-
                     <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
                         <a id="crear_detalle" href="{% url 'reporte_tramites_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
                            <i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>

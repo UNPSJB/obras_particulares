@@ -6,6 +6,9 @@
 {% block estilos %}
 
 	<link rel="stylesheet" type="text/css" href="{% static perfil %}">
+	<!--link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"-->
+
+	<!--link rel="stylesheet" type="text/css" href="javascript:obtenerPerfilCSS();"-->
 
 	<style>
 	 /* Style the button that is used to open and close the collapsible content */
@@ -39,6 +42,11 @@
 {% endblock %}
 
 {% block barra %}
+	<div id="contenedor_botoncalapsable_sidebar">
+		<button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
+			<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+		</button>
+	</div>
 	<ul class="sidebar sidebar-1">
 		<font size="2">
 			<li><a href="#" class="current"><font color="tomato">Director</font></a></li>
@@ -52,13 +60,12 @@
 					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_documento")'>Crear tipo de documento</a></li>
 					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_obra")'>Crear tipo de obra</a></li>
 				</ul>
-			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Otorgar final de obra</a></li>-->
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
 					<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
 					<li><a href="#" onclick='opcionesDatosPersonales("alta_contrasenia")'>Contraseña</a></li>
 				</ul>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
 					<li><a href="vista_de_tramites">Tramites en curso</a></li>
 					<li><a href="vista_de_usuarios">Usuarios por grupo</a></li>
@@ -69,7 +76,7 @@
 {% endblock %}
 
 {% block contenido %}
-	<button type="button" class="btn btn-sm btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn"> <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
+	<div id="contenedor_botoncalapsable_resto"></div>
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
 	  <div class="panel">
 		<div class="panel-heading box" role="tab" id="headingFive">
@@ -246,7 +253,7 @@
 	  <div class="panel">
 		<div class="panel-heading box" role="tab" id="headingSix">
 		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("tareasDatosPersonales")'>
 			  <font color="#ffffff" size="2">Datos personales</font>
 			</a>
 		  </h5>
@@ -259,14 +266,14 @@
 						<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 							<select class="form-control input-sm" id="opcionesDeDatosPersonales" name="Opciones de Datos Personales" onChange="opcionesDatosPersonales(this.value);">
 								<option selected value="nada"> ¿Que desea hacer? </option>
-								<option value="alta_tipo_documento">Modificar datos personales</option>
-								<option value="alta_tipo_de_obra">Modificar contrasena</option>
+								<option value="alta_datos_personales">Modificar datos personales</option>
+								<option value="alta_contrasenia">Modificar contrasena</option>
 							</select>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="container-fluid">
+			<div class="container-fluid" id="alta_datos_personales" style="display: none;">
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<hr>
@@ -290,6 +297,8 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="container-fluid" id="alta_contrasenia" style="display: none;">
 				<div class="row">
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<hr>
@@ -312,19 +321,20 @@
 						</div>
 					</div>
 				</div>
+				</div>
 			</div>
 		  </div>
 		</div>
 	  </div>
 	  <div class="panel" style="display: none;">
-		<div class="panel-heading box" role="tab" id="headingFour">
+		<div class="panel-heading box" role="tab" id="headingNine">
 		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>
 			  <font color="#ffffff" size="2">Consultas e Informes</font>
 			</a>
 		  </h5>
 		</div>
-		<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+		<div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
 		  <div class="panel-body">
 		  </div>
 		</div>
@@ -348,36 +358,6 @@
 	</script>
 
 	<script type="text/javascript">
-		function opcionesGrupo(id) {
-			if (id == "nada") {
-				$("#alta_grupo").hide();
-				$("#baja_grupo").hide();
-				$("#modificar_grupo").hide();
-				$("#" + "opcionesDelGrupo").val('nada');
-			}
-			if (id == "alta_grupo") {
-				$("#alta_grupo").show();
-				$("#baja_grupo").hide();
-				$("#modificar_grupo").hide();
-				//esto es por si dejo los submenu
-				$("#" + "opcionesDelGrupo").val('alta_grupo');
-			}
-			if (id == "baja_grupo") {
-				$("#alta_grupo").hide();
-				$("#modificar_grupo").hide();
-				$("#baja_grupo").show();
-				//esto es por si dejo los submenu
-				$("#" + "opcionesDelGrupo").val('baja_grupo');
-			}
-			if (id == "modificar_grupo") {
-				$("#alta_grupo").hide();
-				$("#modificar_grupo").show();
-				$("#baja_grupo").hide();
-				//esto es por si dejo los submenu
-				$("#" + "opcionesDelGrupo").val('modificar_grupo');
-			}
-		}
-
 		function opcionesUsuario(id) {
 			if (id == "nada") {
 				$("#alta_usuario").hide();
@@ -416,6 +396,7 @@
 					$("#" + "opcionesDelTramite").val('alta_tipo_de_obra');
 				}
 		}
+
 	</script>
 
 	<script type="text/javascript">

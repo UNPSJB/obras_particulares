@@ -12,7 +12,6 @@
                 <th>Agendar</th>
             </tr>
         </thead>
-
         <tbody>
             {% if tramites %}
                 {% for tramite in tramites %}
@@ -39,7 +38,6 @@
                               </button>
                             </a>
                         </td>
-
                         <script>
                             function prueba(){
                                 obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();
@@ -50,7 +48,6 @@
                                 location.href = url;
                             }
                         </script>
-
                     </tr>
                 {% endfor %}
             {% endif%}

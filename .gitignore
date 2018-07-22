@@ -5,3 +5,5 @@ db.sqlite3
 persona/migrations/*
 tipos/migrations/*
 tramite/migrations/*
+media/certificado/*
+media/documentos/*

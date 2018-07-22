@@ -40,7 +40,6 @@
 			padding: 15px;
 			color: black;
 			border-radius: 4px;
-
 		}
 
 		ol li {
@@ -50,14 +49,12 @@
 			padding: 4.8px;
 			list-style-type: none;
 			border-radius: 3px;
-
 		}
 
 		ol label{
 			color: #273746;
 			margin-top: 5px;
 		}
-
 	</style>
 
 	<style>
@@ -127,7 +124,7 @@
 									{% block login %}
 										{% if user.is_active%}
 											<div id="user-tools">
-												<form >
+												<form>
 													<label style="margin-right: 3px; font-size: 13px;">Usuario:</label>
 													<strong style="	font-size: 13px;">{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>
 													<a href="{%url "logout"%}" class=" color1 btn btn-primary btn-sm" title="Cerrar sesión" style="margin-left: 6px;">Salir</a>
@@ -143,19 +140,28 @@
 										<button class="color1 btn btn-primary dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" title="Configuracion" aria-expanded="true" style="margin-left: 6px;" >
 											<span class="glyphicon glyphicon-cog"></span>
 										</button>
-										<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-											<li><a href="#" onclick='cambiarEstilo("neutro")'>Neutro</a></li>
-											<li><a href="#" onclick='cambiarEstilo("colorido")'>Alerces</a></li>
+										<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="font-size:12px">
+
+											<li class="disabled"><a > Esquema de colores</a></li>
 											<li role="separator" class="divider"></li>
-											<li><a href="#" onclick=''>...</a></li>
-											<li><a href="#" onclick=''>...</a></li>
+											<li><a onclick='cambiarEstilo("base.css")'>Alerces</a></li>
+											<li><a onclick='cambiarEstilo("base1.css")'>Neutro</a></li>
+											<li><a onclick='cambiarEstilo("base2.css")'>Pastel</a></li>
+											<li role="separator" class="divider"></li>
+											<li class="disabled"><a > Tamaño de fuentes</a></li>
+											<li role="separator" class="divider"></li>
+											<li class="disabled"><a onclick=''>...</a></li>
+											<li class="disabled"><a onclick=''>...</a></li>
+
+											<!--li><a href="#" onclick='cambiarEstilo("base.css")'>Alerces</a></li>
+											<li class="active"><a href="#" onclick='cambiarEstilo("base1.css")'>Neutro</a></li>
+											<li class="active"><a href="#" onclick='cambiarEstilo("base2.css")'>Pastel</a></li-->
 										</ul>
 									</div>
 								</div>
-							</form>
-						</div>
-			  		</div>
-		  		</div>
+							</div>
+			  			</div>
+		  			</div>
 				{% if messages %}
 					<div class="row">
 						<div class="col-xs-12">
@@ -168,10 +174,10 @@
 						</div>
 					</div>
 				{% endif %}
-	  		</div>
+	  			</div>
+			</div>
 		</header>
 	</nav>
-
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" id="sidebar">
@@ -188,6 +194,18 @@
 		</div>
 	</div>
 </body>
+<br>
+<br>
+<prefooter>
+
+	<div class="container-fluid" style="position:absolute; right: 0;">
+		<div class="botonredondoayuda">
+			<a href="#">
+				<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+			</a>
+		</div>
+	</div>
+</prefooter>
 
 <footer>
 	<div class="container-fluid" >
@@ -202,10 +220,12 @@
 	<!--script src="{% static 'js/dataTables.bootstrap.min.js' %}"></script-->
 
 	<script type="text/javascript">
+		// Lo usa el boton configuracion
 		$('.dropdown-toggle').dropdown()
 	</script>
 
 	<script>
+		//Modifica el tiepo que estan visibles las alert
 		window.setTimeout(function() {
 			$(".alert").fadeTo(250, 0).slideUp(250, function(){
 				$(this).remove();
@@ -214,48 +234,34 @@
 	</script>
 
 	<script>
+		// Configuraciones generales
 		$('.textinput').addClass('input-sm');
-	</script>
-
-	<script>
 		$('.form-control').addClass('input-sm');
-	</script>
-
-	<script>
 		$('.clearablefileinput').addClass('file');
-	</script>
-
-	<script>
 		$('.btn').addClass('btn-sm');
 	</script>
 
 	<script>
-		$(document).ready(function()
-		{
-		var table = $('.table').DataTable( {
-		"language": {
-		url: "/static/localizacion/es_ES.json"
-		}
-		} );
-
-		$('#tabla tbody').on( 'click', 'tr', function()
-		{
-		if ($(this).hasClass('selected') )
-		{
-		$(this).removeClass('selected');
-
-		}
-		else
-		{
-		table.$('tr.selected').removeClass('selected');
-		$(this).addClass('selected');
-		}
+		// Configuracion de tablas en general
+		$(document).ready(function(){
+			var table = $('.table').DataTable( {
+				"language": {
+				url: "/static/localizacion/es_ES.json"
+			}
 		});
-
+		$('#tabla tbody').on( 'click', 'tr', function(){
+			if ($(this).hasClass('selected')){
+				$(this).removeClass('selected');
+			} else {
+				table.$('tr.selected').removeClass('selected');
+				$(this).addClass('selected');
+			}
+		});
 		});
 	</script>
 
     <script>
+    	//
         $(document).ready(function() {
             $("a#single_image").fancybox({
             	protect: true
@@ -263,20 +269,20 @@
         });
     </script>
 
-
 	<script>
-    function generarcolor()
-    {
-      long=6;
-      var caracteres = "0123456789ABCDEF";
-      var color = "";
-      for (i=0; i<long; i++) color += caracteres.charAt(Math.floor(Math.random()*caracteres.length));
-      color="#"+color;
-      return color
-    }
+		// Genera colores de graficos en forma aleartoria
+		function generarcolor(){
+		  long=6;
+		  var caracteres = "0123456789ABCDEF";
+		  var color = "";
+		  for (i=0; i<long; i++) color += caracteres.charAt(Math.floor(Math.random()*caracteres.length));
+		  color="#"+color;
+		  return color
+		}
 	</script>
 
     <script>
+    	// Modifica sidebar cuando se usa el boton colapsar sidebar
 		var valor = true
 		function mostrarBarra() {
 				if( $("#sidebar").is(":visible") ){
@@ -289,6 +295,7 @@
 					$("#resto").addClass('col-md-12');
 					$("#resto").removeClass('col-lg-10');
 					$("#resto").addClass('col-lg-12');
+					$('#botonOn').appendTo('#contenedor_botoncalapsable_resto')
 				}else{
     				$("#sidebar").show();
     				$("#resto").removeClass('col-xs-12');
@@ -299,11 +306,13 @@
 					$("#resto").addClass('col-md-10');
 					$("#resto").removeClass('col-lg-12');
 					$("#resto").addClass('col-lg-10');
+					$('#botonOn').appendTo('#contenedor_botoncalapsable_sidebar')
 				}
 		}
     </script>
 
 	<script>
+		// Modifica el boton colapsar sidebar
 		$(function(){
 			$("#botonOn").click(function(){
 				$("#botonOn").toggleClass("spinEffect");
@@ -313,6 +322,7 @@
 
 
 	<script>
+		// Se usa en sidebar en MIS DATOS - Foto de perfil
 		$("#id_cambiar_foto_de_perfil").fileinput({
 			showCaption: false,
 			browseClass: "btn btn-primary btn-sm",
@@ -325,6 +335,30 @@
 	</script>
 
 	<script>
+		// Se usa en sidebar en MIS DATOS
+		function opcionesDatosPersonales(id) {
+			if (id == "nada") {
+				$("#alta_datos_personales").hide();
+				$("#alta_contrasenia").hide();
+				$("#" + "opcionesDeDatosPersonales").val('nada');
+			}
+			if (id == "alta_datos_personales") {
+				$("#alta_datos_personales").show();
+				$("#alta_contrasenia").hide();
+				//esto es por si dejo los submenu
+				$("#" + "opcionesDeDatosPersonales").val('alta_datos_personales');
+			}
+			if (id == "alta_contrasenia") {
+				$("#alta_datos_personales").hide();
+				$("#alta_contrasenia").show();
+				//esto es por si dejo los submenu
+				$("#" + "opcionesDeDatosPersonales").val('alta_contrasenia');
+			}
+		}
+	</script>
+
+	<script>
+		// Acomoda elementos de CAMBIAR MIS DATOS PERSONALES
 		$('#div_id_usuario_nombre').appendTo('#contenedor_datos_usuario');
 		$('#div_id_mail_usuario').appendTo('#contenedor_datos_usuario');
 		$('#div_id_domicilio_usuario').appendTo('#contenedor_datos_usuario_dos');
@@ -341,6 +375,7 @@
 	</script>
 
 	<script>
+		// Acomoda elementos de CAMBIAR CONTRASEÑA
 		document.getElementById("id_usuario_nombre1").value = '{{user}}';
 		var e = document.getElementById("div_id_usuario_nombre1");
 		e.style.display= 'none';
@@ -351,10 +386,54 @@
 	</script>
 
 	<script>
+		//limpia y carga el usuario en MIS DATOS
 		function limpiar1(){
 			document.getElementById("id_usuario_nombre").value = '{{user}}';
 			document.getElementById("id_usuario_nombre1").value = '{{user}}';
 		}
+	</script>
+
+
+
+	<script>
+		//No se usa, pero probando - 22 julio 2018
+		function cambiarEstilo0(css){
+			alert(css);
+			if (css == "base.css") {
+				var cssrecibido = "base.css";
+			}
+			if (css == "base1.css") {
+				var cssrecibido	= "base1.css";
+			}
+			if (css == "base2.css") {
+				var cssrecibido = "base1.css";
+			}
+            url = '/persona/cambiar_perfil/'+ css;
+            alert(url);
+            location.href = url;
+		}
+	</script>
+
+	<script>
+		// Crea un form para envia el post a la vista cambiar perfil, luego elimina el form
+		// Se usa en boton configuracion
+		function cambiarEstilo(css){
+			var form = document.createElement( "form" );
+			form.setAttribute( "name", "formulario" );
+			form.setAttribute( "action", "" );
+			form.setAttribute( "method", "post" );
+			var input = document.createElement("input");
+			input.setAttribute( "name", "estiloCSS" );
+			input.setAttribute( "type", "hidden" );
+			input.setAttribute( "value", css);
+			form.appendChild(input);
+			document.getElementsByTagName( "body" )[0].appendChild(form);
+			document.formulario.action='/persona/cambiar_perfil/';
+			document.formulario.submit();
+			form.removeChild(input);
+			form.parentNode.removeChild(form);
+		}
+
 	</script>
 
 

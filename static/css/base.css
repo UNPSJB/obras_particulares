@@ -27,9 +27,15 @@ html {
   position: relative;
 }
 
+prefooter {
+	position: absolute;
+    bottom: 72px;
+    width: 100%;
+}
+
 footer {
 	/*background:#268e37;*/
-	 background-image: linear-gradient(to right, #051937, #003253, #004d6c, #006a82, #008793);
+	background-image: linear-gradient(to right, #051937, #003253, #004d6c, #006a82, #008793);
 	color:#fff;
 	position: absolute;
     bottom: 0;
@@ -58,7 +64,6 @@ body {
 		radial-gradient(circle at 98.02% 52.96%, #FF6B6B, transparent 100%),
 		radial-gradient(circle at 50% 50%, #4a2735, #4a2735 100%);*/
 }
-
 
 /* color del nav igual al del header*/
 
@@ -118,8 +123,6 @@ header.sticky {
     border-radius: 0px;
 }
 
-
-
 /* cambio de color de heading*/
 
 .box {
@@ -133,7 +136,6 @@ header.sticky {
   background-color: #3a3a3a;
   cursor: pointer;
 }
-
 
 label {
 	color: tomato;
@@ -152,7 +154,8 @@ a:link {
 }
 
 .sidebar {
-	width: 200px;
+	/*width: 200px;*/
+	width: 100%;
 	margin-right: 35px;
 	background-color: #444;
 	list-style-type: none;
@@ -274,16 +277,12 @@ a:link {
 	display:none;
 }
 
-
 /* ----------------------------------cryspy-----------------------------*/
-
-
 /* Ocultar asterisco de campo obligatorio*/
 
 .asteriskField {
     display: ;
    }
-
 
 /*--------------boton colapsable--------------------------*/
 
@@ -339,38 +338,44 @@ a:link {
     color: white;
 }
 
-
 .dataTables_filter label {
     color: white;
 }
 
+select {
+    color : #444444;
+}
+
+.dataTables_filter input {
+    color: #444444;
+}
+
 /*********** boton que comprime sidebar *************/
 
-
 .btn-collapsible-sidebar {
-    display: block;
-    width: 25px;
-    height: 25px;
-    padding: 0px 0px 0px 0px;
+    width:25px;
+    height:25px;
+    padding: 3px 0px 0px 2px;
+    display:block;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    font-size:12px;
+    border:2px solid #cfdcec;
     position: absolute;
-    top: -30px;
-    left: 0;
+    top: -30.5px;
+    left: 5px;
     margin-left: 15px;
-    color: #444444;
+    color: #fff;
     background: transparent;
-    border: none !important;
-    -webkit-transition: color 300ms ease-out;
-	-moz-transition: color 300ms ease-out;
-	-o-transition: color 300ms ease-out;
-	transition: color 300ms ease-out;
 	-webkit-transition: -webkit-transform 200ms ease-out;
 	-moz-transition: -moz-transform 200ms ease-out;
 	-o-transition: -o-transform 200ms ease-out;
 }
 
 .btn-collapsible-sidebar:hover{
-    color: #fffff1;
-    padding: 0px 3px 0px 0px;
+    background-color:#03800b;
+    padding: 0px 0px 0px 3px;
     -moz-transform: rotate(180deg);
     -webkit-transform: rotate(180deg);
 	-o-transform: rotate(180deg);
@@ -378,7 +383,7 @@ a:link {
 }
 
 .spinEffect{
-    padding: 0px 3px 0px 0px;
+    padding: 2px 0px 0px 3px;
     transform: rotate(180deg);
     -moz-transform: rotate(180deg);
     -webkit-transform: rotate(180deg);
@@ -387,9 +392,40 @@ a:link {
 }
 
 .spinEffect:hover{
-    padding: 0px 0px 0px 0px;
+    padding: 2px 0px 0px 0px;
     -moz-transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
 	-o-transform: rotate(0deg);
 	filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=2);
+}
+
+/*************boton redondo**************/
+
+.botonredondoayuda{
+    width:30px;
+    height:30px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    font-size:11px;
+    line-height:32px;
+    float:left;
+    border:2px solid #cfdcec;
+}
+.botonredondoayuda:hover{
+    background-color:#03800b;
+}
+.botonredondoayuda a{
+    color:#fff;
+    padding:13px 4px 1px 4px;
+    display:block;
+    float:left;
+    width:100%;
+    line-height:1em;
+    margin-top:-0.5em;
+    text-align:center;
+    font-family:Verdana;
+    font-size:1.2em;
+    font-weight:bold;
+    text-decoration:none;
 }
