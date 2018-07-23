@@ -72,7 +72,7 @@ urlpatterns = [
     url(r'^vista_de_usuarios$', views.ver_listado_todos_usuarios, name="vista_de_usuarios"),
 
 
-    #probando esto ----------------------------------------------------------------------------------------------------
-    #url(r'^cambiar_perfil/(?P<estilo>\w+)/$', views.cambiar_perfil, name="cambiar_perfil"),
+    #general ----------------------------------------------------------------------------------------------------
     url(r'^cambiar_perfil/$', views.cambiar_perfil, name="cambiar_perfil"),
 ]
+

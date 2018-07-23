@@ -2,101 +2,102 @@
 {% load staticfiles %}
 
 {% block estilos %}
-
-	<link rel="stylesheet" type="text/css" href="{% static perfil %}">
-
-    <style>
-        *{font-family:Verdana, Arial, Helvetica, sans-serif}
-        #lupa{
-            width:300px;
-            height:282px;
-            position:relative;
-            box-shadow: 5px 5px 5px rgba(50,50,50 0.5);
-            overflow:hidden;
-        }
-        #im{
-            position: relative;
-            width: auto;
-            height: auto;
-        }
-        #im0{
-            cursor:crosshair;
-            position: relative;
-            width: auto;
-            height: 200px;
-            margin: 0 5% 0 auto;
-            box-shadow: 1px 1px 5px rgba(50,50,50 0.5);
-        }
-    </style>
-
+<link rel="stylesheet" type="text/css" href="" id="estilo_de_usuario">
+<style>
+    *{font-family:Verdana, Arial, Helvetica, sans-serif}
+    #lupa{
+        width:300px;
+        height:282px;
+        position:relative;
+        box-shadow: 5px 5px 5px rgba(50,50,50 0.5);
+        overflow:hidden;
+    }
+    #im{
+        position: relative;
+        width: auto;
+        height: auto;
+    }
+    #im0{
+        cursor:crosshair;
+        position: relative;
+        width: auto;
+        height: 200px;
+        margin: 0 5% 0 auto;
+        box-shadow: 1px 1px 5px rgba(50,50,50 0.5);
+    }
+</style>
 {% endblock %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="javascript:history.back(-1);" class="current"><font color="tomato">Administrativo</font></a></li>
-		</font>
-	</ul>
+<div id="contenedor_botoncalapsable_sidebar">
+	<button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
+		<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+	</button>
+</div>
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="javascript:history.back(-1);" class="current"><font color="tomato">Administrativo</font></a></li>
+    </font>
+</ul>
 {% endblock %}
 
-
 {% block contenido %}
-    <button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn"> <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-	  <div class="panel">
-		<div class="panel-heading box" role="tab" id="headingFive">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			  <font color="#ffffff" size="2">Datos del profesional</font>
-			</a>
-		  </h5>
-		</div>
-		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-		  <div class="panel-body">
-			<div class="container-fluid">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <form action="" >
-                            <div class="row" style="color:#fff;">
-                                <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <ol>
-                                        <label>Nombre y Apellido:</label>
-                                        <li> {{persona.nombre}} {{persona.apellido}}</li>
-                                        <label>Profesión - Categoria:</label>
-                                        <li> {{persona.profesional.profesion}} - {{persona.profesional.categoria}}</li>
-                                        <label>Nro de matricula</label>
-                                        <li> {{persona.profesional.matricula}}</li>
-                                        <label>Nro de CUIL:</label>
-                                        <li> {{persona.cuil}}</li>
-                                        <label>Email:</label>
-                                        <li> {{persona.mail}}</li>
-                                    </ol>
-                                </div>
-                                <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <div class="thumbnail ">
-                                        <a id="single_image" href="/media/{{persona.profesional.certificado}}"  data-fancybox="images" data-caption="{{documento.tipo_documento}}">
-                                            <img id="im0" src="/media/{{persona.profesional.certificado}}"  width=300 height=300>
-                                        </a>
-                                        <br>
-                                        <p style="color: #17202a; font-style: oblique; text-align: center;">Mover el cursor sobre la imagen</p>
-                                        <form action="">
-                                            <p align="right" >
-                                                <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>Descargar</span></a>
-                                            </p>
-                                        </form>
+<div id="contenedor_botoncalapsable_resto"></div>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+    <div class="panel">
+        <div class="panel-heading box" role="tab" id="headingFive">
+            <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    <font color="#ffffff" size="2">Datos del profesional</font>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <form action="" >
+                                <div class="row" style="color:#fff;">
+                                    <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <ol>
+                                            <label>Nombre y Apellido:</label>
+                                            <li> {{persona.nombre}} {{persona.apellido}}</li>
+                                            <label>Profesión - Categoria:</label>
+                                            <li> {{persona.profesional.profesion}} - {{persona.profesional.categoria}}</li>
+                                            <label>Nro de matricula</label>
+                                            <li> {{persona.profesional.matricula}}</li>
+                                            <label>Nro de CUIL:</label>
+                                            <li> {{persona.cuil}}</li>
+                                            <label>Email:</label>
+                                            <li> {{persona.mail}}</li>
+                                        </ol>
                                     </div>
-                                </div>
-                                <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <div class="thumbnail ">
-                                        <div id="lupa"><img  id="im" src="/media/{{ persona.profesional.certificado}}"/></div>
+                                    <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <div class="thumbnail ">
+                                            <a id="single_image" href="/media/{{persona.profesional.certificado}}"  data-fancybox="images" data-caption="{{documento.tipo_documento}}">
+                                                <img id="im0" src="/media/{{persona.profesional.certificado}}"  width=300 height=300>
+                                            </a>
+                                            <br>
+                                            <p style="color: #17202a; font-style: oblique; text-align: center;">Mover el cursor sobre la imagen</p>
+                                            <form action="">
+                                                <p align="right" >
+                                                    <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>Descargar</span></a>
+                                                </p>
+                                            </form>
+                                        </div>
                                     </div>
+                                    <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <div class="thumbnail ">
+                                            <div id="lupa"><img  id="im" src="/media/{{ persona.profesional.certificado}}"/></div>
+                                        </div>
 
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="container-fluid">
-                                <br>
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                                <div class="container-fluid">
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
                                             <a href="{% url 'administrativo' %}">
                                                 <button type="button" class="btn btn-primary" name="habilitar">
                                                     Volver
@@ -107,22 +108,20 @@
                                                     Habilitar
                                                 </button>
                                             </a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
-  	        </div>
-          </div>
+            </div>
         </div>
-      </div>
     </div>
-
+</div>
 {% endblock %}
 
 {% block scripts %}
-
     <script>
         function t(id){return document.getElementById(id);}
         function addEvent(obj,fun,type){
@@ -187,5 +186,4 @@
             );
         }
     </script>
-
 {% endblock %}

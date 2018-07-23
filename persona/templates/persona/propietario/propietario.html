@@ -3,147 +3,152 @@
 {% load crispy_forms_tags%}
 
 {% block estilos %}
-	<link rel="stylesheet" type="text/css" href="{% static perfil %}">
+<link rel="stylesheet" type="text/css" href="{% static perfil %}">
 {% endblock %}
 
 {% block imagenusuario %}
-	<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
+<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
 {% endblock %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="#" class="current"><font color="tomato">Propietario</font></a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
-				<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
-					<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
-					<li><a href="#" onclick='opcionesDatosPersonales("alta_contrasenia")'>Contraseña</a></li>
-				</ul>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
-				<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
-					<li><a href="#">Consulta 1</a></li>
-					<li><a href="#">Consulta 2</a></li>
-					<li><a href="#">Consulta 3</a></li>
-				</ul>
-		</font>
-	</ul>
+<div id="contenedor_botoncalapsable_sidebar">
+	<button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
+		<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+	</button>
+</div>
+<ul class="sidebar sidebar-1">
+	<font size="2">
+		<li><a href="#" class="current"><font color="tomato">Propietario</font></a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
+		<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
+			<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
+			<li><a href="#" onclick='opcionesDatosPersonales("alta_contrasenia")'>Contraseña</a></li>
+		</ul>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
+		<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
+			<li><a href="#">Consulta 1</a></li>
+			<li><a href="#">Consulta 2</a></li>
+			<li><a href="#">Consulta 3</a></li>
+		</ul>
+	</font>
+</ul>
 {% endblock %}
 
 {% block contenido %}
-	<button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn"> <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-		<div class="panel panel-custom">
-			<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
-				<h5 class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-						<font color="#ffffff" size="2">Consultar estado de mis Trámites</font>
-					</a>
-				</h5>
+<div id="contenedor_botoncalapsable_resto"></div>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+	<div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+					<font color="#ffffff" size="2">Consultar estado de mis Trámites</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block contenido_tramite_estado %}
+							{% include "persona/propietario/consultar_estado_tramite_propietario.html" with tramites_de_propietario=ctxtramitespropietario %}
+							{% endblock %}
+						</div>
+					</div>
+				</div>
 			</div>
-			<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-				<div class="panel-body">
-					<div class="container-fluid">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								{% block contenido_tramite_estado %}
-									{% include "persona/propietario/consultar_estado_tramite_propietario.html" with tramites_de_propietario=ctxtramitespropietario %}
-								{% endblock %}
+		</div>
+	</div>
+	<div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
+			<h5 class="panel-title">
+				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales")'>
+					<font color="#ffffff" size="2">Modificar mis datos personales</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+								<select class="form-control input-sm" id="opcionesDeDatosPersonales" name="Opciones de Datos Personales" onChange="opcionesDatosPersonales(this.value);">
+									<option selected value="nada"> ¿Que desea hacer? </option>
+									<option value="alta_datos_personales">Modificar datos personales</option>
+									<option value="alta_contrasenia">Modificar contrasena</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid" id="alta_datos_personales" style="display: none;">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<hr>
+							<div class="container-fluid">
+								<form method='POST' action='' enctype="multipart/form-data">
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_usuario"></div>
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_usuario_dos"></div>
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_foto_perfil_usuario"></div>
+									</div>
+									<div id="contenedor_boton_cambia_datos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+										<button  class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="limpiar1()">
+											Limpiar
+										</button>
+									</div>
+									{% block modificar_datospersonales_usuario %}
+									{% crispy usuario_datospersonales_form %}
+									{% endblock %}
+									<br>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid" id="alta_contrasenia" style="display: none;">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<hr>
+							<div class="container-fluid">
+								<form method='POST' action='' enctype="multipart/form-data">
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_pass1"></div>
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_pass2"></div>
+									</div>
+									<div id="contenedor_boton_cambia_pass" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+										<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="limpiar1()">
+											Limpiar
+										</button>
+									</div>
+									{% block usuario_contrasenia_form %}
+									{% crispy usuario_contrasenia_form %}
+									{% endblock %}
+									<br>
+								</form>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="panel panel-custom">
-			<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
-			  <h5 class="panel-title">
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales")'>
-				  <font color="#ffffff" size="2">Modificar mis datos personales</font>
-				</a>
-			  </h5>
-			</div>
-			 <div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
-			   <div class="panel-body">
-					<div class="container-fluid">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-									<select class="form-control input-sm" id="opcionesDeDatosPersonales" name="Opciones de Datos Personales" onChange="opcionesDatosPersonales(this.value);">
-										<option selected value="nada"> ¿Que desea hacer? </option>
-										<option value="alta_datos_personales">Modificar datos personales</option>
-										<option value="alta_contrasenia">Modificar contrasena</option>
-									</select>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="container-fluid" id="alta_datos_personales" style="display: none;">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<hr>
-								<div class="container-fluid">
-									<form method='POST' action='' enctype="multipart/form-data">
-										<div class="row">
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_usuario"></div>
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_usuario_dos"></div>
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_foto_perfil_usuario"></div>
-										</div>
-										<div id="contenedor_boton_cambia_datos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-											<button  class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="limpiar1()">
-												Limpiar
-											</button>
-										</div>
-										{% block modificar_datospersonales_usuario %}
-											{% crispy usuario_datospersonales_form %}
-										{% endblock %}
-										<br>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="container-fluid" id="alta_contrasenia" style="display: none;">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<hr>
-								<div class="container-fluid">
-									<form method='POST' action='' enctype="multipart/form-data">
-										<div class="row">
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_pass1"></div>
-											<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_pass2"></div>
-										</div>
-										<div id="contenedor_boton_cambia_pass" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-											<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="limpiar1()">
-												Limpiar
-											</button>
-										</div>
-										{% block usuario_contrasenia_form %}
-											{% crispy usuario_contrasenia_form %}
-										{% endblock %}
-										<br>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-		  		</div>
-			 </div>
-		</div>
-	  <div class="panel" style="display: none;">
+	</div>
+	<div class="panel" style="display: none;">
 		<div class="panel-heading box" role="tab" id="headingNine">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>
-			  <font color="#ffffff" size="2">Consultas e Informes</font>
-			</a>
-		  </h5>
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>
+					<font color="#ffffff" size="2">Consultas e Informes</font>
+				</a>
+			</h5>
 		</div>
 		<div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
-		  <div class="panel-body">
-		  </div>
+			<div class="panel-body">
+			</div>
 		</div>
-	  </div>
 	</div>
+</div>
 {% endblock %}
 
 
@@ -183,5 +188,4 @@
 			}
 		}
 	</script>
-
 {% endblock %}

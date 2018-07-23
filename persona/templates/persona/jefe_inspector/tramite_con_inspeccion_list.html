@@ -14,42 +14,42 @@
         </thead>
         <tbody>
             {% if tramites %}
-                {% for tramite in tramites %}
-                    <tr>
-                        <td class="col-xs-1">{{ tramite.id }}</td>
-                        <td class="col-xs-2">{{ tramite.propietario }}</td>
-                        <td class="col-xs-3">
-                            {{ tramite.profesional.persona.nombre }}
-                            {{ tramite.profesional.persona.apellido }}
-                            {{ tramite.profesional.profesion }}
-                            {{ tramite.profesional.matricula }}
-                        </td>
-                        <td class="col-xs-1">{{ tramite.medidas }}</td>
-                        <td class="col-xs-1">{{ tramite.tipo_obra }}</td>
-                        <td class="col-xs-1">{{ tramite.domicilio }}</td>
-                        <td class="col-xs-1" align="center">
-                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                            <input class="form-control input-xs" id="id_fechadeinspeccion_{{tramite.pk}}" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
-                        </td>
-                        <td class="col-xs-1" align="center">
-                            <a href="javascript:prueba();">
-                              <button type="button" class="btn btn-primary btn-xs" name="Agendar">
-                                <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>
-                              </button>
-                            </a>
-                        </td>
-                        <script>
-                            function prueba(){
-                                obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();
-                                alert(obs);
-                                id_tramite = $("#id_tramite").val();
-                                url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+obs;
-                                alert(url);
-                                location.href = url;
-                            }
-                        </script>
-                    </tr>
-                {% endfor %}
+            {% for tramite in tramites %}
+            <tr>
+                <td class="col-xs-1">{{ tramite.id }}</td>
+                <td class="col-xs-2">{{ tramite.propietario }}</td>
+                <td class="col-xs-3">
+                    {{ tramite.profesional.persona.nombre }}
+                    {{ tramite.profesional.persona.apellido }}
+                    {{ tramite.profesional.profesion }}
+                    {{ tramite.profesional.matricula }}
+                </td>
+                <td class="col-xs-1">{{ tramite.medidas }}</td>
+                <td class="col-xs-1">{{ tramite.tipo_obra }}</td>
+                <td class="col-xs-1">{{ tramite.domicilio }}</td>
+                <td class="col-xs-1" align="center">
+                    <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                    <input class="form-control input-xs" id="id_fechadeinspeccion_{{tramite.pk}}" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
+                </td>
+                <td class="col-xs-1" align="center">
+                    <a href="javascript:prueba();">
+                        <button type="button" class="btn btn-primary btn-xs" name="Agendar">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>
+                        </button>
+                    </a>
+                </td>
+                <script>
+                    function prueba(){
+                        obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();
+                        alert(obs);
+                        id_tramite = $("#id_tramite").val();
+                        url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+obs;
+                        alert(url);
+                        location.href = url;
+                    }
+                </script>
+            </tr>
+            {% endfor %}
             {% endif%}
         </tbody>
     </table>

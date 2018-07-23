@@ -1,59 +1,41 @@
 {% load staticfiles %}
 
 {% block contenido_tramite %}
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-            <!-- Cabecera -->
-            <thead>
-                <tr>
-                    <th>Nro</th>
-                    <th>Propietario</th>
-                    <th>Profesional</th>
-                    <th>Medidas</th>
-                    <th>Tipo</th>
-                    <th>Estado</th>
-                    <th>Ver</th>
-                    <!---<th>Rechazar</th>
-                    <th>Aceptar</th>-->
-                </tr>
-            </thead>
-            <!-- Mostramos los datos de las tablas -->
-            <tbody>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+        <thead>
+            <tr>
+                <th>Nro</th>
+                <th>Propietario</th>
+                <th>Profesional</th>
+                <th>Medidas</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Ver</th>
+            </tr>
+        </thead>
+        <tbody>
             {% if tramites %}
-                {% for tramite in tramites %}
-                    <tr>
-                        <td class="col-xs-1">{{ tramite.id }}</td>
-                        <td class="col-xs-3">{{ tramite.propietario }}</td>
-                        <td class="col-xs-4">{{ tramite.profesional }} </td>
-                        <td class="col-xs-1">{{ tramite.medidas }}</td>
-                        <td class="col-xs-1">{{ tramite.tipo_obra }}</td>
-                        <td class="col-xs-1">{{ tramite.estado }}</td>
-                        <!---<td>
-                            <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary btn-xs" name="Rechazar">
-                                Rechazar
-                              </button>
-                            </a>
-                        </td>
-                        <td>
-                            <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary btn-xs" name="Aceptar">
-                                Aceptar
-                              </button>
-                            </a>
-                        </td>-->
-                        <td align="center" class="col-xs-1">
-                            <a href="{% url 'ver_documentos_tramite_administrativo' pk_tramite=tramite.id %}">
-                              <button type="button" class="btn btn-primary btn-xs" name="Aceptar">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
-                              </button>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
+            {% for tramite in tramites %}
+            <tr>
+                <td class="col-xs-1">{{ tramite.id }}</td>
+                <td class="col-xs-3">{{ tramite.propietario }}</td>
+                <td class="col-xs-4">{{ tramite.profesional }} </td>
+                <td class="col-xs-1">{{ tramite.medidas }}</td>
+                <td class="col-xs-1">{{ tramite.tipo_obra }}</td>
+                <td class="col-xs-1">{{ tramite.estado }}</td>
+                <td align="center" class="col-xs-1">
+                    <a href="{% url 'ver_documentos_tramite_administrativo' pk_tramite=tramite.id %}">
+                        <button type="button" class="btn btn-primary btn-xs" name="Aceptar">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
+                        </button>
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
             {% endif%}
 
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
+</div>
 {% endblock %}

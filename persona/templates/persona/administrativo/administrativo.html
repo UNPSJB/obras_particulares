@@ -3,80 +3,84 @@
 {% load crispy_forms_tags%}
 
 {% block estilos %}
-	<link rel="stylesheet" type="text/css" href="{% static perfil %}">
+<link rel="stylesheet" type="text/css" href="{% static perfil %}">
 {% endblock %}
 
 {% block imagenusuario %}
-	<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
+<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
 {% endblock %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="#" class="current"><font color="tomato">Administrativo</font></a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Trámites iniciados</a></li>
-			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Tramites corregidos</a></li>-->
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de final de obra</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Alta profesional</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Alta propietario</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Registrar pagos</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
-				<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
-					<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
-					<li><a href="#" onclick='opcionesDatosPersonales("alta_contrasenia")'>Contraseña</a></li>
-				</ul>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
-				<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
-					<li><a href="#">Consulta 1</a></li>
-					<li><a href="#">Consulta 2</a></li>
-					<li><a href="#">Consulta 3</a></li>
-				</ul>
-		</font>
-	</ul>
+<div id="contenedor_botoncalapsable_sidebar">
+	<button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
+		<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+	</button>
+</div>
+<ul class="sidebar sidebar-1">
+	<font size="2">
+		<li><a href="#" class="current"><font color="tomato">Administrativo</font></a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Trámites iniciados</a></li>
+		<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Tramites corregidos</a></li>-->
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de final de obra</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Alta profesional</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Alta propietario</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Registrar pagos</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
+		<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
+			<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
+			<li><a href="#" onclick='opcionesDatosPersonales("alta_contrasenia")'>Contraseña</a></li>
+		</ul>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
+		<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
+			<li><a href="#">Consulta 1</a></li>
+			<li><a href="#">Consulta 2</a></li>
+			<li><a href="#">Consulta 3</a></li>
+		</ul>
+	</font>
+</ul>
 {% endblock %}
 
 {% block contenido %}
-<button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn"> <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span></button>
+<div id="contenedor_botoncalapsable_resto"></div>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
 	<div class="panel" >
 		<div class="panel-heading box" role="tab" id="headingOne">
-		  	<h5 class="panel-title">
+			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>
 					<font color="#ffffff" size="2">Tramites iniciados</font>
 				</a>
 			</h5>
-	  </div>
-	  <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-		  <div class="panel-body">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						{% block contenido_tramite %}
+		</div>
+		<div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block contenido_tramite %}
 							{% include "persona/administrativo/tramite_list.html" with tramites=ctxtramitesiniciados.tramites %}
-						{% endblock %}
+							{% endblock %}
 
+						</div>
 					</div>
 				</div>
 			</div>
-		  </div>
-	  </div>
-	</div>
-
+		</div>
+		</div>
 	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingFive">
-		  	<h5 class="panel-title">
+			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			  		<font color="#ffffff" size="2">Solicitud de final de obra</font>
+					<font color="#ffffff" size="2">Solicitud de final de obra</font>
 				</a>
-		  	</h5>
+			</h5>
 		</div>
 		<div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-		  <div class="panel-body">
+			<div class="panel-body">
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							{% block contenido_tramite_final_obra %}
-								{% include "persona/administrativo/solicitud_final_obra_list.html" with tramites=ctxsolicitudesfinalobra.tramites %}
+							{% include "persona/administrativo/solicitud_final_obra_list.html" with tramites=ctxsolicitudesfinalobra.tramites %}
 							{% endblock %}
 						</div>
 					</div>
@@ -84,14 +88,13 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingSix">
-	  		<h5 class="panel-title">
+			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-		  			<font color="#ffffff" size="2">Alta profesional</font>
+					<font color="#ffffff" size="2">Alta profesional</font>
 				</a>
-	  		</h5>
+			</h5>
 		</div>
 		<div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
 			<div class="panel-body">
@@ -99,7 +102,7 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							{% block contenido_profesional %}
-								{% include "persona/administrativo/profesional_list.html" with personas=ctxprofesional.personas %}
+							{% include "persona/administrativo/profesional_list.html" with personas=ctxprofesional.personas %}
 							{% endblock %}
 						</div>
 					</div>
@@ -107,14 +110,13 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingThree">
-		  	<h5 class="panel-title">
+			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-			  		<font color="#ffffff" size="2">Alta propietario</font>
+					<font color="#ffffff" size="2">Alta propietario</font>
 				</a>
-		  	</h5>
+			</h5>
 		</div>
 		<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
 			<div class="panel-body">
@@ -122,7 +124,7 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							{% block contenido_propietario %}
-								{% include "persona/administrativo/propietario_list.html" with propietarios=ctxpropietario.propietarios %}
+							{% include "persona/administrativo/propietario_list.html" with propietarios=ctxpropietario.propietarios %}
 							{% endblock %}
 						</div>
 					</div>
@@ -130,13 +132,12 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingSeven">
 			<h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("tareasDatosPersonales")'>
-				<font color="#ffffff" size="2">Registrar pago</font>
-			</a>
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("tareasDatosPersonales")'>
+					<font color="#ffffff" size="2">Registrar pago</font>
+				</a>
 			</h5>
 		</div>
 		<div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
@@ -158,16 +159,15 @@
 			</div>
 		</div>
 	</div>
-
-	  <div class="panel">
-	    <div class="panel-heading box" role="tab" id="headingFour">
-	      <h5 class="panel-title">
-	        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-	          <font color="#ffffff" size="2">Modificar mis datos personales</font>
-	        </a>
-	      </h5>
-	    </div>
-	    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+	<div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFour">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+					<font color="#ffffff" size="2">Modificar mis datos personales</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
 			<div class="panel-body">
 				<div class="container-fluid">
 					<div class="row">
@@ -199,7 +199,7 @@
 										</button>
 									</div>
 									{% block modificar_datospersonales_usuario %}
-										{% crispy usuario_datospersonales_form %}
+									{% crispy usuario_datospersonales_form %}
 									{% endblock %}
 									<br>
 								</form>
@@ -223,7 +223,7 @@
 										</button>
 									</div>
 									{% block usuario_contrasenia_form %}
-										{% crispy usuario_contrasenia_form %}
+									{% crispy usuario_contrasenia_form %}
 									{% endblock %}
 									<br>
 								</form>
@@ -231,28 +231,26 @@
 						</div>
 					</div>
 				</div>
-		  	</div>
+			</div>
 		</div>
-	  </div>
-	  <div class="panel" style="display: none;">
+	</div>
+	<div class="panel" style="display: none;">
 		<div class="panel-heading box" role="tab" id="headingNine">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>
-			  <font color="#ffffff" size="2">Consultas e Informes</font>
-			</a>
-		  </h5>
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>
+					<font color="#ffffff" size="2">Consultas e Informes</font>
+				</a>
+			</h5>
 		</div>
 		<div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
-		  <div class="panel-body">
-		  </div>
+			<div class="panel-body">
+			</div>
 		</div>
-	  </div>
 	</div>
-
+</div>
 {% endblock %}
 
 {% block scripts %}
-
 	<script>
 		$(".file").fileinput({
 			showCaption: false,
@@ -293,6 +291,4 @@
 		var d = document.getElementById("imagenusuario");
 		d.style.display= '';
     </script>
-
-
 {% endblock %}

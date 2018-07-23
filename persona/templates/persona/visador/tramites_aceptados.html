@@ -1,41 +1,38 @@
 {% block contenido_tramites_aceptados %}
-
-  <div class="table-responsive">
-      <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-          <!-- Cabecera -->
-          <thead>
-              <tr>
-                  <th>Nro</th>
-                  <th>Fecha Inicio</th>
-                  <th>Tipo</th>
-                  <th>Profesional</th>
-                  <th>Propietario</th>
-                  <th>Superficie</th>
-                  <th >Revisar</th>
-              </tr>
-          </thead>
-          <!-- Mostramos los datos de las tablas -->
-          <tbody>
-          {% if tramites %}
-              {% for tramite in tramites %}
-                <tr>
-                    <td class="col-xs-2">{{ tramite.id }}</td>
-                    <td class="col-xs-3">{{ tramite.estado.timestamp }}</td>
-                    <td class="col-xs-1">{{ tramite.tipo_obra }} </td>
-                    <td class="col-xs-3">{{ tramite.profesional}}</td>
-                    <td class="col-xs-3">{{ tramite.propietario}}</td>
-                    <td class="col-xs-1">{{ tramite.medidas }} </td>
-                    <td align="center" class="col-xs-1">
-                        <a href="{% url 'ver_documentos_para_visado' tramite.pk %}">
-                            <button type="button" class="btn btn-primary btn-xs" name="Ver documentos">
-                                <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
-                            </button>
-                        </a>
-                    </td>
-                </tr>
-              {% endfor %}
-          {% endif%}
-          </tbody>
-      </table>
-  </div>
+<div class="table-responsive">
+  <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+    <thead>
+      <tr>
+        <th>Nro</th>
+        <th>Fecha Inicio</th>
+        <th>Tipo</th>
+        <th>Profesional</th>
+        <th>Propietario</th>
+        <th>Superficie</th>
+        <th >Revisar</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if tramites %}
+      {% for tramite in tramites %}
+      <tr>
+        <td class="col-xs-2">{{ tramite.id }}</td>
+        <td class="col-xs-3">{{ tramite.estado.timestamp }}</td>
+        <td class="col-xs-1">{{ tramite.tipo_obra }} </td>
+        <td class="col-xs-3">{{ tramite.profesional}}</td>
+        <td class="col-xs-3">{{ tramite.propietario}}</td>
+        <td class="col-xs-1">{{ tramite.medidas }} </td>
+        <td align="center" class="col-xs-1">
+          <a href="{% url 'ver_documentos_para_visado' tramite.pk %}">
+            <button type="button" class="btn btn-primary btn-xs" name="Ver documentos">
+              <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
+            </button>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+      {% endif%}
+    </tbody>
+  </table>
+</div>
 {% endblock %}
