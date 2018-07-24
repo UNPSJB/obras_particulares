@@ -19,8 +19,12 @@ class FormularioTipoDocumento(forms.ModelForm):
     # Esto es para el crispy
     def __init__(self, *args, **kwargs):
         super(FormularioTipoDocumento, self).__init__(*args, **kwargs)
+        self.fields['nombre'].widget.attrs['title'] = "Ingresar Nombre"
+        self.fields['nombre'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
+        self.fields['descripcion'].widget.attrs['title'] = "Ingresar Descripcion"
+        self.fields['dexcripcion'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
+        self.fields['fecha_alta'].widget.attrs['title'] = "Ingresar Fecha de Alta"
         self.helper = FormHelper()
-        # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
         self.helper.layout = Layout(
             Field('nombre', placeholder='Ingresar Nombre'),
@@ -50,6 +54,11 @@ class FormularioTipoObra(forms.ModelForm):
         # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit('tipo_obra_submit', 'Guardar'))
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
+        self.fields['nombre'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
         self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
+        self.fields['descripcion'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
         self.fields['categorias'].widget.attrs['placeholder'] = "Ingresar Categoria/s"
+        self.fields['nombre'].widget.attrs['title'] = "Ingresar Nombre"
+        self.fields['descripcion'].widget.attrs['title'] = "Ingresar Descripcion"
+        self.fields['categorias'].widget.attrs['title'] = "Ingresar Categoria/s"
 

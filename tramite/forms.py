@@ -27,10 +27,15 @@ class FormularioIniciarTramite(forms.ModelForm):
         self.fields['tipo_obra'].widget.attrs['title'] = "Ingresar Tipo de Obra"
         self.fields['medidas'].widget.attrs['placeholder'] = "Ingresar Medidas en m2"
         self.fields['medidas'].widget.attrs['title'] = "Ingresar Medidas en m2"
+        self.fields['medidas'].widget.attrs['max'] = "10000"
+        self.fields['medidas'].widget.attrs['min'] = "1"
         self.fields['propietario'].widget.attrs['placeholder'] = "Ingresar DNI del Propietario"
         self.fields['propietario'].widget.attrs['title'] = "Ingresar DNI del Propietario"
+        self.fields['propietario'].widget.attrs['max'] = "99999999"
+        self.fields['propietario'].widget.attrs['min'] = "9999999"
         self.fields['domicilio'].widget.attrs['placeholder'] = "Ingresar Domicilio de la Obra"
         self.fields['domicilio'].widget.attrs['title'] = "Ingresar Domicilio de la Obra"
+        self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50} [0-9]{0,5}$"
 
 
     def save(self, commit=True, propietario=None):
