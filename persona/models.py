@@ -108,10 +108,8 @@ class Persona(models.Model):
         return self.usuario
 
     def modificarPerfilCSS(self, perfilseleccionado):
-        print(perfilseleccionado)
         self.perfilCSS = perfilseleccionado
         self.save()
-        '''return self.perfilcss'''
 
     def modificarUsuario(self, mail, domicilio, telefono, imagen):
         if mail:
@@ -121,7 +119,7 @@ class Persona(models.Model):
         if telefono:
             self.telefono = telefono
         if imagen:
-            self.perfilFoto.delete()
+            '''self.perfilFoto.delete()'''
             self.perfilFoto = imagen
         self.save()
         return self.usuario

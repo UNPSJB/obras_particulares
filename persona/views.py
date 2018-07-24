@@ -148,7 +148,9 @@ def mostrar_profesional(request):
     tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
     propietario_form = FormularioPropietario()
     propietario = None
-    if request.method == "POST":
+
+    if request.method == "POST" and "propietario" in request.POST:
+        print ("dice que no es un form")
         personas = Persona.objects.filter(dni=request.POST["propietario"])
         persona = personas.exists() and personas.first() or None
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
@@ -168,7 +170,7 @@ def mostrar_profesional(request):
             messages.add_message(request, messages.WARNING, 'Propietario no existe, debe darlo de alta para iniciar al tramite.')
     else:
         propietario_form = None
-    usuario = request.user
+
     perfil = 'css/' + usuario.persona.perfilCSS
     values = {
         "perfil": perfil,
@@ -177,15 +179,17 @@ def mostrar_profesional(request):
         'tramite_form': tramite_form,
         'propietario_form': propietario_form,
         'documento_set': documento_set,
-        'ctxtramcorregidos':tramites_corregidos(request)
+        'ctxtramcorregidos': tramites_corregidos(request)
     }
-    for form_name, submit_name in FORMS_PROFESIONAL:
-        KlassForm = FORMS_PROFESIONAL[(form_name, submit_name)]
+
+    for form_name, submit_name in FORMS_ADMINISTRATIVO:
+        KlassForm = FORMS_ADMINISTRATIVO[(form_name, submit_name)]
         if request.method == "POST" and submit_name in request.POST:
+            print ("dice que es un form")
             _form = KlassForm(request.POST, request.FILES)
             if _form.is_valid():
                 _form.save()
-                messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
+                messages.add_message(request, messages.SUCCESS,"La accion solicitada ha sido ejecutada con exito")
                 return redirect(usuario.get_view_name())
             else:
                 values["submit_name"] = submit_name

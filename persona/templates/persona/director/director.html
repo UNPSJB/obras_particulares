@@ -118,7 +118,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="container-fluid" id="modificar_usuario_grupo" style="display: none;">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -182,134 +181,60 @@
 		<div id="collapseTwo" class="panel-collapse
 		{% if submit_name != 'tipo_documento_submit' and submit_name != 'tipo_obra_submit' %}collapse{% endif %}
 		" role="tabpanel" aria-labelledby="headingTwo">
-		<div class="panel-body">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-							<select class="form-control input-sm" id="opcionesDelTramite" name="Opciones de Datos del tramite" onChange="opcionesDatosTramite(this.value);">
-								<option selected value="nada"> ¿Que desea hacer? </option>
-								<option value="alta_tipo_documento">Crear tipo de documento</option>
-								<option value="alta_tipo_de_obra">Crear tipo de obra</option>
-							</select>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="container-fluid" id="alta_tipo_documento" {% if submit_name != 'tipo_documento_submit' %}class="hide"{% endif %} style="display: none;">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<hr>
-						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
-							{% block alta_tipo_documento %}
-							{% crispy tipo_documento_form %}
-							{% endblock %}
-						</div>
-						<form method="post" enctype="multipart/form-data"> {% csrf_token %}
-							<div id="tipo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-							<div id="requerido_para" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-							<div id="boton_tipo" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-									Limpiar
-								</button>
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+								<select class="form-control input-sm" id="opcionesDelTramite" name="Opciones de Datos del tramite" onChange="opcionesDatosTramite(this.value);">
+									<option selected value="nada"> ¿Que desea hacer? </option>
+									<option value="alta_tipo_documento">Crear tipo de documento</option>
+									<option value="alta_tipo_de_obra">Crear tipo de obra</option>
+								</select>
 							</div>
-							<br>
-						</form>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="container-fluid" id="alta_tipo_de_obra" style="display: none;">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<hr>
-						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
-							{% block alta_tipo_de_obra %}
-							{% crispy tipo_obra_form %}
-							{% endblock %}
-						</div>
-						<form method="post" enctype="multipart/form-data"> {% csrf_token %}
-							<div id="nombre_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-							<div id="desc_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-							<div id="categoria_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
-							<div id="boton_tipo_obra" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-									Limpiar
-								</button>
+				<div class="container-fluid" id="alta_tipo_documento" {% if submit_name != 'tipo_documento_submit' %}class="hide"{% endif %} style="display: none;">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<hr>
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
+								{% block alta_tipo_documento %}
+								{% crispy tipo_documento_form %}
+								{% endblock %}
 							</div>
-							<br>
-						</form>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="panel">
-	<div class="panel-heading box" role="tab" id="headingSix">
-		<h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("tareasDatosPersonales")'>
-				<font color="#ffffff" size="2">Datos personales</font>
-			</a>
-		</h5>
-	</div>
-	<div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
-		<div class="panel-body">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-							<select class="form-control input-sm" id="opcionesDeDatosPersonales" name="Opciones de Datos Personales" onChange="opcionesDatosPersonales(this.value);">
-								<option selected value="nada"> ¿Que desea hacer? </option>
-								<option value="alta_datos_personales">Modificar datos personales</option>
-								<option value="alta_contrasenia">Modificar contrasena</option>
-							</select>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="container-fluid" id="alta_datos_personales" style="display: none;">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<hr>
-						<div class="container-fluid">
-							<form method='POST' action='' enctype="multipart/form-data">
-								<div class="row">
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_usuario"></div>
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_usuario_dos"></div>
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_foto_perfil_usuario"></div>
-								</div>
-								<div id="contenedor_boton_cambia_datos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-									<button  class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="limpiar1()">
+							<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+								<div id="tipo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+								<div id="requerido_para" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+								<div id="boton_tipo" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
 										Limpiar
 									</button>
 								</div>
-								{% block modificar_datospersonales_usuario %}
-								{% crispy usuario_datospersonales_form %}
-								{% endblock %}
 								<br>
 							</form>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="container-fluid" id="alta_contrasenia" style="display: none;">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<hr>
-						<div class="container-fluid">
-							<form method='POST' action='' enctype="multipart/form-data">
-								<div class="row">
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_pass1"></div>
-									<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_pass2"></div>
-								</div>
-								<div id="contenedor_boton_cambia_pass" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="limpiar1()">
+				<div class="container-fluid" id="alta_tipo_de_obra" style="display: none;">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<hr>
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
+								{% block alta_tipo_de_obra %}
+								{% crispy tipo_obra_form %}
+								{% endblock %}
+							</div>
+							<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+								<div id="nombre_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+								<div id="desc_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+								<div id="categoria_tipo_obra" class="col-xs-12 col-sm-12 col-md-4 col-lg-4"></div>
+								<div id="boton_tipo_obra" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
 										Limpiar
 									</button>
 								</div>
-								{% block usuario_contrasenia_form %}
-								{% crispy usuario_contrasenia_form %}
-								{% endblock %}
 								<br>
 							</form>
 						</div>
@@ -318,21 +243,94 @@
 			</div>
 		</div>
 	</div>
-</div>
-</div>
-<div class="panel" style="display: none;">
-	<div class="panel-heading box" role="tab" id="headingNine">
-		<h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>
-				<font color="#ffffff" size="2">Consultas e Informes</font>
-			</a>
-		</h5>
-	</div>
-	<div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
-		<div class="panel-body">
+	<div class="panel">
+		<div class="panel-heading box" role="tab" id="headingSix">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("tareasDatosPersonales")'>
+					<font color="#ffffff" size="2">Datos personales</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+								<select class="form-control input-sm" id="opcionesDeDatosPersonales" name="Opciones de Datos Personales" onChange="opcionesDatosPersonales(this.value);">
+									<option selected value="nada"> ¿Que desea hacer? </option>
+									<option value="alta_datos_personales">Modificar datos personales</option>
+									<option value="alta_contrasenia">Modificar contrasena</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid" id="alta_datos_personales" style="display: none;">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<hr>
+							<div class="container-fluid">
+								<form method='POST' action='' enctype="multipart/form-data">
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_usuario"></div>
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_usuario_dos"></div>
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_foto_perfil_usuario"></div>
+									</div>
+									<div id="contenedor_boton_cambia_datos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+										<button  class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="limpiar1()">
+											Limpiar
+										</button>
+									</div>
+									{% block modificar_datospersonales_usuario %}
+									{% crispy usuario_datospersonales_form %}
+									{% endblock %}
+									<br>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid" id="alta_contrasenia" style="display: none;">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<hr>
+							<div class="container-fluid">
+								<form method='POST' action='' enctype="multipart/form-data">
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_pass1"></div>
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="contenedor_datos_pass2"></div>
+									</div>
+									<div id="contenedor_boton_cambia_pass" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+										<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="limpiar1()">
+											Limpiar
+										</button>
+									</div>
+									{% block usuario_contrasenia_form %}
+									{% crispy usuario_contrasenia_form %}
+									{% endblock %}
+									<br>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-</div>
+	<div class="panel" style="display: none;">
+		<div class="panel-heading box" role="tab" id="headingNine">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>
+					<font color="#ffffff" size="2">Consultas e Informes</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
+			<div class="panel-body">
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 
