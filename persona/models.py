@@ -131,3 +131,4 @@ def generar_password():
     password = ""
     password = password.join([choice(valores) for i in range(longitud)])
     return password
+
