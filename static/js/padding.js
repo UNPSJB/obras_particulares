@@ -20,11 +20,11 @@ function mostrarayuda() {
 }
 function mostrarayudarapida() {
     var x = document.getElementById('id_burbuja_ayuda');
-    x.style.visibility = 'visible';
+    x.style.display = 'block';
 }
 function ocultarayudarapida() {
     var x = document.getElementById('id_burbuja_ayuda');
-    x.style.visibility = 'hidden';
+    x.style.display= 'none';
 }
 
 //Controla el zoom y el ancho de la pantalla en la carga
