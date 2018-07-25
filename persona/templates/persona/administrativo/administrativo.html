@@ -59,17 +59,16 @@
 							{% block contenido_tramite %}
 							{% include "persona/administrativo/tramite_list.html" with tramites=ctxtramitesiniciados.tramites %}
 							{% endblock %}
-
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		</div>
+	</div>
 	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingFive">
 			<h5 class="panel-title">
-				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>
 					<font color="#ffffff" size="2">Solicitud de final de obra</font>
 				</a>
 			</h5>
@@ -91,7 +90,7 @@
 	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingSix">
 			<h5 class="panel-title">
-				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>
 					<font color="#ffffff" size="2">Alta profesional</font>
 				</a>
 			</h5>
@@ -113,7 +112,7 @@
 	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingThree">
 			<h5 class="panel-title">
-				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>
 					<font color="#ffffff" size="2">Alta propietario</font>
 				</a>
 			</h5>
@@ -135,7 +134,7 @@
 	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingSeven">
 			<h5 class="panel-title">
-				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("tareasDatosPersonales")'>
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>
 					<font color="#ffffff" size="2">Registrar pago</font>
 				</a>
 			</h5>
@@ -162,7 +161,7 @@
 	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingFour">
 			<h5 class="panel-title">
-				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("tareasDatosPersonales")'>
 					<font color="#ffffff" size="2">Modificar mis datos personales</font>
 				</a>
 			</h5>

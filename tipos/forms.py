@@ -22,7 +22,7 @@ class FormularioTipoDocumento(forms.ModelForm):
         self.fields['nombre'].widget.attrs['title'] = "Ingresar Nombre"
         self.fields['nombre'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
         self.fields['descripcion'].widget.attrs['title'] = "Ingresar Descripcion"
-        self.fields['dexcripcion'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
+        self.fields['descripcion'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
         self.fields['fecha_alta'].widget.attrs['title'] = "Ingresar Fecha de Alta"
         self.helper = FormHelper()
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))

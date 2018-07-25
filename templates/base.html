@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 {% load staticfiles %}
 <html lang="es">
-<head>
 
+<head>
 	<meta charset="UTF-8">
 	<title>SOP</title>
 	<link rel="icon" href="{% static 'images/Casa.ico' %}" type="image/x-icon">
@@ -41,7 +41,6 @@
 			color: black;
 			border-radius: 4px;
 		}
-
 		ol li {
 			background: #eaecee;
 			color: #17202a;
@@ -50,7 +49,6 @@
 			list-style-type: none;
 			border-radius: 3px;
 		}
-
 		ol label{
 			color: #273746;
 			margin-top: 5px;
@@ -61,37 +59,80 @@
 		 table thead tr th {
 		  text-align: center;
 		 }
-
 		el {
 			background: white;
 			border-radius: 4px;
 			max-width: 658px;
 			max-height: 350px;
 		}
-
 		thead {
 			height:30px;
 		}
-
 		table {
 			background: white;
 		}
-
 		.progress {
 		 	position: relative;
 		 	top: 0.7em;
     	}
+	</style>
 
-</style>
+	<script language="javaScript">
+		//Reacomoda algunos elementos del dom cuando la ventana pasa de
+		var width;
+		var auxwidthp = 0;
+		var auxwidthg = 10000;
+		var agrandado = 0;
+		$(window).resize(function() {
+			var newWidth = $(window).width();
+			if(newWidth != width){
+				width = newWidth;
+				if(width < 992 && width > auxwidthp){
+					auxwidthp = width;
+					//alert("Reacomodar por pequeño");
+					if($("#sidebar").is(":visible")){
+						$("#sidebar").hide();
+						$("#resto").removeClass('col-xs-10');
+						$("#resto").addClass('col-xs-12');
+						$("#resto").removeClass('col-sm-10');
+						$("#resto").addClass('col-sm-12');
+						$("#resto").removeClass('col-md-10');
+						$("#resto").addClass('col-md-12');
+						$("#resto").removeClass('col-lg-10');
+						$("#resto").addClass('col-lg-12');
+					}
+				}
+				if(width > 992){
+					auxwidthp = 0;
+				}
+				if ( width > 992 && width < auxwidthg){
+					auxwidthg = width;
+					//alert("Reacomodar por grande");
+					if( $("#sidebar").is(":hidden")){
+						$("#sidebar").show();
+						$("#resto").removeClass('col-xs-12');
+						$("#resto").addClass('col-xs-10');
+						$("#resto").removeClass('col-sm-12');
+						$("#resto").addClass('col-sm-10');
+						$("#resto").removeClass('col-md-12');
+						$("#resto").addClass('col-md-10');
+						$("#resto").removeClass('col-lg-12');
+						$("#resto").addClass('col-lg-10');
+					}
+				}
+				if(width < 992){
+					auxwidthg = 10000;
+				}
+			}
+		});
+	</script>
 
 	{% block estilos %}
 
 	{% endblock %}
-
 </head>
 
 <body>
-
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
   		<div class="prehead">
 			<div class="container-fluid">
@@ -141,7 +182,6 @@
 											<span class="glyphicon glyphicon-cog"></span>
 										</button>
 										<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1" style="font-size:12px">
-
 											<li class="disabled"><a > Esquema de colores</a></li>
 											<li role="separator" class="divider"></li>
 											<li><a onclick='cambiarEstilo("base.css")'>Alerces</a></li>
@@ -152,10 +192,6 @@
 											<li role="separator" class="divider"></li>
 											<li class="disabled"><a onclick=''>...</a></li>
 											<li class="disabled"><a onclick=''>...</a></li>
-
-											<!--li><a href="#" onclick='cambiarEstilo("base.css")'>Alerces</a></li>
-											<li class="active"><a href="#" onclick='cambiarEstilo("base1.css")'>Neutro</a></li>
-											<li class="active"><a href="#" onclick='cambiarEstilo("base2.css")'>Pastel</a></li-->
 										</ul>
 									</div>
 								</div>
@@ -197,12 +233,22 @@
 <br>
 <br>
 <prefooter>
-
-	<div class="container-fluid" style="position:absolute; right: 0;">
-		<div class="botonredondoayuda">
-			<a href="#">
-				<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
-			</a>
+	<div class="container-fluid">
+		<div class="row">
+			<div class=" col-xs-12 col-sm-12 col-md-12"  id="id_burbuja_ayuda" style="visibility: hidden">
+				<p class="triangle-isosceles" style="top: 29px;">
+					Esta es la burbuja de dialogo donde muestra la ayuda 'rapida', cuando se desplaza el cursor sobre el boton,
+					para mas ayuda clic sobre el boton.
+				</p>
+			</div>
+			<div class=" col-xs-12 col-sm-12 col-md-12">
+				<div id="id_botonredondoayuda" style="position: absolute; right: 45px;">
+					<!--input type="button" class="botonredondoayuda" onclick="mostrarayuda()" onmousemove="mostrarayudarapida()" onmouseout="ocultarayudarapida()" id="id_boton_ayuda" name="btn1" value="?"  /-->
+					<button type="button" class="botonredondoayuda" onclick="mostrarayuda()" onmousemove="mostrarayudarapida()" onmouseout="ocultarayudarapida()" id="id_boton_ayuda">
+						<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+					</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </prefooter>
@@ -283,7 +329,6 @@
 
     <script>
     	// Modifica sidebar cuando se usa el boton colapsar sidebar
-		var valor = true
 		function mostrarBarra() {
 				if( $("#sidebar").is(":visible") ){
 					$("#sidebar").hide();
@@ -412,9 +457,7 @@
 			form.removeChild(input);
 			form.parentNode.removeChild(form);
 		}
-
 	</script>
-
 
 	{% block scripts %}
 

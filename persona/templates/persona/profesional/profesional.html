@@ -18,9 +18,9 @@
 </div>
 <ul class="sidebar sidebar-1">
 	<font size="2"><li><a href="#" class="current"><font color="tomato">Profesional</font></a></li>
-	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Iniciar Trámite</a></li>
-	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">Cargar correcciones a un Trámite</a></li>
-	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a></li>
+	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Iniciar Trámite</a></li>
+	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Cargar correcciones a un Trámite</a></li>
+	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar estado de mis tramites</a></li>
 	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
 	<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
 		<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
@@ -42,7 +42,7 @@
 	<div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
 			<h5 class="panel-title">
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>
 					<font color="#ffffff" size="2">Iniciar Trámite</font>
 				</a>
 			</h5>
@@ -94,7 +94,7 @@
 	<div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
 			<h5 class="panel-title">
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>
 					<font color="#ffffff" size="2">Cargar correcciones a un Trámite</font>
 				</a>
 			</h5>
@@ -121,7 +121,7 @@
 	<div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
 			<h5 class="panel-title">
-				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>
 					<font color="#ffffff" size="2">Consultar estado de mis Trámites</font>
 				</a>
 			</h5>
