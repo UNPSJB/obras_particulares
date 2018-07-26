@@ -150,7 +150,6 @@ def mostrar_profesional(request):
     propietario = None
 
     if request.method == "POST" and "propietario" in request.POST:
-        print ("dice que no es un form")
         personas = Persona.objects.filter(dni=request.POST["propietario"])
         persona = personas.exists() and personas.first() or None
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
@@ -185,7 +184,6 @@ def mostrar_profesional(request):
     for form_name, submit_name in FORMS_ADMINISTRATIVO:
         KlassForm = FORMS_ADMINISTRATIVO[(form_name, submit_name)]
         if request.method == "POST" and submit_name in request.POST:
-            print ("dice que es un form")
             _form = KlassForm(request.POST, request.FILES)
             if _form.is_valid():
                 _form.save()
