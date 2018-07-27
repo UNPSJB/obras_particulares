@@ -105,7 +105,6 @@
 
 {% block scripts %}
     <script>
-        color = [];
         labelsEstados = [];
         dataEstados = [];
 
@@ -115,7 +114,6 @@
 
         {% for la in label_estados %}
             labelsEstados.push("{{la}}");
-            color.push(generarcolor());
         {% endfor %}
 
         var ctx = document.getElementById("chartDirectorTramites");
