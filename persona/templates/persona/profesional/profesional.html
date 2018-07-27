@@ -56,16 +56,16 @@
 								<form action="{% url 'profesional' %}" class="uniForm" method="post" enctype="multipart/form-data">
 									<div class="row">
 										<div class=" col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<font class="form-group" color=white><h5 align="left">Datos de la Obra:</h5></font>
+											<font class="form-group colorSubtitulosProf"><h5 align="left">Datos de la Obra:</h5></font>
 											{% crispy tramite_form %}
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<font class="form-group" color=white><h5 align="left">Documentos requeridos:</h5></font>
+											<font class="form-group colorSubtitulosProf"><h5 align="left">Documentos requeridos:</h5></font>
 											{% crispy documento_set %}
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 											{% if propietario_form %}
-											<font color=white><h5 align="left">Datos de Nuevo Propietario</h5></font>
+											<font class="colorSubtitulosProf"><h5 align="left">Datos de Nuevo Propietario</h5></font>
 											{% crispy propietario_form %}
 											{% endif %}
 										</div>

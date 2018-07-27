@@ -155,23 +155,27 @@ def mostrar_profesional(request):
     propietario = None
 
     if request.method == "POST" and "propietario" in request.POST:
-        personas = Persona.objects.filter(dni=request.POST["propietario"])
-        persona = personas.exists() and personas.first() or None
-        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
-        propietario_form = FormularioPropietario(request.POST)
-        tramite_form = FormularioIniciarTramite(request.POST)
-        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
-        propietario = propietario_form.obtener_o_crear(persona)
-        if propietario is not None and tramite_form.is_valid() and documento_set.is_valid():
-            tramite = tramite_form.save(propietario=propietario, commit=False)
-            lista=[]
-            for docForm in documento_set:
-               lista.append(docForm.save(commit=False))
-            Tramite.new(usuario, propietario, usuario.persona.profesional,request.POST['tipo_obra'],request.POST['medidas'],request.POST['domicilio'],lista)
-            tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
-            propietario_form = None
+        if int(usuario.persona.profesional.categoria) >= int(request.POST['tipo_obra']):
+            personas = Persona.objects.filter(dni=request.POST["propietario"])
+            persona = personas.exists() and personas.first() or None
+            documento_set = FormularioDocumentoSet(request.POST, request.FILES)
+            propietario_form = FormularioPropietario(request.POST)
+            tramite_form = FormularioIniciarTramite(request.POST)
+            documento_set = FormularioDocumentoSet(request.POST, request.FILES)
+            propietario = propietario_form.obtener_o_crear(persona)
+            if propietario is not None and tramite_form.is_valid() and documento_set.is_valid():
+                tramite = tramite_form.save(propietario=propietario, commit=False)
+                lista=[]
+                for docForm in documento_set:
+                   lista.append(docForm.save(commit=False))
+                Tramite.new(usuario, propietario, usuario.persona.profesional,request.POST['tipo_obra'],request.POST['medidas'],request.POST['domicilio'],lista)
+                tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
+                propietario_form = None
+            else:
+                messages.add_message(request, messages.WARNING, 'Propietario no existe, debe darlo de alta para iniciar al tramite.')
         else:
-            messages.add_message(request, messages.WARNING, 'Propietario no existe, debe darlo de alta para iniciar al tramite.')
+            messages.add_message(request, messages.WARNING,
+                                 'Categoria del profesional no es suficiente para el tipo de tramite que desea iniciar.')
     else:
         propietario_form = None
 

@@ -2,7 +2,7 @@
 {% load staticfiles %}
 
 {% block estilos %}
-<link rel="stylesheet" type="text/css" href="" id="estilo_de_usuario">
+<link rel="stylesheet" type="text/css" href="{% static perfil %}">
 <style>
     *{font-family:Verdana, Arial, Helvetica, sans-serif}
     #lupa{
@@ -26,6 +26,10 @@
         box-shadow: 1px 1px 5px rgba(50,50,50 0.5);
     }
 </style>
+{% endblock %}
+
+{% block imagenusuario %}
+<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
 {% endblock %}
 
 {% block barra %}
