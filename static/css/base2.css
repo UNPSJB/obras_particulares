@@ -28,16 +28,16 @@ html {
 }
 
 footer {
-	background:#ffffff;
-	color:#024F59;
+	background: #212930;
+	color:#fff;
 	position: absolute;
     bottom: 0;
     width: 100%;
 }
 
 .prehead {
-	background: #ffffff;
-	color:#024F59;
+	background:#fff;
+	color:#212930;
 }
 
 body {
@@ -47,7 +47,7 @@ body {
 	xoverflow: hidden;
 	padding-top: 140px;
 	padding-bottom: 40px;
-    background: #C8D4D0;
+	background: #ffffff;
 }
 
 
@@ -58,8 +58,7 @@ body {
 }
 
 header{
-	background:#024F59;
-	/*background:#04142b;*/
+	background: #212930;
 	color: #ffffff;
 	transition: 0.5s;
 }
@@ -97,19 +96,18 @@ header.sticky {
 /* configuracion panel gris*/
 
 .panel-group > .panel {
-    border-color: #7BABAF;
+    border-color: #606a74;
     border-radius: 0px;
-    background:#7BABAF;
+    background: #606a74;
 }
 
 .panel-custom {
-    border-color: #7BABAF;
+    border-color: #606a74;
     border-radius: 0px;
-    background:#7BABAF;
+    background: #606a74;
 }
-
 .panel-custom > .panel-heading-custom {
-    background: #7BABAF;
+    background: #606a74;
     border-radius: 0px;
 }
 
@@ -123,21 +121,18 @@ header.sticky {
 }
 
 .box:hover {
-  background-color: #317A89;
+  background-color: #414b56;
   cursor: pointer;
 }
 
 label {
-	color: #7DD201;
+	color: #ffffff;
 }
 
 a:link {
 	text-decoration:none;
 }
 
-.colorp {
-	background: #ffffff;
-}
 
 /* menu lateral */
 
@@ -151,18 +146,18 @@ a:link {
 	/*width: 200px;*/
 	width: 100%;
 	margin-right: 35px;
-	background-color: #7BABAF;
+	background-color: #606a74;
 	list-style-type: none;
 	padding-left: 0;
-	color: #7DD201;
+	color: #06c2f4;
 }
 
 .sidebar li a {
-	color: #ffffff;
+	color: #fff;
 	box-sizing: border-box; }
 
 .sidebar li a:hover {
-	color: #ffffff; }
+	color: #fff; }
 
 /* sidebar 1 */
 
@@ -175,22 +170,22 @@ a:link {
 
 .sidebar-1 li a:hover,
 .sidebar-1 li a.current {
-    color: #7DD201;
-	background-color: #317A89;
-	border-left: 5px solid #7DD201;
+	color: #06c2f4;
+	background-color: #414b56;
+ 	border-left: 5px solid #06c2f4;
 }
 
 .sidebar-1 li a:focus{
-	color: #7DD201;
-	background-color: #317A89;
-	border-left: 5px solid #7DD201;
+	color: #06c2f4;
+	background-color: #414b56;
+	border-left: 5px solid #06c2f4;
 }
 
 /*Subemu lateral*/
 
 .sidebar-2 li a {
 	color: white;
-	background-color: #86B4C1;
+	background-color: #cbd1d4;
 	box-sizing: border-box; }
 
 
@@ -203,17 +198,16 @@ a:link {
 
 .sidebar-2 li a:hover,
 .sidebar-2 li a.current {
-	color: #7DD201;
-	background-color: #ffffff;
-	border-left: 3px solid #7DD201;
+	color: #06c2f4;
+	background-color: #606a74;
+	border-left: 3px solid #06c2f4;
 }
 
 .sidebar-2 li a:focus{
-	color: #7DD201;
-	background-color: #ffffff;
-	border-left: 3px solid #7DD201;
+	color: #06c2f4;
+	background-color: #606a74;
+	border-left: 3px solid #06c2f4;
 }
-
 
 /* ----------------------------------cryspy-----------------------------*/
 
@@ -300,12 +294,12 @@ select {
     -moz-border-radius: 50px;
     border-radius: 50px;
     font-size:12px;
-    border:2px solid #ffffff;
+    border:2px solid #99a3a6;
     position: absolute;
     top: -30.5px;
     left: 5px;
     margin-left: 15px;
-    color: #fff;
+    color: #99a3a6;
     background: transparent;
 	-webkit-transition: -webkit-transform 200ms ease-out;
 	-moz-transition: -moz-transform 200ms ease-out;
@@ -313,7 +307,8 @@ select {
 }
 
 .btn-collapsible-sidebar:hover{
-    background: #024F59;
+    background: #3d4242;
+    color: #ffffff;
     padding: 0px 0px 0px 3px;
     -moz-transform: rotate(180deg);
     -webkit-transform: rotate(180deg);
@@ -350,16 +345,17 @@ select {
     font-size:11px;
     line-height:32px;
     float:left;
-    border:2px solid #ffffff;
+    border:2px solid #99a3a6;
     background: transparent;
-    color: #fff;
+    color: #99a3a6;
     position: absolute;
     text-align: center;
     line-height: 50%;
 }
 
 .botonredondoayuda:hover{
-    background: #024F59;
+    background: #3d4242;
+    color: #ffffff;
 }
 
 /***********+ burbuja ayuda*************/
@@ -368,10 +364,10 @@ select {
     position: relative;
     padding: 9px;
     margin: 1em 0 3em;
-    color: #024F59;
+    color: #444444;
     background: #fff;
     border-radius: 10px;
-    border:2px solid #024F59;
+    border:2px solid #444444;
     text-align: right;
 
     transition-property: visibility;
@@ -388,7 +384,7 @@ select {
     display:block;
     width:0;
     height: 0;
-    border-top: 9px solid #ffffff;
+    border-top: 9px solid #cfdcec;
     border-left: 9px solid transparent;
     border-right: 9px solid transparent;
 }

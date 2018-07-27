@@ -160,6 +160,7 @@ a:link {
 	background-color: #444;
 	list-style-type: none;
 	padding-left: 0;
+	color: tomato;
 }
 
 .sidebar li a {
@@ -216,65 +217,6 @@ a:link {
 	color: tomato;
 	background-color: #3a3a3a;
 	border-left: 3px solid tomato;
-}
-
-/* validar contraseña */
-
-#pswd_info {
-	position:relative;
-	background:#fefefe;
-	font-size:.875em;
-	border-radius:1px;
-	box-shadow:0 1px 3px #ccc;
-	border:1px solid #ddd;
-	float: center;
-}
-
-#pswd_info::before {
-	content: "\25B2";
-	position:absolute;
-	top:-12px;
-	left:45%;
-	color:#ddd;
-	display:block;
-}
-.invalid {
-	background:url(images/cancel.png) no-repeat 0 50%;
-	padding-left:22px;
-	line-height:24px;
-	color:tomato;
-}
-.valid {
-	background:url(images/accept.png) no-repeat 0 50%;
-	padding-left:22px;
-	line-height:24px;
-	color:#268e37;
-}
-#pswd_info {
-	display:none;
-}
-
-#pswd2_info {
-	position:relative;
-	background:#fefefe;
-	font-size:.875em;
-	border-radius:1px;
-	box-shadow:0 1px 3px #ccc;
-	border:1px solid #ddd;
-	float: center;
-}
-
-#pswd2_info::before {
-	content: "\25B2";
-	position:absolute;
-	top:-12px;
-	left:45%;
-	color:#ddd;
-	display:block;
-}
-
-#pswd2_info {
-	display:none;
 }
 
 /* ----------------------------------cryspy-----------------------------*/

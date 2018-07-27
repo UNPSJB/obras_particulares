@@ -34,6 +34,11 @@ import time
 from datetime import datetime
 import collections
 
+from reportlab.graphics.shapes import Drawing, String
+from reportlab.graphics import renderPDF
+from reportlab.graphics.charts.barcharts import VerticalBarChart
+
+
 '''
 generales -----------------------------------------------------------------------------------------------------
 '''
@@ -1038,6 +1043,40 @@ class ReporteTramitesDirectorPdf(View):
         ))
         detalle_orden.hAlign = 'CENTER'
         story.append(detalle_orden)
+
+        '''
+        trabajando con los graficos dentro del informe
+        '''
+        d = Drawing(500, 200)
+        data = [
+            (13, 5, 20, 22, 37, 45, 19, 4),
+            (14, 6, 21, 23, 38, 46, 20, 5)
+        ]
+        bc = VerticalBarChart()
+        bc.x = 50
+        bc.y = 50
+        bc.height = 125
+        bc.width = 500
+        bc.data = data
+        bc.strokeColor = colors.black
+        bc.valueAxis.valueMin = 0
+        bc.valueAxis.valueMax = 50
+        bc.valueAxis.valueStep = 10  # paso de distancia entre punto y punto
+        bc.categoryAxis.labels.boxAnchor = 'ne'
+        bc.categoryAxis.labels.dx = 8
+        bc.categoryAxis.labels.dy = -2
+        bc.categoryAxis.labels.angle = 30
+        bc.categoryAxis.categoryNames = ['Ene-14', 'Feb-14', 'Mar-14',
+                                         'Abr-14', 'May-14', 'Jun-14', 'Jul-14', 'Ago-14']
+        bc.groupSpacing = 10
+        bc.barSpacing = 2
+        d.add(bc)
+        story.append(d)
+
+        '''
+        hasta aca, anda pero ver los valores colores y como se ubica dentor de pagina
+        '''
+
         doc.build(story)
         return response
 
