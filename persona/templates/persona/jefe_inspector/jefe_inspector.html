@@ -63,20 +63,22 @@
       </div>
     </div>
   </div>
-  <div class="panel">
-    <div class="panel-heading box" role="tab" id="headingFive">
+  <div class="panel ">
+    <div class="panel-heading" role="tab" id="headingthree">
       <h5 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>
-          <font color="#ffffff" size="2">Consultar otra Inspeccion</font>
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree"  onclick='mostrarSubmenu("sin_submenu")'>
+          <font color="#ffffff" size="2">Cargar Inspeccion</font>
         </a>
       </h5>
     </div>
-    <div id="collapseFive" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingFive">
+    <div id="collapsethree" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingthree">
       <div class="panel-body">
         <div class="container-fluid">
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              consultar otra inspecciones
+              {% block contenido_tramites_agendados_jefe_inspector %}
+              {% include "persona/jefe_inspector/tramites_agendados_jefe_inspector.html" with tramites=ctxtramitesagendados %}
+              {% endblock %}
             </div>
           </div>
         </div>
@@ -103,22 +105,20 @@
       </div>
     </div>
   </div>
-  <div class="panel ">
-    <div class="panel-heading" role="tab" id="headingthree">
+  <div class="panel">
+    <div class="panel-heading box" role="tab" id="headingFive">
       <h5 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree"  onclick='mostrarSubmenu("sin_submenu")'>
-          <font color="#ffffff" size="2">Cargar Inspeccion</font>
+        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>
+          <font color="#ffffff" size="2">Consultar otra Inspeccion</font>
         </a>
       </h5>
     </div>
-    <div id="collapsethree" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingthree">
+    <div id="collapseFive" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingFive">
       <div class="panel-body">
         <div class="container-fluid">
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              {% block contenido_tramites_agendados_jefe_inspector %}
-              {% include "persona/jefe_inspector/tramites_agendados_jefe_inspector.html" with tramites=ctxtramitesagendados %}
-              {% endblock %}
+              Consultar otra inspecciones
             </div>
           </div>
         </div>

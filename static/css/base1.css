@@ -274,21 +274,24 @@ a:link {
 /*********** tablas*************/
 
 .dataTables_wrapper .dataTables_length label{
-    color: white;
+    color: #7DD201
 }
 
 .dataTables_filter label {
-    color: white;
+    color: #7DD201
 }
 
 select {
-    color : #444444;
+    color: #7DD201
 }
 
 .dataTables_filter input {
-    color: #444444;
+    color: #7DD201
 }
 
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{
+    color: #7DD201
+}
 /*********** boton que comprime sidebar *************/
 
 .btn-collapsible-sidebar {
