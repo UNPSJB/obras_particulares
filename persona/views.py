@@ -721,19 +721,8 @@ def cargar_inspeccion(request, pk_tramite):
     id_tramite = int(pk_tramite)
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
-
-        print ("----------------Documentos de post-----------------")
-        print (documento_set)
-        print ("---------------------------------------------------")
-
-
         if documento_set.is_valid():
             for docForm in documento_set:
-
-                print ("--------------El documento es ------------------")
-                print (docForm)
-                print ("------------------------------------------------")
-
                 docForm.save(tramite=tramite)
             if "aceptar_tramite" in request.POST:
                 aceptar_inspeccion(request, pk_tramite)
