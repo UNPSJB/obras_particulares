@@ -30,7 +30,7 @@
     <div class="panel-heading box" role="tab" id="headingFive">
       <h5 class="panel-title">
         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-          <font color="#ffffff" size="2">Usuarios por grupo</font>
+          <font color="#ffffff" size="2">Detalle de todos los tramites en curso</font>
         </a>
       </h5>
     </div>
@@ -39,49 +39,34 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <canvas id="chartDirectorUsuarios" height="80" style="padding-left:25px;"></canvas>
+              <canvas id="chartDirectorTramites" height="80" style="padding-left:25px;"></canvas>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="table-responsive">
                 <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
                   <thead>
                     <tr>
-                      <th>Usuario</th>
-                      <th>Grupo</th>
-                      <th>Nombre</th>
-                      <th>Documento</th>
-                      <th>Telefono</th>
-                      <th>Mail</th>
-                      <th>Domicilio</th>
-                      <th>Actividad</th>
+                      <th>Nro</th>
+                      <th>Propietario</th>
+                      <th>Profesional</th>
+                      <th>Estado</th>
+                      <th>Medidas</th>
+                      <th>Tipo</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% if todos_los_usuarios %}
-                    {% for usuario in todos_los_usuarios %}
+                    si
+                    for
                     <tr>
-                      <td class="col-xs-1">{{usuario}}</td>
-                      <td class="col-xs-2">
-                        {% for gr in usuario.groups.values %}
-                        {{gr.name}}
-                        <br>
-                        {% endfor %}
-                      </td>
-                      <td class="col-xs-2">{{usuario.persona}}</td>
-                      <td class="col-xs-1" align="center">{{usuario.persona.dni}}</td>
-                      <td class="col-xs-1" align="center">{{usuario.persona.telefono}}</td>
-                      <td class="col-xs-2">{{usuario.persona.mail}}</td>
-                      <td class="col-xs-2">{{usuario.persona.domicilio}}</td>
-                      <td class="col-xs-1" align="center">
-                        <a href="{% url 'ver_actividad_usuario' usuario %}">
-                          <button type="button" class="btn btn-primary btn-xs" name="Ver actividad">
-                            <span class="glyphicon glyphicon-equalizer" aria-hidden="true"></span>
-                          </button>
-                        </a>
-                      </td>
+                      <td class="col-xs-1" align="center">algo</td>
+                      <td class="col-xs-2">algo</td>
+                      <td class="col-xs-3">algo</td>
+                      <td class="col-xs-2">algo</td>
+                      <td class="col-xs-1">algo</td>
+                      <td class="col-xs-2" align="center">algo</td>
                     </tr>
-                    {% endfor %}
-                    {% endif%}
+                    endfor
+                    endif
                   </tbody>
                 </table>
               </div>
@@ -112,23 +97,22 @@
 
 {% block scripts %}
     <script>
+        labelsEstados = [];
+        dataEstados = [];
 
-        labelsGrupos = [];
-        dataGrupos = [];
-
-        {% for da in datos_grupos %}
-            dataGrupos.push({{da}});
+        {% for da in datos_estados %}
+            dataEstados.push({{da}});
         {% endfor %}
 
-        {% for la in label_grupos %}
-            labelsGrupos.push("{{la}}");
+        {% for la in label_estados %}
+            labelsEstados.push("{{la}}");
         {% endfor %}
 
-        var ctx = document.getElementById("chartDirectorUsuarios");
+        var ctx = document.getElementById("chartDirectorTramites");
         var chartDirectorTramites = new Chart( ctx, {
             type: 'bar',
             data: {
-              labels: labelsGrupos,
+              labels: labelsEstados,
               datasets: [
                 {
                   backgroundColor: [
@@ -138,9 +122,10 @@
                   'rgba(44, 0, 255, 1.0)',
                   'rgba(183, 92, 224, 1.0)',
                   'rgba(255, 0, 211, 1.0)',
-                  'rgba(255, 0, 0, 1.0)'
+                  'rgba(255, 0, 0, 1.0)',
+                  'rgba(0, 128, 128, 1.0)'
                   ],
-                  data: dataGrupos
+                  data: dataEstados
                 }
               ]
             },
@@ -151,7 +136,7 @@
                 },
                 title:{
                     display:true,
-                    text:'Cantidad de usuarios por grupo',
+                    text:'Actividad de usuario por fecha',
                     fontSize: 14,
                     padding: 14,
                     fontColor:"#ffffff",
@@ -189,6 +174,7 @@
                 }
             }
         });
+
     </script>
 
     <script>

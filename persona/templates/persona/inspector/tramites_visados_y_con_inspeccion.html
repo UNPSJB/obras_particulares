@@ -63,11 +63,9 @@
             var Hora = today.getHours();
             var Minutos = today.getMinutes();
             obs = $("#datepicker").val();
-            fecha = obs+' '+Hora+':'+Minutos
-            alert(fecha);
+            fecha = obs+' '+Hora+':'+Minutos;
             id_tramite = $("#id_tramite").val();
             url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
-            alert(url);
             location.href = url;
         }
     </script>

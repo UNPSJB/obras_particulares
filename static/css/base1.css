@@ -3,13 +3,13 @@
 /* opciones generales */
 
 .color1 {
-	background: #34495e;
+	background: transparent;
 	color:#fff;
 }
 
 .color2 {
-	background: #0098db;
-	color:#ffffff;
+    background: transparent;
+	color:#7DD201;
 }
 
 .color3 {
@@ -47,7 +47,8 @@ footer {
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 12px;
-	min-height: 100vh; width: 100%;
+	min-height: 100vh;
+	width: 100%;
 	xoverflow: hidden;
 	padding-top: 140px;
 	padding-bottom: 40px;
@@ -132,7 +133,7 @@ header.sticky {
 }
 
 label {
-	color: #7DD201;
+	color: #444444;
 }
 
 a:link {
@@ -278,24 +279,25 @@ a:link {
 /*********** tablas*************/
 
 .dataTables_wrapper .dataTables_length label{
-    color: #7DD201
+    color: #444444
 }
 
 .dataTables_filter label {
-    color: #7DD201
+    color: #444444
 }
 
 select {
-    color: #7DD201
+    color: #444444
 }
 
 .dataTables_filter input {
-    color: #7DD201
+    color: #444444
 }
 
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{
-    color: #7DD201
+    color: #444444
 }
+
 /*********** boton que comprime sidebar *************/
 
 .btn-collapsible-sidebar {

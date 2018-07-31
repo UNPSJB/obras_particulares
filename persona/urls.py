@@ -70,7 +70,7 @@ urlpatterns = [
     url(r'^reporte_tramites_director_excel/', ReporteTramitesDirectorExcel.as_view(), name="reporte_tramites_director_excel"),
     url(r'^reporte_tramites_director_pdf/$', login_required(ReporteTramitesDirectorPdf.as_view()), name="reporte_tramites_director_pdf"),
     url(r'^vista_de_usuarios$', views.ver_listado_todos_usuarios, name="vista_de_usuarios"),
-
+    url(r'^ver_actividad_usuario/(?P<usuario>\w+)/$', views.ver_actividad_usuario, name="ver_actividad_usuario"),
 
     #general ----------------------------------------------------------------------------------------------------
     url(r'^cambiar_perfil/$', views.cambiar_perfil, name="cambiar_perfil"),

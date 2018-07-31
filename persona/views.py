@@ -46,7 +46,9 @@ generales ----------------------------------------------------------------------
 DATETIME = re.compile("^(\d{4})\-(\d{2})\-(\d{2})\s(\d{2}):(\d{2})$")
 
 def convertidor_de_fechas(fecha):
-
+    print ("----------------------------")
+    print (fecha)
+    print ("----------------------------")
     return datetime(*[int(n) for n in DATETIME.match(fecha).groups()])
 
 '''
@@ -153,9 +155,10 @@ def mostrar_profesional(request):
     tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
     propietario_form = FormularioPropietario()
     propietario = None
-
     if request.method == "POST" and "propietario" in request.POST:
-        if int(usuario.persona.profesional.categoria) >= int(request.POST['tipo_obra']):
+        tramites = Tramite.objects.all()
+        t = filter(lambda tramite: (tramite.domicilio == request.POST['domicilio']), tramites)
+        if int(usuario.persona.profesional.categoria) >= int(request.POST['tipo_obra']) and len(t) == 0:
             personas = Persona.objects.filter(dni=request.POST["propietario"])
             persona = personas.exists() and personas.first() or None
             documento_set = FormularioDocumentoSet(request.POST, request.FILES)
@@ -171,14 +174,19 @@ def mostrar_profesional(request):
                 Tramite.new(usuario, propietario, usuario.persona.profesional,request.POST['tipo_obra'],request.POST['medidas'],request.POST['domicilio'],lista)
                 tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
                 propietario_form = None
+                messages.add_message(request, messages.SUCCESS,'Solicitud de iniciar tramitre reallizada con exito.')
             else:
-                messages.add_message(request, messages.WARNING, 'Propietario no existe, debe darlo de alta para iniciar al tramite.')
+                messages.add_message(request, messages.ERROR, 'Propietario no existe, debe darlo de alta para iniciar al tramite.')
         else:
-            messages.add_message(request, messages.WARNING,
-                                 'Categoria del profesional no es suficiente para el tipo de tramite que desea iniciar.')
+            propietario_form = None
+            if int(usuario.persona.profesional.categoria) < int(request.POST['tipo_obra']):
+                messages.add_message(request, messages.ERROR,
+                                     'Categoria del profesional no es suficiente para el tipo de tramite que desea iniciar.')
+            else:
+                messages.add_message(request, messages.ERROR,
+                                     'Ya existe un tramite para este domicilio.')
     else:
         propietario_form = None
-
     perfil = 'css/' + usuario.persona.perfilCSS
     values = {
         "perfil": perfil,
@@ -189,7 +197,6 @@ def mostrar_profesional(request):
         'documento_set': documento_set,
         'ctxtramcorregidos': tramites_corregidos(request)
     }
-
     for form_name, submit_name in FORMS_ADMINISTRATIVO:
         KlassForm = FORMS_ADMINISTRATIVO[(form_name, submit_name)]
         if request.method == "POST" and submit_name in request.POST:
@@ -678,8 +685,9 @@ def tramites_visados_y_con_inspeccion():
 def tramites_inspeccionados_por_inspector(request):
     usuario = request.user
     estados = Estado.objects.all()
-    tipo = 9
-    estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
+    tipo = 6
+    estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and
+                                                    estado.tipo == tipo), estados)
     return estados_inspeccionados
 
 
@@ -698,6 +706,7 @@ def agendar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     fecha = convertidor_de_fechas(request.GET["msg"])
     tramite.hacer(Tramite.AGENDAR, request.user, fecha)
+    messages.add_message(request, messages.SUCCESS, "La inspeccion ha sido agendada")
     return redirect('inspector')
 
 
@@ -712,18 +721,30 @@ def cargar_inspeccion(request, pk_tramite):
     id_tramite = int(pk_tramite)
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
+
+        print ("----------------Documentos de post-----------------")
+        print (documento_set)
+        print ("---------------------------------------------------")
+
+
         if documento_set.is_valid():
             for docForm in documento_set:
+
+                print ("--------------El documento es ------------------")
+                print (docForm)
+                print ("------------------------------------------------")
+
                 docForm.save(tramite=tramite)
-                if "aceptar_tramite" in request.POST:
-                    aceptar_inspeccion(request, pk_tramite)
-                elif "rechazar_tramite" in request.POST:
-                    rechazar_inspeccion(request, pk_tramite)
-        else:
-            print("no entre al if")
-    return render(request, 'persona/inspector/cargar_inspeccion.html', {'tramite': tramite,
+            if "aceptar_tramite" in request.POST:
+                aceptar_inspeccion(request, pk_tramite)
+            elif "rechazar_tramite" in request.POST:
+                rechazar_inspeccion(request, pk_tramite)
+    else:
+        return render(request, 'persona/inspector/cargar_inspeccion.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
+                                                                        'documentos_requeridos': tipos_de_documentos_requeridos,
                                                                         "perfil": perfil})
+    return redirect('inspector')
 
 
 def rechazar_inspeccion(request, pk_tramite):
@@ -745,18 +766,7 @@ def ver_documentos_tramite_inspector(request, pk_tramite):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    contexto0 = {'tramite': tramite}
-    pk = int(pk_tramite)
-    estados = Estado.objects.all()
-    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
-    contexto1 = {'estados_del_tramite': estados_de_tramite}
-    fechas_del_estado = []
-    for est in estados_de_tramite:
-        fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"))
-    return render(request, 'persona/inspector/documentos_tramite_inspector.html', {"tramite": contexto0,
-                                                                                   "estadosp": contexto1,
-                                                                                   "fechas":fechas_del_estado,
-                                                                                   "perfil": perfil})
+    return render(request, 'persona/inspector/documentos_tramite_inspector.html', {'tramite': tramite, "perfil": perfil})
 
 
 def documentos_inspector_estado(request, pk_estado):
@@ -923,21 +933,23 @@ def ver_listado_todos_usuarios(request):
     grupos = Group.objects.all()
     label_grupos = []
     for g in grupos:
-        label_grupos.append(g.name)
+        if g.name != 'profesional' and g.name != 'propietario':
+            label_grupos.append(g.name)
     usuarios = Usuario.objects.all()
     cant_usuarios_grupos = []
     for u in usuarios:
         for gu in u.get_view_groups():
-            cant_usuarios_grupos.append(gu)
+            if str(gu) != 'profesional' and str(gu) != 'propietario':
+                cant_usuarios_grupos.append(gu)
     total_usuarios_grupos = dict(collections.Counter(cant_usuarios_grupos))
-    for lg in grupos:
+    for lg in label_grupos:
         if not total_usuarios_grupos.has_key(lg):
             total_usuarios_grupos.setdefault(lg, 0)
     datos_grupos = total_usuarios_grupos.values()
-    usuarios = Usuario.objects.all()
+    usuarios = empleados()
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
-    return render(request, 'persona/director/vista_de_usuarios.html', {'todos_los_usuarios':usuarios, "label_grupos":label_grupos, "datos_grupos":datos_grupos,  "perfil" : perfil})
+    return render(request, 'persona/director/vista_de_usuarios.html', {'todos_los_usuarios': usuarios, "label_grupos": label_grupos, "datos_grupos": datos_grupos,  "perfil": perfil})
 
 
 def detalle_de_tramite(request, pk_tramite):
@@ -966,6 +978,29 @@ def documentos_del_estado(request, pk_estado):
     contexto= {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
     return render(request, 'persona/director/documentos_del_estado.html', contexto)
 
+
+def ver_actividad_usuario(request, usuario):
+
+    '''trabajando en esto'''
+
+    usuarios = Usuario.objects.all()
+    usuario_req = filter(lambda u: (str(u) == usuario), usuarios)
+    estados = Estado.objects.all()
+    estados_usuario_req = filter(lambda estado:(str(estado.usuario) == str(usuario_req[0])), estados)
+
+    fechas_del_estado = []
+    for e in estados_usuario_req:
+        #print ("-----------------------")
+        #print (e.tipo)
+        #print (e.tramite)
+        #print (e.usuario)
+        #print (e.timestamp)
+        if (e.timestamp.strftime("%d/%m/%Y")) not in fechas_del_estado:
+            fechas_del_estado.append(e.timestamp.strftime("%d/%m/%Y"))
+
+    user = request.user
+    perfil = 'css/' + user.persona.perfilCSS
+    return render(request, 'persona/director/vista_de_actividad_usuario.html', {"perfil": perfil})
 
 class ReporteTramitesDirectorExcel(TemplateView):
 

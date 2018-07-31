@@ -11,8 +11,7 @@
         <th>Profesional</th>
         <th>Propietario</th>
         <th>Superficie</th>
-        <th>Estado</th>
-        <th>Detalle</th>
+        <th>Revisar</th>
       </tr>
     </thead>
     <tbody>
@@ -25,11 +24,10 @@
         <td class="col-xs-2">{{ estado.tramite.profesional}}</td>
         <td class="col-xs-2">{{ estado.tramite.propietario}}</td>
         <td class="col-xs-1">{{ estado.tramite.medidas }} </td>
-        <td class="col-xs-1">{{estado.tramite.estado}}</td>
         <td class="col-xs-1" align="center">
           <a href="{% url 'documentos_tramite_inspector' estado.tramite.pk %}">
             <button type="button" class="btn btn-primary btn-xs" name="Agendar">
-              <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
+              <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
             </button>
           </a>
         </td>

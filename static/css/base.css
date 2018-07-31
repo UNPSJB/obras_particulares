@@ -3,13 +3,13 @@
 /* opciones generales */
 
 .color1 {
-	background: #34495e;
+	background: transparent;
 	color:#fff;
 }
 
 .color2 {
-	background: #0098db;
-	color:#ffffff;
+    background: transparent;
+	color: tomato;
 }
 
 .color3 {
@@ -298,6 +298,11 @@ select {
 
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{
     color: white;
+}
+
+
+.paginate_button{
+    background: white;
 }
 
 /*********** boton que comprime sidebar *************/

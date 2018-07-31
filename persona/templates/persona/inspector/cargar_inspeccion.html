@@ -25,74 +25,90 @@
 
 {% block contenido %}
 <div id="contenedor_botoncalapsable_resto"></div>
-<div class="container-fluid">
-    <div class="panel panel-custom ">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
-                    <h4>Documentos del tramite:</h4>
-                    <hr>
-                    {% for documento in tramite.documentos.all %}
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            <div class="thumbnail ">
-                                <a id="single_image" href="/media/{{documento.file}}">
-                                    <img src="/media/{{documento.file}}"  width="300" height="300">
-                                </a>
-                                <p></p>
-                                <form action="">
-                                    <p align="right" >
-                                        <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
-                                    </p>
-                                </form>
-                            </div>
-                        </div>
-                        <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                            <br>
-                            <p style="font-family: Verdana, Times, serif; font-size: 17px;"> {{documento.tipo_documento}} </p>
-                            <p style="font-style: oblique;">Fecha de ingreso: {{documento.fecha}} </p>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <hr>
-                            <!---Boton para adjuntar el documento correspondiente a la inspeccion-->
-                            <form  method="post" enctype="multipart/form-data">
-                                {{ctxdocumentoset}}
-                                <div class="form-group">
-                                    <label for="">Observaciones:</label>
-                                    <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                                    <input class="form-control input-sm" id="id_observaciones" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+
+<div class="panel-group">
+	<div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box">
+			<h5 class="panel-title">
+				<a>
+					<font color="#ffffff" size="2">Documentos del tramite</font>
+				</a>
+			</h5>
+		</div>
+		<div class="panel-collapse colorp">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                {% for documento in tramite.documentos.all %}
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <div class="thumbnail ">
+                                        <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
+                                            <img src="/media/{{documento.file}}" width=300 height=300>
+                                        </a>
+                                        <br>
+                                        <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}}</p>
+                                        <form action="">
+                                            <p align="right" >
+                                                <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
+                                            </p>
+                                        </form>
+                                    </div>
                                 </div>
-                                <input type="submit" name="aceptar_tramite" value="Aceptar Insepccion">
-                                <input type="submit" name="rechazar_tramite" value="Rechazar Inspeccion">
+                                {% endfor %}
+                            <br>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box">
+			<h5 class="panel-title">
+				<a>
+					<font color="#ffffff" size="2">Documentos de la inspección</font>
+				</a>
+			</h5>
+		</div>
+		<div class="panel-collapse colorp">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <form  method="post" enctype="multipart/form-data">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    {{ctxdocumentoset}}
+                                </div>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <div class="form-group">
+                                        <label>Observaciones:</label>
+                                        <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                                        <input class="form-control input-sm" id="id_observaciones" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                                    </div>
+                                <br>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                                    <button class="btn btn-primary btn-sm" type="submit" title="Aceptar Inspección" name="aceptar_tramite">
+                                        Aceptar inspección
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" type="submit" title="Rechazar Inspección" name="rechazar_tramite">
+                                        Rechazar inspección
+                                    </button>
+                                </div>
                             </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+                            <br>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-
-    <script>
-		$("#id_correcciones").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar Documentos Corregidos',
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
-
     <script>
         var c = document.getElementById("botonConfiguracion");
 		c.style.display= '';
@@ -100,4 +116,41 @@
 		d.style.display= '';
     </script>
 
+   <script>
+		$(function () {
+			var cant_doc_requeridos = {{documentos_requeridos|length}};
+  			for(var n = 0; n < cant_doc_requeridos; n++) {
+    			var valorInput = $("input[id='id_form-"+n+"-tipo_documento']").val();
+				{% for documento in documentos_requeridos %}
+					var id = {{documento.id}}
+					if (valorInput == id){
+					    if (n == 0){
+					        var valorNombreDoc = "{{documento.nombre}}" + "*: "
+					    }
+  						if (n > 0){
+  						    var valorNombreDoc = "<br>{{documento.nombre}}</br>"
+  						}
+					}
+				{% endfor %}
+				$("label[for='id_form-"+n+"-file']").empty();
+                $("label[for='id_form-"+n+"-file']").append(valorNombreDoc);
+			}
+		});
+	</script>
+
+    <script>
+        var cant_doc_requeridos = {{ctxdocumentoset|length}};
+        for(var n = 0; n < cant_doc_requeridos; n++) {
+            $("input[id='id_form-"+n+"-file']").addClass('file')
+        }
+		$('.file').fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Seleccionar archivo',
+			showUpload: false,
+			showRemove: false
+		});
+    </script>
 {% endblock %}

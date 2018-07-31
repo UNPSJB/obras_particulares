@@ -19,10 +19,10 @@
             {% for tramite in tramites_del_inspector %}
             <tr>
                 <td class="col-xs-1">{{ tramite.id}}</td>
-                <td class="col-xs-1">{{ tramite.estado.timestamp}}</td>
-                <td class="col-xs-1">{{ tramite.tipo_obra }} </td>
-                <td class="col-xs-4">{{ tramite.profesional}}</td>
-                <td class="col-xs-4">{{ tramite.propietario}}</td>
+                <td class="col-xs-2">{{ tramite.estado.timestamp}}</td>
+                <td class="col-xs-2">{{ tramite.tipo_obra }} </td>
+                <td class="col-xs-3">{{ tramite.profesional}}</td>
+                <td class="col-xs-3">{{ tramite.propietario}}</td>
                 <td class="col-xs-1">{{ tramite.medidas }} </td>
                 <td align="center" class="col-xs-2">
                     <a href="{% url 'cargar_inspeccion' pk_tramite=tramite.id %}">

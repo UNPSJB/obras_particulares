@@ -161,7 +161,7 @@
 										{% if user.is_active%}
 											<div id="user-tools">
 												<form>
-													<label style="margin-right: 3px; font-size: 13px;">Usuario:</label>
+													<label class="color2" style="margin-right: 3px; font-size: 13px;">Usuario:</label>
 													<strong style="	font-size: 13px;">{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>
 													<a href="{%url "logout"%}" class=" color1 btn btn-primary btn-sm" title="Cerrar sesión" style="margin-left: 6px;">Salir</a>
 												</form>
