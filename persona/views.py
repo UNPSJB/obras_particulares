@@ -892,7 +892,7 @@ def empleados():
     for u in usuarios:
         lista = list(u.groups.values_list('name', flat=True))
         for i in range(len(lista)):
-            if lista[i]<>'profesional' and lista[i]<>'propietario':
+            if lista[i] != 'profesional' and lista[i] != 'propietario':
                 if u not in empleados:
                     empleados.append(u)
     return empleados
