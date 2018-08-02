@@ -52,8 +52,10 @@ def mostrar_propietario(request):
     '''
     Funcion mostrar_propietario
     Funcion que se encarga de mostrar los tramites de un propietario determinado
-    :param request: Requerimiento http.
-    :return contexto: lista de tramites del propietario.
+    Args:
+        request: Requerimiento http.
+    Returns:
+        contexto: lista de tramites del propietario.
     '''
     contexto = {
         "ctxtramitespropietario": listado_tramites_propietario(request)
