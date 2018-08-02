@@ -9,7 +9,9 @@
 
 .color2 {
     background: transparent;
-	color: tomato;
+	color:#06c2f4;
+}
+
 }
 
 .color3 {
@@ -31,15 +33,8 @@ html {
   position: relative;
 }
 
-prefooter {
-	position: absolute;
-    bottom: 72px;
-    width: 100%;
-}
-
 footer {
-	/*background:#268e37;*/
-	background-image: linear-gradient(to right, #051937, #003253, #004d6c, #006a82, #008793);
+	background: #212930;
 	color:#fff;
 	position: absolute;
     bottom: 0;
@@ -47,9 +42,8 @@ footer {
 }
 
 .prehead {
-	/*background:#268e37;*/
-	background-image: linear-gradient(to right, #004d7a, #007aa5, #00a7a3, #00ce74, #a8eb12);
-	color:#fff;
+	background:#fff;
+	color:#212930;
 }
 
 body {
@@ -58,16 +52,10 @@ body {
 	min-height: 100vh; width: 100%;
 	xoverflow: hidden;
 	padding-top: 140px;
-    padding-bottom: 40px;
-	/*color: whitesmoke;
-	font-size: 16px;
-	font-family: 'Lato';*/
-    background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
-	/*background:
-		radial-gradient(circle at 1.98% 14.97%, #556270, transparent 100%),
-		radial-gradient(circle at 98.02% 52.96%, #FF6B6B, transparent 100%),
-		radial-gradient(circle at 50% 50%, #4a2735, #4a2735 100%);*/
+	padding-bottom: 40px;
+	background: #ffffff;
 }
+
 
 /* color del nav igual al del header*/
 
@@ -76,20 +64,21 @@ body {
 }
 
 header{
-	background:#2c3e50;
-	/*background:#04142b;*/
+	background: #212930;
 	color: #ffffff;
 	transition: 0.5s;
 }
 
+
 img.logo {
 	height: 50px;
+
 }
 
-/* eso es para modificar el header cuando top */
+/* eso es para modifical el header cuando top */
 
 header.sticky {
-	/*position: fixed;*/
+	position: fixed;
 	left: 0; right: 0;
 	height: 60px;
 	padding: 0px 0 10px 0;
@@ -99,6 +88,7 @@ header.sticky {
 
 .sticky img.logo {
 	height: 40px;
+
 }
 
 .pad18 {
@@ -112,18 +102,18 @@ header.sticky {
 /* configuracion panel gris*/
 
 .panel-group > .panel {
-    border-color: #444444;
+    border-color: #606a74;
     border-radius: 0px;
-    background:#444444;
+    background: #606a74;
 }
 
 .panel-custom {
-    border-color: #444444;
+    border-color: #606a74;
     border-radius: 0px;
-    background:#444444;
+    background: #606a74;
 }
 .panel-custom > .panel-heading-custom {
-    background: #444444;
+    background: #606a74;
     border-radius: 0px;
 }
 
@@ -137,17 +127,18 @@ header.sticky {
 }
 
 .box:hover {
-  background-color: #3a3a3a;
+  background-color: #414b56;
   cursor: pointer;
 }
 
 label {
-	color: tomato;
+	color: #ffffff;
 }
 
 a:link {
 	text-decoration:none;
 }
+
 
 /* menu lateral */
 
@@ -161,18 +152,18 @@ a:link {
 	/*width: 200px;*/
 	width: 100%;
 	margin-right: 35px;
-	background-color: #444;
+	background-color: #606a74;
 	list-style-type: none;
 	padding-left: 0;
-	color: tomato;
+	color: #06c2f4;
 }
 
 .sidebar li a {
-	color: white;
+	color: #fff;
 	box-sizing: border-box; }
 
 .sidebar li a:hover {
-	color: tomato; }
+	color: #fff; }
 
 /* sidebar 1 */
 
@@ -185,21 +176,22 @@ a:link {
 
 .sidebar-1 li a:hover,
 .sidebar-1 li a.current {
-	background-color: #3a3a3a;
-	border-left: 5px solid tomato;
+	color: #06c2f4;
+	background-color: #414b56;
+ 	border-left: 5px solid #06c2f4;
 }
 
 .sidebar-1 li a:focus{
-	color: tomato;
-	background-color: #3a3a3a;
-	border-left: 5px solid tomato;
+	color: #06c2f4;
+	background-color: #414b56;
+	border-left: 5px solid #06c2f4;
 }
 
 /*Subemu lateral*/
 
 .sidebar-2 li a {
 	color: white;
-	background-color: #5E5E65;
+	background-color: #cbd1d4;
 	box-sizing: border-box; }
 
 
@@ -212,18 +204,19 @@ a:link {
 
 .sidebar-2 li a:hover,
 .sidebar-2 li a.current {
-	color: tomato;
-	background-color: #3a3a3a;
-	border-left: 3px solid tomato;
+	color: #06c2f4;
+	background-color: #606a74;
+	border-left: 3px solid #06c2f4;
 }
 
 .sidebar-2 li a:focus{
-	color: tomato;
-	background-color: #3a3a3a;
-	border-left: 3px solid tomato;
+	color: #06c2f4;
+	background-color: #606a74;
+	border-left: 3px solid #06c2f4;
 }
 
 /* ----------------------------------cryspy-----------------------------*/
+
 /* Ocultar asterisco de campo obligatorio*/
 
 .asteriskField {
@@ -300,7 +293,6 @@ select {
     color: white;
 }
 
-
 .paginate_button{
     background: white;
 }
@@ -316,12 +308,12 @@ select {
     -moz-border-radius: 50px;
     border-radius: 50px;
     font-size:12px;
-    border:2px solid #cfdcec;
+    border:2px solid #99a3a6;
     position: absolute;
     top: -30.5px;
     left: 5px;
     margin-left: 15px;
-    color: #fff;
+    color: #99a3a6;
     background: transparent;
 	-webkit-transition: -webkit-transform 200ms ease-out;
 	-moz-transition: -moz-transform 200ms ease-out;
@@ -329,7 +321,8 @@ select {
 }
 
 .btn-collapsible-sidebar:hover{
-    background-image: radial-gradient(circle, #25b917, #1daa14, #159c11, #0c8e0e, #03800b);
+    background: #3d4242;
+    color: #ffffff;
     padding: 0px 0px 0px 3px;
     -moz-transform: rotate(180deg);
     -webkit-transform: rotate(180deg);
@@ -366,16 +359,17 @@ select {
     font-size:11px;
     line-height:32px;
     float:left;
-    border:2px solid #cfdcec;
+    border:2px solid #99a3a6;
     background: transparent;
-    color: #fff;
+    color: #99a3a6;
     position: absolute;
     text-align: center;
     line-height: 50%;
 }
 
 .botonredondoayuda:hover{
-    background-image: radial-gradient(circle, #25b917, #1daa14, #159c11, #0c8e0e, #03800b);
+    background: #3d4242;
+    color: #ffffff;
 }
 
 /***********+ burbuja ayuda*************/
@@ -387,7 +381,7 @@ select {
     color: #444444;
     background: #fff;
     border-radius: 10px;
-    border:2px solid #03800b;
+    border:2px solid #444444;
     text-align: right;
 
     transition-property: visibility;
@@ -408,4 +402,3 @@ select {
     border-left: 9px solid transparent;
     border-right: 9px solid transparent;
 }
-

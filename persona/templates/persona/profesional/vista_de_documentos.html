@@ -2,81 +2,90 @@
 {% load staticfiles %}
 
 {% block estilos %}
+<link rel="stylesheet" type="text/css" href="{% static perfil %}">
+<style>
+    table thead tr th {
+        text-align: center;
+    }
+</style>
+{% endblock %}
 
-    <style>
-     table thead tr th {
-      text-align: center;
-     }
-
-    </style>
+{% block imagenusuario %}
+<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
 {% endblock %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="{% url 'profesional'  %}" class="current"><font color="tomato">Profesional</font></a></li>
-		</font>
-	</ul>
+<div id="contenedor_botoncalapsable_sidebar">
+	<button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
+		<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+	</button>
+</div>
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="{% url 'profesional'  %}" class="current"><font>Profesional</font></a></li>
+    </font>
+</ul>
 {% endblock %}
 
 {% block contenido %}
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-	  <div class="panel">
-		<div class="panel-heading box" role="tab" id="headingFive">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			  <font color="#ffffff" size="2">Historial del tramite</font>
-			</a>
-		  </h5>
-		</div>
-		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-		  <div class="panel-body">
-			<div class="container-fluid">
-				<div class="row">
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        {% if tramite.tramite %}
-                                <ol>
-                                    <label>Tramite nro:</label>
-                                    <li>{{tramite.tramite.id}}</li>
-                                    <label>Profesional:</label>
-                                    <li>{{tramite.tramite.profesional}}</li>
-                                    <label>Superficie:</label>
-                                    <li>{{tramite.tramite.medidas}}</li>
-                                    <label>Tipo de obra:</label>
-                                    <li>{{tramite.tramite.tipo_obra}}</li>
-                                    <label>Estado actual:</label>
-                                    <li>{{tramite.tramite.estado}}</li>
-                                </ol>
-                        {% endif%}
-                    </div>
-                    <el class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                        <canvas id="myChart" height=143></canvas>
-                    </el>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="table-responsive">
-                              <table  class="table-bordered table-striped table-hover">
-                                  <thead>
-                                      <tr>
-                                          <th>Estado</th>
-                                          <th>Usuario</th>
-                                          <th>Fecha</th>
-                                          <th>Progreso</th>
-                                          <th>Ver</th>
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-                                  {% if estadosp %}
-                                      {% for estado in estadosp.estados_del_tramite %}
+<div id="contenedor_botoncalapsable_resto"></div>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+    <div class="panel">
+        <div class="panel-heading box" role="tab" id="headingFive">
+            <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    <font color="#ffffff" size="2">Historial del tramite</font>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            {% if tramite.tramite %}
+                            <ol>
+                                <label>Tramite nro:</label>
+                                <li>{{tramite.tramite.id}}</li>
+                                <label>Profesional:</label>
+                                <li>{{tramite.tramite.profesional}}</li>
+                                <label>Superficie:</label>
+                                <li>{{tramite.tramite.medidas}}</li>
+                                <label>Tipo de obra:</label>
+                                <li>{{tramite.tramite.tipo_obra}}</li>
+                                <label>Estado actual:</label>
+                                <li>{{tramite.tramite.estado}}</li>
+                            </ol>
+                            {% endif%}
+                        </div>
+                        <el class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                            <canvas id="myChart" height=143></canvas>
+                        </el>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="table-responsive">
+                                <table  class="table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Estado</th>
+                                            <th>Usuario</th>
+                                            <th>Fecha</th>
+                                            <th>Progreso</th>
+                                            <th>Ver</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if estadosp %}
+                                        {% for estado in estadosp.estados_del_tramite %}
                                         <tr>
                                             <td class="col-xs-1" align="center">{{estado.tipo}}</td>
                                             <td class="col-xs-2">{{estado.usuario}}</td>
                                             <td class="col-xs-2">{{estado.timestamp}}</td>
                                             <td class="col-xs-6" >
-                                               <div class="progress" style="position: relative; top: 0.7em;">
-                                                   <div id="{{estado.tipo}} - {{estado.timestamp}}" class="progress-bar progress-bar-success"  role="progressbar" style="width:0%;">
-                                                       <span>%</span>
-                                                   </div>
-                                               </div>
+                                                <div class="progress" style="position: relative; top: 0.7em;">
+                                                    <div id="{{estado.tipo}} - {{estado.timestamp}}" class="progress-bar progress-bar-success"  role="progressbar" style="width:0%;">
+                                                        <span>%</span>
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td align="center" class="col-xs-1">
                                                 <a href="{% url 'documento_de_estado' estado.id%}">
@@ -86,30 +95,29 @@
                                                 </a>
                                             </td>
                                         </tr>
-                                      {% endfor %}
-                                  {% endif%}
-                                  </tbody>
-                              </table>
-                            <br>
+                                        {% endfor %}
+                                        {% endif%}
+                                    </tbody>
+                                </table>
+                                <br>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                            <a href="javascript:history.back(-1);">
+                                <button type="button" class="btn btn-primary" name="Volver">
+                                    Volver
+                                </button>
+                            </a>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                        <a href="javascript:history.back(-1);">
-                            <button type="button" class="btn btn-primary" name="Volver">
-                                Volver
-                            </button>
-                        </a>
-                    </div>
-			    </div>
-			</div>
-          </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
-
     <script>
         $("[id^='1 -']").css('width', 12 + '%');
         $("[id^='2 -']").css('width', 25 + '%');
@@ -125,7 +133,6 @@
     </script>
 
     <script>
-
         var timeFormat = 'DD/MM/YYYY';
         var datos = [];
         var label_fechas = [];
@@ -213,9 +220,13 @@
                 }
             }
         });
-
     </script>
 
-
+    <script>
+        var c = document.getElementById("botonConfiguracion");
+		c.style.display= '';
+		var d = document.getElementById("imagenusuario");
+		d.style.display= '';
+    </script>
 {% endblock %}
 

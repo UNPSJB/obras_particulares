@@ -9,6 +9,7 @@ from django import template
 register = template.Library()
 
 from openpyxl import load_workbook
+
 """from django_excel import *
 import pyexcel as pe"""
 from os.path import basename
@@ -19,13 +20,15 @@ from decimal import Decimal
 class TramiteBaseManager(models.Manager):
     pass
 
+
 class TramiteQuerySet(models.QuerySet):
     def en_estado(self, estados):
         if type(estados) != list:
             estados = [estados]
         return self.annotate(max_id=models.Max('estados__id')).filter(
             estados__id=models.F('max_id'),
-            estados__tipo__in=[ e.TIPO for e in estados])
+            estados__tipo__in=[e.TIPO for e in estados])
+
 
 TramiteManager = TramiteBaseManager.from_queryset(TramiteQuerySet)
 
@@ -44,17 +47,18 @@ class Tramite(models.Model):
     # Finalizar la obra esto es cuando se pide un final de obra por el ...
     FINALIZAR = "finalizar"
     SOLICITAR_FINAL_OBRA = "solicitar_final_obra"
-    propietario = models.ForeignKey(Propietario,blank=True, null=True,unique=False)
-    profesional= models.ForeignKey(Profesional,unique=False)
+    propietario = models.ForeignKey(Propietario, blank=True, null=True, unique=False)
+    profesional = models.ForeignKey(Profesional, unique=False)
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
-    domicilio = models.CharField(max_length=50,blank=True)
-    monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
-    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
+    domicilio = models.CharField(max_length=50, blank=True)
+    monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     objects = TramiteManager()
 
     def __str__(self):
-        return "Numero de tramite: {} - Profesional: {} - Propietario: {}" .format(self.pk, self.profesional, self.propietario)
+        return "Numero de tramite: {} - Profesional: {} - Propietario: {}".format(self.pk, self.profesional,
+                                                                                  self.propietario)
 
     def saldo_restante_a_pagar(self):
         if self.monto_a_pagar == None or self.monto_pagado == None:
@@ -69,10 +73,11 @@ class Tramite(models.Model):
             return False
 
     @classmethod
-    def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio,documentos):
+    def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio, documentos):
         if any(map(lambda d: d.tipo_documento.requerido != TipoDocumento.INICIAR, documentos)):
             raise Exception("Un documento no es de tipo iniciar")
-        t = cls(domicilio=domicilio, propietario=propietario, profesional=profesional, medidas=medidas, tipo_obra=TipoObra.objects.get(pk=tipo_obra))
+        t = cls(domicilio=domicilio, propietario=propietario, profesional=profesional, medidas=medidas,
+                tipo_obra=TipoObra.objects.get(pk=tipo_obra))
         t.save()
         for doc in documentos:
             doc.tramite = t
@@ -101,9 +106,8 @@ class Tramite(models.Model):
         else:
             raise Exception("Tramite: La accion solicitada no se pudo realizar")
 
-
     def calcular_monto_pagado(self, monto):
-        if (self.monto_pagado<=0):
+        if (self.monto_pagado <= 0):
             self.monto_pagado = monto
         else:
             self.monto_pagado = self.monto_pagado + monto
@@ -121,7 +125,6 @@ class Estado(models.Model):
     usuario = models.ForeignKey(Usuario)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-
     class Meta:
         get_latest_by = 'timestamp'
 
@@ -130,9 +133,8 @@ class Estado(models.Model):
             self.tipo = self.__class__.TIPO
         super(Estado, self).save(*args, **kwargs)
 
-    def agregar_documentacion(self,documentos_requeridos):
+    def agregar_documentacion(self, documentos_requeridos):
         self.tramite.documentos.add(documento)
-
 
     def related(self):
         return self.__class__ != Estado and self or getattr(self, self.get_tipo_display())
@@ -141,17 +143,18 @@ class Estado(models.Model):
     def register(cls, klass):
         cls.TIPOS.append((klass.TIPO, klass.__name__.lower()))
 
-
     def get_usuario(self):
         return self.usuario
 
     def __str__(self):
-        return "{}" .format(self.__class__.__name__)
+        return "{}".format(self.__class__.__name__)
+
+
 
 class Iniciado(Estado):
     TIPO = 1
     CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
-    observacion = models.CharField(max_length=100, default=CADENA_DEFAULT,blank=True)
+    observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True)
 
     def aceptar(self, tramite):
         return Aceptado(tramite=tramite)
@@ -173,6 +176,7 @@ class Aceptado(Estado):
     def __str__(self):
         return self.__class__.__name__
 
+
 class Visado(Estado):
     TIPO = 3
 
@@ -184,10 +188,11 @@ class Corregido(Estado):
     TIPO = 4
     CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
+
     def corregir(self, tramite, observacion=None):
-        #e = Iniciado(tramite=tramite, observacion=observacion)
-        #e.agregar_documentacion(documentos_requeridos=documentos)
-        #return e
+        # e = Iniciado(tramite=tramite, observacion=observacion)
+        # e.agregar_documentacion(documentos_requeridos=documentos)
+        # return e
         return Iniciado(tramite=tramite, observacion=observacion)
 
 
@@ -203,7 +208,6 @@ class Agendado(Estado):
 class ConInspeccion(Estado):
     TIPO = 6
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
-
 
     def solicitar_final_obra(self, tramite):
         return FinalObraSolicitado(tramite=tramite, final_obra_total=False)
@@ -224,8 +228,7 @@ class ConInspeccion(Estado):
 class Inspeccionado(Estado):
     TIPO = 7
 
-
-    def solicitar_final_obra(self, tramite):#solicitar final de obra
+    def solicitar_final_obra(self, tramite):  # solicitar final de obra
         if self.tramite.esta_pagado():  # Tramite.objects.get(pk=tramite.pk).pago_completo
             return FinalObraSolicitado(tramite=tramite, final_obra_total=True)
         else:
@@ -243,12 +246,15 @@ class FinalObraSolicitado(Estado):
         else:
             raise Exception("Todavia no se puede otorgar el final de obra")
 
+
 class Finalizado(Estado):
     TIPO = 9
 
 
-for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, Finalizado, ConInspeccion, FinalObraSolicitado]:
+for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, Finalizado, ConInspeccion,
+              FinalObraSolicitado]:
     Estado.register(klass)
+
 
 class Pago(models.Model):
     tramite = models.ForeignKey(Tramite)
@@ -264,15 +270,16 @@ class Pago(models.Model):
 
         datos = archivo.read()
 
-        #La siguientes linea arma un diccionario para poder recorrer el archivo mejor
-        spliter = lambda datos: [ l.split('"')[:2] for l in datos.splitlines()[1:]]
+        # La siguientes linea arma un diccionario para poder recorrer el archivo mejor
+        spliter = lambda datos: [l.split('"')[:2] for l in datos.splitlines()[1:]]
 
         datos_diccionario = []
 
-        #Esta linea arma una lista de cadenas de la siguiente forma: {'monto': xxxxxx, 'id': xx}
+        # Esta linea arma una lista de cadenas de la siguiente forma: {'monto': xxxxxx, 'id': xx}
         try:
             for idt, monto in spliter(datos):
-                datos_diccionario.append({"id": int(idt[:-1]), "monto": Decimal(monto[1:].replace(".","").replace(",", "."))})
+                datos_diccionario.append(
+                    {"id": int(idt[:-1]), "monto": Decimal(monto[1:].replace(".", "").replace(",", "."))})
 
             for linea in datos_diccionario:
                 try:

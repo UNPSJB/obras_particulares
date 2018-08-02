@@ -1,42 +1,38 @@
 {% load staticfiles %}
 
-
 {% block contenido_propietario %} 
-  <div class="table-responsive">
-      <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-          <!-- Cabecera -->
-          <thead>
-              <tr>
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                  <th>CUIL</th>
-                  <th>Telefono</th>
-                  <th>Email</th>
-                  <th>Propietario</th>
-              </tr>
-          </thead>
-          <!-- Mostramos los datos de las tablas -->
-          <tbody>
-          {% if propietarios %}
-              {% for propietario in propietarios %}
-                <tr>
-                    <td class="col-xs-2">{{ propietario.persona.nombre }}</td>
-                    <td class="col-xs-2">{{ propietario.persona.apellido }} </td>
-                    <td class="col-xs-2">{{ propietario.persona.cuil }}</td>
-                    <td class="col-xs-2">{{ propietario.persona.telefono }}</td>
-                    <td class="col-xs-2">{{ propietario.persona.mail}}</td>
-                    <td align="center" class="col-xs-1">
-                    <a href="{% url 'crear_usuario' pk_propietario=propietario.persona.id %}">
-                      <button type="button" class="btn btn-primary btn-xs" name="habilitar">
-                        <span class="glyphicon glyphicon-ok" aria-hidden="true"> Habilitar</span>
-                      </button>
-                    </a>
-
-                  </td>
-                </tr>
-              {% endfor %}
-          {% endif%}
-          </tbody>
-      </table>
-  </div>
+<div class="table-responsive">
+  <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>CUIL</th>
+        <th>Telefono</th>
+        <th>Email</th>
+        <th>Propietario</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if propietarios %}
+      {% for propietario in propietarios %}
+      <tr>
+        <td class="col-xs-2">{{ propietario.persona.nombre }}</td>
+        <td class="col-xs-2">{{ propietario.persona.apellido }} </td>
+        <td class="col-xs-2">{{ propietario.persona.cuil }}</td>
+        <td class="col-xs-2">{{ propietario.persona.telefono }}</td>
+        <td class="col-xs-2">{{ propietario.persona.mail}}</td>
+        <td align="center" class="col-xs-1">
+          <a href="{% url 'crear_usuario' pk_propietario=propietario.persona.id %}">
+            <button type="button" class="btn btn-primary btn-xs" name="habilitar">
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"> Habilitar</span>
+            </button>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+      {% endif%}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

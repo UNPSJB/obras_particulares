@@ -3,99 +3,95 @@
 {% load crispy_forms_tags%}
 
 {% block estilos %}
+<link rel="stylesheet" type="text/css" href="{% static perfil %}">
+{% endblock %}
 
+{% block imagenusuario %}
+<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
 {% endblock %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="javascript:history.back(-1);" class="current"><font color="tomato">Jefe Inspector</font></a></li>
-		</font>
-	</ul>
+<div id="contenedor_botoncalapsable_sidebar">
+    <button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
+        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+    </button>
+</div>
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="javascript:history.back(-1);" class="current"><font>Jefe Inspector</font></a></li>
+    </font>
+</ul>
 {% endblock %}
 
-
 {% block contenido %}
-
-    <div class="container-fluid">
-        <div class="panel panel-custom ">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <h4 style="color: white;">Documentos del tramite:</h4>
-                        <hr>
-                        {% for documento in tramite.documentos.all %}
-                            <div class="col-md-3">
-				                <div class="thumbnail ">
-                                    <a href="/media/{{documento.file}}" class="thumbnail ">
-                                        <img src="/media/{{documento.file}}" class="img-thumbnail" width="200" height="200">
-                                    </a>
-                                    <font color="#337ab7" size="4">{{documento.tipo_documento}}</font>
-                                    <form action="">
-                                        <p align="right" >
-                                        <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save-file"></i><span> Descargar</span></a>
-                                        </p>
-                                    </form>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <hr>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div class="form-group">
-                                        <label for="">Cargar Documentos corregidos:</label>
-                                        <input class="file" id="id_correcciones"  type="file" data-preview-file-type="any" multiple="true" title="Cargar documentos corregidos" required />
-                                    </div>
-                                <hr>
-
-                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8">
-                                        <div class="form-group">
-                                            <label for="">Observaciones:</label>
-                                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                                            <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
-                                        </div>
-                                    </div>
-
-                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12">
-
-                                        <a href="{% url 'aceptar_inspeccion_final' pk_tramite=tramite.id  %}">
-                                            <button type="button" class="btn btn-primary" name="Aceptar">
-                                                Aprobar inspeccion
-                                            </button>
-                                        </a>
-                                        <a href="javascript:prueba();">
-                                            <button type="button" class="btn btn-primary" name="Rechazar">
-                                                Rechazar inspeccion
-                                            </button>
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <script>
-                                    function prueba(){
-                                        obs = $("#id_observaciones").val();
-                                        id_tramite = $("#id_tramite").val();
-                                        url = '/persona/rechazar_inspeccion/'+id_tramite+'/?msg='+obs;
-                                        alert(url);
-                                        location.href = url;
-                                    }
-                                </script>
-
-                            </div>
+<div id="contenedor_botoncalapsable_resto"></div>
+<div class="container-fluid">
+    <div class="panel panel-custom ">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <h4 style="color: white;">Documentos del tramite:</h4>
+                    <hr>
+                    {% for documento in tramite.documentos.all %}
+                    <div class="col-md-3">
+                        <div class="thumbnail ">
+                            <a href="/media/{{documento.file}}" class="thumbnail ">
+                                <img src="/media/{{documento.file}}" class="img-thumbnail" width="200" height="200">
+                            </a>
+                            <font color="#337ab7" size="4">{{documento.tipo_documento}}</font>
+                            <form action="">
+                                <p align="right" >
+                                    <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save-file"></i><span> Descargar</span></a>
+                                </p>
+                            </form>
                         </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <hr>
+                            <div class="form-group">
+                                <label>Cargar Documentos corregidos:</label>
+                                <input class="file" id="id_correcciones"  type="file" data-preview-file-type="any" multiple="true" title="Cargar documentos corregidos" required />
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <label>Observaciones:</label>
+                                <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                                <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                            </div>
+                            <a href="{% url 'aceptar_inspeccion_final' pk_tramite=tramite.id  %}">
+                                <button type="button" class="btn btn-primary" name="Aceptar">
+                                    Aprobar inspeccion
+                                </button>
+                            </a>
+                            <a href="javascript:prueba();">
+                                <button type="button" class="btn btn-danger" name="Rechazar">
+                                    Rechazar inspeccion
+                                </button>
+                            </a>
+                        </div>
+                        <br>
+                        <script>
+                            function prueba(){
+                                obs = $("#id_observaciones").val();
+                                id_tramite = $("#id_tramite").val();
+                                url = '/persona/rechazar_inspeccion/'+id_tramite+'/?msg='+obs;
+                                alert(url);
+                                location.href = url;
+                            }
+                        </script>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+</div>
 {% endblock %}
 
 {% block scripts %}
-
     <script>
 		$("#id_correcciones").fileinput({
 			showCaption: false,
@@ -108,4 +104,10 @@
 		});
 	</script>
 
+    <script>
+        var c = document.getElementById("botonConfiguracion");
+		c.style.display= '';
+		var d = document.getElementById("imagenusuario");
+		d.style.display= '';
+    </script>
 {% endblock %}

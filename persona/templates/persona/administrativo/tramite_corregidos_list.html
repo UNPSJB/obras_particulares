@@ -1,57 +1,54 @@
 {% load staticfiles %}
 
-
 {% block contenido_tramite_corregidos %}
-  <div class="table-responsive">
-      <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-          <!-- Cabecera -->
-          <thead>
-              <tr>
-                  <th>Numero</th>
-                  <th>Medidas</th>
-                  <th>Tipo de Obra</th>
-                  <th>Estado</th>
-                  <th>Profesional</th>
-                  <th>Propietario</th>
-                  <th>Ver datos tramite</th>
-                  <th>Habilitar final de obra</th>
-              </tr>
-          </thead>
-          <!-- Mostramos los datos de las tablas -->
-          <tbody>
-          {% if tramites %}
-              {% for tramite in tramites %}
-                <tr>
-                  <td class="col-xs-1">{{ tramite.numero }}</td>
-                  <td class="col-xs-1">{{ tramite.medidas }} </td>
-                  <td class="col-xs-1">{{ tramite.tipoObra }}</td>
-                  <td class="col-xs-1">{{ tramite.estado }}</td>
-                  <td class="col-xs-3">{{ tramite.profesiona.persona.nombre }}
-                      {{ tramite.profesiona.persona.apellido }}
-                      {{ tramite.profesiona.persona.profesion }}
-                      {{ tramite.profesiona.persona.matricula }}
-                  </td>
-                  <td class="col-xs-3">{{ persona.propietario.nombre }}
-                      {{ persona.propietario.apellido }}
-                  </td >
-                  <td align="center" class="col-xs-1">
-                    <a href="">
-                      <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
-                        Ver certificado
-                      </button>
-                    </a>
-                  </td>
-                  <td align="center" class="col-xs-1">
-                    <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
-                      <button type="button" class="btn btn-primary btn-xs" name="habilitar">
-                        Habilitar
-                      </button>
-                    </a>
-                  </td>
-                </tr>
-              {% endfor %}
-          {% endif%}
-          </tbody>
-      </table>
-  </div>
+<div class="table-responsive">
+  <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+    <thead>
+      <tr>
+        <th>Numero</th>
+        <th>Medidas</th>
+        <th>Tipo de Obra</th>
+        <th>Estado</th>
+        <th>Profesional</th>
+        <th>Propietario</th>
+        <th>Ver datos tramite</th>
+        <th>Habilitar final de obra</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if tramites %}
+      {% for tramite in tramites %}
+      <tr>
+        <td class="col-xs-1">{{ tramite.numero }}</td>
+        <td class="col-xs-1">{{ tramite.medidas }} </td>
+        <td class="col-xs-1">{{ tramite.tipoObra }}</td>
+        <td class="col-xs-1">{{ tramite.estado }}</td>
+        <td class="col-xs-3">{{ tramite.profesiona.persona.nombre }}
+          {{ tramite.profesiona.persona.apellido }}
+          {{ tramite.profesiona.persona.profesion }}
+          {{ tramite.profesiona.persona.matricula }}
+        </td>
+        <td class="col-xs-3">{{ persona.propietario.nombre }}
+          {{ persona.propietario.apellido }}
+        </td >
+        <td align="center" class="col-xs-1">
+          <a href="">
+            <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
+              Ver certificado
+            </button>
+          </a>
+        </td>
+        <td align="center" class="col-xs-1">
+          <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
+            <button type="button" class="btn btn-primary btn-xs" name="habilitar">
+              Habilitar
+            </button>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+      {% endif%}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

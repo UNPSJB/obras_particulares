@@ -52,29 +52,21 @@
                       <th>Estado</th>
                       <th>Medidas</th>
                       <th>Tipo</th>
-                      <th>Detalle</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {% if todos_los_tramites %}
-                    {% for tramite in todos_los_tramites %}
+                    si
+                    for
                     <tr>
-                      <td class="col-xs-1" align="center">{{tramite.id}}</td>
-                      <td class="col-xs-2">{{tramite.propietario}}</td>
-                      <td class="col-xs-3">{{tramite.profesional}}</td>
-                      <td class="col-xs-2">{{tramite.estado}}</td>
-                      <td class="col-xs-1">{{tramite.medidas}}</td>
-                      <td class="col-xs-2" align="center">{{tramite.tipo_obra}}</td>
-                      <td align="center" class="col-xs-1">
-                        <a href="{% url 'detalle_de_tramite' tramite.pk %}">
-                          <button type="button" class="btn btn-primary btn-xs" name="detalle">
-                            <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
-                          </button>
-                        </a>
-                      </td>
+                      <td class="col-xs-1" align="center">algo</td>
+                      <td class="col-xs-2">algo</td>
+                      <td class="col-xs-3">algo</td>
+                      <td class="col-xs-2">algo</td>
+                      <td class="col-xs-1">algo</td>
+                      <td class="col-xs-2" align="center">algo</td>
                     </tr>
-                    {% endfor %}
-                    {% endif%}
+                    endfor
+                    endif
                   </tbody>
                 </table>
               </div>
@@ -144,7 +136,7 @@
                 },
                 title:{
                     display:true,
-                    text:'Cantidad de tramites por estado',
+                    text:'Actividad de usuario por fecha',
                     fontSize: 14,
                     padding: 14,
                     fontColor:"#ffffff",

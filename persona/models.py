@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
 from random import choice
 
+
 class Rol(models.Model):
     '''
     Correspondiente a un rol dentro del sistema
@@ -10,18 +11,18 @@ class Rol(models.Model):
     class Meta:
         abstract = True
 
+
 class Profesional(Rol):
     '''
     Correspondiente a un rol profesional dentro del sistema
     '''
     CATEGORIAS = [
-
         (1, 'Categoria 1'),
         (2, 'Categoria 2'),
         (3, 'Categoria 3'),
     ]
     matricula = models.CharField(max_length=10)
-    profesion = models.CharField(max_length=10)  # ["Maestro Mayor de Obra", "Ingeniero Civil", "Arquitecto"]
+    profesion = models.CharField(max_length=10)
     categoria = models.IntegerField(choices=CATEGORIAS)
     certificado = models.ImageField(upload_to='certificado/', null=True)
 
@@ -62,21 +63,24 @@ class Usuario(Rol, AbstractUser):
     def get_view_groups(self):
         return self.groups.all()
 
+
 class Persona(models.Model):
     '''
     Correspondiente al modelo de persona dentro del sistema
     '''
     SEXOS = [{'F', 'Femenino'}, {'M', 'Masculino'}]
-    dni = models.IntegerField(unique = True)
-    apellido = models.CharField(max_length = 50)
-    nombre = models.CharField(max_length = 50)
-    mail = models.EmailField(max_length = 40)
-    cuil = models.CharField(max_length = 14)    #el ultimo numero va a ser 00..09
-    domicilio = models.CharField(max_length = 50)
-    telefono = models.CharField(max_length = 15)
+    dni = models.IntegerField(unique=True)
+    apellido = models.CharField(max_length=50)
+    nombre = models.CharField(max_length=50)
+    mail = models.EmailField(max_length=40)
+    cuil = models.CharField(max_length=14)
+    domicilio = models.CharField(max_length=50)
+    telefono = models.CharField(max_length=15)
     profesional = models.OneToOneField(Profesional, blank=True, null=True)
     propietario = models.OneToOneField(Propietario, blank=True, null=True)
     usuario = models.OneToOneField(Usuario, blank=True, null=True)
+    perfilCSS = models.CharField(max_length=10, default="base.css")
+    perfilFoto = models.ImageField(upload_to='fotoperfil/%s/', blank=True, default='fotoperfil/silueta_usuario.png')
 
     def __str__(self):
         return "{}, {}" .format(self.apellido, self.nombre)
@@ -107,6 +111,33 @@ class Persona(models.Model):
     def get_propietario(self):
         return self.propietario
 
+    def modificarGrupo(self, grupo):
+        for gr in self.usuario.groups.all():
+            s = Group.objects.get(name=gr)
+            if str(s) != "propietario" and str(s) != "profesional":
+                self.usuario.groups.remove(s)
+        g = Group.objects.get(name=grupo)
+        self.usuario.groups.add(g)
+        return self.usuario
+
+    def modificarPerfilCSS(self, perfilseleccionado):
+        self.perfilCSS = perfilseleccionado
+        self.save()
+
+    def modificarUsuario(self, mail, domicilio, telefono, imagen):
+        if mail:
+            self.mail = mail
+        if domicilio:
+            self.domicilio = domicilio
+        if telefono:
+            self.telefono = telefono
+        if imagen:
+            '''self.perfilFoto.delete()'''
+            self.perfilFoto = imagen
+        self.save()
+        return self.usuario
+
+
 def generar_password():
     '''
     Funcion generar_password.
@@ -118,3 +149,4 @@ def generar_password():
     password = ""
     password = password.join([choice(valores) for i in range(longitud)])
     return password
+

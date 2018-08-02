@@ -2,35 +2,43 @@
 {% load staticfiles %}
 
 {% block estilos %}
+<link rel="stylesheet" type="text/css" href="{% static perfil %}">
+{% endblock %}
 
+{% block imagenusuario %}
+<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
 {% endblock %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="javascript:history.back(-1);" class="current"><font color="tomato">Administrativo</font></a></li>
-		</font>
-	</ul>
+<div id="contenedor_botoncalapsable_sidebar">
+	<button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
+		<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+	</button>
+</div>
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="javascript:history.back(-1);" class="current"><font>Administrativo</font></a></li>
+    </font>
+</ul>
 {% endblock %}
 
-
 {% block contenido %}
-
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-	  <div class="panel">
-		<div class="panel-heading box" role="tab" id="headingFive">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			  <font color="#ffffff" size="2">Documentacion del tramite</font>
-			</a>
-		  </h5>
-		</div>
-		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-		  <div class="panel-body">
-			<div class="container-fluid">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
-                        {% for documento in tramite.documentos.all %}
+<div id="contenedor_botoncalapsable_resto"></div>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+    <div class="panel">
+        <div class="panel-heading box" role="tab" id="headingFive">
+            <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    <font color="#ffffff" size="2">Documentacion del tramite</font>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
+                            {% for documento in tramite.documentos.all %}
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="thumbnail ">
                                     <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
@@ -40,52 +48,56 @@
                                     <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}} - {{documento.fecha}} </p>
                                     <form action="">
                                         <p align="right" >
-                                        <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
+                                            <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
                                         </p>
                                     </form>
-                                 </div>
+                                </div>
                             </div>
-                        {% endfor %}
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <hr>
-                        <div class="form-group">
-                            <label for="">Observaciones:</label>
-                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                            <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                            {% endfor %}
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <hr>
+                            <div class="form-group">
+                                <label for="">Observaciones:</label>
+                                <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                                <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                            <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id  %}">
+                                <button type="button" class="btn btn-primary" name="Aceptar">
+                                    Aceptar
+                                </button>
+                            </a>
+                            <a href="javascript:prueba();">
+                                <button type="button" class="btn btn-primary" name="Aceptar">
+                                    Rechazar
+                                </button>
+                            </a>
+                            <br>
                         </div>
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                        <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id  %}">
-                            <button type="button" class="btn btn-primary" name="Aceptar">
-                                Aceptar
-                            </button>
-                        </a>
-                        <script>
-                            function prueba(){
-                                obs = $("#id_observaciones").val();
-                                id_tramite = $("#id_tramite").val();
-                                url = '/persona/rechazar_tramite/'+id_tramite+'/?msg='+obs;
-                                alert(url);
-                                location.href = url;
-                            }
-                        </script>
-                        <a href="javascript:prueba();">
-                            <button type="button" class="btn btn-primary" name="Aceptar">
-                                  Rechazar
-                            </button>
-                        </a>
-                        <br>
-                    </div>
                 </div>
-		    </div>
-          </div>
+            </div>
         </div>
-      </div>
     </div>
-
+</div>
 {% endblock %}
 
 {% block scripts %}
+    <script>
+        function prueba(){
+            obs = $("#id_observaciones").val();
+            id_tramite = $("#id_tramite").val();
+            url = '/persona/rechazar_tramite/'+id_tramite+'/?msg='+obs;
+            location.href = url;
+        }
+    </script>
 
+    <script>
+        var c = document.getElementById("botonConfiguracion");
+		c.style.display= '';
+		var d = document.getElementById("imagenusuario");
+		d.style.display= '';
+    </script>
 {% endblock %}

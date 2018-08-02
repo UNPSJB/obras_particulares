@@ -7,7 +7,7 @@ from .models import *
 class FormularioIniciarTramite(forms.ModelForm):
     NAME = 'tramite_form'
     SUBMIT = 'tramite_submit'
-    propietario = forms.CharField()
+    propietario = forms.CharField(label="Dni propietario")
 
     class Meta:
         model = Tramite
@@ -18,12 +18,24 @@ class FormularioIniciarTramite(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(FormularioIniciarTramite, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        #self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
-        self.helper.form_tag = False
+        for field_name in self.fields:
+            field = self.fields.get(field_name)
+            if field:
+                if type(field.widget) in (forms.TextInput, forms.DateInput):
+                    field.widget = forms.TextInput(attrs={'placeholder': "Ingresar " + str(field.label)})
         self.fields['tipo_obra'].widget.attrs['placeholder'] = "Ingresar Tipo de Obra"
+        self.fields['tipo_obra'].widget.attrs['title'] = "Ingresar Tipo de Obra"
         self.fields['medidas'].widget.attrs['placeholder'] = "Ingresar Medidas en m2"
-        self.fields['profesional'].widget.attrs['placeholder'] = "Ingresar DNI del Profesional"
+        self.fields['medidas'].widget.attrs['title'] = "Ingresar Medidas en m2"
+        self.fields['medidas'].widget.attrs['max'] = "10000"
+        self.fields['medidas'].widget.attrs['min'] = "1"
+        self.fields['propietario'].widget.attrs['placeholder'] = "Ingresar DNI del Propietario"
+        self.fields['propietario'].widget.attrs['title'] = "Ingresar DNI del Propietario"
+        self.fields['propietario'].widget.attrs['max'] = "99999999"
+        self.fields['propietario'].widget.attrs['min'] = "9999999"
+        self.fields['domicilio'].widget.attrs['placeholder'] = "Ingresar Domicilio de la Obra"
+        self.fields['domicilio'].widget.attrs['title'] = "Ingresar Domicilio de la Obra"
+        self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50} [0-9]{0,5}$"
 
 
     def save(self, commit=True, propietario=None):
