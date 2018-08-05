@@ -40,10 +40,10 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            {% for documento in tramite.documentos.all %}
-                            <div class="col-md-3">
+														<div class="col-md-3">
+														{% for documento in tramite.documentos.all %}
                                 <div class="thumbnail ">
-                                    <a href=/media/{{documento.file}}" class="thumbnail ">
+                                    <a href="/media/{{documento.file}}" class="thumbnail ">
                                         <img src="/media/{{documento.file}}" class="img-thumbnail" width="200" height="200">
                                     </a>
                                     <font color="#337ab7" size="4">{{documento.tipo_documento}}</font>
@@ -53,8 +53,14 @@
                                         </p>
                                     </form>
                                 </div>
-                            </div>
                             {% endfor %}
+														</div>
+														<div class="col-md-3">
+															<div class="alert alert-danger alert-dismissible">
+															  <button type="button" class="close" data-dismiss="alert">&times;</button>
+															  <strong>Atencion</strong> {{tramite.estado.observacion}}.
+															</div>
+														</div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="container-fluid">
@@ -89,6 +95,10 @@
 
 {% block scripts %}
     <script>
+		$(document).ready(function() {
+			$('.alert-danger').delay(999999999);
+		})
+
 		$("#id_correcciones").fileinput({
 			showCaption: false,
 			browseClass: "btn btn-primary btn-sm",
@@ -99,11 +109,13 @@
 			showRemove: false
 		});
 	</script>
-
     <script>
-        var c = document.getElementById("botonConfiguracion");
-		c.style.display= '';
-		var d = document.getElementById("imagenusuario");
-		d.style.display= '';
+      var c = document.getElementById("botonConfiguracion");
+			c.style.display= '';
+			var d = document.getElementById("imagenusuario");
+			d.style.display= '';
     </script>
+		<script>
+
+		</script>
 {% endblock %}

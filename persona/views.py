@@ -90,7 +90,7 @@ def listado_tramites_propietario(request):
     personas = Persona.objects.all()
     usuario = request.user
     lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = lista_de_persona_que_esta_logueada.pop()
+    persona = list(lista_de_persona_que_esta_logueada).pop()
     propietario = persona.get_propietario()
     tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
     return tramites_de_propietario
@@ -156,7 +156,7 @@ def mostrar_profesional(request):
     if request.method == "POST" and "propietario" in request.POST:
         tramites = Tramite.objects.all()
         t = filter(lambda tramite: (tramite.domicilio == request.POST['domicilio']), tramites)
-        if int(usuario.persona.profesional.categoria) >= int(request.POST['tipo_obra']) and len(t) == 0:
+        if int(usuario.persona.profesional.categoria) >= int(request.POST['tipo_obra']) and len(list(t)) == 0:
             personas = Persona.objects.filter(dni=request.POST["propietario"])
             persona = personas.exists() and personas.first() or None
             documento_set = FormularioDocumentoSet(request.POST, request.FILES)
@@ -222,7 +222,7 @@ def listado_tramites_de_profesional(request):
     personas = Persona.objects.all()
     usuario = request.user
     lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = lista_de_persona_que_esta_logueada.pop()
+    persona = list(lista_de_persona_que_esta_logueada).pop()
     profesional = persona.get_profesional()
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
     contexto = {'tramites_de_profesional': tramites_de_profesional}
@@ -234,7 +234,7 @@ def tramites_corregidos(request):
     personas = Persona.objects.all()
     usuario = request.user
     lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = lista_de_persona_que_esta_logueada.pop()
+    persona = list(lista_de_persona_que_esta_logueada).pop()
     profesional = persona.get_profesional()
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
     tipo = 4

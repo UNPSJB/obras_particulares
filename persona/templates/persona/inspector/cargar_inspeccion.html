@@ -40,23 +40,23 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                {% for documento in tramite.documentos.all %}
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <div class="thumbnail ">
-                                        <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
-                                            <img src="/media/{{documento.file}}" width=300 height=300>
-                                        </a>
-                                        <br>
-                                        <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}}</p>
-                                        <form action="">
-                                            <p align="right" >
-                                                <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
-                                            </p>
-                                        </form>
-                                    </div>
-                                </div>
-                                {% endfor %}
-                            <br>
+              {% for documento in tramite.documentos.all %}
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                  <div class="thumbnail ">
+                      <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
+                          <img src="/media/{{documento.file}}" width=300 height=300>
+                      </a>
+                      <br>
+                      <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}}</p>
+                      <form action="">
+                          <p align="right" >
+                              <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
+                          </p>
+                      </form>
+                  </div>
+              </div>
+              {% endfor %}
+              <br>
 						</div>
 					</div>
 				</div>
@@ -76,29 +76,29 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <form  method="post" enctype="multipart/form-data">
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    {{ctxdocumentoset}}
-                                </div>
-                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                                    <div class="form-group">
-                                        <label>Observaciones:</label>
-                                        <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                                        <input class="form-control input-sm" id="id_observaciones" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
-                                    </div>
-                                <br>
-                                </div>
+              <form  method="post" enctype="multipart/form-data">
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                      {{ctxdocumentoset}}
+                  </div>
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="form-group">
+                        <label>Observaciones:</label>
+                        <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                        <input class="form-control input-sm" id="id_observaciones" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                    </div>
+                    <br>
+                  </div>
 
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                                    <button class="btn btn-primary btn-sm" type="submit" title="Aceptar Inspección" name="aceptar_tramite">
-                                        Aceptar inspección
-                                    </button>
-                                    <button class="btn btn-danger btn-sm" type="submit" title="Rechazar Inspección" name="rechazar_tramite">
-                                        Rechazar inspección
-                                    </button>
-                                </div>
-                            </form>
-                            <br>
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                    <button class="btn btn-primary btn-sm" type="submit" title="Aceptar Inspección" name="aceptar_tramite">
+                        Aceptar inspección
+                    </button>
+                    <button class="btn btn-danger btn-sm" type="submit" title="Rechazar Inspección" name="rechazar_tramite">
+                        Rechazar inspección
+                    </button>
+                  </div>
+              </form>
+              <br>
 						</div>
 					</div>
 				</div>

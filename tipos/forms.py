@@ -23,6 +23,8 @@ class FormularioTipoDocumento(forms.ModelForm):
         self.fields['descripcion'].widget.attrs['title'] = "Ingresar Descripcion"
         self.fields['descripcion'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z0-9 ]{0,50}"
         self.fields['fecha_alta'].widget.attrs['title'] = "Ingresar Fecha de Alta"
+        self.fields['requerido'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+                                                             choices=TipoDocumento.ACCIONES)
         self.helper = FormHelper()
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
         self.helper.layout = Layout(
@@ -30,9 +32,9 @@ class FormularioTipoDocumento(forms.ModelForm):
             Field('descripcion', placeholder='Ingresar Descripcion'),
             Field('activo', placeholder='Ingresar Activo'),
             Field('fecha_alta', placeholder='Ingresar Fecha de Alta', css_class='datepicker'),
+            Field('requerido', placeholder="Ingresar una opcion")
         )
-        self.fields['requerido'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                                             choices=TipoDocumento.ACCIONES)
+
 
     def clean_requerido(self):
         flags = [int(e) for e in self.cleaned_data['requerido']]
