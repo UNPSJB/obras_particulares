@@ -1,10 +1,11 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.utils import timezone
-import datetime
 from persona.models import *
 from tipos.models import *
 from django import template
+import datetime
+from datetime import datetime
 
 register = template.Library()
 
@@ -34,30 +35,45 @@ TramiteManager = TramiteBaseManager.from_queryset(TramiteQuerySet)
 
 
 class Tramite(models.Model):
+
+    DESTINOS= [
+        (1, 'Vivienda'),
+        (2, 'Comercio'),
+    ]
+
     INICIAR = "iniciar"
     REVISAR = "revisar"
-    CORREGIR = "corregir"
+    CORREGIR = "corregir" # VER ESTE
     ACEPTAR = "aceptar"
     RECHAZAR = "rechazar"
+    AGENDAR_VISADO = "agendar_visado"
     VISAR = "visar"
-    AGENDAR = "agendar"
-    INSPECCIONAR = "inspeccionar"
-    # realizar el pago de un tramite
-    PAGAR = "pagar"
-    # Finalizar la obra esto es cuando se pide un final de obra por el ...
+    AGENDAR_INSPECCION= "agendar_inspeccion"
+    APROBAR_INSPECCION = "inspeccionar"
+    SOLICITAR_APROBAR_TRAMITE = "solicitar_aprobar_tramite"
+    APROBAR_TRAMITE = "aprobar_tramite"
+    SOLICITAR_NO_APROBAR_TRAMITE = "solicitar_no_aprobar_tramite"
+    NO_APROBAR_TRAMITE = "no_aprobar_tramite"
+    SOLICITAR_FINAL_OBRA_TOTAL = "solicitar_final_obra_total"
     FINALIZAR = "finalizar"
-    SOLICITAR_FINAL_OBRA = "solicitar_final_obra"
+    SOLICITAR_FINAL_OBRA_PARCIAL = "solicitar_final_obra_parcial"
+
+
+    PAGAR = "pagar"
+    DAR_DE_BAJA = "dar_de_baja"
+
     propietario = models.ForeignKey(Propietario, blank=True, null=True, unique=False)
     profesional = models.ForeignKey(Profesional, unique=False)
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50, blank=True)
+    destino_obra = models.IntegerField(choices=DESTINOS, default=1)
     monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     objects = TramiteManager()
 
     def __str__(self):
-        return "Numero de tramite: {} - Profesional: {} - Propietario: {}".format(self.pk, self.profesional,
+            return "Numero de tramite: {} - Profesional: {} - Propietario: {}".format(self.pk, self.profesional,
                                                                                   self.propietario)
 
     def saldo_restante_a_pagar(self):
@@ -73,11 +89,11 @@ class Tramite(models.Model):
             return False
 
     @classmethod
-    def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio, documentos):
+    def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio, documentos, destino_obra):
         if any(map(lambda d: d.tipo_documento.requerido != TipoDocumento.INICIAR, documentos)):
             raise Exception("Un documento no es de tipo iniciar")
         t = cls(domicilio=domicilio, propietario=propietario, profesional=profesional, medidas=medidas,
-                tipo_obra=TipoObra.objects.get(pk=tipo_obra))
+                tipo_obra=TipoObra.objects.get(pk=tipo_obra), destino_obra=destino_obra)
         t.save()
         for doc in documentos:
             doc.tramite = t
@@ -160,99 +176,265 @@ class Iniciado(Estado):
         return Aceptado(tramite=tramite)
 
     def rechazar(self, tramite, observacion):
-        print (observacion)
         return Corregido(tramite=tramite, observacion=observacion)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
 
 
 class Aceptado(Estado):
     TIPO = 2
 
-    def visar(self, tramite):
-        return Visado(tramite=tramite)
+    def agendar_visado(self, tramite, visador=None):
+        return AgendadoParaVisado(tramite=tramite, visador=None)
 
-    def corregir(self, tramite, observacion):
-        return Corregido(tramite=tramite, observacion=observacion)
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
+
+    def __str__(self):
+        return self.__class__.__name__
+
+
+class AgendadoParaVisado(Estado):
+    TIPO = 3
+    visador = models.ForeignKey(Usuario, null=True, blank=True)
+
+    def visar(self, tramite, visador=None):
+        return Visado(tramite=tramite, visador=visador)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
 
     def __str__(self):
         return self.__class__.__name__
 
 
 class Visado(Estado):
-    TIPO = 3
+    TIPO = 4
+    visador = models.ForeignKey(Usuario, null=True, blank=True)
 
-    def agendar(self, tramite, fecha_inspeccion, inspector=None):
-        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
+    def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
+        return AgendadoPrimerInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
+
+    def corregir(self, tramite, observacion):
+        return Corregido(tramite=tramite, observacion=observacion)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
+
+    def __str__(self):
+        return self.__class__.__name__
 
 
 class Corregido(Estado):
-    TIPO = 4
+    TIPO = 5
     CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
 
     def corregir(self, tramite, observacion=None):
-        # e = Iniciado(tramite=tramite, observacion=observacion)
-        # e.agregar_documentacion(documentos_requeridos=documentos)
-        # return e
         return Iniciado(tramite=tramite, observacion=observacion)
 
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
 
-class Agendado(Estado):
-    TIPO = 5
+    def __str__(self):
+        return self.__class__.__name__
+
+
+class AgendadoPrimerInspeccion(Estado):
+    TIPO = 6
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
     fecha = models.DateTimeField(blank=False)
 
     def inspeccionar(self, tramite, inspector=None):
-        return ConInspeccion(tramite=tramite, inspector=inspector)
+        return PrimerInspeccion(tramite=tramite, inspector=inspector)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
+
+    def __str__(self):
+        return self.__class__.__name__
 
 
-class ConInspeccion(Estado):
-    TIPO = 6
+class PrimerInspeccion(Estado):
+    TIPO = 7
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
 
-    def solicitar_final_obra(self, tramite):
-        return FinalObraSolicitado(tramite=tramite, final_obra_total=False)
+    def solicitar_aprobar_tramite(self, tramite):
+        if tramite.monto_pagado >= tramite.monto_a_pagar or tramite.monto_pagado >= (tramite.monto_a_pagar / 12):
+            return AprobadoSolicitado(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede solicitar el aprobado")
 
-    def agendar(self, tramite, fecha_inspeccion, inspector=None):
-        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
-
-    def inspeccionar(self, tramite):
-        return Inspeccionado(tramite=tramite)
+    def solicitar_no_aprobar_tramite(self, tramite):
+        if tramite.monto_pagado >= tramite.monto_a_pagar or tramite.monto_pagado >= (tramite.monto_a_pagar / 12):
+            return NoAprobadoSolicitado(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede solicitar el no aprobado")
 
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
+
+    def __str__(self):
+        return str(self.__class__.__name__)
+
+
+class AprobadoSolicitado(Estado):
+    TIPO = 8
+
+    def aprobar_tramite(self, tramite):
+            return Aprobado(tramite=tramite)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
+
+    def __str__(self):
+        return str(self.__class__.__name__)
+
+
+class Aprobado(Estado):
+    TIPO = 9
+
+    def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
+        return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
+
+    def solicitar_final_obra_total(self, tramite):
+        return FinalObraTotalSolicitado(tramite=tramite, final_obra_total=False)
+
+    def solicitar_final_obra_parcial(self, tramite):
+        return FinalObraParcialSolicitado(tramite=tramite, final_obra_total=False)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
+
+    def __str__(self):
+        return str(self.__class__.__name__)
+
+
+class NoAprobadoSolicitado(Estado):
+    TIPO = 10
+
+    def no_aprobar_tramite(self, tramite):
+            return NoAprobado(tramite=tramite)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
+
+    def __str__(self):
+        return str(self.__class__.__name__)
+
+
+class NoAprobado(Estado):
+    TIPO = 11
+
+    ''' falta definir los pasos que sigue el propietario para aprobar'''
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
+
+    def __str__(self):
+        return str(self.__class__.__name__)
+
+
+class AgendadoInspeccion(Estado):
+    TIPO = 12
+    inspector = models.ForeignKey(Usuario, null=True, blank=True)
+    fecha = models.DateTimeField(blank=False)
+
+    def inspeccionar(self, tramite):
+        return Inspeccionado(tramite=tramite, inspector=inspector)
+
+    def solicitar_final_obra_total(self, tramite):
+        return FinalObraTotalSolicitado(tramite=tramite, final_obra_total=False)
+
+    def solicitar_final_obra_parcial(self, tramite):
+        return FinalObraParcialSolicitado(tramite=tramite, final_obra_total=False)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
 
     def __str__(self):
         return str(self.__class__.__name__)
 
 
 class Inspeccionado(Estado):
-    TIPO = 7
+    TIPO = 13
+    inspector = models.ForeignKey(Usuario, null=True, blank=True)
 
-    def solicitar_final_obra(self, tramite):  # solicitar final de obra
-        if self.tramite.esta_pagado():  # Tramite.objects.get(pk=tramite.pk).pago_completo
-            return FinalObraSolicitado(tramite=tramite, final_obra_total=True)
-        else:
-            return FinalObraSolicitado(tramite=tramite, final_obra_total=False)
+    def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
+        return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
+
+    def solicitar_final_obra_total(self, tramite):
+        return FinalObraTotalSolicitado(tramite=tramite, final_obra_total=False)
+
+    def solicitar_final_obra_parcial(self, tramite):
+        return FinalObraParcialSolicitado(tramite=tramite, final_obra_total=False)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
+
+    def __str__(self):
+        return str(self.__class__.__name__)
 
 
-class FinalObraSolicitado(Estado):
-    TIPO = 8
+class FinalObraTotalSolicitado(Estado):
+    TIPO = 14
+    inspector = models.ForeignKey(Usuario, null=True, blank=True)
+
+    def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
+        return AgendadoInspeccionFinal(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
+
+
+class AgendadoInspeccionFinal(Estado):
+    TIPO = 15
+    inspector = models.ForeignKey(Usuario, null=True, blank=True)
+    fecha = models.DateTimeField(blank=False)
+
+    def inspeccionar(self, tramite, inspector=None):
+        return InspeccionFinal(tramite=tramite, inspector=inspector)
+
+    def __str__(self):
+        return self.__class__.__name__
+
+
+class InspeccionFinal(Estado):
+    TIPO = 16
+    inspector = models.ForeignKey(Usuario, null=True, blank=True)
+
+    def corregir(self, tramite, observacion):
+        return Corregido(tramite=tramite, observacion=observacion)
 
     final_obra_total = models.BooleanField(blank=True)
 
     def finalizar(self, tramite):
-        if (tramite.monto_pagado >= tramite.monto_a_pagar):  # Tramite.objects.get(pk=tramite.pk).pago_completo
+        if tramite.monto_pagado >= tramite.monto_a_pagar:  # Tramite.objects.get(pk=tramite.pk).pago_completo
             return Finalizado(tramite=tramite)
         else:
             raise Exception("Todavia no se puede otorgar el final de obra")
 
+    def __str__(self):
+        return str(self.__class__.__name__)
+
 
 class Finalizado(Estado):
-    TIPO = 9
+    TIPO = 17
 
 
-for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, Finalizado, ConInspeccion,
-              FinalObraSolicitado]:
+class FinalObraParcialSolicitado(Estado):
+    TIPO = 18
+    '''Este solo extiende el plazo de construccion 2 anios mas'''
+
+
+class Baja(Estado):
+    TIPO = 19
+    ''' falta ver esto'''
+
+
+for klass in [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
+              AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, Corregido, AgendadoInspeccion, Inspeccionado, Finalizado,
+              FinalObraTotalSolicitado, AgendadoInspeccionFinal, InspeccionFinal, Finalizado, FinalObraParcialSolicitado, Baja]:
     Estado.register(klass)
 
 

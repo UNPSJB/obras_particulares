@@ -9,7 +9,7 @@
         <th>Profesional</th>
         <th>Propietario</th>
         <th>Superficie</th>
-        <th >Agendar</th>
+        <th >Revisar</th>
       </tr>
     </thead>
     <tbody>
@@ -23,9 +23,9 @@
         <td class="col-xs-2">{{ tramite.propietario}}</td>
         <td class="col-xs-1">{{ tramite.medidas }} </td>
         <td align="center" class="col-xs-1">
-          <a href="{% url 'agendar_tramite_para_visado' tramite.pk %}">
-            <button type="button" class="btn btn-primary btn-xs" name="Agendar">
-              <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>
+          <a href="{% url 'ver_documentos_para_visado' tramite.pk %}">
+            <button type="button" class="btn btn-primary btn-xs" name="Ver documentos">
+              <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
             </button>
           </a>
         </td>

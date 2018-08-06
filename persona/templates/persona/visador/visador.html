@@ -19,7 +19,8 @@
 <ul class="sidebar sidebar-1">
 	<font size="2">
 		<li><a href="#" class="current"><font>Visador</font></a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Iniciar Visado</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Agendar Visado</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Cargar Visado</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis Visados</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
@@ -39,11 +40,41 @@
 {% block contenido %}
 <div id="contenedor_botoncalapsable_resto"></div>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
+		<div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>
+					<font color="#ffffff" size="2">Agendar Visado</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseThree" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingThree">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<form action="" class="" >
+								<div class="row">
+									<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										{% block contenido_tramites_aceptados%}
+										{% include "persona/visador/tramites_aceptados.html" with tramites=ctxtramaceptado.tramites%}
+										{% endblock %}
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Iniciar Visado</font>
+					<font color="#ffffff" size="2">Cargar Visado</font>
 				</a>
 			</h5>
 		</div>
@@ -54,23 +85,22 @@
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<form action="" class="" >
 								<div class="row">
-									<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+									<!--div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
 										<a id="crear_detalle" href="{% url 'reporte_tramites_aceptados_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
 											<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
 										</a>
 										<a href="{% url 'reporte_tramites_aceptados_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
 											<i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
 										</a>
-									</div>
+									</div-->
 									<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-										<hr>
-										{% block contenido_tramites_aceptados%}
-										{% include "persona/visador/tramites_aceptados.html" with tramites=ctxtramaceptado.tramites%}
+										<!--hr-->
+										{% block contenido_tramites_agendados%}
+										{% include "persona/visador/tramites_agendados.html" with tramites=ctxtramagendado.tramites%}
 										{% endblock %}
 									</div>
 								</div>
 							</form>
-							<br>
 						</div>
 					</div>
 				</div>

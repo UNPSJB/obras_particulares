@@ -168,7 +168,7 @@ class FormularioUsuarioPersona(FormularioPersona):
         datos = self.cleaned_data
         persona.usuario = Usuario.objects.create_user(username=datos['usuario'], email=datos['mail'],
                                                       password=datos['password'], )
-
+    
         grupo_post = datos['grupo']
 
         for g in self.gruposEmp:

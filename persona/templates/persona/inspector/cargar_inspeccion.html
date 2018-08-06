@@ -25,7 +25,6 @@
 
 {% block contenido %}
 <div id="contenedor_botoncalapsable_resto"></div>
-
 <div class="panel-group">
 	<div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box">
@@ -47,7 +46,7 @@
                                             <img src="/media/{{documento.file}}" width=300 height=300>
                                         </a>
                                         <br>
-                                        <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}}</p>
+                                        <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}} - {{documento.fecha}} </p>
                                         <form action="">
                                             <p align="right" >
                                                 <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
@@ -88,13 +87,12 @@
                                     </div>
                                 <br>
                                 </div>
-
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
                                     <button class="btn btn-primary btn-sm" type="submit" title="Aceptar Inspección" name="aceptar_tramite">
-                                        Aceptar inspección
+                                        Aprobar inspección
                                     </button>
                                     <button class="btn btn-danger btn-sm" type="submit" title="Rechazar Inspección" name="rechazar_tramite">
-                                        Rechazar inspección
+                                        Enviar correcciones
                                     </button>
                                 </div>
                             </form>
@@ -141,7 +139,8 @@
     <script>
         var cant_doc_requeridos = {{ctxdocumentoset|length}};
         for(var n = 0; n < cant_doc_requeridos; n++) {
-            $("input[id='id_form-"+n+"-file']").addClass('file')
+            $("input[id='id_form-"+n+"-file']").addClass('file');
+            $("input[id='id_form-"+n+"-file']").attr("required", true);
         }
 		$('.file').fileinput({
 			showCaption: false,
