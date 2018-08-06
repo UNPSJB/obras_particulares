@@ -157,3 +157,47 @@ EMAIL_PORT = 25
 EMAIL_HOST_USER = 'infosopunpsjb@gmail.com'
 EMAIL_HOST_PASSWORD = 'unpsjb2016'
 EMAIL_USE_TLS = True
+
+
+##############################################################
+#####              D O C U M E N T A C I O N             #####
+##############################################################
+
+def acceso(user):
+    try:
+        if user.groups.filter(name='propietario'):
+            return 1
+        elif user.groups.filter(name='profesional'):
+            return 2
+        elif user.groups.filter(name='administrativo'):
+            return 3
+        elif user.groups.filter(name='visador'):
+            return 4
+        elif user.groups.filter(name='inspector'):
+            return 5
+        elif user.groups.filter(name='director'):
+            return 6
+    except AttributeError:
+        return 0
+
+
+
+DOCUMENTATION_ACCESS_FUNCTION = acceso
+
+DOCUMENTATION_ROOT_PROPIETARIO = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_propietario')
+DOCUMENTATION_HTML_ROOT_PROPIETARIO = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_propietario', 'build' ,'html')
+
+DOCUMENTATION_ROOT_PROFESIONAL = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_profesional')
+DOCUMENTATION_HTML_ROOT_PROFESIONAL = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_profesional', 'build' ,'html')
+
+DOCUMENTATION_ROOT_ADMINISTRATIVO = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_administrativo')
+DOCUMENTATION_HTML_ROOT_ADMINISTRATIVO = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_administrativo', 'build' ,'html')
+
+DOCUMENTATION_ROOT_VISADOR = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_visador')
+DOCUMENTATION_HTML_ROOT_VISADOR = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_visador', 'build' ,'html')
+
+DOCUMENTATION_ROOT_INSPECTOR = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_inspector')
+DOCUMENTATION_HTML_ROOT_INSPECTOR = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_inspector', 'build' ,'html')
+
+DOCUMENTATION_ROOT_DIRECTOR = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_director')
+DOCUMENTATION_HTML_ROOT_DIRECTOR = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_director', 'build' ,'html')
