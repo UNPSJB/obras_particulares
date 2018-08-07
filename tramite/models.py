@@ -472,7 +472,7 @@ class Pago(models.Model):
                     p = cls(tramite=tramite, monto=monto_pagado)
                     p.save()
                 except Tramite.DoesNotExist:
-                    print 'El tramite con numero: {0}, no existe en el sistema. Se ignora su pago.'.format(id_tramite)
+                    print ('El tramite con numero: {0}, no existe en el sistema. Se ignora su pago.'.format(id_tramite))
 
         except ValueError:
             print('El archivo cargado no tiene el formato correcto.')

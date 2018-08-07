@@ -26,48 +26,46 @@
                 <td class="col-xs-2">{{ tramite.tipo_obra }}</td>
                 <td class="col-xs-1">{{ tramite.estado }}</td>
                 <td class="col-xs-2" >
-                    <input type="hidden" id="id_tramite" value="{{tramite.id}}" >
-                    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-                    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-                    <script>
-                        $(document).ready(function() {
-                            $('#datepicker').datepicker({
-                                changeMonth: true,
-                                changeYear: true,
-                                dateFormat: 'yy-mm-dd',
-                                showOn: "button",
-                                minDate: 0,
-                                minMonth: 0,
-                                inline: true
-                            });
-                        });
-                    </script>
-                    <input id="datepicker" readonly>
+                    <input class="mi-datepicker" readonly>
                 </td>
                 <td class="col-xs-1">
-                    <a href="javascript:agregarHora();">
-                        <button type="button" class="btn btn-primary btn-sm" name="Agendar">
-                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>
-                        </button>
-                    </a>
+                    <button type="button" class="btn btn-primary btn-sm" name="Agendar" onclick="agregarHora(this);">
+                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>
+                    </button>
                 </td>
             </tr>
             {% endfor %}
             {% endif%}
         </tbody>
     </table>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
     <script>
-        function agregarHora(){
-            var today = new Date();
-            var Hora = today.getHours();
-            var Minutos = today.getMinutes();
-            obs = $("#datepicker").val();
-            fecha = obs+' '+Hora+':'+Minutos;
-            id_tramite = $("#id_tramite").val();
-            url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
-            location.href = url;
-        }
+    $(document).ready(function() {
+        $('.mi-datepicker').each(function() {
+          $(this).datepicker({
+              changeMonth: true,
+              changeYear: true,
+              dateFormat: 'yy-mm-dd',
+              showOn: "button",
+              minDate: 0,
+              minMonth: 0,
+              inline: true,
+              });
+          $(this).datepicker("setDate", new Date());
+        });
+    });
+    function agregarHora(boton){
+        today = new Date();
+        Hora = today.getHours();
+        Minutos = today.getMinutes();
+        obs = $($(boton).parent().parent()).find('.mi-datepicker').val();
+        fecha = obs+' '+Hora+':'+Minutos;
+        id_tramite = $($(boton).parent().parent().find('td')[0]).text();
+        url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
+        location.href = url;
+    }
     </script>
 </div>
 {% endblock %}

@@ -15,9 +15,6 @@ $(window).scroll(function() {
 });
 
 // Los usa el boton de ayuda para mostrar la burbuja de ayuda rapida
-function mostrarayuda() {
-    alert("mostrar ayuda no esta implementado, hay que hacer las ayudas primero");
-}
 function mostrarayudarapida() {
     var x = document.getElementById('id_burbuja_ayuda');
     x.style.display = 'block';

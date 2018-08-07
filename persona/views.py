@@ -46,9 +46,6 @@ generales ----------------------------------------------------------------------
 DATETIME = re.compile("^(\d{4})\-(\d{2})\-(\d{2})\s(\d{2}):(\d{2})$")
 
 def convertidor_de_fechas(fecha):
-    print ("----------------------------")
-    print (fecha)
-    print ("----------------------------")
     return datetime(*[int(n) for n in DATETIME.match(fecha).groups()])
 
 '''
@@ -92,7 +89,7 @@ def listado_tramites_propietario(request):
     personas = Persona.objects.all()
     usuario = request.user
     lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = lista_de_persona_que_esta_logueada.pop()
+    persona = list(lista_de_persona_que_esta_logueada).pop()
     propietario = persona.get_propietario()
     tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
     return tramites_de_propietario
@@ -158,7 +155,7 @@ def mostrar_profesional(request):
     if request.method == "POST" and "propietario" in request.POST:
         tramites = Tramite.objects.all()
         t = filter(lambda tramite: (tramite.domicilio == request.POST['domicilio']), tramites)
-        if int(usuario.persona.profesional.categoria) >= int(request.POST['tipo_obra']) and len(t) == 0:
+        if int(usuario.persona.profesional.categoria) >= int(request.POST['tipo_obra']) and len(list(t)) == 0:
             personas = Persona.objects.filter(dni=request.POST["propietario"])
             persona = personas.exists() and personas.first() or None
             documento_set = FormularioDocumentoSet(request.POST, request.FILES)
@@ -171,10 +168,10 @@ def mostrar_profesional(request):
                 lista=[]
                 for docForm in documento_set:
                    lista.append(docForm.save(commit=False))
-                Tramite.new(usuario, propietario, usuario.persona.profesional,request.POST['tipo_obra'],request.POST['medidas'],request.POST['domicilio'],lista, request.POST['destino_obra'] )
+                Tramite.new(usuario, propietario, usuario.persona.profesional,request.POST['tipo_obra'],request.POST['medidas'],request.POST['domicilio'],lista)
                 tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
                 propietario_form = None
-                messages.add_message(request, messages.SUCCESS,'Solicitud de iniciar tramite realizada con exito.')
+                messages.add_message(request, messages.SUCCESS,'Solicitud de iniciar tramitre reallizada con exito.')
             else:
                 messages.add_message(request, messages.ERROR, 'Propietario no existe, debe darlo de alta para iniciar al tramite.')
         else:
@@ -224,7 +221,7 @@ def listado_tramites_de_profesional(request):
     personas = Persona.objects.all()
     usuario = request.user
     lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = lista_de_persona_que_esta_logueada.pop()
+    persona = list(lista_de_persona_que_esta_logueada).pop()
     profesional = persona.get_profesional()
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
     contexto = {'tramites_de_profesional': tramites_de_profesional}
@@ -236,7 +233,7 @@ def tramites_corregidos(request):
     personas = Persona.objects.all()
     usuario = request.user
     lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = lista_de_persona_que_esta_logueada.pop()
+    persona = list(lista_de_persona_que_esta_logueada).pop()
     profesional = persona.get_profesional()
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
     tipo = 4
@@ -259,10 +256,7 @@ def ver_documentos_tramite_profesional(request, pk_tramite):
         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"))
     return render(request, 'persona/profesional/vista_de_documentos.html', {"tramite": contexto0,
                                                                             "estadosp": contexto1,
-                                                                            "fecha":fechas_del_estado,
-                                                                            "perfil": perfil})
-
-
+                                                                            "fecha":fechas_del_estado,                                                                         "perfil": perfil})
 def profesional_solicita_aprobar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
@@ -918,15 +912,6 @@ def cargar_inspeccion_final(request, pk_tramite):
     return render(request, 'persona/jefe_inspector/cargar_inspeccion_final.html', {'tramite': tramite, "perfil": perfil})
 
 
-#def aceptar_inspeccion_final(request, pk_tramite):
-#    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-#    u = request.user
-#    tramite.hacer(Tramite.APROBAR_INSPECCION, usuario=u, inspector=u)
-#    tramite.hacer(Tramite.APROBAR_INSPECCION, usuario=u)
-#    messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada')
-#    return redirect('jefe_inspector')
-
-
 def rechazar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.CORREGIR, request.user, request.POST["observaciones"])
@@ -998,7 +983,7 @@ def empleados():
     for u in usuarios:
         lista = list(u.groups.values_list('name', flat=True))
         for i in range(len(lista)):
-            if lista[i]<>'profesional' and lista[i]<>'propietario':
+            if lista[i] != 'profesional' and lista[i] != 'propietario':
                 if u not in empleados:
                     empleados.append(u)
     return empleados
