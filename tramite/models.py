@@ -302,10 +302,10 @@ class Aprobado(Estado):
         return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
     def solicitar_final_obra_total(self, tramite):
-        return FinalObraTotalSolicitado(tramite=tramite, final_obra_total=False)
+        return FinalObraTotalSolicitado(tramite=tramite)
 
     def solicitar_final_obra_parcial(self, tramite):
-        return FinalObraParcialSolicitado(tramite=tramite, final_obra_total=False)
+        return FinalObraParcialSolicitado(tramite=tramite)
 
     def darBaja(self, tramite):
         return Baja(tramite=tramite)
@@ -362,10 +362,10 @@ class AprobadoPorPropietario(Estado):
         return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
     def solicitar_final_obra_total(self, tramite):
-        return FinalObraTotalSolicitado(tramite=tramite, final_obra_total=False)
+        return FinalObraTotalSolicitado(tramite=tramite)
 
     def solicitar_final_obra_parcial(self, tramite):
-        return FinalObraParcialSolicitado(tramite=tramite, final_obra_total=False)
+        return FinalObraParcialSolicitado(tramite=tramite)
 
     def darBaja(self, tramite):
         return Baja(tramite=tramite)
@@ -382,10 +382,10 @@ class AgendadoInspeccion(Estado):
         return Inspeccionado(tramite=tramite, inspector=inspector)
 
     def solicitar_final_obra_total(self, tramite):
-        return FinalObraTotalSolicitado(tramite=tramite, final_obra_total=False)
+        return FinalObraTotalSolicitado(tramite=tramite)
 
     def solicitar_final_obra_parcial(self, tramite):
-        return FinalObraParcialSolicitado(tramite=tramite, final_obra_total=False)
+        return FinalObraParcialSolicitado(tramite=tramite)
 
     def darBaja(self, tramite):
         return Baja(tramite=tramite)
@@ -402,11 +402,10 @@ class Inspeccionado(Estado):
         return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
     def solicitar_final_obra_total(self, tramite):
-        print ("------------esta donde debe------------------   ")
-        return FinalObraTotalSolicitado(tramite=tramite, final_obra_total=False)
+        return FinalObraTotalSolicitado(tramite=tramite)
 
     def solicitar_final_obra_parcial(self, tramite):
-        return FinalObraParcialSolicitado(tramite=tramite, final_obra_total=False)
+        return FinalObraParcialSolicitado(tramite=tramite)
 
     def darBaja(self, tramite):
         return Baja(tramite=tramite)
@@ -417,7 +416,6 @@ class Inspeccionado(Estado):
 
 class FinalObraTotalSolicitado(Estado):
     TIPO = 16
-    inspector = models.ForeignKey(Usuario, null=True, blank=True)
 
     def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
         return AgendadoInspeccionFinal(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
@@ -442,7 +440,7 @@ class InspeccionFinal(Estado):
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
 
-    final_obra_total = models.BooleanField(blank=True)
+    #final_obra_total = models.BooleanField(blank=True)
 
     def finalizar(self, tramite):
         if tramite.monto_pagado >= tramite.monto_a_pagar:  # Tramite.objects.get(pk=tramite.pk).pago_completo

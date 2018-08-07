@@ -282,7 +282,6 @@ def profesional_solicita_no_aprobar_tramite(request, pk_tramite):
 def profesional_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
-        print ("-----------------esta en solicitar final obra total------------------")
         tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA_TOTAL, request.user)
         messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
     except:
@@ -867,12 +866,12 @@ def mostrar_jefe_inspector(request):
     values = {
         "perfil": perfil,
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(),
-        "ctxtramitesagendados": tramites_agendados_por_inspector(request),
+        "ctxtramitesagendados": tramites_agendados_por_jefeinspector(request),
     }
     for form_name, submit_name in FORMS_JEFEINSPECTOR:
         KlassForm = FORMS_JEFEINSPECTOR[(form_name, submit_name)]
         if request.method == "POST" and submit_name in request.POST:
-            _form = KlassForm(request.POST,request.FILES)
+            _form = KlassForm(request.POST, request.FILES)
             if _form.is_valid():
                 _form.save()
                 messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
@@ -898,6 +897,13 @@ def tramite_con_inspecciones_list():
     contexto = {'tramites': tramites}
     return contexto
 
+def tramites_agendados_por_jefeinspector(request):
+    usuario = request.user
+    argumentos = [AgendadoInspeccionFinal]
+    tramites = Tramite.objects.en_estado(argumentos)
+    tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
+    return tramites_del_inspector
+
 
 def agendar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -907,24 +913,42 @@ def agendar_inspeccion_final(request, pk_tramite):
 
 
 def cargar_inspeccion_final(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
-    return render(request, 'persona/jefe_inspector/cargar_inspeccion_final.html', {'tramite': tramite, "perfil": perfil})
-
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.APROBAR_INSPECCION)
+    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
+    inicial = metodo(tipos_de_documentos_requeridos)
+    documento_set = FormularioDocumentoSet(initial=inicial)
+    id_tramite = int(pk_tramite)
+    if request.method == "POST":
+        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
+        if documento_set.is_valid():
+            for docForm in documento_set:
+                docForm.save(tramite=tramite)
+            if "aceptar_tramite" in request.POST:
+                aceptar_inspeccion_final(request, pk_tramite)
+            elif "rechazar_tramite" in request.POST:
+                rechazar_inspeccion_final(request, pk_tramite)
+    else:
+        return render(request, 'persona/jefe_inspector/cargar_inspeccion_final.html', {'tramite': tramite,
+                                                                            'ctxdocumentoset': documento_set,
+                                                                            'documentos_requeridos': tipos_de_documentos_requeridos,
+                                                                            "perfil": perfil})
+    return redirect('jefeinspector')
 
 def rechazar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.CORREGIR, request.user, request.POST["observaciones"])
     messages.add_message(request, messages.ERROR, 'Inspeccion final rechazada')
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 
 def aceptar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.APROBAR_INSPECCION, request.user)
     messages.add_message(request, messages.SUCCESS, 'Inspeccion final aprobada')
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 
 def ver_inspecciones(request, pk_tramite):
