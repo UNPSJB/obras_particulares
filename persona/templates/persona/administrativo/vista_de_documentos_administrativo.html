@@ -24,20 +24,20 @@
 
 {% block contenido %}
 <div id="contenedor_botoncalapsable_resto"></div>
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-    <div class="panel">
-        <div class="panel-heading box" role="tab" id="headingFive">
-            <h5 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                    <font color="#ffffff" size="2">Documentacion del tramite</font>
-                </a>
-            </h5>
-        </div>
-        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-            <div class="panel-body">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
+<div class="panel-group">
+	<div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box">
+			<h5 class="panel-title">
+				<a>
+					<font color="#ffffff" size="2">Documentos del tramite</font>
+				</a>
+			</h5>
+		</div>
+		<div class="panel-collapse colorp">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             {% for documento in tramite.documentos.all %}
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="thumbnail ">
@@ -55,10 +55,26 @@
                             </div>
                             {% endfor %}
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <hr>
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box">
+			<h5 class="panel-title">
+				<a>
+					<font color="#ffffff" size="2">Documentos de la inspección</font>
+				</a>
+			</h5>
+		</div>
+		<div class="panel-collapse colorp">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                <label for="">Observaciones:</label>
+                                <label>Observaciones:</label>
                                 <input type="hidden" id="id_tramite" value="{{tramite.id}}">
                                 <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
                             </div>
@@ -70,7 +86,7 @@
                                 </button>
                             </a>
                             <a href="javascript:prueba();">
-                                <button type="button" class="btn btn-primary" name="Aceptar">
+                                <button type="button" class="btn btn-danger " name="Rechazar">
                                     Rechazar
                                 </button>
                             </a>
