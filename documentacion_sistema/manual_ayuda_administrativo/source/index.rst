@@ -1,20 +1,27 @@
-.. documentacion documentation master file, created by
-   sphinx-quickstart on Mon Aug  6 18:43:29 2018.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Administrativo
+==============
 
-Welcome to ADMINISTRATIVO's documentation!
-==========================================
+Tramites Iniciados
+------------------
+aca esta todo
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+.. image:: _static/administrativo.1.jpg
 
+Alta Profesional
+----------------
+aca esta todo
 
+.. image:: _static/administrativo.2.jpg
+.. image:: _static/administrativo.3.jpg
 
-Indices and tables
-==================
+Alta Propietario
+----------------
+aca esta todo
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. image:: _static/administrativo.4.jpg
+
+Registrar Pago
+--------------
+aca esta todo
+
+.. image:: _static/administrativo.5.jpg
