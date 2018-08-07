@@ -218,9 +218,7 @@ class FormularioUsuarioPersona(FormularioPersona):
         '''
         persona = super(FormularioUsuarioPersona, self).save(commit=False)
         datos = self.cleaned_data
-        #Esta linea esta comentada porque NO SE DEBE CREAR UN USUARIO CUANDO SE DA DE ALTA LA PERSONA
-        #El usuario se da de alta desde las opciones HABILITAR de un administrativo. sino da error por querer dar de alta 2 veces un usuario a la misma persona
-        #persona.usuario = Usuario.objects.create_user(username=datos['usuario'], email=datos['mail'],password=datos['password'], )
+        persona.usuario = Usuario.objects.create_user(username=datos['usuario'], email=datos['mail'],password=datos['password'], )
 
         grupo_post = datos['grupo']
 
