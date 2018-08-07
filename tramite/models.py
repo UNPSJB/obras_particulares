@@ -330,7 +330,12 @@ class NoAprobadoSolicitado(Estado):
 class NoAprobado(Estado):
     TIPO = 11
 
-    ''' falta definir los pasos que sigue el propietario para aprobar'''
+    def solicitar_aprobar_tramite(self, tramite):
+        if tramite.monto_pagado >= tramite.monto_a_pagar or tramite.monto_pagado >= (tramite.monto_a_pagar / 12):
+            return AprobadoSolicitadoPorPropietario(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede solicitar el aprobado")
+
     def darBaja(self, tramite):
         return Baja(tramite=tramite)
 
@@ -338,8 +343,38 @@ class NoAprobado(Estado):
         return str(self.__class__.__name__)
 
 
-class AgendadoInspeccion(Estado):
+class AprobadoSolicitadoPorPropietario(Estado):
     TIPO = 12
+
+    def aprobar_tramite(self, tramite):
+            return AprobadoPorPropietario(tramite=tramite)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
+
+    def __str__(self):
+        return str(self.__class__.__name__)
+
+class AprobadoPorPropietario(Estado):
+    TIPO = 13
+
+    def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
+        return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
+
+    def solicitar_final_obra_total(self, tramite):
+        return FinalObraTotalSolicitado(tramite=tramite, final_obra_total=False)
+
+    def solicitar_final_obra_parcial(self, tramite):
+        return FinalObraParcialSolicitado(tramite=tramite, final_obra_total=False)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
+
+    def __str__(self):
+        return str(self.__class__.__name__)
+
+class AgendadoInspeccion(Estado):
+    TIPO = 14
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
     fecha = models.DateTimeField(blank=False)
 
@@ -360,7 +395,7 @@ class AgendadoInspeccion(Estado):
 
 
 class Inspeccionado(Estado):
-    TIPO = 13
+    TIPO = 15
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
 
     def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
@@ -380,7 +415,7 @@ class Inspeccionado(Estado):
 
 
 class FinalObraTotalSolicitado(Estado):
-    TIPO = 14
+    TIPO = 16
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
 
     def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
@@ -388,7 +423,7 @@ class FinalObraTotalSolicitado(Estado):
 
 
 class AgendadoInspeccionFinal(Estado):
-    TIPO = 15
+    TIPO = 17
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
     fecha = models.DateTimeField(blank=False)
 
@@ -400,7 +435,7 @@ class AgendadoInspeccionFinal(Estado):
 
 
 class InspeccionFinal(Estado):
-    TIPO = 16
+    TIPO = 18
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
 
     def corregir(self, tramite, observacion):
@@ -419,21 +454,22 @@ class InspeccionFinal(Estado):
 
 
 class Finalizado(Estado):
-    TIPO = 17
+    TIPO = 19
 
 
 class FinalObraParcialSolicitado(Estado):
-    TIPO = 18
+    TIPO = 20
     '''Este solo extiende el plazo de construccion 2 anios mas'''
 
 
 class Baja(Estado):
-    TIPO = 19
+    TIPO = 21
     ''' falta ver esto'''
 
 
 for klass in [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
-              AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, Corregido, AgendadoInspeccion, Inspeccionado, Finalizado,
+              AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario,
+              AprobadoPorPropietario, Corregido, AgendadoInspeccion, Inspeccionado, Finalizado,
               FinalObraTotalSolicitado, AgendadoInspeccionFinal, InspeccionFinal, Finalizado, FinalObraParcialSolicitado, Baja]:
     Estado.register(klass)
 

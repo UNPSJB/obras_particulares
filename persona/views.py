@@ -168,7 +168,7 @@ def mostrar_profesional(request):
                 lista=[]
                 for docForm in documento_set:
                    lista.append(docForm.save(commit=False))
-                Tramite.new(usuario, propietario, usuario.persona.profesional,request.POST['tipo_obra'],request.POST['medidas'],request.POST['domicilio'],lista)
+                Tramite.new(usuario, propietario, usuario.persona.profesional,request.POST['tipo_obra'],request.POST['medidas'],request.POST['domicilio'],lista, request.POST['destino_obra'])
                 tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
                 propietario_form = None
                 messages.add_message(request, messages.SUCCESS,'Solicitud de iniciar tramitre reallizada con exito.')
