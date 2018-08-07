@@ -282,7 +282,8 @@ def profesional_solicita_no_aprobar_tramite(request, pk_tramite):
 def profesional_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
-        tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
+        print ("-----------------esta en solicitar final obra total------------------")
+        tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA_TOTAL, request.user)
         messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
@@ -798,7 +799,7 @@ def cargar_inspeccion(request, pk_tramite):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INSPECCIONAR)
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.APROBAR_INSPECCION)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
     documento_set = FormularioDocumentoSet(initial=inicial)

@@ -43,7 +43,7 @@ class Tramite(models.Model):
 
     INICIAR = "iniciar"
     REVISAR = "revisar"
-    CORREGIR = "corregir" # VER ESTE
+    CORREGIR = "corregir"
     ACEPTAR = "aceptar"
     RECHAZAR = "rechazar"
     AGENDAR_VISADO = "agendar_visado"
@@ -378,7 +378,7 @@ class AgendadoInspeccion(Estado):
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
     fecha = models.DateTimeField(blank=False)
 
-    def inspeccionar(self, tramite):
+    def inspeccionar(self, tramite, inspector=None):
         return Inspeccionado(tramite=tramite, inspector=inspector)
 
     def solicitar_final_obra_total(self, tramite):
@@ -402,6 +402,7 @@ class Inspeccionado(Estado):
         return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
     def solicitar_final_obra_total(self, tramite):
+        print ("------------esta donde debe------------------   ")
         return FinalObraTotalSolicitado(tramite=tramite, final_obra_total=False)
 
     def solicitar_final_obra_parcial(self, tramite):
