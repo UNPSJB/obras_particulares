@@ -43,7 +43,7 @@ from reportlab.graphics.charts.barcharts import VerticalBarChart
 generales -----------------------------------------------------------------------------------------------------
 '''
 
-DATETIME = re.compile("^(\d{4})\-(\d{2})\-(\d{2})\s(\d{2}):(\d{2})$")
+DATETIME = re.compile("^(\d{4})\-(\d{2})\-(\d{2})\s(\d{1,2}):(\d{2})$")
 
 def convertidor_de_fechas(fecha):
     return datetime(*[int(n) for n in DATETIME.match(fecha).groups()])
