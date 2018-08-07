@@ -15,7 +15,6 @@ class FormularioTipoDocumento(forms.ModelForm):
         model = TipoDocumento
         fields = ('nombre', 'descripcion', 'activo', 'fecha_alta', 'requerido')
 
-    # Esto es para el crispy
     def __init__(self, *args, **kwargs):
         super(FormularioTipoDocumento, self).__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs['title'] = "Ingresar Nombre"
@@ -47,7 +46,7 @@ class FormularioTipoObra(forms.ModelForm):
 
     class Meta:
         model = TipoObra
-        fields = ('nombre', 'descripcion', 'categorias')
+        fields = ('nombre', 'valor_de_superficie', 'descripcion', 'categorias')
 
     def __init__(self, *args, **kwargs):
         super(FormularioTipoObra, self).__init__(*args, **kwargs)
@@ -56,8 +55,12 @@ class FormularioTipoObra(forms.ModelForm):
         self.helper.add_input(Submit('tipo_obra_submit', 'Guardar'))
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
         self.fields['nombre'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z0-9 ]{0,50}"
+        self.fields['nombre'].widget.attrs['title'] = "Ingresar Nombre"
         self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
         self.fields['descripcion'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z0-9 ]{0,50}"
-        self.fields['nombre'].widget.attrs['title'] = "Ingresar Nombre"
         self.fields['descripcion'].widget.attrs['title'] = "Ingresar Descripcion"
         self.fields['categorias'].widget.attrs['title'] = "Ingresar Categoria"
+        self.fields['valor_de_superficie'].widget.attrs['placeholder'] = "Ingresar Valor m2"
+        self.fields['valor_de_superficie'].widget.attrs['max'] = "10000"
+        self.fields['valor_de_superficie'].widget.attrs['min'] = "1"
+        self.fields['valor_de_superficie'].widget.attrs['title'] = "Ingresar Valor m2"

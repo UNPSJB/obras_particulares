@@ -7,11 +7,11 @@
       <tr>
         <th>Nro</th>
         <th>Propietario</th>
-        <th>Superficie</th>
-        <th>Tipo</th>
         <th>Estado Actual</th>
         <th>Historial</th>
-        <th>Solicitar</th>
+        <th>Aprobar</th>
+        <th>No Aprobar</th>
+        <th>Final de obra</th>
       </tr>
     </thead>
     <tbody>
@@ -20,9 +20,7 @@
       <tr>
         <td class="col-xs-1">{{tramite.id}}</td>
         <td class="col-xs-2">{{tramite.propietario}}</td>
-        <td class="col-xs-1">{{tramite.medidas}}</td>
-        <td class="col-xs-2">{{tramite.tipo_obra}}</td>
-        <td class="col-xs-1">{{tramite.estado}}</td>
+        <td class="col-xs-2">{{tramite.estado}}</td>
         <td align="center" class="col-xs-1">
           <a href="{% url 'ver_documentos_tramite_profesional' tramite.pk %}">
             <button type="button" class="btn btn-primary btn-xs" name="ver_documentos_tramite">
@@ -31,9 +29,23 @@
           </a>
         </td>
         <td align="center" class="col-xs-1">
+          <a href="{% url 'profesional_solicita_aprobar_tramite' pk_tramite=tramite.id %}">
+            <button type="button" class="btn btn-primary btn-xs" name="aprobar_tramite">
+              <span class="glyphicon glyphicon-home" aria-hidden="true"> Solicitar</span>
+            </button>
+          </a>
+        </td>
+        <td align="center" class="col-xs-1">
+          <a href="{% url 'profesional_solicita_no_aprobar_tramite' pk_tramite=tramite.id %}">
+            <button type="button" class="btn btn-primary btn-xs" name="no_aprobar_tramite">
+              <span class="glyphicon glyphicon-home" aria-hidden="true"> Solicitar</span>
+            </button>
+          </a>
+        </td>
+        <td align="center" class="col-xs-1">
           <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.id %}">
             <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
-              <span class="glyphicon glyphicon-home" aria-hidden="true"> Final Obra</span>
+              <span class="glyphicon glyphicon-home" aria-hidden="true"> Solicitar</span>
             </button>
           </a>
         </td>

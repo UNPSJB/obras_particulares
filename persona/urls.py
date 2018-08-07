@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^ver_documentos_tramite_profesional/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_profesional, name="ver_documentos_tramite_profesional"),
     url(r'^ver_documentos_corregidos/(?P<pk_tramite>\d+)/$', views.ver_documentos_corregidos, name="ver_documentos_corregidos"),
     url(r'^solicitud_final_obra/(?P<pk_tramite>\d+)/$', views.profesional_solicita_final_obra, name="profesional_solicita_final_obra"),
+    url(r'^profesional_solicita_aprobar_tramite/(?P<pk_tramite>\d+)/$', views.profesional_solicita_aprobar_tramite, name="profesional_solicita_aprobar_tramite"),
+    url(r'^profesional_solicita_no_aprobar_tramite/(?P<pk_tramite>\d+)/$', views.profesional_solicita_no_aprobar_tramite,name="profesional_solicita_no_aprobar_tramite"),
     url(r'^enviar_correcciones/(?P<pk_tramite>\d+)/$', views.enviar_correcciones, name="enviar_correcciones"),
     url(r'^profesional/estado_tramite$', views.listado_tramites_de_profesional, name="estado_tramite"),
     url(r'^documento_de_estado/(?P<pk_estado>\d+)/$', views.documento_de_estado, name="documento_de_estado"),
@@ -36,9 +38,12 @@ urlpatterns = [
     url(r'^documentos_tramite_administrativo/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_administrativo, name="ver_documentos_tramite_administrativo"),
     url(r'^rechazar_tramite/(?P<pk_tramite>\d+)/$', views.rechazar_tramite, name="rechazar_tramite"),
     url(r'^aceptar_tramite/(?P<pk_tramite>\d+)/$', views.aceptar_tramite, name="aceptar_tramite"),
+    url(r'^aprobar_tramite/(?P<pk_tramite>\d+)/$', views.aprobar_tramite, name="aprobar_tramite"),
+    url(r'^no_aprobar_tramite/(?P<pk_tramite>\d+)/$', views.no_aprobar_tramite, name="no_aprobar_tramite"),
 
     # visador -------------------------------------------------------------------------------------------------------
     url(r'^visador$', views.mostrar_visador, name="visador"),
+    url(r'^agendar_tramite_para_visado/(?P<pk_tramite>\d+)/$', views.agendar_tramite_para_visado, name="agendar_tramite_para_visado"),
     url(r'^ver_documentos_para_visado/(?P<pk_tramite>\d+)/$', views.ver_documentos_para_visado, name="ver_documentos_para_visado"),
     url(r'^aprobar_visado/(?P<pk_tramite>\d+)/$', views.aprobar_visado, name="aprobar_visado"),
     url(r'^no_aprobar_visado/(?P<pk_tramite>\d+)/$', views.no_aprobar_visado, name="no_aprobar_visado"),
@@ -54,7 +59,7 @@ urlpatterns = [
     url(r'^rechazar_inspeccion/(?P<pk_tramite>\d+)/$', views.rechazar_inspeccion, name="rechazar_inspeccion"),
     url(r'^aceptar_inspeccion/(?P<pk_tramite>\d+)/$', views.aceptar_inspeccion, name="aceptar_inspeccion"),
     url(r'^documentos_tramite_inspector/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_inspector, name="documentos_tramite_inspector"),
-    url(r'^documentos_inspector_estado/(?P<pk_estado>\d+)/$', views.documentos_inspector_estado, name="documentos_inspector_estado"),
+    #url(r'^documentos_inspector_estado/(?P<pk_estado>\d+)/$', views.documentos_inspector_estado, name="documentos_inspector_estado"),
 
     #jefeinspector --------------------------------------------------------------------------------------------------
     url(r'^jefeinspector$', views.mostrar_jefe_inspector, name="jefe_inspector"),

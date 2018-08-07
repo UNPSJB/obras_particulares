@@ -11,7 +11,7 @@ class FormularioIniciarTramite(forms.ModelForm):
 
     class Meta:
         model = Tramite
-        fields = ('tipo_obra', 'medidas', 'profesional','domicilio')
+        fields = ('tipo_obra', 'medidas', 'profesional','domicilio', 'destino_obra')
         widgets = {
             "profesional": forms.HiddenInput()
         }

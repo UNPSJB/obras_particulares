@@ -1,0 +1,39 @@
+{% load staticfiles %}
+
+{% block contenido_tramite_final_obra %}
+<div class="table-responsive">
+  <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+    <thead>
+      <tr>
+        <th>Numero</th>
+        <th>Domicilio</th>
+        <th>Estado</th>
+        <th>Profesional</th>
+        <th>Propietario</th>
+        <th>Aprobar</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if tramites %}
+      {% for tramite in tramites %}
+      <tr>
+        <td class="col-xs-2">{{ tramite.id }}</td>
+        <td class="col-xs-2">{{ tramite.domicilio}} </td>
+        <td class="col-xs-2">{{ tramite.estado }}</td>
+        <td class="col-xs-2">{{ tramite.profesional}} </td>
+        <td class="col-xs-2">{{ tramite.propietario}}
+        </td>
+        <td class="col-xs-2" align="center">
+          <a href="{% url 'aprobar_tramite' pk_tramite=tramite.id %}">
+            <button type="button" class="btn btn-primary btn-xs" name="habilitar">
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"> Aprobar tramite</span>
+            </button>
+          </a>
+        </td>
+      </tr>
+      {% endfor %}
+      {% endif%}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -10,6 +10,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group, User
 
 class FormularioPersona(forms.ModelForm):
+
     '''
     Formulario para el alta de una nueva persona dentro del sistema
     '''
@@ -60,6 +61,7 @@ class FormularioPersona(forms.ModelForm):
             raise ValidationError('La persona ya existe en el sistema')
         return dato
 
+
 class FormularioProfesional(FormularioPersona):
     '''
     Formulario para el alta de un nuevo profesional dentro del sistema
@@ -109,6 +111,7 @@ class FormularioProfesional(FormularioPersona):
             raise ValidationError('Matricula repetida')
         return dato
 
+
 class FormularioPropietario(FormularioPersona):
     '''
     Formulario para el alta de un nuevo propietario dentro del sistema
@@ -155,6 +158,7 @@ class FormularioPropietario(FormularioPersona):
         elif self.is_valid():
             return self.save()
 
+
 class FormularioUsuario(AuthenticationForm):
     '''
     Formulario para el alta de un nuevo usuario dentro del sistema
@@ -166,6 +170,7 @@ class FormularioUsuario(AuthenticationForm):
         super(FormularioUsuario, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', 'Submit', css_class="btn btn-default"))
+
 
 class FormularioUsuarioPersona(FormularioPersona):
     '''
