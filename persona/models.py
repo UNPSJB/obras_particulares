@@ -141,8 +141,8 @@ class Persona(models.Model):
 def generar_password():
     '''
     Funcion generar_password.
-    Funcion que genera una contraseña con valores aleatorios.
-    :return password: contraseña generada.
+    Funcion que genera una contrasenia con valores aleatorios.
+    :return password: contrasenia generada.
     '''
     longitud = 6
     valores = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
