@@ -28,7 +28,7 @@ class TipoDocumento(models.Model):
     SOLICITAR_NO_APROBAR_TRAMITE = 1 << 10
     #NO_APROBAR_TRAMITE = 1 << 0
     #SOLICITAR_FINAL_OBRA_TOTAL = 1 << 0
-    #FINALIZAR = 1 << 0
+    FINALIZAR = 1 << 21
     #SOLICITAR_FINAL_OBRA_PARCIAL = 1 << 0
     #PAGAR = 1 << 0
     #DAR_DE_BAJA = 1 << 0
@@ -48,7 +48,7 @@ class TipoDocumento(models.Model):
         (SOLICITAR_NO_APROBAR_TRAMITE, "Solicitar no aprobar tramite"),
         #(NO_APROBAR_TRAMITE, "No aprobar tramite"),
         #(SOLICITAR_FINAL_OBRA_TOTAL, "Solicitar final obra total de tramite"),
-        #(FINALIZAR, "Finalizar tramite"),
+        (FINALIZAR, "Finalizar tramite"),
         #(SOLICITAR_FINAL_OBRA_PARCIAL, "Solicitar final obra parcial de tramite"),
         #(PAGAR, "Pagar tramite"),
         #(DAR_DE_BAJA, "Dar_de_baja tramite")

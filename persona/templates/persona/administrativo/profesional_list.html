@@ -13,7 +13,7 @@
         <th>Categoria</th>
         <th>Matricula</th>
         <th>Certificado</th>
-        <th>Profesional</th>
+        <!--th>Profesional</th-->
       </tr>
     </thead>
     <tbody>
@@ -28,20 +28,19 @@
         <td class="col-xs-1">{{ persona.profesional.categoria }}</td>
         <td class="col-xs-1">{{ persona.profesional.matricula }}</td>
         <td align="center" class="col-xs-1">
-          <a href="{% url 'ver_certificado' pk=persona.id %}">
-
+          <a href="{% url 'ver_un_certificado' pk_persona=persona.id %}">
             <button type="" class="btn btn-primary btn-xs" name="ver certificado">
               <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
             </button>
           </a>
         </td>
-        <td align="center" class="col-xs-1">
+        <!--td align="center" class="col-xs-1">
           <a href="{% url 'crear_usuario' pk_persona=persona.id %}">
             <button type="button" class="btn btn-primary btn-xs" name="habilitar">
               <span class="glyphicon glyphicon-ok" aria-hidden="true"> Habilitar</span>
             </button>
           </a>
-        </td>
+        </td-->
       </tr>
       {% endfor %}
       {% endif%}

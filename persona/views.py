@@ -155,7 +155,7 @@ def mostrar_profesional(request):
     if request.method == "POST" and "propietario" in request.POST:
         tramites = Tramite.objects.all()
         t = filter(lambda tramite: (tramite.domicilio == request.POST['domicilio']), tramites)
-        if int(usuario.persona.profesional.categoria) >= int(request.POST['tipo_obra']) and len(list(t)) == 0:
+        if int(usuario.persona.profesional.categoria) <= int(request.POST['tipo_obra']) and len(list(t)) == 0:
             personas = Persona.objects.filter(dni=request.POST["propietario"])
             persona = personas.exists() and personas.first() or None
             documento_set = FormularioDocumentoSet(request.POST, request.FILES)
@@ -171,7 +171,7 @@ def mostrar_profesional(request):
                 Tramite.new(usuario, propietario, usuario.persona.profesional,request.POST['tipo_obra'],request.POST['medidas'],request.POST['domicilio'],lista, request.POST['destino_obra'])
                 tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
                 propietario_form = None
-                messages.add_message(request, messages.SUCCESS,'Solicitud de iniciar tramitre reallizada con exito.')
+                messages.add_message(request, messages.SUCCESS,'Solicitud de iniciar tramitre realizada con exito.')
             else:
                 messages.add_message(request, messages.ERROR, 'Propietario no existe, debe darlo de alta para iniciar al tramite.')
         else:
@@ -283,7 +283,7 @@ def profesional_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA_TOTAL, request.user)
-        messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
+        messages.add_message(request, messages.SUCCESS, 'Final de obra solicitado.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
     finally:
@@ -396,7 +396,7 @@ def tramite_corregidos_list():
 
 
 def solicitud_final_obra_list():
-    tramites = Tramite.objects.en_estado(FinalObraTotalSolicitado)
+    tramites = Tramite.objects.en_estado(InspeccionFinal)
     contexto = {'tramites': tramites}
     return contexto
 
@@ -595,11 +595,12 @@ def rechazar_tramite(request, pk_tramite):
     return redirect('administrativo')
 
 
-class ver_un_certificado(DetailView):
-    model = Persona
-    template_name = 'persona/administrativo/ver_certificado_profesional.html'
-    def dispatch(self, *args, **kwargs):
-        return super(ver_un_certificado, self).dispatch(*args, **kwargs)
+def ver_un_certificado(request, pk_persona):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+    persona = get_object_or_404(Persona, pk=pk_persona)
+    return render(request, 'persona/administrativo/ver_certificado_profesional.html', {'persona': persona,
+                                                                                       "perfil": perfil})
 
 
 def ver_documentos_tramite_administrativo(request, pk_tramite):

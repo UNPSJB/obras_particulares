@@ -58,8 +58,10 @@
     });
     function agregarHora(boton){
         today = new Date();
-        Hora = today.getHours();
-        Minutos = today.getMinutes();
+        //Hora = today.getHours();
+        Hora = 12;
+        //Minutos = today.getMinutes();
+        Minutos = 12;
         obs = $($(boton).parent().parent()).find('.mi-datepicker').val();
         fecha = obs+' '+Hora+':'+Minutos;
         id_tramite = $($(boton).parent().parent().find('td')[0]).text();
