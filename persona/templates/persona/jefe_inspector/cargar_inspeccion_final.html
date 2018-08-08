@@ -95,41 +95,6 @@
                                     </button>
                                 </div>
                             </form>
-                            <!--div class="container-fluid">
-                                <div class="row">
-                                    <hr>
-                                    <div class="form-group">
-                                        <label>Cargar Documentos corregidos:</label>
-                                        <input class="file" id="id_correcciones"  type="file" data-preview-file-type="any" multiple="true" title="Cargar documentos corregidos" required />
-                                    </div>
-                                    <hr>
-                                    <div class="form-group">
-                                        <label>Observaciones:</label>
-                                        <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                                        <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
-                                    </div>
-                                    <a href="{% url 'aceptar_inspeccion_final' pk_tramite=tramite.id  %}">
-                                        <button type="button" class="btn btn-primary" name="Aceptar">
-                                            Aprobar inspeccion
-                                        </button>
-                                    </a>
-                                    <a href="javascript:prueba();">
-                                        <button type="button" class="btn btn-danger" name="Rechazar">
-                                            Rechazar inspeccion
-                                        </button>
-                                    </a>
-                                </div>
-                                <br>
-                                <script>
-                                    function prueba(){
-                                        obs = $("#id_observaciones").val();
-                                        id_tramite = $("#id_tramite").val();
-                                        url = '/persona/rechazar_inspeccion/'+id_tramite+'/?msg='+obs;
-                                        alert(url);
-                                        location.href = url;
-                                    }
-                                </script>
-                            </div-->
                             <br>
 						</div>
 					</div>

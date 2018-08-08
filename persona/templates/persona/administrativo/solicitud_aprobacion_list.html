@@ -10,7 +10,7 @@
         <th>Estado</th>
         <th>Profesional</th>
         <th>Propietario</th>
-        <th>Aprobar</th>
+        <th>Ver</th>
       </tr>
     </thead>
     <tbody>
@@ -23,13 +23,20 @@
         <td class="col-xs-2">{{ tramite.profesional}} </td>
         <td class="col-xs-2">{{ tramite.propietario}}
         </td>
-        <td class="col-xs-2" align="center">
+        <td align="center" class="col-xs-1">
+            <a href="{% url 'cargar_aprobacion' pk_tramite=tramite.id %}">
+                <button type="button" class="btn btn-primary btn-xs" name="Aceptar">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
+                </button>
+            </a>
+        </td>
+        <!--td class="col-xs-2" align="center">
           <a href="{% url 'aprobar_tramite' pk_tramite=tramite.id %}">
             <button type="button" class="btn btn-primary btn-xs" name="habilitar">
               <span class="glyphicon glyphicon-ok" aria-hidden="true"> Aprobar tramite</span>
             </button>
           </a>
-        </td>
+        </td-->
       </tr>
       {% endfor %}
       {% endif%}

@@ -6,8 +6,8 @@
                 <th>Propietario</th>
                 <th>Profesional</th>
                 <th>Medidas</th>
-                <th>Tipo de Obra</th>
-                <th>Direccion obra</th>
+                <th>Tipo</th>
+                <th>Domicilio</th>
                 <th>Fecha</th>
                 <th>Agendar</th>
             </tr>
@@ -18,39 +18,50 @@
             <tr>
                 <td class="col-xs-1">{{ tramite.id }}</td>
                 <td class="col-xs-2">{{ tramite.propietario }}</td>
-                <td class="col-xs-3">
-                    {{ tramite.profesional.persona.nombre }}
-                    {{ tramite.profesional.persona.apellido }}
-                    {{ tramite.profesional.profesion }}
-                    {{ tramite.profesional.matricula }}
-                </td>
+                <td class="col-xs-2">{{ tramite.profesional }}</td>
                 <td class="col-xs-1">{{ tramite.medidas }}</td>
-                <td class="col-xs-1">{{ tramite.tipo_obra }}</td>
+                <td class="col-xs-2">{{ tramite.tipo_obra }}</td>
                 <td class="col-xs-1">{{ tramite.domicilio }}</td>
-                <td class="col-xs-1" align="center">
-                    <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                    <input class="form-control input-xs" id="id_fechadeinspeccion_{{tramite.pk}}" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
+                <td class="col-xs-2">
+                    <input class="mi-datepicker" readonly>
                 </td>
-                <td class="col-xs-1" align="center">
-                    <a href="javascript:prueba();">
-                        <button type="button" class="btn btn-primary btn-xs" name="Agendar">
-                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>
-                        </button>
-                    </a>
+                <td class="col-xs-1">
+                    <button type="button" class="btn btn-primary btn-sm" name="Agendar" onclick="agregarHora(this);">
+                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>
+                    </button>
                 </td>
-                <script>
-                    function prueba(){
-                        obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();
-                        alert(obs);
-                        id_tramite = $("#id_tramite").val();
-                        url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+obs;
-                        alert(url);
-                        location.href = url;
-                    }
-                </script>
             </tr>
             {% endfor %}
             {% endif%}
         </tbody>
     </table>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('.mi-datepicker').each(function() {
+          $(this).datepicker({
+              changeMonth: true,
+              changeYear: true,
+              dateFormat: 'yy-mm-dd',
+              showOn: "button",
+              minDate: 0,
+              minMonth: 0,
+              inline: true,
+              });
+          $(this).datepicker("setDate", new Date());
+        });
+    });
+    function agregarHora(boton){
+        today = new Date();
+        Hora = today.getHours();
+        Minutos = today.getMinutes();
+        obs = $($(boton).parent().parent()).find('.mi-datepicker').val();
+        fecha = obs+' '+Hora+':'+Minutos;
+        id_tramite = $($(boton).parent().parent().find('td')[0]).text();
+        url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+fecha;
+        location.href = url;
+    }
+    </script>
 </div>

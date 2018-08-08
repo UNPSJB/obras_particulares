@@ -10,7 +10,7 @@ urlpatterns = [
 
     url(r'^altapersona$', views.alta_persona, name="alta_persona"),
     url(r'^crearusuario/(?P<pk_persona>\d+)/$', views.crear_usuario, name="crear_usuario"),
-    url(r'^habilitar_final_obra/(?P<pk_tramite>\d+)/$', views.habilitar_final_obra, name="habilitar_final_obra"),
+    #url(r'^habilitar_final_obra/(?P<pk_tramite>\d+)/$', views.habilitar_final_obra, name="habilitar_final_obra"),
     url(r'^aceptar_tramite/(?P<pk_tramite>\d+)/$', views.aceptar_tramite, name="aceptar_tramite"),
 
     # propietario ---------------------------------------------------------------------------------------------------
@@ -40,6 +40,11 @@ urlpatterns = [
     url(r'^aceptar_tramite/(?P<pk_tramite>\d+)/$', views.aceptar_tramite, name="aceptar_tramite"),
     url(r'^aprobar_tramite/(?P<pk_tramite>\d+)/$', views.aprobar_tramite, name="aprobar_tramite"),
     url(r'^no_aprobar_tramite/(?P<pk_tramite>\d+)/$', views.no_aprobar_tramite, name="no_aprobar_tramite"),
+    url(r'^cargar_aprobacion/(?P<pk_tramite>\d+)/$', views.cargar_aprobacion, name="cargar_aprobacion"),
+    url(r'^aprobar_final_de_obra/(?P<pk_tramite>\d+)/$', views.habilitar_final_obra, name="habilitar_final_obra"),
+    url(r'^cargar_final_de_obra_total/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total,name="cargar_final_de_obra_total"),
+    url(r'^cargar_no_final_de_obra_total/(?P<pk_tramite>\d+)/$', views.cargar_no_final_de_obra_total, name="cargar_no_final_de_obra_total"),
+
 
     # visador -------------------------------------------------------------------------------------------------------
     url(r'^visador$', views.mostrar_visador, name="visador"),

@@ -45,7 +45,7 @@
     <div class="panel-heading box" role="tab" id="headingTwo">
       <h5 class="panel-title">
         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>
-          <font color="#ffffff" size="2">Agendar para inspeccion</font>
+          <font color="#ffffff" size="2">Agendar para inspeccion final</font>
         </a>
       </h5>
     </div>
@@ -98,7 +98,9 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
+              {% block contenido_tramites_inspeccionados %}
+              {% include "persona/inspector/tramites_inspeccionados.html" with estados=ctxtramitesinspeccionados%}
+              {% endblock %}
             </div>
           </div>
         </div>
