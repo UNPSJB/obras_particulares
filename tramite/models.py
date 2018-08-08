@@ -55,8 +55,11 @@ class Tramite(models.Model):
     SOLICITAR_NO_APROBAR_TRAMITE = "solicitar_no_aprobar_tramite"
     NO_APROBAR_TRAMITE = "no_aprobar_tramite"
     SOLICITAR_FINAL_OBRA_TOTAL = "solicitar_final_obra_total"
-    FINALIZAR = "finalizar"
     SOLICITAR_FINAL_OBRA_PARCIAL = "solicitar_final_obra_parcial"
+    NO_SOLICITAR_FINAL_OBRA_TOTAL = "no_solicitar_final_obra_total"
+    FINALIZAR = "finalizar"
+    NO_FINALIZAR = "no_finalizar"
+
 
 
     PAGAR = "pagar"
@@ -307,6 +310,9 @@ class Aprobado(Estado):
     def solicitar_final_obra_parcial(self, tramite):
         return FinalObraParcialSolicitado(tramite=tramite)
 
+    def no_solicitar_final_obra_total(self, tramite):
+        return NoFinalObraTotalSolicitado(tramite=tramite)
+
     def darBaja(self, tramite):
         return Baja(tramite=tramite)
 
@@ -367,6 +373,9 @@ class AprobadoPorPropietario(Estado):
     def solicitar_final_obra_parcial(self, tramite):
         return FinalObraParcialSolicitado(tramite=tramite)
 
+    def no_solicitar_final_obra_total(self, tramite):
+        return NoFinalObraTotalSolicitado(tramite=tramite)
+
     def darBaja(self, tramite):
         return Baja(tramite=tramite)
 
@@ -386,6 +395,9 @@ class AgendadoInspeccion(Estado):
 
     def solicitar_final_obra_parcial(self, tramite):
         return FinalObraParcialSolicitado(tramite=tramite)
+
+    def no_solicitar_final_obra_total(self, tramite):
+        return NoFinalObraTotalSolicitado(tramite=tramite)
 
     def darBaja(self, tramite):
         return Baja(tramite=tramite)
@@ -407,6 +419,9 @@ class Inspeccionado(Estado):
     def solicitar_final_obra_parcial(self, tramite):
         return FinalObraParcialSolicitado(tramite=tramite)
 
+    def no_solicitar_final_obra_total(self, tramite):
+        return NoFinalObraTotalSolicitado(tramite=tramite)
+
     def darBaja(self, tramite):
         return Baja(tramite=tramite)
 
@@ -421,8 +436,42 @@ class FinalObraTotalSolicitado(Estado):
         return AgendadoInspeccionFinal(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
 
-class AgendadoInspeccionFinal(Estado):
+class FinalObraParcialSolicitado(Estado):
     TIPO = 17
+
+    '''Falta que extienda el plazo de construccion 2 anios mas'''
+
+    def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
+        return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
+
+    def solicitar_final_obra_total(self, tramite):
+        return FinalObraTotalSolicitado(tramite=tramite)
+
+    def solicitar_no_final_obra_total(self, tramite):
+        return FinalObraTotalSolicitado(tramite=tramite)
+
+    def no_solicitar_final_obra_total(self, tramite):
+        return NoFinalObraTotalSolicitado(tramite=tramite)
+
+    def darBaja(self, tramite):
+        return Baja(tramite=tramite)
+
+    def __str__(self):
+        return str(self.__class__.__name__)
+
+
+class NoFinalObraTotalSolicitado(Estado):
+    TIPO = 18
+
+    def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
+        return AgendadoInspeccionFinal(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
+
+    def __str__(self):
+        return str(self.__class__.__name__)
+
+
+class AgendadoInspeccionFinal(Estado):
+    TIPO = 19
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
     fecha = models.DateTimeField(blank=False)
 
@@ -434,42 +483,70 @@ class AgendadoInspeccionFinal(Estado):
 
 
 class InspeccionFinal(Estado):
-    TIPO = 18
+    TIPO = 20
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
 
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
 
-    #final_obra_total = models.BooleanField(blank=True)
-
     def finalizar(self, tramite):
-        if tramite.monto_pagado >= tramite.monto_a_pagar:  # Tramite.objects.get(pk=tramite.pk).pago_completo
+        if tramite.monto_pagado >= tramite.monto_a_pagar:
             return Finalizado(tramite=tramite)
         else:
             raise Exception("Todavia no se puede otorgar el final de obra")
+
+    def no_finalizar(self, tramite):
+        if tramite.monto_pagado >= tramite.monto_a_pagar:
+            return NoFinalizado(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede otorgar el no final de obra total")
 
     def __str__(self):
         return str(self.__class__.__name__)
 
 
 class Finalizado(Estado):
-    TIPO = 19
+    TIPO = 21
+
+    def __str__(self):
+        return str(self.__class__.__name__)
 
 
-class FinalObraParcialSolicitado(Estado):
-    TIPO = 20
-    '''Este solo extiende el plazo de construccion 2 anios mas'''
+class NoFinalizado(Estado):
+    TIPO = 22
+
+    def solicitar_final_obra_total(self, tramite):
+        return FinalObraTotalSolicitadoPorPropietario(tramite=tramite)
+
+    def __str__(self):
+        return str(self.__class__.__name__)
+
+
+class FinalObraTotalSolicitadoPorPropietario(Estado):
+    TIPO = 23
+
+    def finalizar(self, tramite):
+        if tramite.monto_pagado >= tramite.monto_a_pagar:
+            return Finalizado(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede otorgar el final de obra total")
+
+    def __str__(self):
+        return str(self.__class__.__name__)
 
 
 class Baja(Estado):
-    TIPO = 21
-    ''' falta ver esto'''
+    TIPO = 24
+
+    def __str__(self):
+        return str(self.__class__.__name__)
 
 
 for klass in [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
               AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario,
-              AprobadoPorPropietario, Corregido, AgendadoInspeccion, Inspeccionado, Finalizado,
-              FinalObraTotalSolicitado, AgendadoInspeccionFinal, InspeccionFinal, Finalizado, FinalObraParcialSolicitado, Baja]:
+              AprobadoPorPropietario, Corregido, AgendadoInspeccion, Inspeccionado, FinalObraTotalSolicitado,
+              FinalObraParcialSolicitado, NoFinalObraTotalSolicitado, AgendadoInspeccionFinal, InspeccionFinal,
+              Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]:
     Estado.register(klass)
 
 

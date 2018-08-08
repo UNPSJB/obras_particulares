@@ -76,7 +76,7 @@ class TipoObra(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
     descripcion = models.CharField(max_length=100)
     #categorias = models.CharField(max_length=100, blank= True, null = True)
-    categorias = models.IntegerField(choices=Profesional.CATEGORIAS)
+    categorias = models.IntegerField(choices=Profesional.CATEGORIAS, default=1)
     valor_de_superficie = models.IntegerField(default=15)
     activo = models.BooleanField(default=True)
 
