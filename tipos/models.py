@@ -4,53 +4,51 @@ from django.utils import timezone
 from django.db import models
 from persona.models import *
 
-class TipoDocumento(models.Model):
-    #INICIAR = 1 << 0
-    #REVISAR = 1 << 1
-    #CORREGIR = 1 << 2
-    #VISAR = 1 << 3
-    #AGENDAR = 1 << 4
-    #INSPECCIONAR = 1 << 6
-    #PAGAR = 1 << 7
-    #FINALIZAR = 1 << 8
 
+class TipoDocumento(models.Model):
     INICIAR = 1 << 0
     REVISAR = 1 << 1
-    CORREGIR = 1 << 5
     #ACEPTAR = 1 << 0
     #RECHAZAR = 1 << 0
     #AGENDAR_VISADO = 1 << 0
-    VISAR = 1 << 4
+    VISAR = 1 << 3
+    CORREGIR = 1 << 4
     #AGENDAR_INSPECCION = 1 << 0
-    APROBAR_INSPECCION = 1 << 7
+    APROBAR_INSPECCION = 1 << 5
     #SOLICITAR_APROBAR_TRAMITE = 1 << 0
-    APROBAR_TRAMITE = 1 << 9
-    SOLICITAR_NO_APROBAR_TRAMITE = 1 << 10
-    #NO_APROBAR_TRAMITE = 1 << 0
-    #SOLICITAR_FINAL_OBRA_TOTAL = 1 << 0
-    FINALIZAR = 1 << 21
+    APROBAR_TRAMITE = 1 << 6
+    SOLICITAR_NO_APROBAR_TRAMITE = 1 << 7
+    NO_APROBAR_TRAMITE = 1 << 8
+    SOLICITAR_APROBAR_TRAMITE_PROPIETARIO = 1 << 9
+    SOLICITAR_FINAL_OBRA_TOTAL = 1 << 10
+    SOLICITAR_NO_FINAL_OBRA_TOTAL = 1 << 11
+    FINALIZAR = 1 << 12
+    SOLICITAR_FINAL_OBRA_TOTAL_PROPIETARIO = 1 << 13
     #SOLICITAR_FINAL_OBRA_PARCIAL = 1 << 0
-    #PAGAR = 1 << 0
+    PAGAR = 1 << 14
     #DAR_DE_BAJA = 1 << 0
 
     ACCIONES = [
         (INICIAR, "Iniciar tramite"),
         (REVISAR, "Revisar tramite"),
-        (CORREGIR, "Corregir tramite"),
         #(ACEPTAR, "Aceptar tramite"),
         #(RECHAZAR, "Rechazar tramite"),
         #(AGENDAR_VISADO, "Agendar tramite para visado"),
         (VISAR, "Visar tramite"),
+        (CORREGIR, "Corregir tramite"),
         #(AGENDAR_INSPECCION, "Agendar tramite para inspeccion"),
-        (APROBAR_INSPECCION, "Inspeccionar tramit"),
+        (APROBAR_INSPECCION, "Inspeccionar tramitE"),
         #(SOLICITAR_APROBAR_TRAMITE, "Solicitar aprobar tramite"),
         (APROBAR_TRAMITE, "Aprobar tramite"),
         (SOLICITAR_NO_APROBAR_TRAMITE, "Solicitar no aprobar tramite"),
-        #(NO_APROBAR_TRAMITE, "No aprobar tramite"),
-        #(SOLICITAR_FINAL_OBRA_TOTAL, "Solicitar final obra total de tramite"),
+        (NO_APROBAR_TRAMITE, "No aprobar tramite"),
+        (SOLICITAR_APROBAR_TRAMITE_PROPIETARIO, "Propietario solicita aprobar tramite"),
+        (SOLICITAR_FINAL_OBRA_TOTAL, "Solicitar final obra total de tramite"),
+        (SOLICITAR_NO_FINAL_OBRA_TOTAL, "Solicitar no final obra total de tramite"),
         (FINALIZAR, "Finalizar tramite"),
+        (SOLICITAR_FINAL_OBRA_TOTAL_PROPIETARIO, "Profesional solicita final obra total de tramite"),
         #(SOLICITAR_FINAL_OBRA_PARCIAL, "Solicitar final obra parcial de tramite"),
-        #(PAGAR, "Pagar tramite"),
+        (PAGAR, "Pagar tramite")
         #(DAR_DE_BAJA, "Dar_de_baja tramite")
     ]
     nombre = models.CharField(max_length=50)

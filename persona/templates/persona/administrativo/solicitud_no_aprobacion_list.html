@@ -1,9 +1,6 @@
 {% load staticfiles %}
 
 {% block contenido_tramite_final_obra %}
-
-<h3 style="color: red;">Terminar esto!! Activar ver nota del profesional, la nota es el documento requerido para hacer esto</h3>
-
 <div class="table-responsive">
   <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
     <thead>
@@ -13,8 +10,7 @@
         <th>Estado</th>
         <th>Profesional</th>
         <th>Propietario</th>
-        <th>Documentos</th>
-        <th>No Aprobar</th>
+        <th>Ver</th>
       </tr>
     </thead>
     <tbody>
@@ -26,17 +22,10 @@
         <td class="col-xs-2">{{ tramite.estado }}</td>
         <td class="col-xs-2">{{ tramite.profesional}} </td>
         <td class="col-xs-2">{{ tramite.propietario}}</td>
-        <td class="col-xs-2" align="center">
-          <a href="">
-            <button type="button" class="btn btn-primary btn-xs" name="ver_nota">
-              <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
-            </button>
-          </a>
-        </td>
-        <td class="col-xs-2" align="center">
-          <a href="{% url 'solicitud_aprobacion_list.html' pk_tramite=tramite.id %}">
+        <td class="col-xs-1" align="center">
+          <a href="{% url 'cargar_no_aprobacion' pk_tramite=tramite.id %}">
             <button type="button" class="btn btn-primary btn-xs" name="no_aprobar">
-              <span class="glyphicon glyphicon-ok" aria-hidden="true"> No Aprobar tramite</span>
+              <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
             </button>
           </a>
         </td>

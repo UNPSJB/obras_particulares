@@ -54,12 +54,13 @@ class Tramite(models.Model):
     APROBAR_TRAMITE = "aprobar_tramite"
     SOLICITAR_NO_APROBAR_TRAMITE = "solicitar_no_aprobar_tramite"
     NO_APROBAR_TRAMITE = "no_aprobar_tramite"
+    SOLICITAR_APROBAR_TRAMITE_PROPIETARIO = "solicitar_aprobar_tramite_propietario"
     SOLICITAR_FINAL_OBRA_TOTAL = "solicitar_final_obra_total"
     SOLICITAR_FINAL_OBRA_PARCIAL = "solicitar_final_obra_parcial"
-    NO_SOLICITAR_FINAL_OBRA_TOTAL = "no_solicitar_final_obra_total"
+    SOLICITAR_NO_FINAL_OBRA_TOTAL = "no_solicitar_final_obra_total"
     FINALIZAR = "finalizar"
     NO_FINALIZAR = "no_finalizar"
-
+    SOLICITAR_FINAL_OBRA_TOTAL_PROPIETARIO = "solicitar_final_obra_total_propietario"
 
 
     PAGAR = "pagar"
@@ -336,7 +337,7 @@ class NoAprobadoSolicitado(Estado):
 class NoAprobado(Estado):
     TIPO = 11
 
-    def solicitar_aprobar_tramite(self, tramite):
+    def solicitar_aprobar_tramite_propietario(self, tramite):
         if tramite.monto_pagado >= tramite.monto_a_pagar or tramite.monto_pagado >= (tramite.monto_a_pagar / 12):
             return AprobadoSolicitadoPorPropietario(tramite=tramite)
         else:
@@ -515,7 +516,7 @@ class Finalizado(Estado):
 class NoFinalizado(Estado):
     TIPO = 22
 
-    def solicitar_final_obra_total(self, tramite):
+    def solicitar_final_obra_total_propietario(self, tramite):
         return FinalObraTotalSolicitadoPorPropietario(tramite=tramite)
 
     def __str__(self):

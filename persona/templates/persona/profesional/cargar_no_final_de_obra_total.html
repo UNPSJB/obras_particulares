@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block estilos %}
+<link rel="stylesheet" type="text/css" href="{% static perfil %}">
+{% endblock %}
+
+{% block imagenusuario %}
+<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
+{% endblock %}
+
+{% block barra %}
+<div id="contenedor_botoncalapsable_sidebar">
+    <button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
+        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+    </button>
+</div>
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="javascript:history.back(-1);" class="current"><font>Profesional</font></a></li>
+    </font>
+</ul>
+{% endblock %}
+
+{% block contenido %}
+<div id="contenedor_botoncalapsable_resto"></div>
+<div class="panel-group">
+	<div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box">
+			<h5 class="panel-title">
+				<a>
+					<font color="#ffffff" size="2">Documentos del tramite</font>
+				</a>
+			</h5>
+		</div>
+		<div class="panel-collapse colorp">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                {% for documento in tramite.documentos.all %}
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <div class="thumbnail ">
+                                        <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
+                                            <img src="/media/{{documento.file}}" width=300 height=300>
+                                        </a>
+                                        <br>
+                                        <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}} - {{documento.fecha}} </p>
+                                        <form action="">
+                                            <p align="right" >
+                                                <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
+                                            </p>
+                                        </form>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            <br>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+    <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box">
+			<h5 class="panel-title">
+				<a>
+					<font color="#ffffff" size="2">Documentos dar no final de obra total al tramite</font>
+				</a>
+			</h5>
+		</div>
+		<div class="panel-collapse colorp">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <form  method="post" enctype="multipart/form-data">
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    {{ctxdocumentoset}}
+                                </div>
+                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                    <br>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                                    <button class="btn btn-primary btn-sm" type="submit" title="No_aprobar_final_de_obra_total" name="no_aprobar_final_de_obra_total">
+                                        Solicitar no final de obra
+                                    </button>
+                                </div>
+                            </form>
+                            <br>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        var c = document.getElementById("botonConfiguracion");
+		c.style.display= '';
+		var d = document.getElementById("imagenusuario");
+		d.style.display= '';
+    </script>
+
+   <script>
+		$(function () {
+			var cant_doc_requeridos = {{documentos_requeridos|length}};
+  			for(var n = 0; n < cant_doc_requeridos; n++) {
+    			var valorInput = $("input[id='id_form-"+n+"-tipo_documento']").val();
+				{% for documento in documentos_requeridos %}
+					var id = {{documento.id}}
+					if (valorInput == id){
+					    if (n == 0){
+					        var valorNombreDoc = "{{documento.nombre}}" + "*: "
+					    }
+  						if (n > 0){
+  						    var valorNombreDoc = "<br>{{documento.nombre}}</br>"
+  						}
+					}
+				{% endfor %}
+				$("label[for='id_form-"+n+"-file']").empty();
+                $("label[for='id_form-"+n+"-file']").append(valorNombreDoc);
+			}
+		});
+	</script>
+
+    <script>
+        var cant_doc_requeridos = {{ctxdocumentoset|length}};
+        for(var n = 0; n < cant_doc_requeridos; n++) {
+            $("input[id='id_form-"+n+"-file']").addClass('file');
+            $("input[id='id_form-"+n+"-file']").attr("required", true);
+        }
+		$('.file').fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Seleccionar archivo',
+			showUpload: false,
+			showRemove: false
+		});
+    </script>
+{% endblock %}

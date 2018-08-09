@@ -18,17 +18,23 @@ urlpatterns = [
     url(r'^ver_historial_tramite/(?P<pk_tramite>\d+)/$', views.ver_historial_tramite, name="ver_historial_tramite"),
     url(r'^solicitud_final_obra_propietario/(?P<pk_tramite>\d+)/$', views.propietario_solicita_final_obra, name="propietario_solicita_final_obra"),
     url(r'^documentos_de_estado/(?P<pk_estado>\d+)/$', views.documentos_de_estado, name="documentos_de_estado"),
+    url(r'^cargar_aprobacion_propietario/(?P<pk_tramite>\d+)/$', views.cargar_aprobacion_propietario, name="cargar_aprobacion_propietario"),
+    url(r'^cargar_final_de_obra_total_propietario/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total_propietario, name="cargar_final_de_obra_total_propietario"),
 
     # profesional ---------------------------------------------------------------------------------------------------
     url(r'^profesional$', views.mostrar_profesional, name="profesional"),
     url(r'^ver_documentos_tramite_profesional/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_profesional, name="ver_documentos_tramite_profesional"),
     url(r'^ver_documentos_corregidos/(?P<pk_tramite>\d+)/$', views.ver_documentos_corregidos, name="ver_documentos_corregidos"),
     url(r'^solicitud_final_obra/(?P<pk_tramite>\d+)/$', views.profesional_solicita_final_obra, name="profesional_solicita_final_obra"),
+    url(r'^solicitud_no_final_obra/(?P<pk_tramite>\d+)/$', views.profesional_solicita_no_final_obra, name="profesional_solicita_no_final_obra"),
+    url(r'^solicitud_final_obra_parcial/(?P<pk_tramite>\d+)/$', views.profesional_solicita_final_obra_parcial,name="profesional_solicita_final_obra_parcial"),
     url(r'^profesional_solicita_aprobar_tramite/(?P<pk_tramite>\d+)/$', views.profesional_solicita_aprobar_tramite, name="profesional_solicita_aprobar_tramite"),
     url(r'^profesional_solicita_no_aprobar_tramite/(?P<pk_tramite>\d+)/$', views.profesional_solicita_no_aprobar_tramite,name="profesional_solicita_no_aprobar_tramite"),
     url(r'^enviar_correcciones/(?P<pk_tramite>\d+)/$', views.enviar_correcciones, name="enviar_correcciones"),
     url(r'^profesional/estado_tramite$', views.listado_tramites_de_profesional, name="estado_tramite"),
     url(r'^documento_de_estado/(?P<pk_estado>\d+)/$', views.documento_de_estado, name="documento_de_estado"),
+    url(r'^cargar_final_de_obra_total_profesional/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total_profesional, name="cargar_final_de_obra_total_profesional"),
+    url(r'^cargar_no_final_de_obra_total_profesional/(?P<pk_tramite>\d+)/$', views.cargar_no_final_de_obra_total_profesional, name="cargar_no_final_de_obra_total_profesional"),
 
     # administrativo ------------------------------------------------------------------------------------------------
     url(r'^administrativo$', views.mostrar_administrativo, name="administrativo"),
@@ -41,6 +47,7 @@ urlpatterns = [
     url(r'^aprobar_tramite/(?P<pk_tramite>\d+)/$', views.aprobar_tramite, name="aprobar_tramite"),
     url(r'^no_aprobar_tramite/(?P<pk_tramite>\d+)/$', views.no_aprobar_tramite, name="no_aprobar_tramite"),
     url(r'^cargar_aprobacion/(?P<pk_tramite>\d+)/$', views.cargar_aprobacion, name="cargar_aprobacion"),
+    url(r'^cargar_no_aprobacion/(?P<pk_tramite>\d+)/$', views.cargar_no_aprobacion, name="cargar_no_aprobacion"),
     url(r'^aprobar_final_de_obra/(?P<pk_tramite>\d+)/$', views.habilitar_final_obra, name="habilitar_final_obra"),
     url(r'^cargar_final_de_obra_total/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total,name="cargar_final_de_obra_total"),
     url(r'^cargar_no_final_de_obra_total/(?P<pk_tramite>\d+)/$', views.cargar_no_final_de_obra_total, name="cargar_no_final_de_obra_total"),
