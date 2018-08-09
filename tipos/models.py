@@ -23,9 +23,10 @@ class TipoDocumento(models.Model):
     SOLICITAR_FINAL_OBRA_TOTAL = 1 << 10
     SOLICITAR_NO_FINAL_OBRA_TOTAL = 1 << 11
     FINALIZAR = 1 << 12
-    SOLICITAR_FINAL_OBRA_TOTAL_PROPIETARIO = 1 << 13
+    NO_FINALIZAR = 1 << 13
+    SOLICITAR_FINAL_OBRA_TOTAL_PROPIETARIO = 1 << 14
     #SOLICITAR_FINAL_OBRA_PARCIAL = 1 << 0
-    PAGAR = 1 << 14
+    PAGAR = 1 << 15
     #DAR_DE_BAJA = 1 << 0
 
     ACCIONES = [
@@ -46,6 +47,7 @@ class TipoDocumento(models.Model):
         (SOLICITAR_FINAL_OBRA_TOTAL, "Solicitar final obra total de tramite"),
         (SOLICITAR_NO_FINAL_OBRA_TOTAL, "Solicitar no final obra total de tramite"),
         (FINALIZAR, "Finalizar tramite"),
+        (NO_FINALIZAR, "no_finalizar"),
         (SOLICITAR_FINAL_OBRA_TOTAL_PROPIETARIO, "Profesional solicita final obra total de tramite"),
         #(SOLICITAR_FINAL_OBRA_PARCIAL, "Solicitar final obra parcial de tramite"),
         (PAGAR, "Pagar tramite")

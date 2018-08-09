@@ -62,7 +62,6 @@ class Tramite(models.Model):
     NO_FINALIZAR = "no_finalizar"
     SOLICITAR_FINAL_OBRA_TOTAL_PROPIETARIO = "solicitar_final_obra_total_propietario"
 
-
     PAGAR = "pagar"
     DAR_DE_BAJA = "dar_de_baja"
 
@@ -440,15 +439,10 @@ class FinalObraTotalSolicitado(Estado):
 class FinalObraParcialSolicitado(Estado):
     TIPO = 17
 
-    '''Falta que extienda el plazo de construccion 2 anios mas'''
-
     def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
         return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
     def solicitar_final_obra_total(self, tramite):
-        return FinalObraTotalSolicitado(tramite=tramite)
-
-    def solicitar_no_final_obra_total(self, tramite):
         return FinalObraTotalSolicitado(tramite=tramite)
 
     def no_solicitar_final_obra_total(self, tramite):

@@ -12,7 +12,6 @@
         <th style="vertical-align: middle;">Tipo</th>
         <th style="vertical-align: middle;">Monto total</th>
         <th style="vertical-align: middle;">Monto pagado</th>
-        <th style="vertical-align: middle;">Resta pagar</th>
         <th style="vertical-align: middle;">Historial</th>
         <th style="vertical-align: middle;">Aprobar</th>
         <th style="vertical-align: middle;">Final de obra</th>
@@ -29,7 +28,6 @@
         <td class="col-xs-1">{{tramite.tipo_obra}}</td>
         <td class="col-xs-1">{{tramite.monto_a_pagar}}</td>
         <td class="col-xs-1">{{tramite.monto_pagado}}</td>
-        <td class="col-xs-1">{{ tramite.saldo_restante_a_pagar}}</td>
         <td align="center" class="col-xs-1">
           <a href="{% url 'ver_historial_tramite' tramite.id %}">
             <button type="button" class="btn btn-primary btn-xs" name="ver-historial">

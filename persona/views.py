@@ -39,18 +39,14 @@ from reportlab.graphics import renderPDF
 from reportlab.graphics.charts.barcharts import VerticalBarChart
 
 
-'''
-generales -----------------------------------------------------------------------------------------------------
-'''
+'''generales --------------------------------------------------------------------------------------------'''
 
 DATETIME = re.compile("^(\d{4})\-(\d{2})\-(\d{2})\s(\d{1,2}):(\d{2})$")
 
 def convertidor_de_fechas(fecha):
     return datetime(*[int(n) for n in DATETIME.match(fecha).groups()])
 
-'''
-propietario ---------------------------------------------------------------------------------------------------
-'''
+'''propietario ------------------------------------------------------------------------------------------'''
 
 
 @login_required(login_url="login")
@@ -158,9 +154,9 @@ def propietario_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA_TOTAL_PROPIETARIO, request.user)
-        messages.add_message(request, messages.SUCCESS, 'Final de obra solicitado.')
+        messages.add_message(request, messages.SUCCESS, 'Final de obra total solicitado.')
     except:
-        messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
+        messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra total para ese tramite.')
     finally:
         return redirect('propietario')
 
@@ -195,9 +191,7 @@ def documentos_de_estado(request, pk_estado):
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
 
 
-'''
-profesional ----------------------------------------------------------------------------------------------------
-'''
+'''profesional -------------------------------------------------------------------------------------------'''
 
 
 @login_required(login_url="login")
@@ -325,6 +319,8 @@ def profesional_solicita_aprobar_tramite(request, pk_tramite):
         if str(tramite.estado()) != 'NoAprobado':
             tramite.hacer(Tramite.SOLICITAR_APROBAR_TRAMITE, request.user)
             messages.add_message(request, messages.SUCCESS, 'Solicitud de aprobar tramite realizada.')
+        else:
+            messages.add_message(request, messages.ERROR, 'No puede solicitar aprobar tramite para ese tramite.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar aprobar tramite para ese tramite.')
     finally:
@@ -372,6 +368,8 @@ def profesional_solicita_final_obra(request, pk_tramite):
         if str(tramite.estado()) != 'NoFinalizado':
             tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA_TOTAL, request.user)
             messages.add_message(request, messages.SUCCESS, 'Final de obra solicitado.')
+        else:
+            messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
     finally:
@@ -416,8 +414,14 @@ def profesional_solicita_no_final_obra(request, pk_tramite):
 def profesional_solicita_final_obra_parcial(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
-        tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA_PARCIAL, request.user)
-        messages.add_message(request, messages.SUCCESS, 'Final de obra parcial solicitado.')
+        estados = Estado.objects.all()
+        tipo = 17
+        estado = filter(lambda e: (e.tipo == tipo and str(e.tramite.pk) == str(pk_tramite)), estados)
+        if len(estado) == 0:
+            tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA_PARCIAL, request.user)
+            messages.add_message(request, messages.SUCCESS, 'Final de obra parcial solicitado.')
+        else:
+            messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra parcial para ese tramite.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra parcial para ese tramite.')
     finally:
@@ -457,9 +461,7 @@ def documento_de_estado(request, pk_estado):
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
 
 
-'''
-administrativo ------------------------------------------------------------------------------------------------
-'''
+'''administrativo ---------------------------------------------------------------------------------------'''
 
 
 @login_required(login_url="login")
@@ -474,7 +476,7 @@ def mostrar_administrativo(request):
         "ctxtramitesiniciados": listado_de_tramites_iniciados(),
         "ctxtramitescorregidos": tramite_corregidos_list(),
         "ctxsolicitudesfinalobra": solicitud_final_obra_list(),
-        "ctxsolicitudesnofinalobra": solicitud_no_final_obra_list(),
+        #"ctxsolicitudesnofinalobra": solicitud_no_final_obra_list(),
         "ctxsolicitudesaprobacion": solicitud_aprobacion_list(),
         "ctxsolicitudesnoaprobacion": solicitud_no_aprobacion_list(),
         "ctxpago": registrar_pago_tramite(request),
@@ -530,16 +532,16 @@ def tramite_corregidos_list():
 
 
 def solicitud_final_obra_list():
-    tramites = Tramite.objects.en_estado(InspeccionFinal)
+    argumentos = [InspeccionFinal, FinalObraTotalSolicitadoPorPropietario]
+    tramites = Tramite.objects.en_estado(argumentos)
     contexto = {'tramites': tramites}
     return contexto
 
 
-def solicitud_no_final_obra_list():
-
-    tramites = Tramite.objects.en_estado(NoFinalObraTotalSolicitado)
-    contexto = {'tramites': tramites}
-    return contexto
+#def solicitud_no_final_obra_list():
+#    tramites = Tramite.objects.en_estado(InspeccionFinal)
+#    contexto = {'tramites': tramites}
+#    return contexto
 
 
 def solicitud_aprobacion_list():
@@ -605,7 +607,18 @@ def cargar_final_de_obra_total(request, pk_tramite):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.FINALIZAR)
+    estados = Estado.objects.all()
+    tipoFOS = 16
+    tipos_de_documentos_requeridos = []
+    estadoFOS = filter(lambda e: (e.tipo == tipoFOS and str(e.tramite.pk) == str(pk_tramite)), estados)
+    if len(estadoFOS) > 0:
+        tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.FINALIZAR)
+    tipoNFOS = 18
+    estadoNFOS = filter(lambda e: (e.tipo == tipoNFOS and str(e.tramite.pk) == str(pk_tramite)), estados)
+    if len(estadoNFOS) > 0:
+        tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.NO_FINALIZAR)
+    if str(tramite.estado()) == 'FinalObraTotalSolicitadoPorPropietario':
+        tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.FINALIZAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
     documento_set = FormularioDocumentoSet(initial=inicial)
@@ -628,47 +641,59 @@ def cargar_final_de_obra_total(request, pk_tramite):
 def habilitar_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
-        tramite.hacer(tramite.FINALIZAR, request.user)
-        messages.add_message(request, messages.SUCCESS, 'Final de obra aprobado.')
+        estados = Estado.objects.all()
+        tipoFOS = 16
+        estadoFOS = filter(lambda e: (e.tipo == tipoFOS and str(e.tramite.pk) == str(pk_tramite)), estados)
+        if len(estadoFOS) > 0:
+            tramite.hacer(tramite.FINALIZAR, request.user)
+            messages.add_message(request, messages.SUCCESS, 'Final de obra aprobado.')
+        tipoNFOS = 18
+        estadoNFOS = filter(lambda e: (e.tipo == tipoNFOS and str(e.tramite.pk) == str(pk_tramite)), estados)
+        if len(estadoNFOS) > 0 and str(tramite.estado()) != 'FinalObraTotalSolicitadoPorPropietario':
+            tramite.hacer(tramite.NO_FINALIZAR, request.user)
+            messages.add_message(request, messages.SUCCESS, 'No Final de obra aprobado.')
+        if len(estadoNFOS) > 0 and str(tramite.estado()) == 'FinalObraTotalSolicitadoPorPropietario':
+            tramite.hacer(tramite.FINALIZAR, request.user)
+            messages.add_message(request, messages.SUCCESS, 'Final de obra total solicitado por propietario aprobado.')
     except:
         messages.add_message(request, messages.ERROR, 'No se puede otorgar final de obra total para ese tramite.')
     finally:
         return redirect('administrativo')
 
 
-def cargar_no_final_de_obra_total(request, pk_tramite):
-    usuario = request.user
-    perfil = 'css/' + usuario.persona.perfilCSS
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.NO_FINALIZAR)
-    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
-    inicial = metodo(tipos_de_documentos_requeridos)
-    documento_set = FormularioDocumentoSet(initial=inicial)
-    id_tramite = int(pk_tramite)
-    if request.method == "POST":
-        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
-        if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
-            if "no_aprobar_final_de_obra_total" in request.POST:
-                habilitar_no_final_obra(request, pk_tramite)
-    else:
-        return render(request, 'persona/administrativo/cargar_no_final_de_obra_total.html', {'tramite': tramite,
-                                                                        'ctxdocumentoset': documento_set,
-                                                                        'documentos_requeridos': tipos_de_documentos_requeridos,
-                                                                        "perfil": perfil})
-    return redirect('administrativo')
+#def cargar_no_final_de_obra_total(request, pk_tramite):
+#    usuario = request.user
+#    perfil = 'css/' + usuario.persona.perfilCSS
+#    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+#    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.NO_FINALIZAR)
+#    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
+#    inicial = metodo(tipos_de_documentos_requeridos)
+#    documento_set = FormularioDocumentoSet(initial=inicial)
+#    id_tramite = int(pk_tramite)
+#    if request.method == "POST":
+#        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
+#        if documento_set.is_valid():
+#            for docForm in documento_set:
+#                docForm.save(tramite=tramite)
+#            if "no_aprobar_final_de_obra_total" in request.POST:
+#                habilitar_no_final_obra(request, pk_tramite)
+#    else:
+#        return render(request, 'persona/administrativo/cargar_no_final_de_obra_total.html', {'tramite': tramite,
+#                                                                        'ctxdocumentoset': documento_set,
+#                                                                        'documentos_requeridos': tipos_de_documentos_requeridos,
+#                                                                        "perfil": perfil})
+#    return redirect('administrativo')
 
 
-def habilitar_no_final_obra(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    try:
-        tramite.hacer(tramite.NO_FINALIZAR, request.user)
-        messages.add_message(request, messages.SUCCESS, 'No Final de obra dado.')
-    except:
-        messages.add_message(request, messages.ERROR, 'No se puede otorgar no final de obra total para ese tramite.')
-    finally:
-        return redirect('administrativo')
+#def habilitar_no_final_obra(request, pk_tramite):
+#    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+#    try:
+#        tramite.hacer(tramite.NO_FINALIZAR, request.user)
+#        messages.add_message(request, messages.SUCCESS, 'No Final de obra dado.')
+#    except:
+#        messages.add_message(request, messages.ERROR, 'No se puede otorgar no final de obra total para ese tramite.')
+#    finally:
+#        return redirect('administrativo')
 
 
 def cargar_aprobacion(request, pk_tramite):
@@ -771,9 +796,7 @@ def ver_documentos_tramite_administrativo(request, pk_tramite):
                                                                                               "perfil": perfil})
 
 
-'''
-visador ----------------------------------------------------------------------------------------------------------
-'''
+'''visador -----------------------------------------------------------------------------------------------'''
 
 
 @login_required(login_url="login")
@@ -979,9 +1002,7 @@ class ReporteTramitesAceptadosPdf(View):
         return response
 
 
-'''
-inspector ------------------------------------------------------------------------------------------------------
-'''
+'''inspector --------------------------------------------------------------------------------------------'''
 
 
 @login_required(login_url="login")
@@ -1019,7 +1040,7 @@ FORMS_INSPECTOR = {(k.NAME, k.SUBMIT): k for k in [
 
 
 def tramites_visados_y_con_inspeccion():
-    argumentos = [Visado, Inspeccionado, Aprobado, AprobadoPorPropietario] #falta conCorreccionesInspeccion
+    argumentos = [Visado, Inspeccionado, Aprobado, AprobadoPorPropietario, FinalObraParcialSolicitado] #falta conCorreccionesInspeccion
     tramites = Tramite.objects.en_estado(argumentos)
     return tramites
 
@@ -1109,9 +1130,7 @@ def ver_documentos_tramite_inspector(request, pk_tramite):
 #    return render(request, 'persona/inspector/documentos_del_estado.html', contexto)
 
 
-'''
-jefeinspector ----------------------------------------------------------------------------------------------------
-'''
+'''jefeinspector ----------------------------------------------------------------------------------------'''
 
 
 @login_required(login_url="login")
@@ -1149,7 +1168,7 @@ FORMS_JEFEINSPECTOR = {(k.NAME, k.SUBMIT): k for k in [
 
 
 def tramite_con_inspecciones_list():
-    argumentos = [FinalObraTotalSolicitado] # falta conCorreccionesInspeccion
+    argumentos = [FinalObraTotalSolicitado, NoFinalObraTotalSolicitado] # falta conCorreccionesInspeccion
     tramites = Tramite.objects.en_estado(argumentos)
     contexto = {'tramites': tramites}
     return contexto
@@ -1230,9 +1249,7 @@ def ver_inspecciones(request, pk_tramite):
     return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html',contexto)
 
 
-'''
-director ---------------------------------------------------------------------------------------------------------
-'''
+'''director ---------------------------------------------------------------------------------------------'''
 
 @login_required(login_url="login")
 @grupo_requerido('director')
@@ -1491,9 +1508,7 @@ class ReporteTramitesDirectorPdf(View):
         return response
 
 
-'''
-general-------------------------------------------------------------------------------------------------------
-'''
+'''general ----------------------------------------------------------------------------------------------'''
 
 def cambiar_perfil(request):
     usuario = request.user
@@ -1503,9 +1518,7 @@ def cambiar_perfil(request):
         return redirect(usuario.get_view_name())
 
 
-'''
-No se de donde son estos -------------------------------------------------------------------------------------
-'''
+'''No se de donde son estos -----------------------------------------------------------------------------'''
 
 #def tramite_visados_list():
 #    tramites = Tramite.objects.en_estado(Visado)
