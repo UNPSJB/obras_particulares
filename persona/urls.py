@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^documento_de_estado/(?P<pk_estado>\d+)/$', views.documento_de_estado, name="documento_de_estado"),
     url(r'^cargar_final_de_obra_total_profesional/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total_profesional, name="cargar_final_de_obra_total_profesional"),
     url(r'^cargar_no_final_de_obra_total_profesional/(?P<pk_tramite>\d+)/$', views.cargar_no_final_de_obra_total_profesional, name="cargar_no_final_de_obra_total_profesional"),
+    url(r'^cargar_no_aprobar_profesional/(?P<pk_tramite>\d+)/$', views.cargar_no_aprobar_profesional, name="cargar_no_aprobar_profesional"),
 
     # administrativo ------------------------------------------------------------------------------------------------
     url(r'^administrativo$', views.mostrar_administrativo, name="administrativo"),

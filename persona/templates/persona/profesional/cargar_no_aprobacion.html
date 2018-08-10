@@ -18,7 +18,7 @@
 </div>
 <ul class="sidebar sidebar-1">
     <font size="2">
-        <li><a href="javascript:history.back(-1);" class="current"><font>Inspector</font></a></li>
+        <li><a href="javascript:history.back(-1);" class="current"><font>Profesional</font></a></li>
     </font>
 </ul>
 {% endblock %}
@@ -66,7 +66,7 @@
 		<div class="panel-heading panel-heading-custom box">
 			<h5 class="panel-title">
 				<a>
-					<font color="#ffffff" size="2">Documentos de la inspección</font>
+					<font color="#ffffff" size="2">Documentos para solicitar no aprobar tramite</font>
 				</a>
 			</h5>
 		</div>
@@ -80,19 +80,11 @@
                                     {{ctxdocumentoset}}
                                 </div>
                                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                                    <div class="form-group">
-                                        <label>Observaciones:</label>
-                                        <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                                        <input class="form-control input-sm" id="id_observaciones" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
-                                    </div>
-                                <br>
+                                    <br>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                                    <button class="btn btn-primary btn-sm" type="submit" title="Aceptar Inspección" name="aceptar_tramite">
-                                        Aprobar inspección
-                                    </button>
-                                    <button class="btn btn-danger btn-sm" type="submit" title="Rechazar Inspección" name="rechazar_tramite">
-                                        Enviar correcciones
+                                    <button class="btn btn-primary btn-sm" type="submit" title="No_aprobar" name="no_aprobar_tramite">
+                                        Solicitar no aprobar tramite
                                     </button>
                                 </div>
                             </form>

@@ -42,7 +42,7 @@ class Tramite(models.Model):
     ]
 
     INICIAR = "iniciar"
-    REVISAR = "revisar"
+    #REVISAR = "revisar"
     CORREGIR = "corregir"
     ACEPTAR = "aceptar"
     RECHAZAR = "rechazar"
@@ -446,6 +446,7 @@ class FinalObraParcialSolicitado(Estado):
         return FinalObraTotalSolicitado(tramite=tramite)
 
     def no_solicitar_final_obra_total(self, tramite):
+        print ("----------------llego al tramite--------------------")
         return NoFinalObraTotalSolicitado(tramite=tramite)
 
     def darBaja(self, tramite):

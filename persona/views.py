@@ -218,10 +218,10 @@ def mostrar_profesional(request):
             propietario = propietario_form.obtener_o_crear(persona)
             if propietario is not None and tramite_form.is_valid() and documento_set.is_valid():
                 tramite = tramite_form.save(propietario=propietario, commit=False)
-                lista=[]
+                lista = []
                 for docForm in documento_set:
-                   lista.append(docForm.save(commit=False))
-                Tramite.new(usuario, propietario, usuario.persona.profesional,request.POST['tipo_obra'],request.POST['medidas'],request.POST['domicilio'],lista, request.POST['destino_obra'])
+                    lista.append(docForm.save(commit=False))
+                Tramite.new(usuario, propietario, usuario.persona.profesional, request.POST['tipo_obra'], request.POST['medidas'], request.POST['domicilio'], lista, request.POST['destino_obra'])
                 tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
                 propietario_form = None
                 messages.add_message(request, messages.SUCCESS,'Solicitud de iniciar tramitre realizada con exito.')
@@ -327,6 +327,30 @@ def profesional_solicita_aprobar_tramite(request, pk_tramite):
         return redirect('profesional')
 
 
+def cargar_no_aprobar_profesional(request, pk_tramite):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.SOLICITAR_NO_APROBAR_TRAMITE)
+    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
+    inicial = metodo(tipos_de_documentos_requeridos)
+    documento_set = FormularioDocumentoSet(initial=inicial)
+    id_tramite = int(pk_tramite)
+    if request.method == "POST":
+        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
+        if documento_set.is_valid():
+            for docForm in documento_set:
+                docForm.save(tramite=tramite)
+            if "no_aprobar_tramite" in request.POST:
+                profesional_solicita_no_aprobar_tramite(request, pk_tramite)
+    else:
+        return render(request, 'persona/profesional/cargar_no_aprobacion.html', {'tramite': tramite,
+                                                                        'ctxdocumentoset': documento_set,
+                                                                        'documentos_requeridos': tipos_de_documentos_requeridos,
+                                                                        "perfil": perfil})
+    return redirect('profesional')
+
+
 def profesional_solicita_no_aprobar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
@@ -380,7 +404,7 @@ def cargar_no_final_de_obra_total_profesional(request, pk_tramite):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.SOLICITAR_FINAL_OBRA_TOTAL)
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.SOLICITAR_NO_FINAL_OBRA_TOTAL)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
     documento_set = FormularioDocumentoSet(initial=inicial)
@@ -403,6 +427,7 @@ def cargar_no_final_de_obra_total_profesional(request, pk_tramite):
 def profesional_solicita_no_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
+        print ("-----------------esta aca--------------------------")
         tramite.hacer(Tramite.SOLICITAR_NO_FINAL_OBRA_TOTAL, request.user)
         messages.add_message(request, messages.SUCCESS, 'No Final de obra solicitado.')
     except:
@@ -876,9 +901,9 @@ def ver_documentos_para_visado(request, pk_tramite):
     if request.method == "POST":
         observacion = request.POST["observaciones"]
         tram = request.POST['tram']
-        tramites = Tramite.objects.all()
-        tramite = filter(lambda t: str(t.pk) == str(tram), tramites)
-        monto_permiso = tramite[0].medidas * tramite[0].tipo_obra.valor_de_superficie
+        #tramites = Tramite.objects.all()
+        #tramite = filter(lambda t: str(t.pk) == str(tram), tramites)
+        monto_permiso = tramite.medidas * tramite.tipo_obra.valor_de_superficie
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
             for docForm in documento_set:

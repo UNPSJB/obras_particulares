@@ -34,7 +34,6 @@ class FormularioTipoDocumento(forms.ModelForm):
             Field('requerido', placeholder="Ingresar una opcion")
         )
 
-
     def clean_requerido(self):
         flags = [int(e) for e in self.cleaned_data['requerido']]
         return sum(flags)

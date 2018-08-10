@@ -6,6 +6,7 @@ from django.forms import BaseFormSet
 from django.forms import formset_factory
 from documento.models import *
 
+
 class FormularioDocumento(forms.ModelForm):
     '''
     Formulario necesario para realizar la carga de los nuevos documentos.
@@ -28,6 +29,7 @@ class FormularioDocumento(forms.ModelForm):
             doc.save()
         return doc
 
+
 class FormularioDocumentosSetBase(BaseFormSet):
     '''
     Fomset de formularios tipo FormularioDocumentosSetBase.
@@ -37,6 +39,7 @@ class FormularioDocumentosSetBase(BaseFormSet):
         self.helper = FormHelper()
 
         self.helper.form_tag = False
+
 
 def FormularioDocumentoSetFactory(tipos):
     '''
@@ -48,6 +51,7 @@ def FormularioDocumentoSetFactory(tipos):
     return formset_factory(FormularioDocumento,
         formset=FormularioDocumentosSetBase,
         max_num=len(tipos), extra=len(tipos))
+
 
 def metodo(tipos):
     '''
