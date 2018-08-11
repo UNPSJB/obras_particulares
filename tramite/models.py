@@ -62,7 +62,7 @@ class Tramite(models.Model):
     NO_FINALIZAR = "no_finalizar"
     SOLICITAR_FINAL_OBRA_TOTAL_PROPIETARIO = "solicitar_final_obra_total_propietario"
     PAGAR = "pagar"
-    DAR_DE_BAJA = "darBaja"
+    DAR_DE_BAJA = "dar_de_baja"
 
     propietario = models.ForeignKey(Propietario, blank=True, null=True, unique=False)
     profesional = models.ForeignKey(Profesional, unique=False)
