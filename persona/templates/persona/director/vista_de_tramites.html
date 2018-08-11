@@ -131,6 +131,22 @@
                   'rgba(183, 92, 224, 1.0)',
                   'rgba(255, 0, 211, 1.0)',
                   'rgba(255, 0, 0, 1.0)',
+                  'rgba(0, 128, 128, 1.0)',
+                  'rgba(255, 255, 0, 1.0)',
+                  'rgba(0, 255, 0, 1.0)',
+                  'rgba(0, 234, 236, 1.0)',
+                  'rgba(44, 0, 255, 1.0)',
+                  'rgba(183, 92, 224, 1.0)',
+                  'rgba(255, 0, 211, 1.0)',
+                  'rgba(255, 0, 0, 1.0)',
+                  'rgba(0, 128, 128, 1.0)',
+                  'rgba(255, 255, 0, 1.0)',
+                  'rgba(0, 255, 0, 1.0)',
+                  'rgba(0, 234, 236, 1.0)',
+                  'rgba(44, 0, 255, 1.0)',
+                  'rgba(183, 92, 224, 1.0)',
+                  'rgba(255, 0, 211, 1.0)',
+                  'rgba(255, 0, 0, 1.0)',
                   'rgba(0, 128, 128, 1.0)'
                   ],
                   data: dataEstados
@@ -140,7 +156,7 @@
             options: {
                 responsive: true,
                 legend: {
-                    display: false
+                    display: false,
                 },
                 title:{
                     display:true,
@@ -154,9 +170,12 @@
                         barPercentage: 0.5,
                         scaleLabel: {
                             display: true,
+                            labelString: "Estados del tramite",
+                            fontColor:"#ffffff",
                         },
                         ticks: {
                             fontColor:"#ffffff",
+                            fontSize: 12,
                         },
                         gridLines:{
                             color:"#808b96",
@@ -167,6 +186,8 @@
                     yAxes: [{
                         scaleLabel: {
                             display: true,
+                            labelString: "Cantidad",
+                            fontColor:"#ffffff",
                         },
                         ticks: {
                             beginAtZero:true,

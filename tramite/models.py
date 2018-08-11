@@ -61,9 +61,8 @@ class Tramite(models.Model):
     FINALIZAR = "finalizar"
     NO_FINALIZAR = "no_finalizar"
     SOLICITAR_FINAL_OBRA_TOTAL_PROPIETARIO = "solicitar_final_obra_total_propietario"
-
     PAGAR = "pagar"
-    DAR_DE_BAJA = "dar_de_baja"
+    DAR_DE_BAJA = "darBaja"
 
     propietario = models.ForeignKey(Propietario, blank=True, null=True, unique=False)
     profesional = models.ForeignKey(Profesional, unique=False)
@@ -86,7 +85,7 @@ class Tramite(models.Model):
             return self.monto_a_pagar - self.monto_pagado
 
     def esta_pagado(self):
-        if ((self.monto_a_pagar - self.monto_pagado) <= 0):
+        if (self.monto_a_pagar - self.monto_pagado) <= 0:
             return True
         else:
             return False
@@ -181,8 +180,8 @@ class Iniciado(Estado):
     def rechazar(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
 
 class Aceptado(Estado):
@@ -191,8 +190,8 @@ class Aceptado(Estado):
     def agendar_visado(self, tramite, visador=None):
         return AgendadoParaVisado(tramite=tramite, visador=None)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return self.__class__.__name__
@@ -205,8 +204,8 @@ class AgendadoParaVisado(Estado):
     def visar(self, tramite, visador=None):
         return Visado(tramite=tramite, visador=visador)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return self.__class__.__name__
@@ -222,8 +221,8 @@ class Visado(Estado):
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return self.__class__.__name__
@@ -237,8 +236,8 @@ class Corregido(Estado):
     def corregir(self, tramite, observacion=None):
         return Iniciado(tramite=tramite, observacion=observacion)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return self.__class__.__name__
@@ -252,8 +251,8 @@ class AgendadoPrimerInspeccion(Estado):
     def inspeccionar(self, tramite, inspector=None):
         return PrimerInspeccion(tramite=tramite, inspector=inspector)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return self.__class__.__name__
@@ -278,8 +277,8 @@ class PrimerInspeccion(Estado):
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -291,8 +290,8 @@ class AprobadoSolicitado(Estado):
     def aprobar_tramite(self, tramite):
             return Aprobado(tramite=tramite)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -305,7 +304,10 @@ class Aprobado(Estado):
         return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
     def solicitar_final_obra_total(self, tramite):
-        return FinalObraTotalSolicitado(tramite=tramite)
+        if tramite.monto_pagado >= tramite.monto_a_pagar:
+            return FinalObraTotalSolicitado(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede solicitar el final de obra total")
 
     def solicitar_final_obra_parcial(self, tramite):
         return FinalObraParcialSolicitado(tramite=tramite)
@@ -313,8 +315,8 @@ class Aprobado(Estado):
     def no_solicitar_final_obra_total(self, tramite):
         return NoFinalObraTotalSolicitado(tramite=tramite)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -326,8 +328,8 @@ class NoAprobadoSolicitado(Estado):
     def no_aprobar_tramite(self, tramite):
             return NoAprobado(tramite=tramite)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -342,8 +344,8 @@ class NoAprobado(Estado):
         else:
             raise Exception("Todavia no se puede solicitar el aprobado")
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -355,8 +357,8 @@ class AprobadoSolicitadoPorPropietario(Estado):
     def aprobar_tramite(self, tramite):
             return AprobadoPorPropietario(tramite=tramite)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -368,7 +370,10 @@ class AprobadoPorPropietario(Estado):
         return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
     def solicitar_final_obra_total(self, tramite):
-        return FinalObraTotalSolicitado(tramite=tramite)
+        if tramite.monto_pagado >= tramite.monto_a_pagar:
+            return FinalObraTotalSolicitado(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede solicitar el final de obra total")
 
     def solicitar_final_obra_parcial(self, tramite):
         return FinalObraParcialSolicitado(tramite=tramite)
@@ -376,8 +381,8 @@ class AprobadoPorPropietario(Estado):
     def no_solicitar_final_obra_total(self, tramite):
         return NoFinalObraTotalSolicitado(tramite=tramite)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -391,7 +396,10 @@ class AgendadoInspeccion(Estado):
         return Inspeccionado(tramite=tramite, inspector=inspector)
 
     def solicitar_final_obra_total(self, tramite):
-        return FinalObraTotalSolicitado(tramite=tramite)
+        if tramite.monto_pagado >= tramite.monto_a_pagar:
+            return FinalObraTotalSolicitado(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede solicitar el final de obra total")
 
     def solicitar_final_obra_parcial(self, tramite):
         return FinalObraParcialSolicitado(tramite=tramite)
@@ -399,8 +407,8 @@ class AgendadoInspeccion(Estado):
     def no_solicitar_final_obra_total(self, tramite):
         return NoFinalObraTotalSolicitado(tramite=tramite)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -414,7 +422,10 @@ class Inspeccionado(Estado):
         return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
     def solicitar_final_obra_total(self, tramite):
-        return FinalObraTotalSolicitado(tramite=tramite)
+        if tramite.monto_pagado >= tramite.monto_a_pagar:
+            return FinalObraTotalSolicitado(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede solicitar el final de obra total")
 
     def solicitar_final_obra_parcial(self, tramite):
         return FinalObraParcialSolicitado(tramite=tramite)
@@ -422,8 +433,8 @@ class Inspeccionado(Estado):
     def no_solicitar_final_obra_total(self, tramite):
         return NoFinalObraTotalSolicitado(tramite=tramite)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -443,14 +454,16 @@ class FinalObraParcialSolicitado(Estado):
         return AgendadoInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
     def solicitar_final_obra_total(self, tramite):
-        return FinalObraTotalSolicitado(tramite=tramite)
+        if tramite.monto_pagado >= tramite.monto_a_pagar:
+            return FinalObraTotalSolicitado(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede solicitar el final de obra total")
 
     def no_solicitar_final_obra_total(self, tramite):
-        print ("----------------llego al tramite--------------------")
         return NoFinalObraTotalSolicitado(tramite=tramite)
 
-    def darBaja(self, tramite):
-        return Baja(tramite=tramite)
+    def darBaja(self, tramite, observacion):
+        return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -486,16 +499,10 @@ class InspeccionFinal(Estado):
         return Corregido(tramite=tramite, observacion=observacion)
 
     def finalizar(self, tramite):
-        if tramite.monto_pagado >= tramite.monto_a_pagar:
-            return Finalizado(tramite=tramite)
-        else:
-            raise Exception("Todavia no se puede otorgar el final de obra")
+        return Finalizado(tramite=tramite)
 
     def no_finalizar(self, tramite):
-        if tramite.monto_pagado >= tramite.monto_a_pagar:
-            return NoFinalizado(tramite=tramite)
-        else:
-            raise Exception("Todavia no se puede otorgar el no final de obra total")
+        return NoFinalizado(tramite=tramite)
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -512,7 +519,10 @@ class NoFinalizado(Estado):
     TIPO = 22
 
     def solicitar_final_obra_total_propietario(self, tramite):
-        return FinalObraTotalSolicitadoPorPropietario(tramite=tramite)
+        if tramite.monto_pagado >= tramite.monto_a_pagar:
+            return FinalObraTotalSolicitadoPorPropietario(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede otorgar el final de obra total")
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -522,10 +532,7 @@ class FinalObraTotalSolicitadoPorPropietario(Estado):
     TIPO = 23
 
     def finalizar(self, tramite):
-        if tramite.monto_pagado >= tramite.monto_a_pagar:
-            return Finalizado(tramite=tramite)
-        else:
-            raise Exception("Todavia no se puede otorgar el final de obra total")
+        return Finalizado(tramite=tramite)
 
     def __str__(self):
         return str(self.__class__.__name__)
@@ -533,6 +540,8 @@ class FinalObraTotalSolicitadoPorPropietario(Estado):
 
 class Baja(Estado):
     TIPO = 24
+    CADENA_DEFAULT = "Sin observaciones sobre la baja del tramite"
+    observacion = models.CharField(max_length=120, default=CADENA_DEFAULT, blank=True, null=True)
 
     def __str__(self):
         return str(self.__class__.__name__)

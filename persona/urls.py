@@ -51,7 +51,8 @@ urlpatterns = [
     url(r'^cargar_no_aprobacion/(?P<pk_tramite>\d+)/$', views.cargar_no_aprobacion, name="cargar_no_aprobacion"),
     url(r'^aprobar_final_de_obra/(?P<pk_tramite>\d+)/$', views.habilitar_final_obra, name="habilitar_final_obra"),
     url(r'^cargar_final_de_obra_total/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total,name="cargar_final_de_obra_total"),
-    #url(r'^cargar_no_final_de_obra_total/(?P<pk_tramite>\d+)/$', views.cargar_no_final_de_obra_total, name="cargar_no_final_de_obra_total"),
+    url(r'^dar_baja_tramite_pago/(?P<pk_tramite>\d+)/$', views.dar_baja_tramite_pago, name="dar_baja_tramite_pago"),
+    url(r'^dar_baja_tramite_plazo_vencido/(?P<pk_tramite>\d+)/$', views.dar_baja_tramite_plazo_vencido, name="dar_baja_tramite_plazo_vencido"),
 
     # visador -------------------------------------------------------------------------------------------------------
     url(r'^visador$', views.mostrar_visador, name="visador"),

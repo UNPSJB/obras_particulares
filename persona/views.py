@@ -427,7 +427,6 @@ def cargar_no_final_de_obra_total_profesional(request, pk_tramite):
 def profesional_solicita_no_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
-        print ("-----------------esta aca--------------------------")
         tramite.hacer(Tramite.SOLICITAR_NO_FINAL_OBRA_TOTAL, request.user)
         messages.add_message(request, messages.SUCCESS, 'No Final de obra solicitado.')
     except:
@@ -501,11 +500,11 @@ def mostrar_administrativo(request):
         "ctxtramitesiniciados": listado_de_tramites_iniciados(),
         "ctxtramitescorregidos": tramite_corregidos_list(),
         "ctxsolicitudesfinalobra": solicitud_final_obra_list(),
-        #"ctxsolicitudesnofinalobra": solicitud_no_final_obra_list(),
         "ctxsolicitudesaprobacion": solicitud_aprobacion_list(),
         "ctxsolicitudesnoaprobacion": solicitud_no_aprobacion_list(),
         "ctxpago": registrar_pago_tramite(request),
-        #"ctxtramitesvencidos": listado_tramites_vencidos()
+        "ctxtramitespagovencidos": listado_tramites_pago_vencido(),
+        "ctxtramitesplazovencidos": listado_tramites_plazo_vencido()
     }
     for form_name, submit_name in FORMS_ADMINISTRATIVO:
         KlassForm = FORMS_ADMINISTRATIVO[(form_name, submit_name)]
@@ -563,12 +562,6 @@ def solicitud_final_obra_list():
     return contexto
 
 
-#def solicitud_no_final_obra_list():
-#    tramites = Tramite.objects.en_estado(InspeccionFinal)
-#    contexto = {'tramites': tramites}
-#    return contexto
-
-
 def solicitud_aprobacion_list():
     argumentos = [AprobadoSolicitado, AprobadoSolicitadoPorPropietario]
     tramites = Tramite.objects.en_estado(argumentos)
@@ -583,20 +576,47 @@ def solicitud_no_aprobacion_list():
 
 
 def listado_tramites_pago_vencido():
-    #argumentos = [Iniciado, Aceptado, Visado, Corregido, AgendadoInspeccion, ConInspeccion]
-    #tramites = Tramite.objects.en_estado(argumentos)
-    tramites = Tramite.objects.all()
-    contexto = {'tramites': tramites}
-    print (contexto)
+    argumentos = [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
+                  NoAprobadoSolicitado, NoAprobado]
+    tramites = Tramite.objects.en_estado(argumentos)
+    estados = Estado.objects.all()
+    tipo = 1
+    estados_iniciado = filter(lambda e: (e.tipo == tipo), estados)
+    tramites_vencidos = []
+    for t in tramites:
+        for e in estados_iniciado:
+            if e.tramite == t and (e.timestamp + timedelta(days=60)).strftime("%Y/%m/%d") < datetime.now().strftime(
+                    "%Y/%m/%d"):
+                tramites_vencidos.append(t)
+    tramites_vencidos_no_pagados = []
+    for tr in tramites_vencidos:
+        if not tr.monto_pagado or tr.monto_pagado < (tr.monto_a_pagar / 12):
+            tramites_vencidos_no_pagados.append(tr)
+    contexto = {'tramites': tramites_vencidos_no_pagados}
     return contexto
 
 
 def listado_tramites_plazo_vencido():
-    #argumentos = [Corregido, AgendadoInspeccion, ConInspeccion]
-    #tramites = Tramite.objects.en_estado(argumentos)
-    tramites = Tramite.objects.all()
-    contexto = {'tramites': tramites}
-    print (contexto)
+    argumentos = [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
+                  AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario,
+                  AprobadoPorPropietario, Corregido, AgendadoInspeccion, Inspeccionado, FinalObraParcialSolicitado]
+    tramites = Tramite.objects.en_estado(argumentos)
+    estados = Estado.objects.all()
+    tipo = 1
+    estados_iniciado = filter(lambda e: (e.tipo == tipo), estados)
+    tramites_vencidos = []
+    tipoFOPS = 17
+    for t in tramites:
+        estado_t = filter(lambda e: (e.tipo == tipoFOPS and str(e.tramite.pk) == str(t.pk)), estados)
+        for e in estados_iniciado:
+            if e.tramite == t and len(estado_t) == 0 and (e.timestamp + timedelta(days=730)).strftime("%Y/%m/%d") < datetime.now().strftime(
+                    "%Y/%m/%d"):
+                tramites_vencidos.append(t)
+            elif e.tramite == t and len(estado_t) > 0 and (e.timestamp + timedelta(days=1460)).strftime("%Y/%m/%d") < datetime.now().strftime(
+                    "%Y/%m/%d"):
+                tramites_vencidos.append(t)
+
+    contexto = {'tramites': tramites_vencidos}
     return contexto
 
 
@@ -686,41 +706,6 @@ def habilitar_final_obra(request, pk_tramite):
         return redirect('administrativo')
 
 
-#def cargar_no_final_de_obra_total(request, pk_tramite):
-#    usuario = request.user
-#    perfil = 'css/' + usuario.persona.perfilCSS
-#    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-#    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.NO_FINALIZAR)
-#    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
-#    inicial = metodo(tipos_de_documentos_requeridos)
-#    documento_set = FormularioDocumentoSet(initial=inicial)
-#    id_tramite = int(pk_tramite)
-#    if request.method == "POST":
-#        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
-#        if documento_set.is_valid():
-#            for docForm in documento_set:
-#                docForm.save(tramite=tramite)
-#            if "no_aprobar_final_de_obra_total" in request.POST:
-#                habilitar_no_final_obra(request, pk_tramite)
-#    else:
-#        return render(request, 'persona/administrativo/cargar_no_final_de_obra_total.html', {'tramite': tramite,
-#                                                                        'ctxdocumentoset': documento_set,
-#                                                                        'documentos_requeridos': tipos_de_documentos_requeridos,
-#                                                                        "perfil": perfil})
-#    return redirect('administrativo')
-
-
-#def habilitar_no_final_obra(request, pk_tramite):
-#    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-#    try:
-#        tramite.hacer(tramite.NO_FINALIZAR, request.user)
-#        messages.add_message(request, messages.SUCCESS, 'No Final de obra dado.')
-#    except:
-#        messages.add_message(request, messages.ERROR, 'No se puede otorgar no final de obra total para ese tramite.')
-#    finally:
-#        return redirect('administrativo')
-
-
 def cargar_aprobacion(request, pk_tramite):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
@@ -802,6 +787,22 @@ def rechazar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.RECHAZAR, request.user, request.GET["msg"])
     messages.add_message(request, messages.WARNING, 'Tramite rechazado.')
+    return redirect('administrativo')
+
+
+def dar_baja_tramite_pago(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    obs = "Tramite dado de baja. Se ha vencido el plazo de pago del permiso de construccion"
+    tramite.hacer(tramite.DAR_DE_BAJA, request.user, obs)
+    messages.add_message(request, messages.SUCCESS, 'Tramite dado de baja.')
+    return redirect('administrativo')
+
+
+def dar_baja_tramite_plazo_vencido(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    obs = "Tramite dado de baja. Se ha vencido el plazo de construccion de la obra"
+    tramite.hacer(tramite.DAR_DE_BAJA, request.user, obs)
+    messages.add_message(request, messages.SUCCESS, 'Tramite dado de baja.')
     return redirect('administrativo')
 
 
@@ -1327,17 +1328,21 @@ def empleados():
 def ver_listado_todos_tramites(request):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
-    argumentos = [Iniciado, Aceptado, Visado, Corregido, AgendadoInspeccion, ConInspeccion, Inspeccionado, FinalObraSolicitado]
+    argumentos = [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
+              AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario,
+              AprobadoPorPropietario, Corregido, AgendadoInspeccion, Inspeccionado, FinalObraTotalSolicitado,
+              FinalObraParcialSolicitado, NoFinalObraTotalSolicitado, AgendadoInspeccionFinal, InspeccionFinal,
+              Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]
+    len_argumentos = len(argumentos)
     tramites = Tramite.objects.en_estado(argumentos)
     estados = []
     for t in tramites:
         estados.append(t.estado().tipo)
     estados_cant = dict(collections.Counter(estados))
-    for n in range(1, 9):
+    for n in range(1, (len_argumentos+1)):
         if (not estados_cant.has_key(n)):
             estados_cant.setdefault(n, 0)
     estados_datos = estados_cant.values()
-    perfil = 'css/' + usuario.persona.perfilCSS
     contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":argumentos, "perfil" : perfil}
     return render(request, 'persona/director/vista_de_tramites.html', contexto)
 

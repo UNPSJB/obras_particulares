@@ -23,7 +23,7 @@
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de aprobación</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de no aprobación</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de final de obra</a></li>
-		<!--li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de no final de obra</a></li-->
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen" onclick='mostrarSubmenu("sin_submenu")'>Baja de tramites</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Alta profesional</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Alta propietario</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Registrar pagos</a></li>
@@ -133,11 +133,11 @@
 			</div>
 		</div>
 	</div>
-	<!--div class="panel">
+	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingTen">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Tramites con solicitud de no final de obra total</font>
+					<font color="#ffffff" size="2">Baja de tramites</font>
 				</a>
 			</h5>
 		</div>
@@ -146,16 +146,23 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<h3 style="color:red">verSiSacarEstoQueLoJagaTodoJuntoEnAprobarFinalObra</h3>
-							{% block contenido_tramite_no_final_obra %}
-							{% include "persona/administrativo/solicitud_no_final_obra_list.html" with tramites=ctxsolicitudesnofinalobra.tramites %}
+							<label style="font-size: 115%;">Baja por falta de pago del permiso de construcción</label>
+							<br><br>
+							{% block contenido_baja_tramite_falta_de_pago_permiso %}
+							{% include "persona/administrativo/baja_tramite_list.html" with tramites=ctxtramitespagovencidos.tramites %}
+							{% endblock %}
+							<hr>
+							<label style="font-size: 115%;">Baja por plazo de construcción vencido</label>
+							<br><br>
+							{% block contenido_baja_tramite_plazo_construccion_vencido %}
+							{% include "persona/administrativo/baja_tramite_plazo_permiso_list.html" with tramites=ctxtramitesplazovencidos.tramites %}
 							{% endblock %}
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div-->
+	</div>
 	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingSix">
 			<h5 class="panel-title">
