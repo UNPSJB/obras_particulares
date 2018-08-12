@@ -257,6 +257,7 @@
 		var cant_doc_requeridos = {{documento_set|length}};
         for(var n = 0; n < cant_doc_requeridos; n++) {
             $("input[id='id_form-"+n+"-file']").attr("required", true);
+            $("input[id='id_form-"+n+"-file']").attr("required", true);
         }
 		$('.file').fileinput({
 			showCaption: false,

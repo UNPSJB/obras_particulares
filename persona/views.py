@@ -609,13 +609,12 @@ def listado_tramites_plazo_vencido():
     for t in tramites:
         estado_t = filter(lambda e: (e.tipo == tipoFOPS and str(e.tramite.pk) == str(t.pk)), estados)
         for e in estados_iniciado:
-            if e.tramite == t and len(estado_t) == 0 and (e.timestamp + timedelta(days=730)).strftime("%Y/%m/%d") < datetime.now().strftime(
+            if e.tramite == t and len(estado_t) == 0 and (e.timestamp + timedelta(days=1095)).strftime("%Y/%m/%d") < datetime.now().strftime(
                     "%Y/%m/%d"):
                 tramites_vencidos.append(t)
-            elif e.tramite == t and len(estado_t) > 0 and (e.timestamp + timedelta(days=1460)).strftime("%Y/%m/%d") < datetime.now().strftime(
+            elif e.tramite == t and len(estado_t) > 0 and (e.timestamp + timedelta(days=1825)).strftime("%Y/%m/%d") < datetime.now().strftime(
                     "%Y/%m/%d"):
                 tramites_vencidos.append(t)
-
     contexto = {'tramites': tramites_vencidos}
     return contexto
 
