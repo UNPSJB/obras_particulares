@@ -28,7 +28,7 @@ class TramiteQuerySet(models.QuerySet):
             estados = [estados]
         return self.annotate(max_id=models.Max('estados__id')).filter(
             estados__id=models.F('max_id'),
-            estados__tipo__in=[e.TIPO for e in estados])
+                estados__tipo__in=[e.TIPO for e in estados])
 
 
 TramiteManager = TramiteBaseManager.from_queryset(TramiteQuerySet)
@@ -163,6 +163,10 @@ class Estado(models.Model):
 
     def get_usuario(self):
         return self.usuario
+
+    def cambiar_usuario(self, usuario):
+        self.usuario = usuario
+        self.save()
 
     def __str__(self):
         return "{}".format(self.__class__.__name__)

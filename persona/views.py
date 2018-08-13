@@ -901,8 +901,6 @@ def ver_documentos_para_visado(request, pk_tramite):
     if request.method == "POST":
         observacion = request.POST["observaciones"]
         tram = request.POST['tram']
-        #tramites = Tramite.objects.all()
-        #tramite = filter(lambda t: str(t.pk) == str(tram), tramites)
         monto_permiso = tramite.medidas * tramite.tipo_obra.valor_de_superficie
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
@@ -1073,10 +1071,9 @@ def tramites_visados_y_con_inspeccion():
 def tramites_inspeccionados_por_inspector(request):
     usuario = request.user
     estados = Estado.objects.all()
-    tipo = 7
-    '''aca no es solo tipo 7'''
+    tipos = [7, 15]
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and
-                                                    estado.tipo == tipo), estados)
+                                                    (estado.tipo == tipos[0] or estado.tipo == tipos[1])), estados)
     return estados_inspeccionados
 
 
@@ -1168,6 +1165,8 @@ def mostrar_jefe_inspector(request):
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(),
         "ctxtramitesagendados": tramites_agendados_por_jefeinspector(request),
         "ctxtramitesinspeccionados": tramites_inspeccionados_por_jefeinspector(request),
+        "ctxtramitesinspeccionadosporinspectores": tramites_inspeccionados_por_inspectores(),
+        "ctxinspectoresconinspeccionesagendadas": inspecciones_agendadas_por_inspectores()
     }
     for form_name, submit_name in FORMS_JEFEINSPECTOR:
         KlassForm = FORMS_JEFEINSPECTOR[(form_name, submit_name)]
@@ -1214,6 +1213,52 @@ def tramites_inspeccionados_por_jefeinspector(request):
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and
                                                     estado.tipo == tipo), estados)
     return estados_inspeccionados
+
+
+def tramites_inspeccionados_por_inspectores():
+    estados = Estado.objects.all()
+    tipos = [7, 15]
+    estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and (estado.tipo == tipos[0] or estado.tipo == tipos[1])), estados)
+    return estados_inspeccionados
+
+
+def inspectores_sin_inspecciones_agendadas(request, pk_estado):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    usuarios = Usuario.objects.all()
+    inspectores = []
+    for u in usuarios:
+        lista = list(u.groups.values_list('name', flat=True))
+        for i in range(len(lista)):
+            if lista[i] == 'inspector':
+                if u not in inspectores:
+                    inspectores.append(u)
+    estados = Estado.objects.all()
+    tipos = [6, 14]
+    estados_agendados = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or str(e.tramite.estado()) == 'AgendadoInspeccion') and (e.tipo == tipos[0] or e.tipo == tipos[1])), estados)
+    inspectores_estados_agendados = []
+    for i in range(len(estados_agendados)):
+        inspectores_estados_agendados.append(estados_agendados[i].usuario)
+    inspectores_sin_insp_agendadas = []
+    for inp in inspectores:
+        if inp not in inspectores_estados_agendados:
+            inspectores_sin_insp_agendadas.append(inp)
+    if request.method == "POST" and "cambiar_inspector" in request.POST:
+        inspector = get_object_or_404(Usuario, pk=request.POST["idempleado"])
+        #print (request.POST["idempleado"])
+        estado.cambiar_usuario(inspector)
+        #no_aprobar_tramite(request, pk_tramite)
+    else:
+        return render(request, 'persona/jefe_inspector/cambiar_inspector_de_inspeccion.html', {'estado': estado, "perfil": perfil, 'inspectores': inspectores_sin_insp_agendadas})
+    return redirect('jefe_inspector')
+
+
+def inspecciones_agendadas_por_inspectores():
+    estados = Estado.objects.all()
+    tipos = [6, 14]
+    estados_agendados= filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or str(e.tramite.estado()) == 'AgendadoInspeccion') and (e.tipo == tipos[0] or e.tipo == tipos[1])), estados)
+    return estados_agendados
 
 
 def agendar_inspeccion_final(request, pk_tramite):
