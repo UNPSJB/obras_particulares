@@ -228,12 +228,6 @@ def cambiar_profesional_de_tramite(request, pk_tramite):
     return redirect('propietario')
 
 
-
-
-
-
-
-
 '''profesional -------------------------------------------------------------------------------------------'''
 
 
@@ -642,7 +636,7 @@ def listado_tramites_pago_vencido():
 def listado_tramites_plazo_vencido():
     argumentos = [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
                   AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario,
-                  AprobadoPorPropietario, Corregido, AgendadoInspeccion, Inspeccionado, FinalObraParcialSolicitado]
+                  AprobadoPorPropietario, AgendadoInspeccion, Inspeccionado, FinalObraParcialSolicitado]
     tramites = Tramite.objects.en_estado(argumentos)
     estados = Estado.objects.all()
     tipo = 1
@@ -827,7 +821,7 @@ def aceptar_tramite(request, pk_tramite):
 
 def rechazar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.RECHAZAR, request.user, request.GET["msg"])
+    tramite.hacer(tramite.CORREGIR, request.user, request.GET["msg"])
     messages.add_message(request, messages.WARNING, 'Tramite rechazado.')
     return redirect('administrativo')
 
@@ -1419,7 +1413,7 @@ def ver_listado_todos_tramites(request):
     perfil = 'css/' + usuario.persona.perfilCSS
     argumentos = [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
               AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario,
-              AprobadoPorPropietario, Corregido, AgendadoInspeccion, Inspeccionado, FinalObraTotalSolicitado,
+              AprobadoPorPropietario, AgendadoInspeccion, Inspeccionado, FinalObraTotalSolicitado,
               FinalObraParcialSolicitado, NoFinalObraTotalSolicitado, AgendadoInspeccionFinal, InspeccionFinal,
               Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]
     len_argumentos = len(argumentos)
