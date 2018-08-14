@@ -56,7 +56,8 @@ def mostrar_propietario(request):
     perfil = 'css/' + usuario.persona.perfilCSS
     values = {
         "perfil": perfil,
-        "ctxtramitespropietario": listado_tramites_propietario(request)
+        "ctxtramitespropietario": listado_tramites_propietario(request),
+        "ctxtramitesprofesionalpropietario": listado_tramites_cambiar_profesional(request)
     }
     for form_name, submit_name in FORMS_PROPIETARIO:
         KlassForm = FORMS_PROPIETARIO[(form_name, submit_name)]
@@ -81,13 +82,9 @@ FORMS_PROPIETARIO = {(k.NAME, k.SUBMIT): k for k in [
 
 
 def listado_tramites_propietario(request):
+    usuario = get_object_or_404(Usuario, pk=request.user.persona.pk)
     tramites = Tramite.objects.all()
-    personas = Persona.objects.all()
-    usuario = request.user
-    lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = list(lista_de_persona_que_esta_logueada).pop()
-    propietario = persona.get_propietario()
-    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
+    tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == usuario.persona.pk), tramites)
     return tramites_de_propietario
 
 
@@ -189,6 +186,52 @@ def documentos_de_estado(request, pk_estado):
     documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
+
+
+def listado_tramites_cambiar_profesional(request):
+    usuario = get_object_or_404(Usuario, pk=request.user.persona.pk)
+    tramites = Tramite.objects.all()
+    tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == usuario.persona.pk
+                                                and str(t.estado()) != 'NoAprobadoSolicitado'
+                                                and str(t.estado()) != 'NoAprobado'
+                                                and str(t.estado()) != 'AprobadoSolicitadoPorPropietario'
+                                                and str(t.estado()) != 'NoFinalObraTotalSolicitado'
+                                                and str(t.estado()) != 'AgendadoInspeccionFinal'
+                                                and str(t.estado()) != 'InspeccionFinal'
+                                                and str(t.estado()) != 'FinalObraTotalSolicitadoPorPropietario'
+                                                and str(t.estado()) != 'Finalizado'
+                                                and str(t.estado()) != 'Baja'), tramites)
+    return tramites_de_propietario
+
+
+def cambiar_profesional_de_tramite(request, pk_tramite):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    usuarios = Usuario.objects.all()
+    profesionales = []
+    for u in usuarios:
+        lista = list(u.groups.values_list('name', flat=True))
+        for i in range(len(lista)):
+            if lista[i] == 'profesional':
+                if u not in profesionales:
+                    profesionales.append(u)
+    if request.method == "POST" and "cambiar_profesional" in request.POST:
+        pers_profesional = get_object_or_404(Persona, pk=request.POST["idempleado"])
+        if tramite.profesional.persona.id != pers_profesional.id:
+            tramite.cambiar_profesional(pers_profesional.profesional)
+            messages.add_message(request, messages.SUCCESS, "El profesional del tramite ha sido cambiado")
+        else:
+            messages.add_message(request, messages.ERROR, "El profesional del tramite no ha sido cambiado. Selecciono el mismo profesional.")
+    else:
+        return render(request, 'persona/propietario/cambiar_profesional_de_tramite.html', {'tramite': tramite, "perfil": perfil, 'profesionales': profesionales})
+    return redirect('propietario')
+
+
+
+
+
+
 
 
 '''profesional -------------------------------------------------------------------------------------------'''
@@ -1246,9 +1289,11 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
             inspectores_sin_insp_agendadas.append(inp)
     if request.method == "POST" and "cambiar_inspector" in request.POST:
         inspector = get_object_or_404(Usuario, pk=request.POST["idempleado"])
-        #print (request.POST["idempleado"])
-        estado.cambiar_usuario(inspector)
-        #no_aprobar_tramite(request, pk_tramite)
+        if estado.usuario.persona.id != inspector.persona.id:
+            estado.cambiar_usuario(inspector)
+            messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
+        else:
+            messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
     else:
         return render(request, 'persona/jefe_inspector/cambiar_inspector_de_inspeccion.html', {'estado': estado, "perfil": perfil, 'inspectores': inspectores_sin_insp_agendadas})
     return redirect('jefe_inspector')

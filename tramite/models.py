@@ -132,6 +132,10 @@ class Tramite(models.Model):
         self.save()
         return self.monto_pagado
 
+    def cambiar_profesional(self, profesional):
+        self.profesional = profesional
+        self.save()
+
 
 class Estado(models.Model):
     TIPO = 0
@@ -170,7 +174,6 @@ class Estado(models.Model):
 
     def __str__(self):
         return "{}".format(self.__class__.__name__)
-
 
 
 class Iniciado(Estado):

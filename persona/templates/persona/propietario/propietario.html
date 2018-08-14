@@ -74,8 +74,8 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							{% block contenido_cambiar_profesional_estado %}
-
+							{% block contenido_cambiar_profesional_de_tramite %}
+							{% include "persona/propietario/consultar_estado_tramite.html" with tramites_de_propietario=ctxtramitesprofesionalpropietario %}
 							{% endblock %}
 						</div>
 					</div>

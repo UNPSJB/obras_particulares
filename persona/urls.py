@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^documentos_de_estado/(?P<pk_estado>\d+)/$', views.documentos_de_estado, name="documentos_de_estado"),
     url(r'^cargar_aprobacion_propietario/(?P<pk_tramite>\d+)/$', views.cargar_aprobacion_propietario, name="cargar_aprobacion_propietario"),
     url(r'^cargar_final_de_obra_total_propietario/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total_propietario, name="cargar_final_de_obra_total_propietario"),
+    url(r'^cambiar_profesional_de_tramite/(?P<pk_tramite>\d+)/$', views.cambiar_profesional_de_tramite, name="cambiar_profesional_de_tramite"),
 
     # profesional ---------------------------------------------------------------------------------------------------
     url(r'^profesional$', views.mostrar_profesional, name="profesional"),

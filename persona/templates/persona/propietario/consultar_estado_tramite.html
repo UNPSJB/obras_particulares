@@ -1,0 +1,44 @@
+{% load staticfiles %}
+
+{% block contenido_tramite_estado %}
+<div class="table-responsive">
+	<table  class="table table-bordered table-striped table-hover" style="background: white;">
+		<thead>
+			<tr>
+				<th style="vertical-align: middle;">Nro</th>
+				<th style="vertical-align: middle;">Profesional</th>
+				<th style="vertical-align: middle;">Matricula</th>
+				<th style="vertical-align: middle;">Estado</th>
+				<th style="vertical-align: middle;">Superficie</th>
+				<th style="vertical-align: middle;">Tipo</th>
+				<th style="vertical-align: middle;">Monto total</th>
+				<th style="vertical-align: middle;">Monto pagado</th>
+				<th style="vertical-align: middle;">Seleccionar</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if tramites_de_propietario %}
+			{% for tramite in tramites_de_propietario %}
+			<tr>
+				<td class="col-xs-1">{{tramite.id}}</td>
+				<td class="col-xs-2">{{tramite.profesional}}</td>
+				<td class="col-xs-2">{{tramite.profesional.matricula}}</td>
+				<td class="col-xs-1">{{tramite.estado}}</td>
+				<td class="col-xs-1">{{tramite.medidas}}</td>
+				<td class="col-xs-1">{{tramite.tipo_obra}}</td>
+				<td class="col-xs-1">{{tramite.monto_a_pagar}}</td>
+				<td class="col-xs-1">{{tramite.monto_pagado}}</td>
+				<td align="center" class="col-xs-1">
+					<a href="{% url 'cambiar_profesional_de_tramite' pk_tramite=tramite.id %}">
+						<button type="button" class="btn btn-primary btn-xs" name="cambiar_profesional">
+							<span class="glyphicon glyphicon-home" aria-hidden="true"> Nuevo Profesional</span>
+						</button>
+					</a>
+				</td>
+			</tr>
+			{% endfor %}
+			{% endif%}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
