@@ -54,6 +54,14 @@
 			<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_documento")'>Crear tipo de documento</a></li>
 			<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_obra")'>Crear tipo de obra</a></li>
 		</ul>
+
+
+
+
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Cambiar visador de tramite</a></li>
+
+
+
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
@@ -238,6 +246,28 @@
 								</div>
 								<br>
 							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel">
+		<div class="panel-heading box" role="tab" id="headingThree">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>
+					<font color="#ffffff" size="2">Cambiar visador de trámite</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseThree" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingThree">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block contenido_cambiar_visador_de_tramite %}
+							{% include "persona/director/visadores_con_visado_agendado.html" with estados=ctxvisadorescontramitesagendados%}
+							{% endblock %}
 						</div>
 					</div>
 				</div>

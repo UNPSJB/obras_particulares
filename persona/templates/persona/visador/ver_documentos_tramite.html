@@ -25,17 +25,17 @@
 
 {% block contenido %}
 <div id="contenedor_botoncalapsable_resto"></div>
-<div class="panel-group">
-	<div class="panel panel-custom">
-		<div class="panel-heading panel-heading-custom box">
-			<h5 class="panel-title">
-				<a>
-					<font color="#ffffff" size="2">Documentos del tramite</font>
-				</a>
-			</h5>
-		</div>
-		<div class="panel-collapse colorp">
-			<div class="panel-body">
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+    <div class="panel">
+        <div class="panel-heading box" role="tab" id="headingFive">
+            <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    <font color="#ffffff" size="2">Documentos del tramite</font>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

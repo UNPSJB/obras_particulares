@@ -326,8 +326,12 @@ def tramites_corregidos(request):
     persona = list(lista_de_persona_que_esta_logueada).pop()
     profesional = persona.get_profesional()
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
-    tipo = 4
-    tram_corregidos = filter(lambda tramite: (tramite.estado().tipo == tipo), tramites_de_profesional)
+    tram_corregidos = filter(lambda tramite: (str(tramite.estado()) == 'ConCorrecciones' or
+                                              str(tramite.estado()) == 'ConCorreccionesDeVisado' or
+                                              str(tramite.estado()) == 'ConCorreccionesDePrimerInspeccion' or
+                                              str(tramite.estado()) == 'ConCorreccionesDeInspeccion' or
+                                              str(tramite.estado()) == 'ConCorreccionesDeInspeccionFinal'),
+                             tramites_de_profesional)
     contexto = {'tramites': tram_corregidos}
     return contexto
 
@@ -493,19 +497,28 @@ def ver_documentos_corregidos(request, pk_tramite):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    if request.method == "POST":
-        enviar_correcciones(request, pk_tramite)
+    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INGRESAR_CORRECCIONES)
+    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
+    inicial = metodo(tipos_de_documentos_requeridos)
+    documento_set = FormularioDocumentoSet(initial=inicial)
+    if request.method == "POST" and "enviar_correcciones" in request.POST:
+        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
+        if documento_set.is_valid():
+            for docForm in documento_set:
+                docForm.save(tramite=tramite)
+            enviar_correcciones(request, pk_tramite)
     else:
         return render(request, 'persona/profesional/ver_documentos_corregidos.html', {'tramite': tramite,
-                                                                                      "perfil": perfil})
+                                                                                      "perfil": perfil,
+                                                                                      'ctxdocumentoset': documento_set,
+                                                                                      'documentos_requeridos': tipos_de_documentos_requeridos,
+                                                                                      })
     return redirect('profesional')
 
 
 def enviar_correcciones(request, pk_tramite):
-    usuario = request.user
-    observacion = "Este tramite ya tiene los archivos corregidos cargados"
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.CORREGIR, request.user, observacion)
+    tramite.hacer(tramite.INGRESAR_CORRECCIONES, request.user)
     messages.add_message(request, messages.SUCCESS, 'Tramite con documentos corregidos y enviados')
     return redirect('profesional')
 
@@ -581,7 +594,8 @@ def propietario_list():
 
 
 def listado_de_tramites_iniciados():
-    tramites = Tramite.objects.en_estado(Iniciado)
+    argumentos = [Iniciado, ConCorreccionesRealizadas]
+    tramites = Tramite.objects.en_estado(argumentos)
     contexto = {'tramites': tramites}
     return contexto
 
@@ -822,7 +836,7 @@ def aceptar_tramite(request, pk_tramite):
 def rechazar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.CORREGIR, request.user, request.GET["msg"])
-    messages.add_message(request, messages.WARNING, 'Tramite rechazado.')
+    messages.add_message(request, messages.SUCCESS, 'Tramite rechazado.')
     return redirect('administrativo')
 
 
@@ -896,7 +910,7 @@ FORMS_VISADOR = {(k.NAME, k.SUBMIT): k for k in [
 
 
 def tramites_aceptados():
-    argumentos = [Aceptado] #falta conCorreccionesVisado
+    argumentos = [Aceptado, CorreccionesDeVisadoRealizadas]
     aceptados = Tramite.objects.en_estado(argumentos)
     contexto = {'tramites': aceptados}
     return contexto
@@ -921,8 +935,8 @@ def tramites_agendados(request):
 def tramites_visados(request):
     usuario = request.user
     estados = Estado.objects.all()
-    tipo = 4
-    estados_visado = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
+    tipos = [5, 8]
+    estados_visado = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and (estado.tipo == tipos[0] or estado.tipo == tipos[1])), estados)
     contexto = {'estados': estados_visado}
     return contexto
 
@@ -973,10 +987,9 @@ def aprobar_visado(request, pk_tramite, monto):
 
 
 def no_aprobar_visado(request, pk_tramite, observacion):
-    usuario = request.user
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     obs = observacion
-    tramite.hacer(tramite.CORREGIR, usuario, obs)
+    tramite.hacer(tramite.CORREGIR, request.user, obs)
     messages.add_message(request, messages.SUCCESS, 'Tramite con visado no aprobado')
     return redirect('visador')
 
@@ -1100,7 +1113,8 @@ FORMS_INSPECTOR = {(k.NAME, k.SUBMIT): k for k in [
 
 
 def tramites_visados_y_con_inspeccion():
-    argumentos = [Visado, Inspeccionado, Aprobado, AprobadoPorPropietario, FinalObraParcialSolicitado] #falta conCorreccionesInspeccion
+    argumentos = [Visado, Inspeccionado, Aprobado, AprobadoPorPropietario, FinalObraParcialSolicitado,
+                  CorreccionesDePrimerInspeccionRealizadas, CorreccionesDeInspeccionRealizadas]
     tramites = Tramite.objects.en_estado(argumentos)
     return tramites
 
@@ -1108,9 +1122,12 @@ def tramites_visados_y_con_inspeccion():
 def tramites_inspeccionados_por_inspector(request):
     usuario = request.user
     estados = Estado.objects.all()
-    tipos = [7, 15]
+    tipos = [9, 12, 19, 22]
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and
-                                                    (estado.tipo == tipos[0] or estado.tipo == tipos[1])), estados)
+                                                    (estado.tipo == tipos[0] or
+                                                     estado.tipo == tipos[1] or
+                                                     estado.tipo == tipos[2] or
+                                                     estado.tipo == tipos[3])), estados)
     return estados_inspeccionados
 
 
@@ -1156,17 +1173,17 @@ def cargar_inspeccion(request, pk_tramite):
     return redirect('inspector')
 
 
-def rechazar_inspeccion(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(Tramite.CORREGIR, request.user, request.POST["observaciones"])
-    messages.add_message(request, messages.ERROR, 'Inspeccion rechazada')
-    return redirect('inspector')
-
-
 def aceptar_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.APROBAR_INSPECCION, request.user)
     messages.add_message(request, messages.SUCCESS, 'Inspeccion aprobada')
+    return redirect('inspector')
+
+
+def rechazar_inspeccion(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite.hacer(Tramite.CORREGIR, request.user, request.POST["observaciones"])
+    messages.add_message(request, messages.SUCCESS, 'Inspeccion rechazada')
     return redirect('inspector')
 
 
@@ -1229,7 +1246,7 @@ FORMS_JEFEINSPECTOR = {(k.NAME, k.SUBMIT): k for k in [
 
 
 def tramite_con_inspecciones_list():
-    argumentos = [FinalObraTotalSolicitado, NoFinalObraTotalSolicitado] # falta conCorreccionesInspeccion
+    argumentos = [FinalObraTotalSolicitado, NoFinalObraTotalSolicitado, CorreccionesDeInspeccionFinalRealizadas]
     tramites = Tramite.objects.en_estado(argumentos)
     contexto = {'tramites': tramites}
     return contexto
@@ -1246,16 +1263,19 @@ def tramites_agendados_por_jefeinspector(request):
 def tramites_inspeccionados_por_jefeinspector(request):
     usuario = request.user
     estados = Estado.objects.all()
-    tipo = 18
+    tipos = [26, 29]
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and
-                                                    estado.tipo == tipo), estados)
+                                                    (estado.tipo == tipos[0] or estado.tipo == tipos[1])), estados)
     return estados_inspeccionados
 
 
 def tramites_inspeccionados_por_inspectores():
     estados = Estado.objects.all()
-    tipos = [7, 15]
-    estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and (estado.tipo == tipos[0] or estado.tipo == tipos[1])), estados)
+    tipos = [9, 12, 19, 22]
+    estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and (estado.tipo == tipos[0] or
+                                                                                    estado.tipo == tipos[1] or
+                                                                                    estado.tipo == tipos[2] or
+                                                                                    estado.tipo == tipos[3])), estados)
     return estados_inspeccionados
 
 
@@ -1336,7 +1356,7 @@ def cargar_inspeccion_final(request, pk_tramite):
 def rechazar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.CORREGIR, request.user, request.POST["observaciones"])
-    messages.add_message(request, messages.ERROR, 'Inspeccion final rechazada')
+    messages.add_message(request, messages.SUCCESS, 'Inspeccion final rechazada')
     return redirect('jefe_inspector')
 
 
@@ -1368,6 +1388,7 @@ def mostrar_director(request):
     values = {
         "perfil": perfil,
         "datos_usuario": empleados(),
+        "ctxvisadorescontramitesagendados": tramites_con_visado_agendado(),
     }
     for form_name, submit_name in FORMS_DIRECTOR:
         KlassForm = FORMS_DIRECTOR[(form_name, submit_name)]
@@ -1406,6 +1427,47 @@ def empleados():
                 if u not in empleados:
                     empleados.append(u)
     return empleados
+
+
+def tramites_con_visado_agendado():
+    estados = Estado.objects.all()
+    tipos = [7]
+    estados_agendados= filter(lambda e: (e.usuario is not None and str(e.tramite.estado()) == 'AgendadoParaVisado' and e.tipo == tipos[0]), estados)
+    return estados_agendados
+
+
+def visadores_sin_visado_agendado(request, pk_estado):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    usuarios = Usuario.objects.all()
+    visadores = []
+    for u in usuarios:
+        lista = list(u.groups.values_list('name', flat=True))
+        for i in range(len(lista)):
+            if lista[i] == 'visador':
+                if u not in visadores:
+                    visadores.append(u)
+    estados = Estado.objects.all()
+    tipo = 7
+    estados_agendados = filter(lambda e: (e.usuario is not None and str(e.tramite.estado()) == 'AgendadoParaVisado' and e.tipo == tipo), estados)
+    visadores_estados_agendados = []
+    for i in range(len(estados_agendados)):
+        visadores_estados_agendados.append(estados_agendados[i].usuario)
+    visadores_sin_vis_agendadas = []
+    for vis in visadores:
+        if vis not in visadores_estados_agendados:
+            visadores_sin_vis_agendadas.append(vis)
+    if request.method == "POST" and "cambiar_visador" in request.POST:
+        visador = get_object_or_404(Usuario, pk=request.POST["idempleado"])
+        if estado.usuario.persona.id != visador.persona.id:
+            estado.cambiar_usuario(visador)
+            messages.add_message(request, messages.SUCCESS, "El visador del tramite ha sido cambiado")
+        else:
+            messages.add_message(request, messages.ERROR, "El visador del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
+    else:
+        return render(request, 'persona/director/cambiar_visador_de_tramite.html', {'estado': estado, "perfil": perfil, 'visadores': visadores_sin_vis_agendadas})
+    return redirect('director')
 
 
 def ver_listado_todos_tramites(request):

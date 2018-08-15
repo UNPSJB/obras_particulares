@@ -73,7 +73,6 @@ urlpatterns = [
     url(r'^rechazar_inspeccion/(?P<pk_tramite>\d+)/$', views.rechazar_inspeccion, name="rechazar_inspeccion"),
     url(r'^aceptar_inspeccion/(?P<pk_tramite>\d+)/$', views.aceptar_inspeccion, name="aceptar_inspeccion"),
     url(r'^documentos_tramite_inspector/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_inspector, name="documentos_tramite_inspector"),
-    #url(r'^documentos_inspector_estado/(?P<pk_estado>\d+)/$', views.documentos_inspector_estado, name="documentos_inspector_estado"),
 
     #jefeinspector --------------------------------------------------------------------------------------------------
     url(r'^jefeinspector$', views.mostrar_jefe_inspector, name="jefe_inspector"),
@@ -91,6 +90,7 @@ urlpatterns = [
     url(r'^reporte_tramites_director_pdf/$', login_required(ReporteTramitesDirectorPdf.as_view()), name="reporte_tramites_director_pdf"),
     url(r'^vista_de_usuarios$', views.ver_listado_todos_usuarios, name="vista_de_usuarios"),
     url(r'^ver_actividad_usuario/(?P<usuario>\w+)/$', views.ver_actividad_usuario, name="ver_actividad_usuario"),
+    url(r'^visadores_sin_visado_agendado/(?P<pk_estado>\d+)/$', views.visadores_sin_visado_agendado, name="visadores_sin_visado_agendado"),
 
     #general ----------------------------------------------------------------------------------------------------
     url(r'^cambiar_perfil/$', views.cambiar_perfil, name="cambiar_perfil"),

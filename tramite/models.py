@@ -42,10 +42,8 @@ class Tramite(models.Model):
     ]
 
     INICIAR = "iniciar"
-    #REVISAR = "revisar"
     CORREGIR = "corregir"
     ACEPTAR = "aceptar"
-    #RECHAZAR = "rechazar"
     AGENDAR_VISADO = "agendar_visado"
     VISAR = "visar"
     AGENDAR_INSPECCION= "agendar_inspeccion"
@@ -179,7 +177,7 @@ class Estado(models.Model):
 
 class Iniciado(Estado):
     TIPO = 1
-    CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
+    CADENA_DEFAULT = "No se ingresaron observaciones"
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True)
 
     def aceptar(self, tramite):
@@ -194,10 +192,10 @@ class Iniciado(Estado):
 
 class ConCorrecciones(Estado):
     TIPO = 2
-    CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
+    CADENA_DEFAULT = "No se ingresaron observaciones"
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
 
-    def ingresar_correcciones(self):
+    def ingresar_correcciones(self, tramite):
         return ConCorreccionesRealizadas(tramite=tramite)
 
     def dar_de_baja(self, tramite, observacion):
@@ -209,9 +207,12 @@ class ConCorrecciones(Estado):
 
 class ConCorreccionesRealizadas(Estado):
     TIPO = 3
-    
+
     def aceptar(self, tramite):
         return Aceptado(tramite=tramite)
+
+    def corregir(self, tramite, observacion):
+        return ConCorrecciones(tramite=tramite, observacion=observacion)
 
     def dar_de_baja(self, tramite, observacion):
         return Baja(tramite=tramite, observacion=observacion)
@@ -235,10 +236,10 @@ class Aceptado(Estado):
 
 class ConCorreccionesDeVisado(Estado):
     TIPO = 5
-    CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
+    CADENA_DEFAULT = "No se ingresaron observaciones"
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
 
-    def ingresar_correcciones(self):
+    def ingresar_correcciones(self, tramite):
         return CorreccionesDeVisadoRealizadas(tramite=tramite)
 
     def dar_de_baja(self, tramite, observacion):
@@ -268,6 +269,9 @@ class AgendadoParaVisado(Estado):
     def visar(self, tramite, visador=None):
         return Visado(tramite=tramite, visador=visador)
 
+    def corregir(self, tramite, observacion):
+        return ConCorreccionesDeVisado(tramite=tramite, observacion=observacion)
+
     def dar_de_baja(self, tramite, observacion):
         return Baja(tramite=tramite, observacion=observacion)
 
@@ -282,9 +286,6 @@ class Visado(Estado):
     def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
         return AgendadoPrimerInspeccion(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
-    def corregir(self, tramite, observacion):
-        return ConCorreccionesDeVisado(tramite=tramite, observacion=observacion)
-
     def dar_de_baja(self, tramite, observacion):
         return Baja(tramite=tramite, observacion=observacion)
 
@@ -294,10 +295,10 @@ class Visado(Estado):
 
 class ConCorreccionesDePrimerInspeccion(Estado):
     TIPO = 9
-    CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
+    CADENA_DEFAULT = "No se ingresaron observaciones"
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
 
-    def ingresar_correcciones(self):
+    def ingresar_correcciones(self, tramite):
         return CorreccionesDePrimerInspeccionRealizadas(tramite=tramite)
 
     def dar_de_baja(self, tramite, observacion):
@@ -327,6 +328,9 @@ class AgendadoPrimerInspeccion(Estado):
 
     def inspeccionar(self, tramite, inspector=None):
         return PrimerInspeccion(tramite=tramite, inspector=inspector)
+
+    def corregir(self, tramite, observacion):
+        return ConCorreccionesDePrimerInspeccion(tramite=tramite, observacion=observacion)
 
     def dar_de_baja(self, tramite, observacion):
         return Baja(tramite=tramite, observacion=observacion)
@@ -467,10 +471,10 @@ class AprobadoPorPropietario(Estado):
 
 class ConCorreccionesDeInspeccion(Estado):
     TIPO = 19
-    CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
+    CADENA_DEFAULT = "No se ingresaron observaciones"
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
 
-    def ingresar_correcciones(self):
+    def ingresar_correcciones(self, tramite):
         return CorreccionesDeInspeccionRealizadas(tramite=tramite)
 
     def dar_de_baja(self, tramite, observacion):
@@ -500,6 +504,9 @@ class AgendadoInspeccion(Estado):
 
     def inspeccionar(self, tramite, inspector=None):
         return Inspeccionado(tramite=tramite, inspector=inspector)
+
+    def corregir(self, tramite, observacion):
+        return ConCorreccionesDeInspeccion(tramite=tramite, observacion=observacion)
 
     def solicitar_final_obra_total(self, tramite):
         if tramite.monto_pagado >= tramite.monto_a_pagar:
@@ -590,10 +597,10 @@ class NoFinalObraTotalSolicitado(Estado):
 
 class ConCorreccionesDeInspeccionFinal(Estado):
     TIPO = 26
-    CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
+    CADENA_DEFAULT = "No se ingresaron observaciones"
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
 
-    def ingresar_correcciones(self):
+    def ingresar_correcciones(self, tramite):
         return CorreccionesDeInspeccionFinalRealizadas(tramite=tramite)
 
     def __str__(self):
@@ -617,6 +624,9 @@ class AgendadoInspeccionFinal(Estado):
 
     def inspeccionar(self, tramite, inspector=None):
         return InspeccionFinal(tramite=tramite, inspector=inspector)
+
+    def corregir(self, tramite, observacion):
+        return ConCorreccionesDeInspeccionFinal(tramite=tramite, observacion=observacion)
 
     def __str__(self):
         return self.__class__.__name__

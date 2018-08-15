@@ -40,51 +40,60 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-														<div class="col-md-3">
-														{% for documento in tramite.documentos.all %}
+                            {% for documento in tramite.documentos.all %}
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="thumbnail ">
-                                    <a href="/media/{{documento.file}}" class="thumbnail ">
-                                        <img src="/media/{{documento.file}}" class="img-thumbnail" width="200" height="200">
+                                    <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
+                                        <img src="/media/{{documento.file}}" width=300 height=300>
                                     </a>
-                                    <font color="#337ab7" size="4">{{documento.tipo_documento}}</font>
+                                    <br>
+                                    <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}} - {{documento.fecha}} </p>
                                     <form action="">
                                         <p align="right" >
-                                            <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save-file"></i><span> Descargar</span></a>
+                                            <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
                                         </p>
                                     </form>
                                 </div>
+                            </div>
                             {% endfor %}
-														</div>
-														<div class="col-md-3">
-															<div class="alert alert-danger alert-dismissible">
-															  <button type="button" class="close" data-dismiss="alert">&times;</button>
-															  <strong>Atencion</strong> {{tramite.estado.observacion}}.
-															</div>
-														</div>
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="container-fluid">
-                                <div class="row">
-                                    <hr>
-                                    <form action="" method="post" enctype="multipart/form-data">
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                            <div class="form-group">
-                                                <label for="">Cargar Documentos corregidos:</label>
-                                                <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                                                <input class="file" id="id_correcciones"  type="file" data-preview-file-type="any" multiple="true" title="Cargar documentos corregidos" required />
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                                            <button class="btn btn-primary btn-sm" type="submit" title="Envia Planilla de visado">
-                                                Enviar correcciones
-                                            </button>
-                                            <br>
-                                            <br>
-                                        </div>
-                                    </form>
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <div class="alert alert-danger alert-dismissible">
+                                  <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                  <strong>Atencion</strong> {{tramite.estado.observacion}}.
                                 </div>
                             </div>
                         </div>
+                    </div>
+		    	</div>
+		    </div>
+	    </div>
+    </div>
+    <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box">
+			<h5 class="panel-title">
+				<a>
+					<font color="#ffffff" size="2">Documentos necesarios para realizar la corrección</font>
+				</a>
+			</h5>
+		</div>
+		<div class="panel-collapse colorp">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+                        <form action="" method="post" enctype="multipart/form-data">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    {{ctxdocumentoset}}
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                                <button class="btn btn-primary btn-sm" type="submit" title="Enviar Correcciones" name="enviar_correcciones">
+                                    Enviar correcciones
+                                </button>
+                            <br>
+                            <br>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -99,16 +108,53 @@
 			$('.alert-danger').delay(999999999);
 		})
 
-		$("#id_correcciones").fileinput({
+		//$("#id_correcciones").fileinput({
+		//	showCaption: false,
+		//	browseClass: "btn btn-primary btn-sm",
+		//	fileType: "any",
+		//	maxFileCount: 1,
+		//	browseLabel: 'Cargar Documentos Corregidos',
+		//	showUpload: false,
+		//	showRemove: false
+		//});
+	</script>
+    <script>
+		$(function () {
+			var cant_doc_requeridos = {{documentos_requeridos|length}};
+  			for(var n = 0; n < cant_doc_requeridos; n++) {
+    			var valorInput = $("input[id='id_form-"+n+"-tipo_documento']").val();
+				{% for documento in documentos_requeridos %}
+					var id = {{documento.id}}
+					if (valorInput == id){
+					    if (n == 0){
+					        var valorNombreDoc = "{{documento.nombre}}" + "*:"
+					    }
+  						if (n > 0){
+  						    var valorNombreDoc = "<br>{{documento.nombre}}</br>"
+  						}
+					}
+				{% endfor %}
+				$("label[for='id_form-"+n+"-file']").empty();
+                $("label[for='id_form-"+n+"-file']").append(valorNombreDoc);
+			}
+		});
+	</script>
+    <script>
+        var cant_doc_requeridos = {{documentos_requeridos|length}};
+        for(var n = 0; n < cant_doc_requeridos; n++) {
+            $("input[id='id_form-"+n+"-file']").addClass('file');
+            $("input[id='id_form-"+n+"-file']").attr("required", true);
+        }
+		$('.file').fileinput({
 			showCaption: false,
 			browseClass: "btn btn-primary btn-sm",
 			fileType: "any",
 			maxFileCount: 1,
-			browseLabel: 'Cargar Documentos Corregidos',
+			browseLabel: 'Seleccionar archivo',
 			showUpload: false,
 			showRemove: false
 		});
-	</script>
+    </script>
     <script>
       var c = document.getElementById("botonConfiguracion");
 			c.style.display= '';

@@ -1,0 +1,42 @@
+{% load staticfiles %}
+
+{% block contenido_tramites_inspeccionados %}
+<div class="table-responsive">
+	<table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+		<thead>
+			<tr>
+				<th>Nro</th>
+				<th>Visador</th>
+				<th>Fecha Inspeccion</th>
+				<th>Tipo de obra</th>
+				<th>Profesional</th>
+				<th>Propietario</th>
+				<th>Superficie</th>
+				<th>Seleccionar</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if estados %}
+			{% for estado in estados %}
+			<tr>
+				<td class="col-xs-1">{{ estado.tramite.id}}</td>
+				<td class="col-xs-1">{{ estado.usuario}}</td>
+				<td class="col-xs-2">{{ estado.tramite.estado.timestamp}}</td>
+				<td class="col-xs-2">{{ estado.tramite.tipo_obra }} </td>
+				<td class="col-xs-2">{{ estado.tramite.profesional}}</td>
+				<td class="col-xs-2">{{ estado.tramite.propietario}}</td>
+				<td class="col-xs-1">{{ estado.tramite.medidas }} </td>
+				<td class="col-xs-1" align="center">
+					<a href="{% url 'visadores_sin_visado_agendado' estado.pk %}">
+						<button type="button" class="btn btn-primary btn-xs" name="Agendar">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"> Nuevo Visador</span>
+						</button>
+					</a>
+				</td>
+			</tr>
+			{% endfor %}
+			{% endif%}
+		</tbody>
+	</table>
+</div>
+{% endblock %}
