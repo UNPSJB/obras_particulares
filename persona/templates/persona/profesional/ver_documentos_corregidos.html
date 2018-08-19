@@ -107,16 +107,6 @@
 		$(document).ready(function() {
 			$('.alert-danger').delay(999999999);
 		})
-
-		//$("#id_correcciones").fileinput({
-		//	showCaption: false,
-		//	browseClass: "btn btn-primary btn-sm",
-		//	fileType: "any",
-		//	maxFileCount: 1,
-		//	browseLabel: 'Cargar Documentos Corregidos',
-		//	showUpload: false,
-		//	showRemove: false
-		//});
 	</script>
     <script>
 		$(function () {
@@ -144,12 +134,13 @@
         for(var n = 0; n < cant_doc_requeridos; n++) {
             $("input[id='id_form-"+n+"-file']").addClass('file');
             $("input[id='id_form-"+n+"-file']").attr("required", true);
+            $("input[id='id_form-"+n+"-file']").attr("multiple", true);
         }
 		$('.file').fileinput({
 			showCaption: false,
 			browseClass: "btn btn-primary btn-sm",
 			fileType: "any",
-			maxFileCount: 1,
+			maxFileCount: 10,
 			browseLabel: 'Seleccionar archivo',
 			showUpload: false,
 			showRemove: false
@@ -161,7 +152,4 @@
 			var d = document.getElementById("imagenusuario");
 			d.style.display= '';
     </script>
-		<script>
-
-		</script>
 {% endblock %}

@@ -19,25 +19,25 @@
 <ul class="sidebar sidebar-1">
 	<font size="2">
 		<li><a href="#" class="current"><font>Administrativo</font></a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Trámites iniciados</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de aprobación</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de no aprobación</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>Solicitud de final de obra</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen" onclick='mostrarSubmenu("sin_submenu")'>Baja de tramites</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Alta profesional</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Alta propietario</a></li>
+        <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Trámites iniciados {% if ctxtramitesiniciados.tramites.count > 0 %}<span class="badge confBadge">{{ ctxtramitesiniciados.tramites.count }}</span>{% endif %}</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Sol. de aprobación {% if  ctxsolicitudesaprobacion.tramites.count > 0 %}<span class="badge confBadge">{{ ctxsolicitudesaprobacion.tramites.count }}</span>{% endif %}</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight" onclick='mostrarSubmenu("sin_submenu")'>Sol. de no aprobación {% if ctxsolicitudesnoaprobacion.tramites.count > 0 %}<span class="badge confBadge">{{ ctxsolicitudesnoaprobacion.tramites.count }}</span>{% endif %}</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>Sol. de final de obra {% if ctxsolicitudesfinalobra.tramites.count > 0 %}<span class="badge confBadge">{{ ctxsolicitudesfinalobra.tramites.count }}</span>{% endif %}</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen" onclick='mostrarSubmenu("sin_submenu")'>Baja de tramites {% if ctxtramitesvencidos.tramites_vencidos_no_pagados_no_renovados > 0 %}<span class="badge confBadge">{{ ctxtramitesvencidos.tramites_vencidos_no_pagados_no_renovados }}</span>{% endif %}</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Alta profesional {% if ctxprofesional.len_personas > 0 %}<span class="badge confBadge">{{ctxprofesional.len_personas}}</span>{% endif %}</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Alta propietario {% if ctxpropietario.len_propietarios  > 0 %}<span class="badge confBadge">{{ ctxpropietario.len_propietarios }}</span>{% endif %}</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Registrar pagos</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_contrasenia")'>Contraseña</a></li>
 		</ul>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
+		<!--li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
 			<li><a href="#">Consulta 1</a></li>
 			<li><a href="#">Consulta 2</a></li>
 			<li><a href="#">Consulta 3</a></li>
-		</ul>
+		</ul-->
 	</font>
 </ul>
 {% endblock %}
@@ -146,16 +146,8 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<label style="font-size: 115%;">Baja por falta de pago del permiso de construcción</label>
-							<br><br>
-							{% block contenido_baja_tramite_falta_de_pago_permiso %}
-							{% include "persona/administrativo/baja_tramite_list.html" with tramites=ctxtramitespagovencidos.tramites %}
-							{% endblock %}
-							<hr>
-							<label style="font-size: 115%;">Baja por plazo de construcción vencido</label>
-							<br><br>
-							{% block contenido_baja_tramite_plazo_construccion_vencido %}
-							{% include "persona/administrativo/baja_tramite_plazo_permiso_list.html" with tramites=ctxtramitesplazovencidos.tramites %}
+							{% block contenido_baja_tramite %}
+							{% include "persona/administrativo/baja_tramite_list.html" with tramites=ctxtramitesvencidos.tramites %}
 							{% endblock %}
 						</div>
 					</div>

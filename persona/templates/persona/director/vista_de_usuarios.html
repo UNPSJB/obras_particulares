@@ -17,184 +17,259 @@
 	</button>
 </div>
 <ul class="sidebar sidebar-1">
-  <font size="2">
-    <li><a href="javascript:history.back(-1);" class="current"><font>Director</font></a></li>
-  </font>
+	<font size="2">
+		<li><a href="javascript:history.back(-1);" class="current"><font>Director</font></a></li>
+	</font>
 </ul>
 {% endblock %}
 
 {% block contenido %}
 <div id="contenedor_botoncalapsable_resto"></div>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-  <div class="panel">
-    <div class="panel-heading box" role="tab" id="headingFive">
-      <h5 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-          <font color="#ffffff" size="2">Usuarios por grupo</font>
-        </a>
-      </h5>
-    </div>
-    <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-      <div class="panel-body">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <canvas id="chartDirectorUsuarios" height="80" style="padding-left:25px;"></canvas>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <div class="table-responsive">
-                <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-                  <thead>
-                    <tr>
-                      <th>Usuario</th>
-                      <th>Grupo</th>
-                      <th>Nombre</th>
-                      <th>Documento</th>
-                      <th>Telefono</th>
-                      <th>Mail</th>
-                      <th>Domicilio</th>
-                      <th>Actividad</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% if todos_los_usuarios %}
-                    {% for usuario in todos_los_usuarios %}
-                    <tr>
-                      <td class="col-xs-1">{{usuario}}</td>
-                      <td class="col-xs-2">
-                        {% for gr in usuario.groups.values %}
-                        {{gr.name}}
-                        <br>
-                        {% endfor %}
-                      </td>
-                      <td class="col-xs-2">{{usuario.persona}}</td>
-                      <td class="col-xs-1" align="center">{{usuario.persona.dni}}</td>
-                      <td class="col-xs-1" align="center">{{usuario.persona.telefono}}</td>
-                      <td class="col-xs-2">{{usuario.persona.mail}}</td>
-                      <td class="col-xs-2">{{usuario.persona.domicilio}}</td>
-                      <td class="col-xs-1" align="center">
-                        <a href="{% url 'ver_actividad_usuario' usuario %}">
-                          <button type="button" class="btn btn-primary btn-xs" name="Ver actividad">
-                            <span class="glyphicon glyphicon-equalizer" aria-hidden="true"></span>
-                          </button>
-                        </a>
-                      </td>
-                    </tr>
-                    {% endfor %}
-                    {% endif%}
-                  </tbody>
-                </table>
-              </div>
-              <hr>
-            </div>
-            <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
-              <a id="crear_detalle" href="{% url 'reporte_tramites_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
-                <i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
-              </a>
-              <a href="{% url 'reporte_tramites_director_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
-                <i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
-              </a>
-            </div>
-            <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4" align="right">
-              <a href="javascript:history.back(-1);">
-                <button type="button" class="btn btn-primary" name="Volver">
-                  Volver
-                </button>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="panel">
+		<div class="panel-heading" role="tab" id="headingFive">
+			<h5 class="panel-title">
+				<!--a class="collapsed" role="button" data-toggle="" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive"-->
+					<font color="#ffffff" size="2">Gráfico Usuarios por grupo</font>
+				<!--/a-->
+			</h5>
+		</div>
+		<div id="collapseFive" class="panel-collapse colorG" role="tabpanel" aria-labelledby="headingFive">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+							<canvas id="chartDirectorUsuarios"></canvas> <!--style="padding-left:25px;"-->
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="canvas-holder-1" > <!-- style="width:30%; direction:ltr; margin-left:auto; margin-right:auto; display:table;" -->
+						   <canvas id="chart-area2" width="250" height="250"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel">
+		<div class="panel-heading box" role="tab" id="headingOne">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+					<font color="#ffffff" size="2">Datos usuarios por grupo</font>
+				</a>
+			</h5>
+		</div>
+    	<div id="collapseOne" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingOne">
+      		<div class="panel-body">
+        		<div class="container-fluid">
+          			<div class="row">
+            			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="table-responsive">
+								<table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+									<thead>
+										<tr>
+											<th>Usuario</th>
+											<th>Grupo</th>
+											<th>Nombre</th>
+											<th>Documento</th>
+											<th>Telefono</th>
+											<th>Mail</th>
+											<th>Domicilio</th>
+											<th>Actividad</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% if todos_los_usuarios %}
+										{% for usuario in todos_los_usuarios %}
+										<tr>
+											<td class="col-xs-1">{{usuario}}</td>
+											<td class="col-xs-2">
+												{% for gr in usuario.groups.values %}
+												{{gr.name}}
+												<br>
+												{% endfor %}
+											</td>
+											<td class="col-xs-2">{{usuario.persona}}</td>
+											<td class="col-xs-1" align="center">{{usuario.persona.dni}}</td>
+											<td class="col-xs-1" align="center">{{usuario.persona.telefono}}</td>
+											<td class="col-xs-2">{{usuario.persona.mail}}</td>
+											<td class="col-xs-2">{{usuario.persona.domicilio}}</td>
+											<td class="col-xs-1" align="center">
+												<a href="{% url 'ver_actividad_usuario' usuario %}">
+													<button type="button" class="btn btn-primary btn-xs" name="Ver actividad">
+														<span class="glyphicon glyphicon-equalizer" aria-hidden="true"></span>
+													</button>
+												</a>
+											</td>
+										</tr>
+										{% endfor %}
+										{% endif%}
+									</tbody>
+								</table>
+							</div>
+							<hr>
+						</div>
+						<div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
+							<a id="crear_detalle" href="{% url 'reporte_empleados_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+								<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
+							</a>
+							<a href="{% url 'reporte_empleados_director_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
+								<i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
+							</a>
+						</div>
+						<div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4" align="right">
+							<a href="javascript:history.back(-1);">
+								<button type="button" class="btn btn-primary" name="Volver">
+									Volver
+								</button>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-    <script>
+	<script>
 
-        labelsGrupos = [];
-        dataGrupos = [];
+		labelsGrupos = [];
+		dataGrupos = [];
 
-        {% for da in datos_grupos %}
-            dataGrupos.push({{da}});
-        {% endfor %}
+		{% for da in datos_grupos %}
+			dataGrupos.push({{da}});
+		{% endfor %}
 
-        {% for la in label_grupos %}
-            labelsGrupos.push("{{la}}");
-        {% endfor %}
+		{% for la in label_grupos %}
+			labelsGrupos.push("{{la}}");
+		{% endfor %}
 
-        var ctx = document.getElementById("chartDirectorUsuarios");
-        var chartDirectorTramites = new Chart( ctx, {
-            type: 'bar',
-            data: {
-              labels: labelsGrupos,
-              datasets: [
-                {
-                  backgroundColor: [
-                  'rgba(255, 255, 0, 1.0)',
-                  'rgba(0, 255, 0, 1.0)',
-                  'rgba(0, 234, 236, 1.0)',
-                  'rgba(44, 0, 255, 1.0)',
-                  'rgba(183, 92, 224, 1.0)',
-                  'rgba(255, 0, 211, 1.0)',
-                  'rgba(255, 0, 0, 1.0)'
-                  ],
-                  data: dataGrupos
-                }
-              ]
-            },
-            options: {
-                responsive: true,
-                legend: {
-                    display: false
-                },
-                title:{
-                    display:true,
-                    text:'Cantidad de usuarios por grupo',
-                    fontSize: 14,
-                    padding: 14,
-                    fontColor:"#ffffff",
-                },
-                scales: {
-                    xAxes: [{
-                        barPercentage: 0.5,
-                        scaleLabel: {
-                            display: true,
-                        },
-                        ticks: {
-                            fontColor:"#ffffff",
-                        },
-                        gridLines:{
-                            color:"#808b96",
-                            zeroLineColor: "#ffffff",
-                            zeroLineWidth: 2,
-                        }
-                    }],
-                    yAxes: [{
-                        scaleLabel: {
-                            display: true,
-                        },
-                        ticks: {
-                            beginAtZero:true,
-                            stepSize: 1,
-                            fontColor:"#ffffff",
-                        },
-                        gridLines:{
-                            color:"#808b96",
-                            zeroLineColor: "#ffffff",
-                            zeroLineWidth: 2,
-                        }
-                    }]
-                }
-            }
-        });
-    </script>
+		var ctx = document.getElementById("chartDirectorUsuarios");
+		var chartDirectorTramites = new Chart( ctx, {
+			type: 'bar',
+			data: {
+				labels: labelsGrupos,
+			  		datasets: [{
+				  		backgroundColor: [
+				  			'rgba(255, 255, 0, 1.0)',
+				  			'rgba(0, 255, 0, 1.0)',
+				  			'rgba(0, 234, 236, 1.0)',
+				  			'rgba(44, 0, 255, 1.0)',
+				  			'rgba(183, 92, 224, 1.0)',
+				  			'rgba(255, 0, 211, 1.0)',
+				  			'rgba(255, 0, 0, 1.0)'
+				  		],
+				  	data: dataGrupos
+					}]
+			},
+			options: {
+				responsive: true,
+				legend: {
+					display: false
+				},
 
-    <script>
-        var c = document.getElementById("botonConfiguracion");
+				title:{
+					display:true,
+					text:'Cantidad de usuarios por grupo',
+					fontSize: 16,
+					padding: 14,
+					fontColor:"#929292",
+				},
+				scales: {
+					xAxes: [{
+						barPercentage: 0.5,
+						scaleLabel: {
+							display: true,
+						},
+						ticks: {
+							fontColor:"#444444",
+						},
+						gridLines:{
+							color:"#a6a6a6",
+							zeroLineColor: "#a6a6a6",
+							zeroLineWidth: 2,
+						}
+					}],
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+						},
+						ticks: {
+							beginAtZero:true,
+							stepSize: 1,
+							fontColor:"#444444",
+						},
+						gridLines:{
+							color:"#a6a6a6",
+							zeroLineColor: "#a6a6a6",
+							zeroLineWidth: 2,
+						}
+					}]
+				}
+			}
+		});
+	</script>
+
+	<script>
+		labelsGrupos = [];
+		dataGrupos = [];
+
+		{% for da in datos_grupos %}
+			dataGrupos.push({{da}});
+		{% endfor %}
+
+		{% for la in label_grupos %}
+			labelsGrupos.push("{{la}}");
+		{% endfor %}
+
+
+		var doughnutData1 = {
+			labels: labelsGrupos,
+			datasets: [{
+				data: dataGrupos,
+				backgroundColor: [
+					'rgba(255, 255, 0, 1.0)',
+					'rgba(0, 255, 0, 1.0)',
+					'rgba(0, 234, 236, 1.0)',
+					'rgba(44, 0, 255, 1.0)',
+					'rgba(183, 92, 224, 1.0)',
+					'rgba(255, 0, 211, 1.0)',
+					'rgba(255, 0, 0, 1.0)'
+				],
+				hoverBackgroundColor: [
+					"#ff8300",
+					"#9d3292",
+					"#522e91",
+					"#5d9632",
+					"#0083a8",
+					"#ff8300",
+					"#9d3292"
+				]
+			}]
+		};
+
+		jQuery(document).ready(function() {
+		var ctx1 = document.getElementById("chart-area2").getContext("2d");
+
+			window.myDoughnutChart2 = new Chart(ctx1, {
+				type: 'doughnut',
+				data: doughnutData1,
+				options: {
+					responsive: true,
+					elements: {
+						arc: {
+							borderColor: "#333"
+						}
+					},
+					cutoutPercentage: 50
+				},
+			});
+		});
+	</script>
+	<script>
+		var c = document.getElementById("botonConfiguracion");
 		c.style.display= '';
 		var d = document.getElementById("imagenusuario");
 		d.style.display= '';
-    </script>
+	</script>
 {% endblock %}

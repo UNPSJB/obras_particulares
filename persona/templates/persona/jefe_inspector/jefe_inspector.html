@@ -152,11 +152,11 @@
 			</div>
 		</div>
 	</div>
-	<div class="panel">
-		<div class="panel-heading box" role="tab" id="headinOne">
+	<div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
 			<h5 class="panel-title">
-				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales")'>
-					<font color="#ffffff" size="2">Datos personales</font>
+				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales")'>
+					<font color="#ffffff" size="2">Modificar mis datos personales</font>
 				</a>
 			</h5>
 		</div>
@@ -268,4 +268,20 @@
 			}
 		}
 	</script>
+
+	<script>
+		$(document).on('ready', function(){
+			$("#id_cambiar_foto_de_perfil").fileinput({
+				showCaption: false,
+				browseClass: "btn btn-primary btn-sm",
+				fileType: "any",
+				maxFileCount: 1,
+				browseLabel: 'Cargar foto perfil',
+				showUpload: false,
+				showRemove: false
+			});
+		});
+	</script>
+
+
 {% endblock%}

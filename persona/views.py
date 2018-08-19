@@ -1,3 +1,5 @@
+#-*- coding:utf-8 -*-
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import  login_required
@@ -13,7 +15,6 @@ from tramite.models import *
 from django.core.mail import send_mail
 from persona.models import *
 from tramite.models import Tramite, Estado
-from django.views.generic.detail import DetailView
 import re
 from datetime import datetime, date, time, timedelta
 from django.views.generic.base import TemplateView
@@ -26,17 +27,20 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Paragraph, TableStyle, Table, Image, Spacer
 from reportlab.lib import colors
-from reportlab.lib.units import cm, inch
+from reportlab.lib.units import cm
 from reportlab.lib.pagesizes import letter, A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
-import time
-from datetime import datetime
-import collections
+from reportlab.lib.styles import getSampleStyleSheet
+
 
 from reportlab.graphics.shapes import Drawing, String
 from reportlab.graphics import renderPDF
 from reportlab.graphics.charts.barcharts import VerticalBarChart
+
+from datetime import datetime
+import collections
+
 
 
 '''generales --------------------------------------------------------------------------------------------'''
@@ -553,8 +557,7 @@ def mostrar_administrativo(request):
         "ctxsolicitudesaprobacion": solicitud_aprobacion_list(),
         "ctxsolicitudesnoaprobacion": solicitud_no_aprobacion_list(),
         "ctxpago": registrar_pago_tramite(request),
-        "ctxtramitespagovencidos": listado_tramites_pago_vencido(),
-        "ctxtramitesplazovencidos": listado_tramites_plazo_vencido()
+        "ctxtramitesvencidos": listado_tramites_vencidos()
     }
     for form_name, submit_name in FORMS_ADMINISTRATIVO:
         KlassForm = FORMS_ADMINISTRATIVO[(form_name, submit_name)]
@@ -572,6 +575,7 @@ def mostrar_administrativo(request):
             values[form_name] = KlassForm()
     return render(request, 'persona/administrativo/administrativo.html', values)
 
+
 FORMS_ADMINISTRATIVO = {(k.NAME, k.SUBMIT): k for k in [
     FormularioUsuarioGrupo,
     FormularioUsuarioCambiarDatos,
@@ -582,14 +586,14 @@ FORMS_ADMINISTRATIVO = {(k.NAME, k.SUBMIT): k for k in [
 def profesional_list():
     personas = Persona.objects.all()
     profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
-    contexto = {'personas': profesionales}
+    contexto = {'personas': profesionales, 'len_personas': len(profesionales)}
     return contexto
 
 
 def propietario_list():
     propietarios = Propietario.objects.all()
     propietarios_sin_usuario = filter(lambda propietario: (propietario.persona.usuario is None and propietario.persona is not None ), propietarios)
-    contexto = {'propietarios': propietarios_sin_usuario}
+    contexto = {'propietarios': propietarios_sin_usuario, 'len_propietarios': len(propietarios_sin_usuario)}
     return contexto
 
 
@@ -626,47 +630,39 @@ def solicitud_no_aprobacion_list():
     return contexto
 
 
-def listado_tramites_pago_vencido():
-    argumentos = [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
+def listado_tramites_vencidos():
+    argumentos_ap = [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
                   NoAprobadoSolicitado, NoAprobado]
-    tramites = Tramite.objects.en_estado(argumentos)
+    tramites_ap = Tramite.objects.en_estado(argumentos_ap)
+    argumentos_fo = [AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario,
+                  AprobadoPorPropietario, AgendadoInspeccion, Inspeccionado, FinalObraParcialSolicitado]
+    tramites_fo = Tramite.objects.en_estado(argumentos_fo)
     estados = Estado.objects.all()
     tipo = 1
     estados_iniciado = filter(lambda e: (e.tipo == tipo), estados)
     tramites_vencidos = []
-    for t in tramites:
+    for t in tramites_ap:
         for e in estados_iniciado:
             if e.tramite == t and (e.timestamp + timedelta(days=60)).strftime("%Y/%m/%d") < datetime.now().strftime(
                     "%Y/%m/%d"):
                 tramites_vencidos.append(t)
-    tramites_vencidos_no_pagados = []
+    tramites_vencidos_no_pagados_no_renovados = []
     for tr in tramites_vencidos:
         if not tr.monto_pagado or tr.monto_pagado < (tr.monto_a_pagar / 12):
-            tramites_vencidos_no_pagados.append(tr)
-    contexto = {'tramites': tramites_vencidos_no_pagados}
-    return contexto
-
-
-def listado_tramites_plazo_vencido():
-    argumentos = [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
-                  AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario,
-                  AprobadoPorPropietario, AgendadoInspeccion, Inspeccionado, FinalObraParcialSolicitado]
-    tramites = Tramite.objects.en_estado(argumentos)
-    estados = Estado.objects.all()
-    tipo = 1
-    estados_iniciado = filter(lambda e: (e.tipo == tipo), estados)
-    tramites_vencidos = []
+            tramites_vencidos_no_pagados_no_renovados.append(tr)
     tipoFOPS = 17
-    for t in tramites:
+    for t in tramites_fo:
         estado_t = filter(lambda e: (e.tipo == tipoFOPS and str(e.tramite.pk) == str(t.pk)), estados)
         for e in estados_iniciado:
-            if e.tramite == t and len(estado_t) == 0 and (e.timestamp + timedelta(days=1095)).strftime("%Y/%m/%d") < datetime.now().strftime(
+            if e.tramite == t and len(estado_t) == 0 and (e.timestamp + timedelta(days=1095)).strftime(
+                    "%Y/%m/%d") < datetime.now().strftime(
                     "%Y/%m/%d"):
-                tramites_vencidos.append(t)
-            elif e.tramite == t and len(estado_t) > 0 and (e.timestamp + timedelta(days=1825)).strftime("%Y/%m/%d") < datetime.now().strftime(
+                tramites_vencidos_no_pagados_no_renovados.append(t)
+            elif e.tramite == t and len(estado_t) > 0 and (e.timestamp + timedelta(days=1825)).strftime(
+                    "%Y/%m/%d") < datetime.now().strftime(
                     "%Y/%m/%d"):
-                tramites_vencidos.append(t)
-    contexto = {'tramites': tramites_vencidos}
+                tramites_vencidos_no_pagados_no_renovados.append(t)
+    contexto = {'tramites': tramites_vencidos_no_pagados_no_renovados, 'tramites_vencidos_no_pagados_no_renovados': len(tramites_vencidos)}
     return contexto
 
 
@@ -840,19 +836,15 @@ def rechazar_tramite(request, pk_tramite):
     return redirect('administrativo')
 
 
-def dar_baja_tramite_pago(request, pk_tramite):
+def dar_baja_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    obs = "Tramite dado de baja. Se ha vencido el plazo de pago del permiso de construccion"
+    print(tramite.estado().tipo )
+    if tramite.estado().tipo < 19:
+        obs = "Tramite dado de baja. Se ha vencido el plazo de pago del permiso de construccion"
+    else:
+        obs = "Tramite dado de baja. Se ha vencido el plazo de construccion de la obra"
     tramite.hacer(tramite.DAR_DE_BAJA, request.user, obs)
-    messages.add_message(request, messages.SUCCESS, 'Tramite dado de baja.')
-    return redirect('administrativo')
-
-
-def dar_baja_tramite_plazo_vencido(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    obs = "Tramite dado de baja. Se ha vencido el plazo de construccion de la obra"
-    tramite.hacer(tramite.DAR_DE_BAJA, request.user, obs)
-    messages.add_message(request, messages.SUCCESS, 'Tramite dado de baja.')
+    messages.add_message(request, messages.SUCCESS, obs)
     return redirect('administrativo')
 
 
@@ -1475,20 +1467,33 @@ def ver_listado_todos_tramites(request):
     perfil = 'css/' + usuario.persona.perfilCSS
     argumentos = [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
               AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario,
-              AprobadoPorPropietario, AgendadoInspeccion, Inspeccionado, FinalObraTotalSolicitado,
+              AprobadoPorPropietario]
+    argumentos2 = [AgendadoInspeccion, Inspeccionado, FinalObraTotalSolicitado,
               FinalObraParcialSolicitado, NoFinalObraTotalSolicitado, AgendadoInspeccionFinal, InspeccionFinal,
               Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]
+    lab = ['Iniciado', 'Aceptado', 'A.Visado', 'Visado', 'A.Inspeccion', 'Inspeccion', 'A.Solicitado', 'Aprobado',
+           'N.A.Solicitado', 'NoAprobado', 'A.S.x Propietario', 'A.x Propietario']
+    lab2 = ['A.Inspeccion', 'Inspeccionado', 'F.O.T.S.', 'F.O.P.S.', 'NoF.O.T.S.', 'A.InspeccionFinal', 'InspeccionFinal',
+                   'Finalizado', 'NoFinalizado', 'F.O.T.S.x Prop.', 'Baja']
+
     len_argumentos = len(argumentos)
     tramites = Tramite.objects.en_estado(argumentos)
     estados = []
     for t in tramites:
         estados.append(t.estado().tipo)
+    print("----------------------------")
+    print(estados)
+    print("----------------------------")
     estados_cant = dict(collections.Counter(estados))
+    print(estados_cant)
+    print("----------------------------")
     for n in range(1, (len_argumentos+1)):
         if (not estados_cant.has_key(n)):
             estados_cant.setdefault(n, 0)
     estados_datos = estados_cant.values()
-    contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":argumentos, "perfil" : perfil}
+    print(estados_datos)
+    print("----------------------------")
+    contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":lab, "perfil" : perfil}
     return render(request, 'persona/director/vista_de_tramites.html', contexto)
 
 
@@ -1645,6 +1650,112 @@ class ReporteTramitesDirectorPdf(View):
         ))
         detalle_orden.hAlign = 'CENTER'
         story.append(detalle_orden)
+        doc.build(story)
+        return response
+
+class ReporteEmpleadosDirectorExcel(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        empleados = Usuario.objects.all()
+        wb = Workbook()
+        ws = wb.active
+        ws['A1'] = 'REPORTE DE TRAMITES'
+        ws.merge_cells('B1:G1')
+        ws['B2'] = 'NRO'
+        ws['C2'] = 'TIPO_DE_OBRA'
+        ws['D2'] = 'PROFESIONAL'
+        ws['E2'] = 'PROPIETARIO'
+        ws['F2'] = 'MEDIDAS'
+        cont = 3
+        '''
+        for tramite in tramites:
+            ws.cell(row=cont, column=2).value = Usuario.id
+            ws.cell(row=cont, column=3).value = str(tramite.tipo_obra)
+            ws.cell(row=cont, column=4).value = str(tramite.profesional)
+            ws.cell(row=cont, column=5).value = str(tramite.propietario)
+            ws.cell(row=cont, column=6).value = tramite.medidas
+            cont = cont + 1
+        '''
+        nombre_archivo = "ReporteEmpleadosExcel.xlsx"
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+        return response
+
+
+class ReporteEmpleadosDirectorPdf(View):
+
+    def pie_pagina(self, canvas, doc):
+        canvas.saveState()
+        canvas.setFont('Times-Roman', 10)
+        canvas.drawCentredString(300, 20, "Page %d" % doc.page)
+        canvas.restoreState()
+
+    def get(self, request, *args, **kwargs):
+        filename = "Informe de empleados.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=0,
+            leftMargin=0,
+            topMargin=0,
+            bottomMargin=0,
+        )
+        story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
+        #styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+
+        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.now().strftime("%Y/%m/%d")
+        story.append(Paragraph(usuario, styles["Usuario"]))
+        story.append(Spacer(0, cm * 0.15))
+
+        im1 = Image(settings.MEDIA_ROOT + '/imagenes/banner_municipio_3.png', width=630, height=50)
+        im1.hAlign = 'CENTER'
+        story.append(im1)
+
+        #im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
+        #im0.hAlign = 'CENTER'
+        #story.append(im0)
+
+        #titulo = 'SISTEMA OBRAS PARTICULARES'
+        #story.append(Paragraph(titulo, styles["Titulo"]))
+        #story.append(Spacer(0, cm * 0.20))
+        story.append(Spacer(0, cm * 0.05))
+        subtitulo = 'Reporte de empleados'
+        story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        story.append(Spacer(0, cm * 0.15))
+
+
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
+        story.append(im0)
+        story.append(Spacer(0, cm * 0.5))
+
+        encabezados = ('NRO', 'TIPO_DE_OBRA', 'PROFESIONAL', 'PROPIETARIO', 'MEDIDAS', 'ESTADO')
+        detalles = []
+        '''
+        detalles = [
+            (tramite.id, tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.medidas, tramite.estado())
+            for tramite in
+            Tramite.objects.all()]
+        '''
+        detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 3 * cm, 4 * cm, 4 * cm, 2 * cm, 3 * cm])
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        story.append(detalle_orden)
 
         '''
         trabajando con los graficos dentro del informe
@@ -1678,6 +1789,10 @@ class ReporteTramitesDirectorPdf(View):
         '''
         hasta aca, anda pero ver los valores, colores y como se ubica dentro de pagina
         '''
+
+        #titulo = "Obras Particulares"
+        #story.append(Paragraph(titulo, styles["Titulo"]))
+        # story.append(Spacer(0, cm * 0.20))
 
         doc.build(story)
         return response

@@ -52,8 +52,9 @@ urlpatterns = [
     url(r'^cargar_no_aprobacion/(?P<pk_tramite>\d+)/$', views.cargar_no_aprobacion, name="cargar_no_aprobacion"),
     url(r'^aprobar_final_de_obra/(?P<pk_tramite>\d+)/$', views.habilitar_final_obra, name="habilitar_final_obra"),
     url(r'^cargar_final_de_obra_total/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total,name="cargar_final_de_obra_total"),
-    url(r'^dar_baja_tramite_pago/(?P<pk_tramite>\d+)/$', views.dar_baja_tramite_pago, name="dar_baja_tramite_pago"),
-    url(r'^dar_baja_tramite_plazo_vencido/(?P<pk_tramite>\d+)/$', views.dar_baja_tramite_plazo_vencido, name="dar_baja_tramite_plazo_vencido"),
+    #url(r'^dar_baja_tramite_pago/(?P<pk_tramite>\d+)/$', views.dar_baja_tramite_pago, name="dar_baja_tramite_pago"),
+    #url(r'^dar_baja_tramite_plazo_vencido/(?P<pk_tramite>\d+)/$', views.dar_baja_tramite_plazo_vencido, name="dar_baja_tramite_plazo_vencido"),
+    url(r'^dar_baja_tramite/(?P<pk_tramite>\d+)/$', views.dar_baja_tramite, name="dar_baja_tramite"),
 
     # visador -------------------------------------------------------------------------------------------------------
     url(r'^visador$', views.mostrar_visador, name="visador"),
@@ -91,6 +92,8 @@ urlpatterns = [
     url(r'^vista_de_usuarios$', views.ver_listado_todos_usuarios, name="vista_de_usuarios"),
     url(r'^ver_actividad_usuario/(?P<usuario>\w+)/$', views.ver_actividad_usuario, name="ver_actividad_usuario"),
     url(r'^visadores_sin_visado_agendado/(?P<pk_estado>\d+)/$', views.visadores_sin_visado_agendado, name="visadores_sin_visado_agendado"),
+    url(r'^reporte_empleados_director_excel/', ReporteEmpleadosDirectorExcel.as_view(), name="reporte_empleados_director_excel"),
+    url(r'^reporte_empleados_director_pdf/$', login_required(ReporteEmpleadosDirectorPdf.as_view()), name="reporte_empleados_director_pdf"),
 
     #general ----------------------------------------------------------------------------------------------------
     url(r'^cambiar_perfil/$', views.cambiar_perfil, name="cambiar_perfil"),

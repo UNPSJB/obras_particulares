@@ -17,9 +17,24 @@
 	color:#fff;
 }
 
-.colorSubtitulosProf {
-	color: #444444;
+
+/*color de panel de graficos, siempre blanco*/
+.colorG {
+	background:#ffffff;
+	color:#444444   ;
 }
+
+
+/*badge, burbuja de notificacion - cantidad*/
+.confBadge {
+    position: absolute;
+    right: 20px;
+	color:#ffffff;
+    font-size: 9px;
+    border-radius: 6px;
+    border: 0px solid #FA3E3E;
+}
+
 
 section {
 	background:#5cbde7;
