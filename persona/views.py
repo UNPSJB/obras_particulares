@@ -318,13 +318,6 @@ def listado_tramites_de_profesional(request):
     persona = list(lista_de_persona_que_esta_logueada).pop()
     profesional = persona.get_profesional()
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
-
-
-    for t in tramites_de_profesional:
-        print (t.estado())
-
-
-
     tipos_ag = [11, 21, 28]  # agendados para inspeccion
     tipo_ip = 12  # primer inspeccion
     tramites_inspecion_dia = filter(lambda t: ((datetime.strftime(t.estado().timestamp, '%d/%m/%Y') == datetime.strftime(datetime.now(), '%d/%m/%Y') and
