@@ -19,10 +19,10 @@
 <ul class="sidebar sidebar-1">
 	<font size="2">
 		<li><a href="#" class="current"><font>Jefe Inspector</font></a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspeccion</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree" onclick='mostrarSubmenu("sin_submenu")'>Cargar Inspeccion</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis Inspecciones</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>Consultar otras Inspecciones</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspección {% if ctxtramitesconinspeccion.len_tramites > 0 %}<span class="badge confBadge">{{ ctxtramitesconinspeccion.len_tramites }}</span>{% endif %}</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree" onclick='mostrarSubmenu("sin_submenu")'>Cargar inspección {% if ctxtramitesagendados.len_tramites > 0 %}<span class="badge confBadge">{{ ctxtramitesagendados.len_tramites }}</span>{% endif %}</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Mis inspecciones</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>Inspecciones de inspectores</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Cambiar inspector de inspección</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
@@ -46,7 +46,7 @@
 		<div class="panel-heading box" role="tab" id="headingTwo">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Agendar para inspeccion final</font>
+					<font color="#ffffff" size="2">Agendar inspección</font>
 				</a>
 			</h5>
 		</div>
@@ -68,7 +68,7 @@
 		<div class="panel-heading" role="tab" id="headingthree">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree"  onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Cargar Inspeccion</font>
+					<font color="#ffffff" size="2">Cargar inspección</font>
 				</a>
 			</h5>
 		</div>
@@ -78,7 +78,7 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							{% block contenido_tramites_agendados_jefe_inspector %}
-							{% include "persona/jefe_inspector/tramites_agendados_jefe_inspector.html" with tramites=ctxtramitesagendados %}
+							{% include "persona/jefe_inspector/tramites_agendados_jefe_inspector.html" with tramites=ctxtramitesagendados.tramites %}
 							{% endblock %}
 						</div>
 					</div>
@@ -90,7 +90,7 @@
 		<div class="panel-heading" role="tab" id="headingFour">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour"  onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Consultar mis Inspecciones</font>
+					<font color="#ffffff" size="2">Mis inspecciones</font>
 				</a>
 			</h5>
 		</div>
@@ -112,7 +112,7 @@
 		<div class="panel-heading box" role="tab" id="headingFive">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Consultar otras inspecciones</font>
+					<font color="#ffffff" size="2">Inspecciones de inspectores</font>
 				</a>
 			</h5>
 		</div>

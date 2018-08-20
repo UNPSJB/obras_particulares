@@ -18,9 +18,9 @@
 </div>
 <ul class="sidebar sidebar-1">
 	<font size="2"><li><a href="#" class="current"><font>Profesional</font></a></li>
-	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Iniciar Trámite</a></li>
-	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Cargar correcciones a un Trámite</a></li>
-	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar estado de mis tramites</a></li>
+	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Iniciar trámites</a></li>
+	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Corregir trámites {% if ctxtramcorregidos.len_tramites > 0 %}<span class="badge confBadge">{{ ctxtramcorregidos.len_tramites }}</span>{% endif %}</a></li>
+	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Estado de tramites {% if ctxtramitesprofesional.tramites_inspeccion_dia > 0 %}<span class="badge confBadge">{{ ctxtramitesprofesional.tramites_inspeccion_dia }}</span>{% endif %}</a></li>
 	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
 	<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
 		<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>

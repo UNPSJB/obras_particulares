@@ -318,7 +318,20 @@ def listado_tramites_de_profesional(request):
     persona = list(lista_de_persona_que_esta_logueada).pop()
     profesional = persona.get_profesional()
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
-    contexto = {'tramites_de_profesional': tramites_de_profesional}
+
+
+    for t in tramites_de_profesional:
+        print (t.estado())
+
+
+
+    tipos_ag = [11, 21, 28]  # agendados para inspeccion
+    tipo_ip = 12  # primer inspeccion
+    tramites_inspecion_dia = filter(lambda t: ((datetime.strftime(t.estado().timestamp, '%d/%m/%Y') == datetime.strftime(datetime.now(), '%d/%m/%Y') and
+                                               (t.estado().tipo == tipos_ag[0] or
+                                                t.estado().tipo == tipos_ag[1] or
+                                                t.estado().tipo == tipos_ag[2])) or (t.estado().tipo == tipo_ip and t.monto_pagado and t.monto_pagado >= (t.monto_a_pagar/12))), tramites_de_profesional)
+    contexto = {'tramites_de_profesional': tramites_de_profesional, 'tramites_inspeccion_dia': len(tramites_inspecion_dia)}
     return contexto
 
 
@@ -336,7 +349,7 @@ def tramites_corregidos(request):
                                               str(tramite.estado()) == 'ConCorreccionesDeInspeccion' or
                                               str(tramite.estado()) == 'ConCorreccionesDeInspeccionFinal'),
                              tramites_de_profesional)
-    contexto = {'tramites': tram_corregidos}
+    contexto = {'tramites': tram_corregidos, 'len_tramites': len(tram_corregidos)}
     return contexto
 
 
@@ -920,7 +933,7 @@ def tramites_agendados(request):
     argumentos = [AgendadoParaVisado]
     agendados = Tramite.objects.en_estado(argumentos)
     tramites_del_visador = filter(lambda t: t.estado().usuario == usuario, agendados)
-    contexto = {'tramites': tramites_del_visador}
+    contexto = {'tramites': tramites_del_visador, 'len_tramites_del_visador': len(tramites_del_visador)}
     return contexto
 
 
@@ -1128,12 +1141,15 @@ def tramites_agendados_por_inspector(request):
     argumentos = [AgendadoPrimerInspeccion, AgendadoInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
-    return tramites_del_inspector
+    tramites_del_inspector_del_dia = filter(lambda t: datetime.strftime(t.estado().timestamp, '%Y-%m-%d') == datetime.strftime(datetime.now(), '%Y-%m-%d'), tramites_del_inspector)
+    contexto = {'tramites': tramites_del_inspector, 'len_tramites': len(tramites_del_inspector_del_dia)}
+    return contexto
 
 
 def agendar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     fecha = convertidor_de_fechas(request.GET["msg"])
+    print(fecha)
     tramite.hacer(Tramite.AGENDAR_INSPECCION, request.user, fecha)
     messages.add_message(request, messages.SUCCESS, "La inspeccion ha sido agendada")
     return redirect('inspector')
@@ -1240,7 +1256,7 @@ FORMS_JEFEINSPECTOR = {(k.NAME, k.SUBMIT): k for k in [
 def tramite_con_inspecciones_list():
     argumentos = [FinalObraTotalSolicitado, NoFinalObraTotalSolicitado, CorreccionesDeInspeccionFinalRealizadas]
     tramites = Tramite.objects.en_estado(argumentos)
-    contexto = {'tramites': tramites}
+    contexto = {'tramites': tramites, 'len_tramites': len(tramites)}
     return contexto
 
 
@@ -1249,7 +1265,9 @@ def tramites_agendados_por_jefeinspector(request):
     argumentos = [AgendadoInspeccionFinal]
     tramites = Tramite.objects.en_estado(argumentos)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
-    return tramites_del_inspector
+    tramites_del_inspector_del_dia = filter(lambda t: datetime.strftime(t.estado().timestamp, '%Y-%m-%d') == datetime.strftime(datetime.now(), '%Y-%m-%d'), tramites_del_inspector)
+    contexto = {'tramites': tramites_del_inspector, 'len_tramites': len(tramites_del_inspector_del_dia)}
+    return contexto
 
 
 def tramites_inspeccionados_por_jefeinspector(request):
@@ -1475,7 +1493,6 @@ def ver_listado_todos_tramites(request):
            'N.A.Solicitado', 'NoAprobado', 'A.S.x Propietario', 'A.x Propietario']
     lab2 = ['A.Inspeccion', 'Inspeccionado', 'F.O.T.S.', 'F.O.P.S.', 'NoF.O.T.S.', 'A.InspeccionFinal', 'InspeccionFinal',
                    'Finalizado', 'NoFinalizado', 'F.O.T.S.x Prop.', 'Baja']
-
     len_argumentos = len(argumentos)
     tramites = Tramite.objects.en_estado(argumentos)
     estados = []

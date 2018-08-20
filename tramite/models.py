@@ -362,7 +362,7 @@ class PrimerInspeccion(Estado):
         return Baja(tramite=tramite, observacion=observacion)
 
     def __str__(self):
-        return str(self.__class__.__name__)
+        return self.__class__.__name__
 
 
 class AprobadoSolicitado(Estado):

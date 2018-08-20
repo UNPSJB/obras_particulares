@@ -19,8 +19,8 @@
 <ul class="sidebar sidebar-1">
 	<font size="2">
 		<li><a href="#" class="current"><font>Visador</font></a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Agendar Visado</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Cargar Visado</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Agendar Visado {% if ctxtramaceptado.tramites.count > 0 %}<span class="badge confBadge">{{ ctxtramaceptado.tramites.count }}</span>{% endif %}</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Cargar Visado {% if ctxtramagendado.len_tramites_del_visador > 0 %}<span class="badge confBadge">{{ ctxtramagendado.len_tramites_del_visador }}</span>{% endif %}</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis Visados</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
