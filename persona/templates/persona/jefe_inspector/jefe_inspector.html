@@ -245,27 +245,48 @@
 
 
 {% block scripts %}
-	<script>
-		var c = document.getElementById("botonConfiguracion");
-		c.style.display= '';
-		var d = document.getElementById("imagenusuario");
-		d.style.display= '';
-	</script>
+<script>
+	var c = document.getElementById("botonConfiguracion");
+	c.style.display= '';
+	var d = document.getElementById("imagenusuario");
+	d.style.display= '';
+</script>
 
-	<script type="text/javascript">
-		function mostrarSubmenu(subformulario){
-			if(subformulario=="sin_submenu"){
+<script type="text/javascript">
+	function mostrarSubmenu(subformulario){
+		if(subformulario=="sin_submenu"){
+			$('.' + "sidebar-2").hide();
+		}
+		else{
+			var idSubformulario=document.getElementById(subformulario).id;
+			if($('#' + idSubformulario).is(':hidden')){
 				$('.' + "sidebar-2").hide();
-			}
-			else{
-				var idSubformulario=document.getElementById(subformulario).id;
-				if($('#' + idSubformulario).is(':hidden')){
-					$('.' + "sidebar-2").hide();
-					$('#' + idSubformulario).show();
-				}else{
-					$('#' + idSubformulario).hide();
-				}
+				$('#' + idSubformulario).show();
+			}else{
+				$('#' + idSubformulario).hide();
 			}
 		}
-	</script>
+	}
+</script>
+
+<script>
+    function agregarHora(boton){
+        fecha = $($(boton).parent().parent()).find('.mi-datepicker').val();
+        id_tramite = $($(boton).parent().parent().find('td')[0]).text();
+        url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+fecha;
+        location.href = url;
+    }
+</script>
+
+<script>
+	$(function(){
+		$('#datetimepicker1').datetimepicker({
+            useCurrent: false,
+            minDate: moment(),
+            autoclose: true,
+            startDate: '-1d',
+            changeMonth: true
+		});
+	});
+</script>
 {% endblock%}

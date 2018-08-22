@@ -18,10 +18,10 @@
 </div>
 <ul class="sidebar sidebar-1">
 	<font size="2">
-		<li><a class="current"><font>Inspector</font></a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspeccion {% if ctxtramitesvisadosyconinspeccion.count > 0 %}<span class="badge confBadge">{{ ctxtramitesvisadosyconinspeccion.count }}</span>{% endif %}</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Cargar Inspeccion {% if ctxtramitesagendados.len_tramites > 0 %}<span class="badge confBadge">{{ ctxtramitesagendados.len_tramites }}</span>{% endif %}</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis Inspecciones</a></li>
+		<li><a href="#" class="current"><font>Inspector</font></a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspección {% if ctxtramitesvisadosyconinspeccion.count > 0 %}<span class="badge confBadge">{{ ctxtramitesvisadosyconinspeccion.count }}</span>{% endif %}</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Cargar inspección{% if ctxtramitesagendados.len_tramites > 0 %}<span class="badge confBadge">{{ ctxtramitesagendados.len_tramites }}</span>{% endif %}</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis inspecciones</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
@@ -40,33 +40,11 @@
 {% block contenido %}
 <div id="contenedor_botoncalapsable_resto"></div>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-	<div class="panel panel-custom">
-		<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
-			<h5 class="panel-title">
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Agendar Inspección</font>
-				</a>
-			</h5>
-		</div>
-		<div id="collapseTwo" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingTwo">
-			<div class="panel-body">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							{% block contenido_tramites_visados_y_con_inspeccion %}
-							{% include "persona/inspector/tramites_visados_y_con_inspeccion.html" with tramites=ctxtramitesvisadosyconinspeccion %}
-							{% endblock %}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="panel panel-custom">
+		<div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
 			<h5 class="panel-title">
-				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Cargar Inspeccion</font>
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="true" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>
+					<font color="#ffffff" size="2">Agendar inspección</font>
 				</a>
 			</h5>
 		</div>
@@ -75,9 +53,52 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							{% block contenido_tramites_agendados %}
-							{% include "persona/inspector/tramites_agendados.html" with tramites_del_inspector=ctxtramitesagendados.tramites %}
-							{% endblock %}
+							<form action="" class="" >
+								<div class="row">
+									<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										{% block contenido_tramites_visados_y_con_inspeccion %}
+										{% include "persona/inspector/tramites_visados_y_con_inspeccion.html" with tramites=ctxtramitesvisadosyconinspeccion %}
+										{% endblock %}
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>
+					<font color="#ffffff" size="2">Cargar inspección</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseTwo" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingTwo">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<form action="" class="" >
+								<div class="row">
+									<!--div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+										<a id="crear_detalle" href="{% url 'reporte_tramites_aceptados_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+											<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
+										</a>
+										<a href="{% url 'reporte_tramites_aceptados_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
+											<i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
+										</a>
+									</div-->
+									<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<!--hr-->
+										{% block contenido_tramites_agendados %}
+										{% include "persona/inspector/tramites_agendados.html" with tramites_del_inspector=ctxtramitesagendados.tramites %}
+										{% endblock %}
+									</div>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -88,7 +109,7 @@
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Consultar mis Inspecciones</font>
+					<font color="#ffffff" size="2">Consultar mis inspecciones</font>
 				</a>
 			</h5>
 		</div>
@@ -98,7 +119,7 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							{% block contenido_tramites_inspeccionados %}
-							{% include "persona/inspector/tramites_inspeccionados.html" with estados=ctxtramitesinspeccionados%}
+							{% include "persona/inspector/tramites_inspeccionados.html" with estados=ctxtramitesinspeccionados %}
 							{% endblock %}
 						</div>
 					</div>
@@ -109,7 +130,7 @@
 	<div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
 			<h5 class="panel-title">
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales")'>
+				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales")'>
 					<font color="#ffffff" size="2">Modificar mis datos personales</font>
 				</a>
 			</h5>
@@ -197,31 +218,44 @@
 </div>
 {% endblock %}
 
-
 {% block scripts %}
-    <script>
-        var c = document.getElementById("botonConfiguracion");
-		c.style.display= '';
-		var d = document.getElementById("imagenusuario");
-		d.style.display= '';
-    </script>
-
-
-	<script type="text/javascript">
-		function mostrarSubmenu(subformulario){
-			if(subformulario=="sin_submenu"){
-				$('.' + "sidebar-2").hide();
-			}
-			else{
-				var idSubformulario=document.getElementById(subformulario).id;
-				if($('#' + idSubformulario).is(':hidden')){
-					$('.' + "sidebar-2").hide();
-					$('#' + idSubformulario).show();
-				}else{
-					$('#' + idSubformulario).hide();
-				}
-			}
+<script type="text/javascript">
+	function mostrarSubmenu(subformulario)
+	{
+		var idSubformulario=document.getElementById(subformulario).id;
+		if($('#' + idSubformulario).is(':hidden')){
+			$('#' + idSubformulario).show();
+		}else{
+			$('#' + idSubformulario).hide();
 		}
-	</script>
+	}
+</script>
 
-{% endblock%}
+<script>
+	var c = document.getElementById("botonConfiguracion");
+	c.style.display= '';
+	var d = document.getElementById("imagenusuario");
+	d.style.display= '';
+</script>
+
+<script>
+    function agregarHora(boton){
+        fecha = $($(boton).parent().parent()).find('.mi-datepicker').val();
+        id_tramite = $($(boton).parent().parent().find('td')[0]).text();
+        url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
+        location.href = url;
+    }
+</script>
+
+<script>
+	$(function(){
+		$('#datetimepicker1').datetimepicker({
+            useCurrent: false,
+            minDate: moment(),
+            autoclose: true,
+            startDate: '-1d',
+            changeMonth: true
+		});
+	});
+</script>
+{% endblock %}

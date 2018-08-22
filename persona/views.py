@@ -38,9 +38,7 @@ from reportlab.graphics.shapes import Drawing, String
 from reportlab.graphics import renderPDF
 from reportlab.graphics.charts.barcharts import VerticalBarChart
 
-from datetime import datetime
 import collections
-
 
 
 '''generales --------------------------------------------------------------------------------------------'''
@@ -1142,7 +1140,6 @@ def tramites_agendados_por_inspector(request):
 def agendar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     fecha = convertidor_de_fechas(request.GET["msg"])
-    print(fecha)
     tramite.hacer(Tramite.AGENDAR_INSPECCION, request.user, fecha)
     messages.add_message(request, messages.SUCCESS, "La inspeccion ha sido agendada")
     return redirect('inspector')
@@ -1327,6 +1324,7 @@ def agendar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     fecha = convertidor_de_fechas(request.GET["msg"])
     tramite.hacer(Tramite.AGENDAR_INSPECCION, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user)
+    messages.add_message(request, messages.SUCCESS, "La inspeccion final ha sido agendada")
     return redirect('jefe_inspector')
 
 

@@ -22,10 +22,10 @@
                 <td class="col-xs-1">{{ tramite.medidas }}</td>
                 <td class="col-xs-2">{{ tramite.tipo_obra }}</td>
                 <td class="col-xs-1">{{ tramite.domicilio }}</td>
-                <td class="col-xs-2">
-                    <input class="mi-datepicker" readonly>
+                <td align="center" class="col-xs-2">
+                    <input type='text' class="form-control mi-datepicker input-sm" id='datetimepicker1' style="height:24px; font-size: 1em; width: 120px" readonly>
                 </td>
-                <td class="col-xs-1">
+                <td align="center" class="col-xs-1">
                     <button type="button" class="btn btn-primary btn-sm" name="Agendar" onclick="agregarHora(this);">
                         <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>
                     </button>
@@ -35,35 +35,4 @@
             {% endif%}
         </tbody>
     </table>
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-    <script>
-    $(document).ready(function() {
-        $('.mi-datepicker').each(function() {
-          $(this).datepicker({
-              changeMonth: true,
-              changeYear: true,
-              dateFormat: 'yy-mm-dd',
-              showOn: "button",
-              minDate: 0,
-              minMonth: 0,
-              inline: true,
-              });
-          $(this).datepicker("setDate", new Date());
-        });
-    });
-    function agregarHora(boton){
-        today = new Date();
-        //Hora = today.getHours();
-        Hora = 12;
-        //Minutos = today.getMinutes();
-        Minutos = 12;
-        obs = $($(boton).parent().parent()).find('.mi-datepicker').val();
-        fecha = obs+' '+Hora+':'+Minutos;
-        id_tramite = $($(boton).parent().parent().find('td')[0]).text();
-        url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+fecha;
-        location.href = url;
-    }
-    </script>
 </div>
