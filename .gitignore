@@ -7,3 +7,4 @@ tipos/migrations/*
 tramite/migrations/*
 media/certificado/*
 media/documentos/*
+.vscode/*
