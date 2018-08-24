@@ -1,39 +1,37 @@
 <div class="table-responsive">
-  <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-	<thead>
-	  <tr>
-		<th>Nro de tramite</th>
-		<th>Fecha Inicio</th>
-		<th>Tipo de obra</th>
-		<th>Profesional</th>
-		<th>Propietario</th>
-		<th>Medidas en m2</th>
-		<th>Estado</th>
-		<th>Revisar</th>
-	  </tr>
-	</thead>
-	<tbody>
-	  {% if estados %}
-	  {% for estado in estados %}
-	  <tr>
-		<td class="col-xs-1">{{ estado.tramite.id}}</td>
-		<td class="col-xs-1">{{ estado.tramite.medidas}}</td>
-		<td class="col-xs-1">{{ estado.tramite.tipo_obra }} </td>
-		<td class="col-xs-3">{{ estado.tramite.profesional}}</td>
-		<td class="col-xs-2">{{ estado.tramite.propietario}}</td>
-		<td class="col-xs-1">{{ estado.tramite.medidas }} </td>
-		<td class="col-xs-1">{{estado.tramite.estado}}</td>
-		<td align="center" class="col-xs-1">
-		  <a href="{% url 'cargar_inspeccion_final' pk_tramite=estado.tramite.id %}">
-			<button type="button" class="btn btn-primary btn-sm" name="Agendar">
-			  <span class="glyphicon glyphicon-ok" aria-hidden="true"> Documentos</span>
-			</button>
-		  </a>
-		</td>
-	  </tr>
-	  {% endfor %}
-	</tbody>
-	{% endif %}
-  </table>
+	<table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+		<thead>
+			<tr>
+				<th>Nro de tramite</th>
+				<th>Fecha inspección</th>
+				<th>Tipo de obra</th>
+				<th>Profesional</th>
+				<th>Propietario</th>
+				<th>Medidas en m2</th>
+				<th>Revisar</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if estados %}
+			{% for estado in estados %}
+			<tr>
+				<td class="col-xs-1">{{ estado.tramite.id}}</td>
+				<td class="col-xs-1">{{estado.fecha}}</td>
+				<td class="col-xs-1">{{ estado.tramite.tipo_obra }} </td>
+				<td class="col-xs-3">{{ estado.tramite.profesional}}</td>
+				<td class="col-xs-2">{{ estado.tramite.propietario}}</td>
+				<td class="col-xs-1">{{ estado.tramite.medidas }} </td>
+				<td align="center" class="col-xs-1">
+					<a href="{% url 'cargar_inspeccion_final' pk_tramite=estado.tramite.id %}">
+						<button type="button" class="btn btn-primary btn-sm" name="Agendar">
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"> Documentos</span>
+						</button>
+					</a>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+		{% endif %}
+	</table>
 </div>
 

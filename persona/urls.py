@@ -94,5 +94,7 @@ urlpatterns = [
 
     #general ----------------------------------------------------------------------------------------------------
     url(r'^cambiar_perfil/$', views.cambiar_perfil, name="cambiar_perfil"),
+
 ]
+
 

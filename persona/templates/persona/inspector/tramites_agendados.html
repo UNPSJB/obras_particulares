@@ -4,7 +4,7 @@
         <thead>
             <tr>
                 <th>Nro</th>
-                <th>Fecha Inicio</th>
+                <th>Fecha inspección</th>
                 <th>Tipo de obra</th>
                 <th>Profesional</th>
                 <th>Propietario</th>
@@ -17,7 +17,7 @@
             {% for tramite in tramites_del_inspector %}
             <tr>
                 <td class="col-xs-1">{{ tramite.id}}</td>
-                <td class="col-xs-2">{{ tramite.estado.timestamp}}</td>
+                <td class="col-xs-2">{{ tramite.estado.fecha}}</td>
                 <td class="col-xs-2">{{ tramite.tipo_obra }} </td>
                 <td class="col-xs-3">{{ tramite.profesional}}</td>
                 <td class="col-xs-3">{{ tramite.propietario}}</td>

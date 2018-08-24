@@ -3,7 +3,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import  login_required
-
 from .forms import *
 from django.contrib import messages
 from tipos.forms import *
@@ -23,7 +22,6 @@ from django.http.response import HttpResponse
 from django.views.generic import View
 from django.conf import settings
 from io import BytesIO
-
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Paragraph, TableStyle, Table, Image, Spacer
 from reportlab.lib import colors
@@ -32,21 +30,23 @@ from reportlab.lib.pagesizes import letter, A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
 from reportlab.lib.styles import getSampleStyleSheet
-
-
 from reportlab.graphics.shapes import Drawing, String
 from reportlab.graphics import renderPDF
 from reportlab.graphics.charts.barcharts import VerticalBarChart
-
 import collections
+from django.utils import timezone
+
 
 
 '''generales --------------------------------------------------------------------------------------------'''
 
-DATETIME = re.compile("^(\d{4})\-(\d{2})\-(\d{2})\s(\d{1,2}):(\d{2})$")
+DATETIME = re.compile("^(\d{4})-(\d{2})-(\d{2})\s(\d{1,2}):(\d{2})$")
+
 
 def convertidor_de_fechas(fecha):
-    return datetime(*[int(n) for n in DATETIME.match(fecha).groups()])
+    fecha = datetime(*[int(n) for n in DATETIME.match(fecha).groups()], tzinfo=timezone.utc)
+    return fecha
+
 
 '''propietario ------------------------------------------------------------------------------------------'''
 
@@ -1132,10 +1132,9 @@ def tramites_agendados_por_inspector(request):
     argumentos = [AgendadoPrimerInspeccion, AgendadoInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
-    tramites_del_inspector_del_dia = filter(lambda t: datetime.strftime(t.estado().timestamp, '%Y-%m-%d') == datetime.strftime(datetime.now(), '%Y-%m-%d'), tramites_del_inspector)
+    tramites_del_inspector_del_dia = filter(lambda t: datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.strftime(datetime.now(), '%Y-%m-%d'), tramites_del_inspector)
     contexto = {'tramites': tramites_del_inspector, 'len_tramites': len(tramites_del_inspector_del_dia)}
     return contexto
-
 
 def agendar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -1255,7 +1254,8 @@ def tramites_agendados_por_jefeinspector(request):
     argumentos = [AgendadoInspeccionFinal]
     tramites = Tramite.objects.en_estado(argumentos)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
-    tramites_del_inspector_del_dia = filter(lambda t: datetime.strftime(t.estado().timestamp, '%Y-%m-%d') == datetime.strftime(datetime.now(), '%Y-%m-%d'), tramites_del_inspector)
+    dia_hoy = date.today()
+    tramites_del_inspector_del_dia = filter(lambda t: datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.strftime(dia_hoy, '%Y-%m-%d'), tramites_del_inspector)
     contexto = {'tramites': tramites_del_inspector, 'len_tramites': len(tramites_del_inspector_del_dia)}
     return contexto
 
@@ -1323,8 +1323,11 @@ def inspecciones_agendadas_por_inspectores():
 def agendar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     fecha = convertidor_de_fechas(request.GET["msg"])
+
+    print (request.GET["msg"])
+    print (fecha)
     tramite.hacer(Tramite.AGENDAR_INSPECCION, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user)
-    messages.add_message(request, messages.SUCCESS, "La inspeccion final ha sido agendada")
+    #messages.add_message(request, messages.SUCCESS, "La inspeccion final ha sido agendada")
     return redirect('jefe_inspector')
 
 

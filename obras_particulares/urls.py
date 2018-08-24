@@ -13,5 +13,4 @@ urlpatterns = [
     url(r'^tipos/', include('tipos.urls')),
     url(r'^tramite/', include('tramite.urls')),
     url(r'^documento/', include('documento.urls')),
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

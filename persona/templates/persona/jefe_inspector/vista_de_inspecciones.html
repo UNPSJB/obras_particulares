@@ -12,14 +12,14 @@
 
 {% block barra %}
 <div id="contenedor_botoncalapsable_sidebar">
-    <button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
-        <span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
-    </button>
+	<button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
+		<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+	</button>
 </div>
 <ul class="sidebar sidebar-1">
-    <font size="2">
-        <li><a href="javascript:history.back(-1);" class="current"><font>Jefe Inspector</font></a></li>
-    </font>
+	<font size="2">
+		<li><a href="javascript:history.back(-1);" class="current"><font>Jefe Inspector</font></a></li>
+	</font>
 </ul>
 {% endblock %}
 
@@ -32,66 +32,66 @@
 
 
 <div class="container-fluid">
-    <div class="panel panel-custom ">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <h4 style="color: white;">Inspecciones:</h4>
-                    <hr>
-                    {% for estado in estados %}
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <h4 style="color: white;">Datos del tramite:</h4>
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <h3>Id del Tramite: {{estado.tramite.pk}}</h3>
-                                <h3>Domicilio del tramite: {{estado.tramite.domicilio}}</h3>
-                                <h3>Inspector que la realizo: {{estado.tramite.estado}}</h3>
-                                <h3>Prueba tipo: {{estado.tramite.estado.TIPO}}</h3>
-                                <hr>
-                            </div>
-                        </div>
-                        <h4 style="color: white;">Documentos de la inspeccion:</h4>
-                        {% for documento in estado.tramite.documentos.all %}
-                        <div class="col-md-3">
-                            <div class="thumbnail">
-                                <a href="/media/{{documento.file}}" class="thumbnail ">
-                                    <img src="/media/{{documento.file}}" class="img">
-                                </a>
-                                <font color="#337ab7" size="4">{{documento.tipo_documento}}</font>
-                                <form action="">
-                                    <p align="right" >
-                                        <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save-file"></i><span> Descargar</span></a>
-                                    </p>
-                                </form>
-                            </div>
-                        </div>
-                        {% endfor %}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="panel panel-custom ">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<h4 style="color: white;">Inspecciones:</h4>
+					<hr>
+					{% for estado in estados %}
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<h4 style="color: white;">Datos del tramite:</h4>
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								<h3>Id del Tramite: {{estado.tramite.pk}}</h3>
+								<h3>Domicilio del tramite: {{estado.tramite.domicilio}}</h3>
+								<h3>Inspector que la realizo: {{estado.tramite.estado}}</h3>
+								<h3>Prueba tipo: {{estado.tramite.estado.TIPO}}</h3>
+								<hr>
+							</div>
+						</div>
+						<h4 style="color: white;">Documentos de la inspeccion:</h4>
+						{% for documento in estado.tramite.documentos.all %}
+						<div class="col-md-3">
+							<div class="thumbnail">
+								<a href="/media/{{documento.file}}" class="thumbnail ">
+									<img src="/media/{{documento.file}}" class="img">
+								</a>
+								<font color="#337ab7" size="4">{{documento.tipo_documento}}</font>
+								<form action="">
+									<p align="right" >
+										<a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save-file"></i><span> Descargar</span></a>
+									</p>
+								</form>
+							</div>
+						</div>
+						{% endfor %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-    <script>
-		$("#id_correcciones").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar Planilla de Visado',
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
+<script>
+	$("#id_correcciones").fileinput({
+		showCaption: false,
+		browseClass: "btn btn-primary btn-sm",
+		fileType: "any",
+		maxFileCount: 1,
+		browseLabel: 'Cargar Planilla de Visado',
+		showUpload: false,
+		showRemove: false
+	});
+</script>
 
-    <script>
-        var c = document.getElementById("botonConfiguracion");
-		c.style.display= '';
-		var d = document.getElementById("imagenusuario");
-		d.style.display= '';
-    </script>
+<script>
+	var c = document.getElementById("botonConfiguracion");
+	c.style.display= '';
+	var d = document.getElementById("imagenusuario");
+	d.style.display= '';
+</script>
 {% endblock %}
