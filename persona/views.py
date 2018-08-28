@@ -37,7 +37,6 @@ import collections
 from django.utils import timezone
 
 
-
 '''generales --------------------------------------------------------------------------------------------'''
 
 DATETIME = re.compile("^(\d{4})-(\d{2})-(\d{2})\s(\d{1,2}):(\d{2})$")
@@ -322,7 +321,7 @@ def listado_tramites_de_profesional(request):
                                                (t.estado().tipo == tipos_ag[0] or
                                                 t.estado().tipo == tipos_ag[1] or
                                                 t.estado().tipo == tipos_ag[2])) or (t.estado().tipo == tipo_ip and t.monto_pagado and t.monto_pagado >= (t.monto_a_pagar/12))), tramites_de_profesional)
-    contexto = {'tramites_de_profesional': tramites_de_profesional, 'tramites_inspeccion_dia': len(tramites_inspecion_dia)}
+    contexto = {'tramites_de_profesional': tramites_de_profesional, 'tramites_inspeccion_dia': len(list(tramites_inspecion_dia))}
     return contexto
 
 
@@ -340,7 +339,7 @@ def tramites_corregidos(request):
                                               str(tramite.estado()) == 'ConCorreccionesDeInspeccion' or
                                               str(tramite.estado()) == 'ConCorreccionesDeInspeccionFinal'),
                              tramites_de_profesional)
-    contexto = {'tramites': tram_corregidos, 'len_tramites': len(tram_corregidos)}
+    contexto = {'tramites': tram_corregidos, 'len_tramites': len(list(tram_corregidos))}
     return contexto
 
 
@@ -490,7 +489,7 @@ def profesional_solicita_final_obra_parcial(request, pk_tramite):
         estados = Estado.objects.all()
         tipo = 17
         estado = filter(lambda e: (e.tipo == tipo and str(e.tramite.pk) == str(pk_tramite)), estados)
-        if len(estado) == 0:
+        if len(list(estado)) == 0:
             tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA_PARCIAL, request.user)
             messages.add_message(request, messages.SUCCESS, 'Final de obra parcial solicitado.')
         else:
@@ -590,14 +589,14 @@ FORMS_ADMINISTRATIVO = {(k.NAME, k.SUBMIT): k for k in [
 def profesional_list():
     personas = Persona.objects.all()
     profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
-    contexto = {'personas': profesionales, 'len_personas': len(profesionales)}
+    contexto = {'personas': profesionales, 'len_personas': len(list(profesionales))}
     return contexto
 
 
 def propietario_list():
     propietarios = Propietario.objects.all()
     propietarios_sin_usuario = filter(lambda propietario: (propietario.persona.usuario is None and propietario.persona is not None ), propietarios)
-    contexto = {'propietarios': propietarios_sin_usuario, 'len_propietarios': len(propietarios_sin_usuario)}
+    contexto = {'propietarios': propietarios_sin_usuario, 'len_propietarios': len(list(propietarios_sin_usuario))}
     return contexto
 
 
@@ -658,11 +657,11 @@ def listado_tramites_vencidos():
     for t in tramites_fo:
         estado_t = filter(lambda e: (e.tipo == tipoFOPS and str(e.tramite.pk) == str(t.pk)), estados)
         for e in estados_iniciado:
-            if e.tramite == t and len(estado_t) == 0 and (e.timestamp + timedelta(days=1095)).strftime(
+            if e.tramite == t and len(list(estado_t)) == 0 and (e.timestamp + timedelta(days=1095)).strftime(
                     "%Y/%m/%d") < datetime.now().strftime(
                     "%Y/%m/%d"):
                 tramites_vencidos_no_pagados_no_renovados.append(t)
-            elif e.tramite == t and len(estado_t) > 0 and (e.timestamp + timedelta(days=1825)).strftime(
+            elif e.tramite == t and len(list(estado_t)) > 0 and (e.timestamp + timedelta(days=1825)).strftime(
                     "%Y/%m/%d") < datetime.now().strftime(
                     "%Y/%m/%d"):
                 tramites_vencidos_no_pagados_no_renovados.append(t)
@@ -706,11 +705,11 @@ def cargar_final_de_obra_total(request, pk_tramite):
     tipoFOS = 16
     tipos_de_documentos_requeridos = []
     estadoFOS = filter(lambda e: (e.tipo == tipoFOS and str(e.tramite.pk) == str(pk_tramite)), estados)
-    if len(estadoFOS) > 0:
+    if len(list(estadoFOS)) > 0:
         tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.FINALIZAR)
     tipoNFOS = 18
     estadoNFOS = filter(lambda e: (e.tipo == tipoNFOS and str(e.tramite.pk) == str(pk_tramite)), estados)
-    if len(estadoNFOS) > 0:
+    if len(list(estadoNFOS)) > 0:
         tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.NO_FINALIZAR)
     if str(tramite.estado()) == 'FinalObraTotalSolicitadoPorPropietario':
         tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.FINALIZAR)
@@ -739,15 +738,15 @@ def habilitar_final_obra(request, pk_tramite):
         estados = Estado.objects.all()
         tipoFOS = 16
         estadoFOS = filter(lambda e: (e.tipo == tipoFOS and str(e.tramite.pk) == str(pk_tramite)), estados)
-        if len(estadoFOS) > 0:
+        if len(list(estadoFOS)) > 0:
             tramite.hacer(tramite.FINALIZAR, request.user)
             messages.add_message(request, messages.SUCCESS, 'Final de obra aprobado.')
         tipoNFOS = 18
         estadoNFOS = filter(lambda e: (e.tipo == tipoNFOS and str(e.tramite.pk) == str(pk_tramite)), estados)
-        if len(estadoNFOS) > 0 and str(tramite.estado()) != 'FinalObraTotalSolicitadoPorPropietario':
+        if len(list(estadoNFOS)) > 0 and str(tramite.estado()) != 'FinalObraTotalSolicitadoPorPropietario':
             tramite.hacer(tramite.NO_FINALIZAR, request.user)
             messages.add_message(request, messages.SUCCESS, 'No Final de obra aprobado.')
-        if len(estadoNFOS) > 0 and str(tramite.estado()) == 'FinalObraTotalSolicitadoPorPropietario':
+        if len(list(estadoNFOS)) > 0 and str(tramite.estado()) == 'FinalObraTotalSolicitadoPorPropietario':
             tramite.hacer(tramite.FINALIZAR, request.user)
             messages.add_message(request, messages.SUCCESS, 'Final de obra total solicitado por propietario aprobado.')
     except:
@@ -924,7 +923,7 @@ def tramites_agendados(request):
     argumentos = [AgendadoParaVisado]
     agendados = Tramite.objects.en_estado(argumentos)
     tramites_del_visador = filter(lambda t: t.estado().usuario == usuario, agendados)
-    contexto = {'tramites': tramites_del_visador, 'len_tramites_del_visador': len(tramites_del_visador)}
+    contexto = {'tramites': tramites_del_visador, 'len_tramites_del_visador': len(list(tramites_del_visador))}
     return contexto
 
 
@@ -1133,7 +1132,7 @@ def tramites_agendados_por_inspector(request):
     tramites = Tramite.objects.en_estado(argumentos)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
     tramites_del_inspector_del_dia = filter(lambda t: datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.strftime(datetime.now(), '%Y-%m-%d'), tramites_del_inspector)
-    contexto = {'tramites': tramites_del_inspector, 'len_tramites': len(tramites_del_inspector_del_dia)}
+    contexto = {'tramites': tramites_del_inspector, 'len_tramites': len(list(tramites_del_inspector_del_dia))}
     return contexto
 
 def agendar_tramite(request, pk_tramite):
@@ -1256,7 +1255,7 @@ def tramites_agendados_por_jefeinspector(request):
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
     dia_hoy = date.today()
     tramites_del_inspector_del_dia = filter(lambda t: datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.strftime(dia_hoy, '%Y-%m-%d'), tramites_del_inspector)
-    contexto = {'tramites': tramites_del_inspector, 'len_tramites': len(tramites_del_inspector_del_dia)}
+    contexto = {'tramites': tramites_del_inspector, 'len_tramites': len(list(tramites_del_inspector_del_dia))}
     return contexto
 
 
@@ -1287,7 +1286,7 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
     inspectores = []
     for u in usuarios:
         lista = list(u.groups.values_list('name', flat=True))
-        for i in range(len(lista)):
+        for i in range(len(list(lista))):
             if lista[i] == 'inspector':
                 if u not in inspectores:
                     inspectores.append(u)
@@ -1295,7 +1294,7 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
     tipos = [6, 14]
     estados_agendados = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or str(e.tramite.estado()) == 'AgendadoInspeccion') and (e.tipo == tipos[0] or e.tipo == tipos[1])), estados)
     inspectores_estados_agendados = []
-    for i in range(len(estados_agendados)):
+    for i in range(len(list(estados_agendados))):
         inspectores_estados_agendados.append(estados_agendados[i].usuario)
     inspectores_sin_insp_agendadas = []
     for inp in inspectores:
@@ -1323,11 +1322,8 @@ def inspecciones_agendadas_por_inspectores():
 def agendar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     fecha = convertidor_de_fechas(request.GET["msg"])
-
-    print (request.GET["msg"])
-    print (fecha)
     tramite.hacer(Tramite.AGENDAR_INSPECCION, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user)
-    #messages.add_message(request, messages.SUCCESS, "La inspeccion final ha sido agendada")
+    messages.add_message(request, messages.SUCCESS, "La inspeccion final ha sido agendada")
     return redirect('jefe_inspector')
 
 
@@ -1456,7 +1452,7 @@ def visadores_sin_visado_agendado(request, pk_estado):
     tipo = 7
     estados_agendados = filter(lambda e: (e.usuario is not None and str(e.tramite.estado()) == 'AgendadoParaVisado' and e.tipo == tipo), estados)
     visadores_estados_agendados = []
-    for i in range(len(estados_agendados)):
+    for i in range(len(list(estados_agendados))):
         visadores_estados_agendados.append(estados_agendados[i].usuario)
     visadores_sin_vis_agendadas = []
     for vis in visadores:
@@ -1531,6 +1527,27 @@ def ver_listado_todos_usuarios(request):
     return render(request, 'persona/director/vista_de_usuarios.html', {'todos_los_usuarios': usuarios, "label_grupos": label_grupos, "datos_grupos": datos_grupos,  "perfil": perfil})
 
 
+def ver_actividad_usuario(request, usuario):
+    usuarios = Usuario.objects.all()
+    usuario_req = filter(lambda u: (str(u) == usuario), usuarios)
+    estados = Estado.objects.all()
+    estados_usuario_req = filter(lambda estado:(str(estado.usuario) == str(usuario_req[0])), estados)
+    fechas_del_estado = []
+    estados_por_fecha = []
+    for e in estados_usuario_req:
+        estados_por_fecha.append(e.timestamp.strftime("%d/%m/%Y"))
+        if (e.timestamp.strftime("%d/%m/%Y")) not in fechas_del_estado:
+            fechas_del_estado.append(e.timestamp.strftime("%d/%m/%Y"))
+    cant_estados_por_fecha = [estados_por_fecha.count(f) for f in fechas_del_estado]
+    user = request.user
+    perfil = 'css/' + user.persona.perfilCSS
+    return render(request, 'persona/director/vista_de_actividad_usuario.html', {"perfil": perfil,
+                                                                                "usuario": usuario_req[0],
+                                                                                "estados": estados_usuario_req,
+                                                                                "fechas_estados": fechas_del_estado,
+                                                                                "cant_estados": cant_estados_por_fecha})
+
+
 def detalle_de_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     contexto0 = {'tramite': tramite}
@@ -1546,7 +1563,7 @@ def detalle_de_tramite(request, pk_tramite):
     return render(request, 'persona/director/detalle_de_tramite.html', {"tramite": contexto0, "estados": contexto1, "fecha": fechas_del_estado, "perfil": perfil})
 
 
-def documentos_del_estado(request, pk_estado):
+def ver_documentos_del_estado(request, pk_estado):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
     estado = get_object_or_404(Estado, pk=pk_estado)
@@ -1555,31 +1572,8 @@ def documentos_del_estado(request, pk_estado):
     documentos = estado.tramite.documentos.all()
     documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
-    return render(request, 'persona/director/documentos_del_estado.html', contexto)
+    return render(request, 'persona/director/ver_documentos_del_estado.html', contexto)
 
-
-def ver_actividad_usuario(request, usuario):
-
-    '''trabajando en esto'''
-
-    usuarios = Usuario.objects.all()
-    usuario_req = filter(lambda u: (str(u) == usuario), usuarios)
-    estados = Estado.objects.all()
-    estados_usuario_req = filter(lambda estado:(str(estado.usuario) == str(usuario_req[0])), estados)
-
-    fechas_del_estado = []
-    for e in estados_usuario_req:
-        #print ("-----------------------")
-        #print (e.tipo)
-        #print (e.tramite)
-        #print (e.usuario)
-        #print (e.timestamp)
-        if (e.timestamp.strftime("%d/%m/%Y")) not in fechas_del_estado:
-            fechas_del_estado.append(e.timestamp.strftime("%d/%m/%Y"))
-
-    user = request.user
-    perfil = 'css/' + user.persona.perfilCSS
-    return render(request, 'persona/director/vista_de_actividad_usuario.html', {"perfil": perfil})
 
 class ReporteTramitesDirectorExcel(TemplateView):
 

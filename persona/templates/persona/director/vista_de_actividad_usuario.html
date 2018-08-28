@@ -17,170 +17,192 @@
 	</button>
 </div>
 <ul class="sidebar sidebar-1">
-  <font size="2">
-    <li><a href="javascript:history.back(-1);" class="current"><font>Director</font></a></li>
-  </font>
+	<font size="2">
+		<li><a href="javascript:history.back(-1);" class="current"><font>Director</font></a></li>
+	</font>
 </ul>
 {% endblock %}
 
 {% block contenido %}
 <div id="contenedor_botoncalapsable_resto"></div>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-  <div class="panel">
-    <div class="panel-heading box" role="tab" id="headingFive">
-      <h5 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-          <font color="#ffffff" size="2">Detalle de todos los tramites en curso</font>
-        </a>
-      </h5>
-    </div>
-    <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-      <div class="panel-body">
-        <div class="container-fluid">
-          <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <canvas id="chartDirectorTramites" height="80" style="padding-left:25px;"></canvas>
-            </div>
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <div class="table-responsive">
-                <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-                  <thead>
-                    <tr>
-                      <th>Nro</th>
-                      <th>Propietario</th>
-                      <th>Profesional</th>
-                      <th>Estado</th>
-                      <th>Medidas</th>
-                      <th>Tipo</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    si
-                    for
-                    <tr>
-                      <td class="col-xs-1" align="center">algo</td>
-                      <td class="col-xs-2">algo</td>
-                      <td class="col-xs-3">algo</td>
-                      <td class="col-xs-2">algo</td>
-                      <td class="col-xs-1">algo</td>
-                      <td class="col-xs-2" align="center">algo</td>
-                    </tr>
-                    endfor
-                    endif
-                  </tbody>
-                </table>
-              </div>
-              <hr>
-            </div>
-            <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
-              <a id="crear_detalle" href="{% url 'reporte_tramites_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
-                <i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
-              </a>
-              <a href="{% url 'reporte_tramites_director_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
-                <i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
-              </a>
-            </div>
-            <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4" align="right">
-              <a href="javascript:history.back(-1);">
-                <button type="button" class="btn btn-primary" name="Volver">
-                  Volver
-                </button>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="panel">
+		<div class="panel-heading" role="tab" id="headingFive">
+			<h5 class="panel-title">
+				<!--a class="collapsed" role="button" data-toggle="" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive"-->
+					<font color="#ffffff" size="2">Gráfico cantidad de tramites en los que trabajo {{usuario}}</font>
+				<!--/a-->
+			</h5>
+		</div>
+		<div id="collapseFive" class="panel-collapse colorG" role="tabpanel" aria-labelledby="headingFive">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+							<canvas id="chartDirectorTramites"></canvas>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" id="canvas-holder-1" > <!-- style="width:30%; direction:ltr; margin-left:auto; margin-right:auto; display:table;" -->
+						   <canvas id="chart-area2" width="250" height="250"></canvas>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel">
+		<div class="panel-heading box" role="tab" id="headingOne">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+					<font color="#ffffff" size="2">Tramites en los que trabajo {{usuario}}</font>
+				</a>
+			</h5>
+		</div>
+    	<div id="collapseOne" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingOne">
+      		<div class="panel-body">
+        		<div class="container-fluid">
+          			<div class="row">
+            			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="table-responsive">
+								<table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+									<thead>
+										<tr>
+											<th>Nro</th>
+											<th>Fecha</th>
+											<th>Profesional</th>
+											<th>Propietario</th>
+											<th>Tipo</th>
+											<th>Destino</th>
+											<th>Documentos</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% if estados %}
+										{% for e in estados %}
+										<tr>
+											<td class="col-xs-1"  align="center">{{ e.tramite.pk }}</td>
+											<td class="col-xs-2">{{ e.timestamp }}</td>
+											<td class="col-xs-2">{{ e.tramite.profesional }}</td>
+											<td class="col-xs-2">{{ e.tramite.propietario }}</td>
+											<td class="col-xs-1">{{ e.tramite.tipo_obra }}</td>
+											<td class="col-xs-1" align="center">{{ e.tramite.destino_obra }}</td>
+											<td class="col-xs-1" align="center">
+												<a href="{% url 'ver_documentos_del_estado' e.pk %}">
+													<button type="button" class="btn btn-primary btn-xs" name="Ver">
+														<span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
+													</button>
+												</a>
+											</td>
+										</tr>
+										{% endfor %}
+										{% endif %}
+									</tbody>
+								</table>
+							</div>
+							<hr>
+						</div>
+						<div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
+							<a id="crear_detalle" href="{% url 'reporte_empleados_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+								<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
+							</a>
+							<a href="{% url 'reporte_empleados_director_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
+								<i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
+							</a>
+						</div>
+						<div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4" align="right">
+							<a href="javascript:history.back(-1);">
+								<button type="button" class="btn btn-primary" name="Volver">
+									Volver
+								</button>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-    <script>
-        labelsEstados = [];
-        dataEstados = [];
+<script>
+	labelsEstados = [];
+	dataEstados = [];
+	color = [];
 
-        {% for da in datos_estados %}
-            dataEstados.push({{da}});
-        {% endfor %}
+	{% for da in cant_estados %}
+	dataEstados.push({{da}});
+	{% endfor %}
 
-        {% for la in label_estados %}
-            labelsEstados.push("{{la}}");
-        {% endfor %}
+	{% for la in fechas_estados %}
+	labelsEstados.push("{{la}}");
+	color.push(generarcolor());
+	{% endfor %}
 
-        var ctx = document.getElementById("chartDirectorTramites");
-        var chartDirectorTramites = new Chart( ctx, {
-            type: 'bar',
-            data: {
-              labels: labelsEstados,
-              datasets: [
-                {
-                  backgroundColor: [
-                  'rgba(255, 255, 0, 1.0)',
-                  'rgba(0, 255, 0, 1.0)',
-                  'rgba(0, 234, 236, 1.0)',
-                  'rgba(44, 0, 255, 1.0)',
-                  'rgba(183, 92, 224, 1.0)',
-                  'rgba(255, 0, 211, 1.0)',
-                  'rgba(255, 0, 0, 1.0)',
-                  'rgba(0, 128, 128, 1.0)'
-                  ],
-                  data: dataEstados
-                }
-              ]
-            },
-            options: {
-                responsive: true,
-                legend: {
-                    display: false
-                },
-                title:{
-                    display:true,
-                    text:'Actividad de usuario por fecha',
-                    fontSize: 14,
-                    padding: 14,
-                    fontColor:"#ffffff",
-                },
-                scales: {
-                    xAxes: [{
-                        barPercentage: 0.5,
-                        scaleLabel: {
-                            display: true,
-                        },
-                        ticks: {
-                            fontColor:"#ffffff",
-                        },
-                        gridLines:{
-                            color:"#808b96",
-                            zeroLineColor: "#ffffff",
-                            zeroLineWidth: 2,
-                        }
-                    }],
-                    yAxes: [{
-                        scaleLabel: {
-                            display: true,
-                        },
-                        ticks: {
-                            beginAtZero:true,
-                            stepSize: 1,
-                            fontColor:"#ffffff",
-                        },
-                        gridLines:{
-                            color:"#808b96",
-                            zeroLineColor: "#ffffff",
-                            zeroLineWidth: 2,
-                        }
-                    }]
-                }
-            }
-        });
+	var ctx = document.getElementById("chartDirectorTramites");
+	var chartDirectorTramites = new Chart( ctx, {
+		type: 'bar',
+		data: {
+			labels: labelsEstados,
+			datasets: [
+			{
+				backgroundColor: color,
+				data: dataEstados
+			}
+			]
+		},
+		options: {
+			responsive: true,
+			legend: {
+				display: false
+			},
 
-    </script>
+			title:{
+				display:true,
+				text:'Actividad de {{usuario}} por fecha',
+				fontSize: 16,
+				padding: 14,
+				fontColor:"#929292",
+			},
+			scales: {
+				xAxes: [{
+					barPercentage: 0.5,
+					scaleLabel: {
+						display: true,
+					},
+					ticks: {
+						fontColor:"#444444",
+					},
+					gridLines:{
+						color:"#a6a6a6",
+						zeroLineColor: "#a6a6a6",
+						zeroLineWidth: 2,
+					}
+				}],
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+					},
+					ticks: {
+						beginAtZero:true,
+						stepSize: 5,
+						fontColor:"#444444",
+					},
+					gridLines:{
+						color:"#a6a6a6",
+						zeroLineColor: "#a6a6a6",
+						zeroLineWidth: 2,
+					}
+				}]
+			}
+		}
+	});
 
-    <script>
-        var c = document.getElementById("botonConfiguracion");
-		c.style.display= '';
-		var d = document.getElementById("imagenusuario");
-		d.style.display= '';
-    </script>
+</script>
+
+<script>
+	var c = document.getElementById("botonConfiguracion");
+	c.style.display= '';
+	var d = document.getElementById("imagenusuario");
+	d.style.display= '';
+</script>
 {% endblock %}
