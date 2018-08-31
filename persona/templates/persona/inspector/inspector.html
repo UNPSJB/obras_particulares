@@ -21,7 +21,7 @@
 		<li><a href="#" class="current"><font>Inspector</font></a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspección {% if ctxtramitesvisadosyconinspeccion.count > 0 %}<span class="badge confBadge">{{ ctxtramitesvisadosyconinspeccion.count }}</span>{% endif %}</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Cargar inspección{% if ctxtramitesagendados.len_tramites > 0 %}<span class="badge confBadge">{{ ctxtramitesagendados.len_tramites }}</span>{% endif %}</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis inspecciones</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Mis inspecciones</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
@@ -109,7 +109,7 @@
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Consultar mis inspecciones</font>
+					<font color="#ffffff" size="2">Mis inspecciones</font>
 				</a>
 			</h5>
 		</div>

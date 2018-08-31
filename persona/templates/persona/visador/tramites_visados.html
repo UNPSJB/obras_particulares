@@ -23,7 +23,7 @@
 				<td class="col-xs-3">{{ estado.tramite.propietario}}</td>
 				<td class="col-xs-1">{{ estado.tramite.medidas }} </td>
 				<td align="center" class="col-xs-1">
-					<a href="{% url 'ver_documentos_visados' estado.tramite.pk %}">
+					<a href="{% url 'ver_documentos_visados' estado.id %}">
 						<button type="button" class="btn btn-primary btn-xs" name="Ver documentos">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
 						</button>

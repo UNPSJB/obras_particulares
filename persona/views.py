@@ -964,11 +964,16 @@ def ver_documentos_para_visado(request, pk_tramite):
     return redirect('visador')
 
 
-def ver_documentos_visados(request, pk_tramite):
+def ver_documentos_visados(request, pk_estado):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/visador/ver_documentos_visados.html', {'tramite': tramite, "perfil": perfil})
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    fecha = estado.timestamp
+    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    documentos = estado.tramite.documentos.all()
+    documentos_fecha = filter(lambda e: (datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    contexto = {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
+    return render(request, 'persona/visador/ver_documentos_visados.html', contexto)
 
 
 def aprobar_visado(request, pk_tramite, monto):
@@ -1183,11 +1188,16 @@ def rechazar_inspeccion(request, pk_tramite):
     return redirect('inspector')
 
 
-def ver_documentos_tramite_inspector(request, pk_tramite):
+def ver_documentos_tramite_inspector(request, pk_estado):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/inspector/documentos_tramite_inspector.html', {'tramite': tramite, "perfil": perfil})
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    fecha = estado.timestamp
+    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    documentos = estado.tramite.documentos.all()
+    documentos_fecha = filter(lambda e: (datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    contexto = {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
+    return render(request, 'persona/inspector/documentos_tramite_inspector.html', contexto)
 
 
 #def documentos_inspector_estado(request, pk_estado):
@@ -1375,7 +1385,30 @@ def ver_inspecciones(request, pk_tramite):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
     contexto = {'estados': estados, "perfil": perfil}
-    return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html',contexto)
+    return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html', contexto)
+
+
+def ver_documentos_tramite_jefeinspector(request, pk_estado):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    fecha = estado.timestamp
+    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    documentos = estado.tramite.documentos.all()
+    documentos_fecha = filter(lambda e: (datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    contexto = {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
+    return render(request, 'persona/jefe_inspector/documentos_tramite_jefeinspector.html', contexto)
+
+def ver_documentos_tramite_inspector_por_jefeinspector(request, pk_estado):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    fecha = estado.timestamp
+    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    documentos = estado.tramite.documentos.all()
+    documentos_fecha = filter(lambda e: (datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    contexto = {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
+    return render(request, 'persona/jefe_inspector/documentos_tramite_inspector_por_jefeinspector.html', contexto)
 
 
 '''director ---------------------------------------------------------------------------------------------'''
@@ -1502,7 +1535,6 @@ def ver_listado_todos_tramites(request):
     print("----------------------------")
     contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":lab, "perfil" : perfil}
     return render(request, 'persona/director/vista_de_tramites.html', contexto)
-
 
 def ver_listado_todos_usuarios(request):
     grupos = Group.objects.all()
@@ -1689,13 +1721,18 @@ class ReporteEmpleadosDirectorExcel(TemplateView):
         return response
 
 
-class ReporteEmpleadosDirectorPdf(View):
 
-    def pie_pagina(self, canvas, doc):
-        canvas.saveState()
-        canvas.setFont('Times-Roman', 10)
-        canvas.drawCentredString(300, 20, "Page %d" % doc.page)
-        canvas.restoreState()
+class RotarImagen(Image):
+    def wrap(self, availWidth, availHeight):
+        self.w, self.h = Image.wrap(self, availWidth, availHeight)
+        return self.w, self.h
+
+    def draw(self):
+        self.canv.translate(0,self.h)
+        self.canv.rotate(-90)
+        Image.draw(self)
+
+class ReporteEmpleadosDirectorPdf(View):
 
     def get(self, request, *args, **kwargs):
         filename = "Informe de empleados.pdf"
@@ -1709,10 +1746,10 @@ class ReporteEmpleadosDirectorPdf(View):
             topMargin=0,
             bottomMargin=0,
         )
+
         story = []
         styles = getSampleStyleSheet()
         styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
-        #styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
         styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
 
         usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.now().strftime("%Y/%m/%d")
@@ -1723,18 +1760,10 @@ class ReporteEmpleadosDirectorPdf(View):
         im1.hAlign = 'CENTER'
         story.append(im1)
 
-        #im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
-        #im0.hAlign = 'CENTER'
-        #story.append(im0)
-
-        #titulo = 'SISTEMA OBRAS PARTICULARES'
-        #story.append(Paragraph(titulo, styles["Titulo"]))
-        #story.append(Spacer(0, cm * 0.20))
         story.append(Spacer(0, cm * 0.05))
         subtitulo = 'Reporte de empleados'
         story.append(Paragraph(subtitulo, styles["Subtitulo"]))
         story.append(Spacer(0, cm * 0.15))
-
 
         im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
         story.append(im0)
@@ -1794,10 +1823,6 @@ class ReporteEmpleadosDirectorPdf(View):
         '''
         hasta aca, anda pero ver los valores, colores y como se ubica dentro de pagina
         '''
-
-        #titulo = "Obras Particulares"
-        #story.append(Paragraph(titulo, styles["Titulo"]))
-        # story.append(Spacer(0, cm * 0.20))
 
         doc.build(story)
         return response

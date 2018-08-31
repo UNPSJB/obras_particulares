@@ -30,7 +30,7 @@
 		<div class="panel-heading box" role="tab" id="headingFive">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-					<font color="#ffffff" size="2">Documentos del tramite</font>
+					<font color="#ffffff" size="2">Documentos de la inspección del tramite</font>
 				</a>
 			</h5>
 		</div>
@@ -39,7 +39,7 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
-							{% for documento in tramite.documentos.all %}
+							{% for documento in documentos_de_fecha %}
 							<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="height:360px;">
 								<div class="thumbnail ">
 									<a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">

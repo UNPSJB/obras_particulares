@@ -18,9 +18,9 @@
 </div>
 <ul class="sidebar sidebar-1">
 	<font size="2"><li><a href="#" class="current"><font>Profesional</font></a></li>
-	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Iniciar trámites</a></li>
+	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Iniciar trámite</a></li>
 	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Corregir trámites {% if ctxtramcorregidos.len_tramites > 0 %}<span class="badge confBadge">{{ ctxtramcorregidos.len_tramites }}</span>{% endif %}</a></li>
-	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Estado de tramites {% if ctxtramitesprofesional.tramites_inspeccion_dia > 0 %}<span class="badge confBadge">{{ ctxtramitesprofesional.tramites_inspeccion_dia }}</span>{% endif %}</a></li>
+	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Mis trámites {% if ctxtramitesprofesional.tramites_inspeccion_dia > 0 %}<span class="badge confBadge">{{ ctxtramitesprofesional.tramites_inspeccion_dia }}</span>{% endif %}</a></li>
 	<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("tareasDatosPersonales"),opcionesDatosPersonales("nada")'>Mis datos <span class="caret"></span></a></li>
 	<ul class="sidebar sidebar-2" style="display:none;" id="tareasDatosPersonales">
 		<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
@@ -43,7 +43,7 @@
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
 			<h5 class="panel-title">
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Iniciar Trámite</font>
+					<font color="#ffffff" size="2">Iniciar trámite</font>
 				</a>
 			</h5>
 		</div>
@@ -101,7 +101,7 @@
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
 			<h5 class="panel-title">
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Cargar correcciones a un Trámite</font>
+					<font color="#ffffff" size="2">Corregir trámites</font>
 				</a>
 			</h5>
 		</div>
@@ -128,7 +128,7 @@
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Consultar estado de mis Trámites</font>
+					<font color="#ffffff" size="2">Mis Trámites</font>
 				</a>
 			</h5>
 		</div>
@@ -148,7 +148,7 @@
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("tareasDatosPersonales")'>
-					<font color="#ffffff" size="2">Datos personales</font>
+					<font color="#ffffff" size="2">Mis datos</font>
 				</a>
 			</h5>
 		</div>

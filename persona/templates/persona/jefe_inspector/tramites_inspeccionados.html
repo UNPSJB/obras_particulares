@@ -6,7 +6,7 @@
 		<thead>
 			<tr>
 				<th>Nro</th>
-				<th>Fecha Inicio</th>
+				<th>Fecha</th>
 				<th>Tipo de obra</th>
 				<th>Profesional</th>
 				<th>Propietario</th>
@@ -19,14 +19,14 @@
 			{% for estado in estados %}
 			<tr>
 				<td class="col-xs-1">{{ estado.tramite.id}}</td>
-				<td class="col-xs-2">{{ estado.tramite.estado.timestamp}}</td>
+				<td class="col-xs-2">{{ estado.timestamp}}</td>
 				<td class="col-xs-2">{{ estado.tramite.tipo_obra }} </td>
 				<td class="col-xs-2">{{ estado.tramite.profesional}}</td>
 				<td class="col-xs-2">{{ estado.tramite.propietario}}</td>
 				<td class="col-xs-1">{{ estado.tramite.medidas }} </td>
 				<td class="col-xs-1" align="center">
-					<a href="{% url 'documentos_tramite_inspector' estado.tramite.pk %}">
-						<button type="button" class="btn btn-primary btn-xs" name="Agendar">
+					<a href="{% url 'documentos_tramite_jefeinspector' estado.id %}">
+						<button type="button" class="btn btn-primary btn-xs" name="Ver">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
 						</button>
 					</a>

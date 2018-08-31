@@ -59,7 +59,7 @@ urlpatterns = [
     url(r'^ver_documentos_para_visado/(?P<pk_tramite>\d+)/$', views.ver_documentos_para_visado, name="ver_documentos_para_visado"),
     url(r'^aprobar_visado/(?P<pk_tramite>\d+)/$', views.aprobar_visado, name="aprobar_visado"),
     url(r'^no_aprobar_visado/(?P<pk_tramite>\d+)/$', views.no_aprobar_visado, name="no_aprobar_visado"),
-    url(r'^ver_documentos_visados/(?P<pk_tramite>\d+)/$', views.ver_documentos_visados, name="ver_documentos_visados"),
+    url(r'^ver_documentos_visados/(?P<pk_estado>\d+)/$', views.ver_documentos_visados, name="ver_documentos_visados"),
     url(r'^reporte_tramites_aceptados_excel/', ReporteTramitesAceptadosExcel.as_view(), name="reporte_tramites_aceptados_excel"),
     url(r'^reporte_tramites_aceptados_pdf/$', login_required(ReporteTramitesAceptadosPdf.as_view()), name="reporte_tramites_aceptados_pdf"),
 
@@ -70,7 +70,7 @@ urlpatterns = [
     url(r'^agendar_tramite/(?P<pk_tramite>\d+)/$', views.agendar_tramite, name="agendar_tramite"),
     url(r'^rechazar_inspeccion/(?P<pk_tramite>\d+)/$', views.rechazar_inspeccion, name="rechazar_inspeccion"),
     url(r'^aceptar_inspeccion/(?P<pk_tramite>\d+)/$', views.aceptar_inspeccion, name="aceptar_inspeccion"),
-    url(r'^documentos_tramite_inspector/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_inspector, name="documentos_tramite_inspector"),
+    url(r'^documentos_tramite_inspector/(?P<pk_estado>\d+)/$', views.ver_documentos_tramite_inspector, name="documentos_tramite_inspector"),
 
     #jefeinspector --------------------------------------------------------------------------------------------------
     url(r'^jefeinspector$', views.mostrar_jefe_inspector, name="jefe_inspector"),
@@ -78,6 +78,8 @@ urlpatterns = [
     url(r'^agendar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.agendar_inspeccion_final, name="agendar_inspeccion_final"),
     url(r'^aceptar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.aceptar_inspeccion_final, name="aceptar_inspeccion_final"),
     url(r'^inspectores_sin_inspecciones_agendadas/(?P<pk_estado>\d+)/$', views.inspectores_sin_inspecciones_agendadas, name="inspectores_sin_inspecciones_agendadas"),
+    url(r'^documentos_tramite_jefeinspector/(?P<pk_estado>\d+)/$', views.ver_documentos_tramite_jefeinspector, name="documentos_tramite_jefeinspector"),
+    url(r'^documentos_tramite_inspector_por_jefeinspector/(?P<pk_estado>\d+)/$', views.ver_documentos_tramite_inspector_por_jefeinspector, name="documentos_tramite_inspector_por_jefeinspector"),
 
     #director -------------------------------------------------------------------------------------------------------
     url(r'^director$', views.mostrar_director, name="director"),

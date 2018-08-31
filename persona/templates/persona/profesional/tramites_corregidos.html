@@ -6,6 +6,7 @@
 		<thead>
 			<tr>
 				<th>Nro</th>
+				<th>Domicilio</th>
 				<th>Propietario</th>
 				<th>Estado</th>
 				<th>Superficie</th>
@@ -18,6 +19,7 @@
 			{% for tramite in tramites %}
 			<tr>
 				<td class="col-xs-1">{{tramite.id}}</td>
+				<td class="col-xs-2">{{tramite.domicilio}}</td>
 				<td class="col-xs-3">{{tramite.propietario}}</td>
 				<td class="col-xs-2">{{tramite.estado}}</td>
 				<td class="col-xs-2">{{tramite.medidas}}</td>
