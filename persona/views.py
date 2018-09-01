@@ -86,7 +86,18 @@ def listado_tramites_propietario(request):
     usuario = get_object_or_404(Usuario, pk=request.user.persona.pk)
     tramites = Tramite.objects.all()
     tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == usuario.persona.pk), tramites)
-    return tramites_de_propietario
+    tipos_ag = [11, 21, 28]  # agendados para inspeccion
+    dia_hoy = date.today()
+    tramites_no_aprobado_o_no_final_o_inspeccion = filter(lambda t: ((datetime.strftime(t.estado().timestamp, '%d/%m/%Y') == datetime.strftime(dia_hoy, '%d/%m/%Y') and
+                                                                      (t.estado().tipo == tipos_ag[0] or
+                                                                       t.estado().tipo == tipos_ag[1] or
+                                                                       t.estado().tipo == tipos_ag[2])) or
+                                                                     (str(t.estado()) != 'NoFinalizado' or
+                                                                      str(t.estado()) != 'NoAprobado')), tramites_de_propietario)
+
+    contexto = {'tramites': tramites_de_propietario, 'tramites_no_aprobado_o_no_final': len(list(tramites_no_aprobado_o_no_final_o_inspeccion))}
+    return contexto
+
 
 
 def cargar_aprobacion_propietario(request, pk_tramite):
