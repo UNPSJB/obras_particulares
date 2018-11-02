@@ -17,7 +17,7 @@
 		</thead>
 		<tbody>
 			{% if estados %}
-			{% for estado in estados %}
+			{% for estado in estados.estados_del_tramite %}
 			<tr>
 				<td class="col-xs-1">{{ estado.tramite.id}}</td>
 				<td class="col-xs-1">{{ estado.usuario}}</td>

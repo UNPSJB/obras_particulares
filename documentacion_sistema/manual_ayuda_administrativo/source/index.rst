@@ -1,27 +1,20 @@
-Administrativo
-==============
+******************************
+Manual de ayuda Administrativo
+******************************
 
-Tramites Iniciados
-------------------
-aca esta todo
+Bienvenido al manual de ayuda al administrativo. Para resolver una consulta por favor haga click en alguna de las opciones debajo
+=================================================================================================================================
 
-.. image:: _static/administrativo.1.jpg
+.. toctree::
+   :maxdepth: 2
 
-Alta Profesional
-----------------
-aca esta todo
-
-.. image:: _static/administrativo.2.jpg
-.. image:: _static/administrativo.3.jpg
-
-Alta Propietario
-----------------
-aca esta todo
-
-.. image:: _static/administrativo.4.jpg
-
-Registrar Pago
---------------
-aca esta todo
-
-.. image:: _static/administrativo.5.jpg
+   archivos/tramites_iniciados
+   archivos/tramites_con_solicitud_aprobacion
+   archivos/tramites_con_solicitud_no_aprobacion
+   archivos/tramites_con_solicitud_obra_total
+   archivos/baja_tramite
+   archivos/alta_profesional
+   archivos/alta_propietario
+   archivos/registrar_pago
+   archivos/datos_personales
+   archivos/cambiar_contraseña

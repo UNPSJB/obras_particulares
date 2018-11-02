@@ -44,6 +44,8 @@ def obtener_path(nivel_usuario):
 @login_required
 def documentation(request, path='index.html'):
     nivel_usuario = app_settings.DOCUMENTATION_ACCESS_FUNCTION(request.user)
+    print("------------")
+    print(nivel_usuario)
     ruta_documentacion = obtener_path(nivel_usuario)
 
     if True:  # not app_settings.DOCUMENTATION_XSENDFILE:

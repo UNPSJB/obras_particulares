@@ -1,20 +1,17 @@
-.. documentacion documentation master file, created by
-   sphinx-quickstart on Mon Aug  6 18:45:01 2018.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+************************
+Manual de ayuda Director
+************************
 
-Welcome to LA DOCUMENTACION DEL DIRECTOR's documentation!
-=========================================================
+Bienvenido al manual de ayuda al director. Para resolver una consulta por favor haga click en alguna de las opciones debajo
+=================================================================================================================================
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   archivos/crear_usuario
+   archivos/cambiar_usuario_grupo
+   archivos/crear_tipo_documento
+   archivos/crear_tipo_obra
+   archivos/cambiar_visador_tramite
+   archivos/datos_personales
+   archivos/cambiar_contraseña

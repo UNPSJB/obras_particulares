@@ -1,0 +1,32 @@
+Administrativo
+==============
+
+Tramites Iniciados
+------------------
+aca esta todo
+
+.. image:: ../_static/administrativo.1.png
+
+Alta Profesional
+----------------
+aca esta todo
+
+.. image:: ../_static/administrativo.2.png
+.. image:: ../_static/administrativo.3.png
+
+Alta Propietario
+----------------
+aca esta todo
+
+.. image:: ../_static/administrativo.4.png
+
+Registrar Pago
+--------------
+aca esta todo
+
+.. image:: ../_static/administrativo.5.png
+.. image:: ../_static/administrativo.6.png
+.. image:: ../_static/administrativo.7.png
+.. image:: ../_static/administrativo.8.png
+.. image:: ../_static/administrativo.9.png
+.. image:: ../_static/administrativo.10.png
