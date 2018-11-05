@@ -1,6 +1,6 @@
-******************************
-Manual de ayuda Administrativo
-******************************
+***************
+Manual de Ayuda
+***************
 
 Bienvenido al manual de ayuda al administrativo. Para resolver una consulta por favor haga click en alguna de las opciones debajo
 =================================================================================================================================
@@ -8,7 +8,7 @@ Bienvenido al manual de ayuda al administrativo. Para resolver una consulta por 
 .. toctree::
    :maxdepth: 2
 
-   archivos/tramites_iniciados
+   archivos/tramites_iniciado
    archivos/tramites_con_solicitud_aprobacion
    archivos/tramites_con_solicitud_no_aprobacion
    archivos/tramites_con_solicitud_obra_total
