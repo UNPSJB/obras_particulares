@@ -91,6 +91,8 @@ urlpatterns = [
     url(r'^reporte_empleados_director_excel/', ReporteEmpleadosDirectorExcel.as_view(), name="reporte_empleados_director_excel"),
     url(r'^reporte_empleados_director_pdf/$', login_required(ReporteEmpleadosDirectorPdf.as_view()), name="reporte_empleados_director_pdf"),
     url(r'^ver_documentos_del_estado/(?P<pk_estado>\d+)/$', views.ver_documentos_del_estado, name="ver_documentos_del_estado"),
+    url(r'^alta_baja_usuarios/$', views.alta_baja_usuarios, name="alta_baja_usuarios"),
+
 
     #general ----------------------------------------------------------------------------------------------------
     url(r'^cambiar_perfil/$', views.cambiar_perfil, name="cambiar_perfil"),
