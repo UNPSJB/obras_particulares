@@ -1,0 +1,30 @@
+<!-- Template que se encarga de listar todos los propietarios con usuario en la vista de administrativo -->
+{% load staticfiles %}
+
+{% block contenido_propietario %} 
+<div class="table-responsive">
+  <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>CUIL</th>
+        <th>Telefono</th>
+        <th>Email</th>
+    </thead>
+    <tbody>
+      {% if propietarios %}
+      {% for propietario in propietarios %}
+      <tr>
+        <td class="col-xs-2">{{ propietario.persona.nombre }}</td>
+        <td class="col-xs-2">{{ propietario.persona.apellido }} </td>
+        <td class="col-xs-2">{{ propietario.persona.cuil }}</td>
+        <td class="col-xs-2">{{ propietario.persona.telefono }}</td>
+        <td class="col-xs-2">{{ propietario.persona.mail}}</td>
+      </tr>
+      {% endfor %}
+      {% endif%}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
