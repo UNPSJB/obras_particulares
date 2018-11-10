@@ -1352,11 +1352,13 @@ def ver_documentos_tramite_inspector_por_jefeinspector(request, pk_estado):
 @grupo_requerido('director')
 def mostrar_director(request):
     usuario = request.user
+    lista_usuarios = Usuario.objects.all().exclude(id=request.user.id)
     perfil = 'css/' + usuario.persona.perfilCSS
     values = {
+        "lista_usuarios": lista_usuarios,
         "perfil": perfil,
         "datos_usuario": empleados(),
-        "ctxvisadorescontramitesagendados": tramites_con_visado_agendado(),
+        "ctxvisadorescontramitesagendados": []#tramites_con_visado_agendado(),
     }
     for form_name, submit_name in FORMS_DIRECTOR:
         KlassForm = FORMS_DIRECTOR[(form_name, submit_name)]
@@ -1794,3 +1796,15 @@ def alta_persona(request):
     else:
         form = FormularioPersona()
     return render(request, 'persona/alta/alta_persona.html', {'form': form})
+
+def alta_baja_usuarios(request):
+    if request.method == 'POST':
+        id_usuario = request.POST.get('id_form_usuario')
+        opcion = request.POST.get('id_form_opcion')
+        usuario = Usuario.objects.get(id=int(id_usuario))
+        if (opcion == 'Baja'):
+            usuario.is_active = False
+        else:
+            usuario.is_active = True
+        usuario.save()    
+    return redirect('director')

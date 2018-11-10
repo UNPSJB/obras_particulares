@@ -48,6 +48,7 @@
 		<ul class="sidebar sidebar-2" style="display:none;" id="tareasUsuario">
 			<li><a href="#" onclick='opcionesUsuario("alta_usuario")'>Crear Usuario</a></li>
 			<li><a href="#" onclick='opcionesUsuario("modificar_usuario_grupo")'>Cambiar usuario de grupo</a></li>
+			<li><a href="#" onclick='opcionesUsuario("baja_usuarios")'>Baja de Usuarios</a></li>
 		</ul>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite"),opcionesDatosTramite("nada")'>Datos tramite <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="tareasTramite">
@@ -92,6 +93,7 @@
 									<option selected value="nada"> ¿Que desea hacer? </option>
 									<option value="alta_usuario">Crear Usuario</option>
 									<option value="modificar_usuario_grupo">Cambiar usuario de grupo</option>
+									<option value="baja_usuarios">Dar de baja un usuario</option>
 								</select>
 							</div>
 						</div>
@@ -166,6 +168,39 @@
 								{% endblock %}
 							</form>
 							<br>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid" id="baja_usuarios" style="display: none;">
+					<div class="row">
+						<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+							<hr>
+							<table class="table table-stripped table-bordered" style="text-align:center">
+								<tr style="align-content: center">	
+									<th style="text-align:center">Id</th>
+									<th style="text-align:center">Email</th>
+									<th style="text-align:center">Staff</th>
+									<th style="text-align:center">Estado</th>
+									<th style="text-align:center">Nombre de Usuario</th>
+								</tr>
+								{% for usuario in lista_usuarios %}
+								<tr>
+									<td>{{usuario.id}}</td>
+									<td>{{usuario.email}}</td>
+									<td>{{usuario.is_staff}}</td>
+									{% if usuario.is_active %}
+										<td>
+											<a class="label label-success" href="#" onclick='alta_baja_usuarios("{{usuario.id}}",true)'>Activo</a>
+										</td>
+									{%else%}
+										<td>
+											<a class="label label-danger" href="#" onclick='alta_baja_usuarios("{{usuario.id}}",false)'>Inactivo</a>
+										</td>
+									{%endif%}
+									<td>{{usuario.username}}</td>
+								</tr>
+								{% endfor %}
+							</table>
 						</div>
 					</div>
 				</div>
@@ -356,10 +391,62 @@
 		</div>
 	</div>
 </div>
+
+  
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModalc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel"></h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<h5 id="opcionCuerpo"></h5>				
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+			<button type="button" class="btn btn-primary" onclick="submit();">Confirmar</button>
+		</div>
+		</div>
+	</div>
+	</div>
+	<form action="{% url 'alta_baja_usuarios' %}"method="POST" style="display:none" id="formAltaBaja">{%csrf_token%}
+		<input type="text" name="id_form_usuario" id="id_form_usuario" value=" ">
+		<input type="text" name="id_form_opcion" id="id_form_opcion" value=" ">
+	</form>
+
+
 {% endblock %}
 
 {% block scripts %}
 	<script type="text/javascript">
+		function alta_baja_usuarios(id_usuario, indicador){
+			if(indicador)
+				abrir_modal(id_usuario,"Baja");
+			else
+				abrir_modal(id_usuario,"Alta");
+		}
+
+		function abrir_modal(id_usuario,indicador){
+			llenarOpciones(id_usuario,indicador);
+			$('#exampleModalLabel').text('Confirmar');
+			$('#opcionCuerpo').text("Esta seguro que desea dar de "+indicador+" al usuario?");
+			$('#exampleModalc').modal('toggle');
+		}
+
+		function llenarOpciones(id_usuario, indicador){
+			$("#id_form_usuario").val(id_usuario);
+			$("#id_form_opcion").val(indicador);
+			console.log($('#id_form_usuario'));
+		}
+		function submit(){
+			$('#formAltaBaja').submit();
+		}
+
+
 	(function(){
 		$(".datepicker").datepicker({
 				changeDay: true,
@@ -376,18 +463,27 @@
 			if (id == "nada") {
 				$("#alta_usuario").hide();
 				$("#modificar_usuario_grupo").hide();
+				$("baja_usuarios").hide();
 				$("#" + "opcionesDelUsuario").val('nada');
 			}
 			if (id == "alta_usuario"){
 				$("#alta_usuario").show();
 				$("#modificar_usuario_grupo").hide();
+				$("baja_usuarios").hide();
 				$("#" + "opcionesDelUsuario").val('alta_usuario');
 			}
 			if (id == "modificar_usuario_grupo") {
 				$("#alta_usuario").hide();
 				$("#modificar_usuario_grupo").show();
+				$("baja_usuarios").hide();
 				//esto es por si dejo los submenu
 				$("#" + "opcionesDelUsuario").val('modificar_usuario_grupo');
+			}
+			if(id=='baja_usuarios'){
+				$("#alta_usuario").hide();
+				$("#modificar_usuario_grupo").hide();
+				$("#baja_usuarios").show();
+				$("#" + "opcionesDelUsuario").val('baja_usuarios');
 			}
 		}
 
