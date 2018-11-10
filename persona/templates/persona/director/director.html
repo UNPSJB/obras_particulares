@@ -126,46 +126,33 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<hr>
-							<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-								<form onLoad="myOnLoad()">
-									<select class="form-control input-sm" id="usuarios" onchange="cargarUsuarioSeleccionado()">
-										<option selected value=""> ¿Que usuario desea cambiar? </option>
-									</select>
-								</form>
-							</div>
-						</div>
-
-
-
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<hr>
 							<form action= ""  method="post" enctype="multipart/form-data"> {% csrf_token %}
-								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									<div class="form-group">
-										<label>Nombre:</label>
-										<input class="form-control input-sm" id="nombreUsuarioS" name="nombreempleado" type="text" placeholder="Nombre del usuario seleccionado" title="Nombre del usuario seleccionado"  disabled/>
-										<br>
-										<div id="id_contenedor_usuario_seleccionado"></div>
-									</div>
-								</div>
-
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+								<label>Usuarios actuales:</label>
+								<table class="table table-stripped table-hover"> <!--Esta tabla no lleva tbody ni thead por cuesitones de tamaño y de visualizacion!-->
+									<tr>
+										<th>Nombre de usuario</th>
+										<th>Id</th>
+									</tr>
+										{% for usuario in datos_usuario %}
+											<tr style="cursor: pointer;" onclick='agregarGruposUsuario("{{usuario.id}}", "{{usuario}}");'>
+												<td>{{usuario}}</td>
+												<td>{{usuario.id}}</td>
+											</tr>
+										{% endfor %}
+								</table>
+							</div>
 
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 									<div class="form-group">
 										<label>Grupos actuales:</label>
 										<select id='gruposActuales' class="form-control" title="Grupos asignados al usuario" size="12" style="height: 111px;" disabled>
-											<option value=""  style="font-weight: bold;"> Grupos del usuario </option>
-											<option value="">  </option>
 										</select>
 									</div>
 								</div>
-
-
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 									<div class="form-group" id="id_contenedor_grupos_disponibles"></div>
 								</div>
-
-
 								<br>
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right" id="id_contenedor_boton_cambiar-grupo">
 									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarTodosLosGrupos()">
@@ -187,33 +174,37 @@
 
 				<div class="container-fluid" id="baja_usuarios" style="display: none;">
 					<div class="row">
-						<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<hr>
 							<table class="table table-stripped table-bordered" style="text-align:center">
-								<tr style="align-content: center">
-									<th style="text-align:center">Id</th>
-									<th style="text-align:center">Email</th>
-									<th style="text-align:center">Staff</th>
-									<th style="text-align:center">Estado</th>
-									<th style="text-align:center">Nombre de Usuario</th>
-								</tr>
-								{% for usuario in lista_usuarios %}
-								<tr>
-									<td>{{usuario.id}}</td>
-									<td>{{usuario.email}}</td>
-									<td>{{usuario.is_staff}}</td>
-									{% if usuario.is_active %}
-										<td>
-											<a class="label label-success" href="#" onclick='alta_baja_usuarios("{{usuario.id}}",true)'>Activo</a>
-										</td>
-									{%else%}
-										<td>
-											<a class="label label-danger" href="#" onclick='alta_baja_usuarios("{{usuario.id}}",false)'>Inactivo</a>
-										</td>
-									{%endif%}
-									<td>{{usuario.username}}</td>
-								</tr>
-								{% endfor %}
+								<thead>
+									<tr style="align-content: center">
+										<th style="text-align:center">Id</th>
+										<th style="text-align:center">Email</th>
+										<th style="text-align:center">Staff</th>
+										<th style="text-align:center">Estado</th>
+										<th style="text-align:center">Nombre de Usuario</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for usuario in lista_usuarios %}
+									<tr>
+										<td>{{usuario.id}}</td>
+										<td>{{usuario.email}}</td>
+										<td>{{usuario.is_staff}}</td>
+										{% if usuario.is_active %}
+											<td>
+												<a class="label label-success" href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",true)'>Activo</a>
+											</td>
+										{%else%}
+											<td>
+												<a class="label label-danger" href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",false)'>Inactivo</a>
+											</td>
+										{%endif%}
+										<td>{{usuario.username}}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
 							</table>
 						</div>
 					</div>
@@ -412,10 +403,12 @@
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel"></h5>
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-			</button>
+			<h4 align="center">
+				<strong>Confirmar<strong>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+		</h4>
 		</div>
 		<div class="modal-body">
 			<h5 id="opcionCuerpo"></h5>
@@ -437,27 +430,51 @@
 
 {% block scripts %}
 	<script type="text/javascript">
-		function alta_baja_usuarios(id_usuario, indicador){
+	$('#id_usuario_seleccionado').hide();
+	$("label[for=id_usuario_seleccionado]").hide();
+
+		function alta_baja_usuarios(id_usuario, usuario, indicador){
 			if(indicador)
-				abrir_modal(id_usuario,"Baja");
+				abrir_modal(id_usuario,usuario,"Baja");
 			else
-				abrir_modal(id_usuario,"Alta");
+				abrir_modal(id_usuario,usuario,"Alta");
 		}
 
-		function abrir_modal(id_usuario,indicador){
+		function abrir_modal(id_usuario,usuario,indicador){
 			llenarOpciones(id_usuario,indicador);
-			$('#exampleModalLabel').text('Confirmar');
-			$('#opcionCuerpo').text("Esta seguro que desea dar de "+indicador+" al usuario?");
+			$('#opcionCuerpo').html("Esta seguro que desea dar de <strong>"+indicador+"</strong> al usuario <strong>"+usuario+"</strong> ?");
 			$('#exampleModalc').modal('toggle');
 		}
 
 		function llenarOpciones(id_usuario, indicador){
 			$("#id_form_usuario").val(id_usuario);
 			$("#id_form_opcion").val(indicador);
-			console.log($('#id_form_usuario'));
 		}
 		function submit(){
 			$('#formAltaBaja').submit();
+		}
+		function blanquearBoxSelect() {
+			$('#gruposActuales').find('option').remove().end()
+		}
+
+		function agregarGruposUsuario(id, usuario) {
+			blanquearBoxSelect();
+			$("#id_usuario_seleccionado").val(usuario);
+			$.ajax({
+				url:'{% url "get_grupos_usuario" %}',
+				type: 'GET',
+				data: {
+					usuario_id:id,
+					csrfmiddlewaretoken: "{{csrf_token}}",
+				},
+				success:function(grupos) {
+					$.each(grupos , function(index, val) {
+						var option = document.createElement("option");
+						$(option).html(val);
+						$(option).appendTo("#gruposActuales");
+					});
+				}
+			});
 		}
 
 
@@ -559,7 +576,6 @@
 		$('#id_password').removeAttr("type");
 		$('#id_password').attr("type","password");
 		$('.selectmultiple').attr( "size", "7" );
-		$('.selectmultiple').append($('<option>',{value:0, text:'Seleccione un grupo'}));
 		$('.selectmultiple > option[value="0"]').attr('selected', 'selected');
 		var selectList = $('#id_grupo option');
 		selectList.sort(function(a,b){
