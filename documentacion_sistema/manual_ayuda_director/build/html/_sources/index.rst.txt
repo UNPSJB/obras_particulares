@@ -10,6 +10,7 @@ Bienvenido al manual de ayuda al director. Para resolver una consulta por favor 
 
    archivos/crear_usuarios
    archivos/cambiar_usuario_grupo
+   archivos/alta_baja
    archivos/crear_tipo_documento
    archivos/crear_tipo_obra
    archivos/cambiar_visador_tramite
