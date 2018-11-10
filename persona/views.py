@@ -612,7 +612,12 @@ def profesional_list():
 def propietario_list():
     propietarios = Propietario.objects.all()
     propietarios_sin_usuario = filter(lambda propietario: (propietario.persona.usuario is None and propietario.persona is not None ), propietarios)
-    contexto = {'propietarios': propietarios_sin_usuario, 'len_propietarios': len(list(propietarios_sin_usuario))}
+    propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
+    contexto = {'propietarios': propietarios_sin_usuario, 
+                'len_propietarios': len(list(propietarios_sin_usuario)),
+                'propietarios_con_usuario': propietarios_con_usuario,
+                'len_propietarios_con_usuario': len(list(propietarios_con_usuario))
+                }
     return contexto
 
 
