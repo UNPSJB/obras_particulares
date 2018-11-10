@@ -600,7 +600,12 @@ FORMS_ADMINISTRATIVO = {(k.NAME, k.SUBMIT): k for k in [
 def profesional_list():
     personas = Persona.objects.all()
     profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
-    contexto = {'personas': profesionales, 'len_personas': len(list(profesionales))}
+    profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
+    contexto = {'personas': profesionales, 
+                'len_personas': len(list(profesionales)), 
+                'profesionales_con_usuario': profesionales_con_usuario, 
+                'len_profesionales_con_usuario': len(list(profesionales_con_usuario))
+                }
     return contexto
 
 

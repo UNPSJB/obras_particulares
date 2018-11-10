@@ -32,6 +32,8 @@
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_contrasenia")'>Contraseña</a></li>
 		</ul>
+		<!-- Listado de profesionales -->
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Profesionales {% if ctxprofesional.len_profesionales_con_usuario > 0 %}<span class="badge confBadge">{{ ctxprofesional.len_profesionales_con_usuario }}</span>{% endif %}</a></li>
 		<!--li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
 			<li><a href="#">Consulta 1</a></li>
@@ -49,7 +51,7 @@
 		<div class="panel-heading box" role="tab" id="headingOne">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Tramites iniciados</font>
+					<font color="#ffffff" size="2">Trámites iniciados</font>
 				</a>
 			</h5>
 		</div>
@@ -315,6 +317,28 @@
 		</div>
 		<div id="collapseNine" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingNine">
 			<div class="panel-body">
+			</div>
+		</div>
+	</div>
+	<div class="panel" >
+		<div class="panel-heading box" role="tab" id="headingEleven">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="true" aria-controls="collapseEleven" onclick='mostrarSubmenu("sin_submenu")'>
+					<font color="#ffffff" size="2">Profesionales</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseEleven" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingEleven">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block listado_profesionales %}
+							{% include "persona/administrativo/profesional_list_con_usuario.html" with profesionales=ctxprofesional.profesionales_con_usuario %}
+							{% endblock %}
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

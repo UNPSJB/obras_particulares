@@ -1,0 +1,39 @@
+<!-- Template que se encarga de mostrar los profesionales con usuario en la vista de administrativo -->
+{% load staticfiles %}
+
+{% block contenido_profesional %}
+<div class="table-responsive">
+  <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Mail</th>
+        <th>Direccion</th>
+        <th>CUIL</th>
+        <th>Telefono</th>
+        <th>Profesion</th>
+        <th>Categoria</th>
+        <th>Matricula</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if profesionales %}
+      {% for profesional in profesionales %}
+      <tr>
+        <td class="col-xs-2">{{ profesional.nombre }}</td>
+        <td class="col-xs-2">{{ profesional.apellido }} </td>
+        <td class="col-xs-2">{{ profesional.mail }} </td>
+        <td class="col-xs-1">{{ profesional.domicilio }}</td>
+        <td class="col-xs-2">{{ profesional.cuil }}</td>
+        <td class="col-xs-1">{{ profesional.telefono }}</td>
+        <td class="col-xs-1">{{ profesional.profesional.profesion }}</td>
+        <td class="col-xs-1">{{ profesional.profesional.categoria }}</td>
+        <td class="col-xs-1">{{ profesional.profesional.matricula }}</td>
+      </tr>
+      {% endfor %}
+      {% endif%}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
