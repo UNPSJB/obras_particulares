@@ -128,12 +128,15 @@
 							<hr>
 							<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 								<form onLoad="myOnLoad()">
-									<select class="form-control input-sm" id="usuarios" title="Selecciona nombre del grupo que vas a modificar" onchange="cargarUsuarioSeleccionado()">
+									<select class="form-control input-sm" id="usuarios" onchange="cargarUsuarioSeleccionado()">
 										<option selected value=""> ¿Que usuario desea cambiar? </option>
 									</select>
 								</form>
 							</div>
 						</div>
+
+
+
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<hr>
 							<form action= ""  method="post" enctype="multipart/form-data"> {% csrf_token %}
@@ -145,6 +148,8 @@
 										<div id="id_contenedor_usuario_seleccionado"></div>
 									</div>
 								</div>
+
+
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 									<div class="form-group">
 										<label>Grupos actuales:</label>
@@ -154,9 +159,13 @@
 										</select>
 									</div>
 								</div>
+
+
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 									<div class="form-group" id="id_contenedor_grupos_disponibles"></div>
 								</div>
+
+
 								<br>
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right" id="id_contenedor_boton_cambiar-grupo">
 									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario" onclick="eliminarTodosLosGrupos()">
@@ -171,12 +180,17 @@
 						</div>
 					</div>
 				</div>
+
+
+
+
+
 				<div class="container-fluid" id="baja_usuarios" style="display: none;">
 					<div class="row">
 						<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
 							<hr>
 							<table class="table table-stripped table-bordered" style="text-align:center">
-								<tr style="align-content: center">	
+								<tr style="align-content: center">
 									<th style="text-align:center">Id</th>
 									<th style="text-align:center">Email</th>
 									<th style="text-align:center">Staff</th>
@@ -392,7 +406,7 @@
 	</div>
 </div>
 
-  
+
 	<!-- Modal -->
 	<div class="modal fade" id="exampleModalc" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
@@ -404,7 +418,7 @@
 			</button>
 		</div>
 		<div class="modal-body">
-			<h5 id="opcionCuerpo"></h5>				
+			<h5 id="opcionCuerpo"></h5>
 		</div>
 		<div class="modal-footer">
 			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -463,19 +477,19 @@
 			if (id == "nada") {
 				$("#alta_usuario").hide();
 				$("#modificar_usuario_grupo").hide();
-				$("baja_usuarios").hide();
+				$("#baja_usuarios").hide();
 				$("#" + "opcionesDelUsuario").val('nada');
 			}
 			if (id == "alta_usuario"){
 				$("#alta_usuario").show();
 				$("#modificar_usuario_grupo").hide();
-				$("baja_usuarios").hide();
+				$("#baja_usuarios").hide();
 				$("#" + "opcionesDelUsuario").val('alta_usuario');
 			}
 			if (id == "modificar_usuario_grupo") {
 				$("#alta_usuario").hide();
 				$("#modificar_usuario_grupo").show();
-				$("baja_usuarios").hide();
+				$("#baja_usuarios").hide();
 				//esto es por si dejo los submenu
 				$("#" + "opcionesDelUsuario").val('modificar_usuario_grupo');
 			}
