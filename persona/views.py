@@ -600,11 +600,8 @@ FORMS_ADMINISTRATIVO = {(k.NAME, k.SUBMIT): k for k in [
 def profesional_list():
     personas = Persona.objects.all()
     profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
-    profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
     contexto = {'personas': profesionales,
-                'len_personas': len(list(profesionales)),
-                'profesionales_con_usuario': profesionales_con_usuario,
-                'len_profesionales_con_usuario': len(list(profesionales_con_usuario))
+                'len_personas': len(list(profesionales))
                 }
     return contexto
 
@@ -612,11 +609,8 @@ def profesional_list():
 def propietario_list():
     propietarios = Propietario.objects.all()
     propietarios_sin_usuario = filter(lambda propietario: (propietario.persona.usuario is None and propietario.persona is not None ), propietarios)
-    propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
     contexto = {'propietarios': propietarios_sin_usuario, 
-                'len_propietarios': len(list(propietarios_sin_usuario)),
-                'propietarios_con_usuario': propietarios_con_usuario,
-                'len_propietarios_con_usuario': len(list(propietarios_con_usuario))
+                'len_propietarios': len(list(propietarios_sin_usuario))
                 }
     return contexto
 
@@ -1819,3 +1813,22 @@ def get_grupos_usuario(request):
         id = request.GET.get('usuario_id')
         lista = Usuario.objects.filter(id=int(id)).values_list('groups__name',flat=True)
         return JsonResponse(list(lista), safe=False)
+
+"""
+Metodo que se encarga de devolver todos los profesionales con usuario
+"""
+def listado_profesionales(request):
+    personas = Persona.objects.all()    
+    profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
+    contexto = {'profesionales': profesionales_con_usuario}
+    return render(request, 'persona/profesional/profesional_list_con_usuario.html', contexto)
+
+"""
+Metodo que se encarga de devolver todos los propietarios con usuario
+"""
+def listado_propietarios(request):
+    propietarios = Propietario.objects.all()
+    propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
+    contexto = {'propietarios': propietarios_con_usuario}
+    print(contexto)
+    return render(request, 'persona/propietario/propietario_list_con_usuario.html', contexto)

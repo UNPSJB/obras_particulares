@@ -32,15 +32,13 @@
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_contrasenia")'>Contraseña</a></li>
 		</ul>
-		<!-- Listado de profesionales -->
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven" onclick='mostrarSubmenu("sin_submenu")'>Profesionales {% if ctxprofesional.len_profesionales_con_usuario > 0 %}<span class="badge confBadge">{{ ctxprofesional.len_profesionales_con_usuario }}</span>{% endif %}</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve" aria-expanded="false" aria-controls="collapseTwelve" onclick='mostrarSubmenu("sin_submenu")'>Propietarios {% if ctxpropietario.len_propietarios_con_usuario > 0 %}<span class="badge confBadge">{{ ctxpropietario.len_propietarios_con_usuario }}</span>{% endif %}</a></li>
-		<!--li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
-		<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
-			<li><a href="#">Consulta 1</a></li>
-			<li><a href="#">Consulta 2</a></li>
-			<li><a href="#">Consulta 3</a></li>
-		</ul-->
+		
+		<!-- Item consultas, listado de profesionales y usuarios -->
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultas")'>Consultas<span class="caret"></span></a></li>
+		<ul class="sidebar sidebar-2" style="display:none;" id="consultas">
+			<li><a href="listado_profesionales">Profesionales</a></li>
+			<li><a href="listado_propietarios">Propietarios</a></li>
+		</ul>
 	</font>
 </ul>
 {% endblock %}
@@ -321,50 +319,6 @@
 			</div>
 		</div>
 	</div>
-	<div class="panel" >
-		<div class="panel-heading box" role="tab" id="headingEleven">
-			<h5 class="panel-title">
-				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="true" aria-controls="collapseEleven" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Profesionales</font>
-				</a>
-			</h5>
-		</div>
-		<div id="collapseEleven" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingEleven">
-			<div class="panel-body">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							{% block listado_profesionales %}
-							{% include "persona/administrativo/profesional_list_con_usuario.html" with profesionales=ctxprofesional.profesionales_con_usuario %}
-							{% endblock %}
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="panel" >
-			<div class="panel-heading box" role="tab" id="headingTwelve">
-				<h5 class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwelve" aria-expanded="true" aria-controls="collapseTwelve" onclick='mostrarSubmenu("sin_submenu")'>
-						<font color="#ffffff" size="2">Propietarios</font>
-					</a>
-				</h5>
-			</div>
-			<div id="collapseTwelve" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingTwelve">
-				<div class="panel-body">
-					<div class="container-fluid">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								{% block listado_propietarios %}
-								{% include "persona/administrativo/propietario_list_con_usuario.html" with propietarios=ctxpropietario.propietarios_con_usuario %}
-								{% endblock %}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 </div>
 {% endblock %}
 
