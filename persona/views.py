@@ -1816,19 +1816,51 @@ def get_grupos_usuario(request):
 
 """
 Metodo que se encarga de devolver todos los profesionales con usuario
+Se utiliza en la vista de administrativo
 """
-def listado_profesionales(request):
+@login_required(login_url="login")
+@grupo_requerido('administrativo')
+def listado_profesionales_administrativo(request):
     personas = Persona.objects.all()    
     profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
     contexto = {'profesionales': profesionales_con_usuario}
-    return render(request, 'persona/profesional/profesional_list_con_usuario.html', contexto)
+    return render(request, 'persona/profesional/profesional_list_con_usuario_administrativo.html', contexto)
 
 """
 Metodo que se encarga de devolver todos los propietarios con usuario
+Se utiliza en la vista de administrativo
 """
-def listado_propietarios(request):
+@login_required(login_url="login")
+@grupo_requerido('administrativo')
+def listado_propietarios_administrativo(request):
     propietarios = Propietario.objects.all()
     propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
     contexto = {'propietarios': propietarios_con_usuario}
     print(contexto)
-    return render(request, 'persona/propietario/propietario_list_con_usuario.html', contexto)
+    return render(request, 'persona/propietario/propietario_list_con_usuario_administrativo.html', contexto)
+
+
+"""
+Metodo que se encarga de devolver todos los profesionales con usuario
+Se utiliza en la vista de administrativo
+"""
+@login_required(login_url="login")
+@grupo_requerido('administrativo')
+def listado_profesionales_director(request):
+    personas = Persona.objects.all()    
+    profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
+    contexto = {'profesionales': profesionales_con_usuario}
+    return render(request, 'persona/profesional/profesional_list_con_usuario_director.html', contexto)
+
+"""
+Metodo que se encarga de devolver todos los propietarios con usuario
+Se utiliza en la vista de administrativo
+"""
+@login_required(login_url="login")
+@grupo_requerido('administrativo')
+def listado_propietarios_director(request):
+    propietarios = Propietario.objects.all()
+    propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
+    contexto = {'propietarios': propietarios_con_usuario}
+    print(contexto)
+    return render(request, 'persona/propietario/propietario_list_con_usuario_director.html', contexto)

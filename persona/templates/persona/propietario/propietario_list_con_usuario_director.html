@@ -17,7 +17,7 @@
 </div>
 <ul class="sidebar sidebar-1">
 	<font size="2">
-		<li><a href="javascript:history.back(-1);" class="current"><font>Administrativo</font></a></li>
+		<li><a href="javascript:history.back(-1);" class="current"><font>Director</font></a></li>
 	</font>
 </ul>
 {% endblock %}
@@ -29,7 +29,7 @@
 		<div class="panel-heading box" role="tab" id="headingOne">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-					<font color="#ffffff" size="2">Profesionales</font>
+					<font color="#ffffff" size="2">Propietarios</font>
 				</a>
 			</h5>
 		</div>
@@ -39,33 +39,24 @@
           			<div class="row">
             			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="table-responsive">
-                      <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+                      <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
                         <thead>
                           <tr>
                             <th>Nombre</th>
                             <th>Apellido</th>
-                            <th>Mail</th>
-                            <th>Direccion</th>
                             <th>CUIL</th>
                             <th>Telefono</th>
-                            <th>Profesion</th>
-                            <th>Categoria</th>
-                            <th>Matricula</th>
-                          </tr>
+                            <th>Email</th>
                         </thead>
                         <tbody>
-                          {% if profesionales %}
-                          {% for profesional in profesionales %}
+                          {% if propietarios %}
+													{% for propietario in propietarios %}
                           <tr>
-                            <td class="col-xs-2">{{ profesional.nombre }}</td>
-                            <td class="col-xs-2">{{ profesional.apellido }} </td>
-                            <td class="col-xs-2">{{ profesional.mail }} </td>
-                            <td class="col-xs-1">{{ profesional.domicilio }}</td>
-                            <td class="col-xs-2">{{ profesional.cuil }}</td>
-                            <td class="col-xs-1">{{ profesional.telefono }}</td>
-                            <td class="col-xs-1">{{ profesional.profesional.profesion }}</td>
-                            <td class="col-xs-1">{{ profesional.profesional.categoria }}</td>
-                            <td class="col-xs-1">{{ profesional.profesional.matricula }}</td>
+                            <td class="col-xs-2">{{ propietario.persona.nombre }}</td>
+                            <td class="col-xs-2">{{ propietario.persona.apellido }} </td>
+                            <td class="col-xs-2">{{ propietario.persona.cuil }}</td>
+                            <td class="col-xs-2">{{ propietario.persona.telefono }}</td>
+                            <td class="col-xs-2">{{ propietario.persona.mail}}</td>
                           </tr>
                           {% endfor %}
                           {% endif%}

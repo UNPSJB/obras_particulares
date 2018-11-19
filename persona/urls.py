@@ -20,7 +20,8 @@ urlpatterns = [
     url(r'^cargar_aprobacion_propietario/(?P<pk_tramite>\d+)/$', views.cargar_aprobacion_propietario, name="cargar_aprobacion_propietario"),
     url(r'^cargar_final_de_obra_total_propietario/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total_propietario, name="cargar_final_de_obra_total_propietario"),
     url(r'^cambiar_profesional_de_tramite/(?P<pk_tramite>\d+)/$', views.cambiar_profesional_de_tramite, name="cambiar_profesional_de_tramite"),
-    url(r'^listado_propietarios/$', views.listado_propietarios, name="listado_propietarios"),
+    url(r'^administrativo/listado_propietarios/$', views.listado_propietarios_administrativo, name="listado_propietarios_administrativo"),
+    url(r'^director/listado_propietarios/$', views.listado_propietarios_director, name="listado_propietarios_director"),
 
     # profesional ---------------------------------------------------------------------------------------------------
     url(r'^profesional$', views.mostrar_profesional, name="profesional"),
@@ -37,7 +38,8 @@ urlpatterns = [
     url(r'^cargar_final_de_obra_total_profesional/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total_profesional, name="cargar_final_de_obra_total_profesional"),
     url(r'^cargar_no_final_de_obra_total_profesional/(?P<pk_tramite>\d+)/$', views.cargar_no_final_de_obra_total_profesional, name="cargar_no_final_de_obra_total_profesional"),
     url(r'^cargar_no_aprobar_profesional/(?P<pk_tramite>\d+)/$', views.cargar_no_aprobar_profesional, name="cargar_no_aprobar_profesional"),
-    url(r'^listado_profesionales/$', views.listado_profesionales, name="listado_profesioanles"),
+    url(r'^administrativo/listado_profesionales/$', views.listado_profesionales_administrativo, name="listado_profesioanles_administrativo"),
+    url(r'^director/listado_profesionales/$', views.listado_profesionales_director, name="listado_profesioanles_administrativo"),
 
     # administrativo ------------------------------------------------------------------------------------------------
     url(r'^administrativo$', views.mostrar_administrativo, name="administrativo"),
