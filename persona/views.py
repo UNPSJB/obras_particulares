@@ -1842,10 +1842,10 @@ def listado_propietarios_administrativo(request):
 
 """
 Metodo que se encarga de devolver todos los profesionales con usuario
-Se utiliza en la vista de administrativo
+Se utiliza en la vista de director
 """
 @login_required(login_url="login")
-@grupo_requerido('administrativo')
+@grupo_requerido('director')
 def listado_profesionales_director(request):
     personas = Persona.objects.all()    
     profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
@@ -1854,10 +1854,10 @@ def listado_profesionales_director(request):
 
 """
 Metodo que se encarga de devolver todos los propietarios con usuario
-Se utiliza en la vista de administrativo
+Se utiliza en la vista de director
 """
 @login_required(login_url="login")
-@grupo_requerido('administrativo')
+@grupo_requerido('director')
 def listado_propietarios_director(request):
     propietarios = Propietario.objects.all()
     propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
