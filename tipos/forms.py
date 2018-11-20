@@ -13,7 +13,7 @@ class FormularioTipoDocumento(forms.ModelForm):
 
     class Meta:
         model = TipoDocumento
-        fields = ('nombre', 'descripcion', 'activo', 'fecha_alta', 'requerido')
+        fields = ('nombre', 'descripcion', 'fecha_alta', 'requerido')
 
     def __init__(self, *args, **kwargs):
         super(FormularioTipoDocumento, self).__init__(*args, **kwargs)
@@ -29,7 +29,6 @@ class FormularioTipoDocumento(forms.ModelForm):
         self.helper.layout = Layout(
             Field('nombre', placeholder='Ingresar Nombre'),
             Field('descripcion', placeholder='Ingresar Descripcion'),
-            Field('activo', placeholder='Ingresar Activo'),
             Field('fecha_alta', placeholder='Ingresar Fecha de Alta', css_class='datepicker'),
             Field('requerido', placeholder="Ingresar una opcion")
         )
