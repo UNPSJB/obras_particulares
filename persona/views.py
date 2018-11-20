@@ -36,6 +36,7 @@ from reportlab.graphics.charts.barcharts import VerticalBarChart
 import collections
 from django.utils import timezone
 from django.http import JsonResponse
+from tipos.models import *
 
 '''generales --------------------------------------------------------------------------------------------'''
 
@@ -1353,10 +1354,13 @@ def mostrar_director(request):
     usuario = request.user
     lista_usuarios = Usuario.objects.all().exclude(id=request.user.id)
     perfil = 'css/' + usuario.persona.perfilCSS
+    tipos_de_documento = TipoDocumento.objects.all()
+    print(tipos_de_documento)
     values = {
         "lista_usuarios": lista_usuarios,
         "perfil": perfil,
         "datos_usuario": empleados(),
+        "tipos_de_documento" : tipos_de_documento,
         "ctxvisadorescontramitesagendados": []#tramites_con_visado_agendado(),
     }
     for form_name, submit_name in FORMS_DIRECTOR:
