@@ -185,6 +185,7 @@
 										<th style="text-align:center">Staff</th>
 										<th style="text-align:center">Estado</th>
 										<th style="text-align:center">Nombre de Usuario</th>
+										<th style="text-align:center">Relacionado</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -198,11 +199,17 @@
 												<a class="label label-success" href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",true)'>Activo</a>
 											</td>
 										{%else%}
+
 											<td>
 												<a class="label label-danger" href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",false)'>Inactivo</a>
 											</td>
 										{%endif%}
 										<td>{{usuario.username}}</td>
+										{% if usuario.relacionado %}
+											<td>RELACIONADO</td>
+										{% else %}
+											<td>NO RELACIONADO</td>
+										{% endif %}
 									</tr>
 									{% endfor %}
 								</tbody>
@@ -424,7 +431,7 @@
 				</button>
 		</h4>
 		</div>
-		<div class="modal-body">
+		<div class="modal-body" style="text-align:center">
 			<h5 id="opcionCuerpo"></h5>
 		</div>
 		<div class="modal-footer">

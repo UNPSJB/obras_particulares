@@ -37,6 +37,8 @@ import collections
 from django.utils import timezone
 from django.http import JsonResponse
 from tipos.models import *
+from django.db.models import F, Q, When
+
 
 '''generales --------------------------------------------------------------------------------------------'''
 
@@ -610,7 +612,7 @@ def profesional_list():
 def propietario_list():
     propietarios = Propietario.objects.all()
     propietarios_sin_usuario = filter(lambda propietario: (propietario.persona.usuario is None and propietario.persona is not None ), propietarios)
-    contexto = {'propietarios': propietarios_sin_usuario, 
+    contexto = {'propietarios': propietarios_sin_usuario,
                 'len_propietarios': len(list(propietarios_sin_usuario))
                 }
     return contexto
@@ -1348,11 +1350,52 @@ def ver_documentos_tramite_inspector_por_jefeinspector(request, pk_estado):
 
 '''director ---------------------------------------------------------------------------------------------'''
 
+"""
+determina que usuarios pueden o no darse de baja logica segun esten relacionados a algun tramite
+"""
+def usuarios_no_borrables(usuario):
+    #adminstrativo
+    #director
+    #profesional
+    #visador
+    #inspector
+    #jefe inspector
+    estados = Estado.objects.all()
+    setattr(usuario, "relacionado", False)
+    setattr(usuario, "descripcion", "")
+
+    try:
+        if (usuario.persona.profesional):
+            tramites = Tramite.objects.filter(profesional=usuario.persona.profesional.id).values_list('id', flat=True)
+            if (len(tramites)>1):
+                setattr(usuario, "relacionado", True)
+                setattr(usuario, "descripcion", "Profesional asignado a tramites:" + tramites)
+
+        elif (usuario.pertenece_a_grupo('visador')):
+            tipo = 7
+            lista_estados = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoParaVisado') and (e.tipo == tipo)), estados)
+            if (any(e.usuario.id == usuario.id for e in lista_estados)):
+                setattr(usuario, "relacionado", True)
+                setattr(usuario, "descripcion", "Visador asignado a tramites:")
+
+        elif (usuario.pertenece_a_grupo('inspector')):
+                setattr(usuario, "relacionado", True)
+                setattr(usuario, "descripcion", "Inspector asignado a un tramite en curso")
+
+        elif (usuario.pertenece_a_grupo('jefeinspector')):
+            setattr(usuario, "relacionado", True)
+            setattr(usuario, "descripcion", "Jefe Inspector asignado a un tramite en curso")
+
+    except Exception: #Puede originarse por usuarios sin persona
+        pass
+    return usuario
+
+
 @login_required(login_url="login")
 @grupo_requerido('director')
 def mostrar_director(request):
     usuario = request.user
-    lista_usuarios = Usuario.objects.all().exclude(id=request.user.id)
+    lista_usuarios = map(usuarios_no_borrables, Usuario.objects.all().exclude(id=request.user.id))
     perfil = 'css/' + usuario.persona.perfilCSS
     tipos_de_documento = TipoDocumento.objects.all()
     print(tipos_de_documento)
@@ -1778,17 +1821,7 @@ def cambiar_perfil(request):
         return redirect(usuario.get_view_name())
 
 
-'''No se de donde son estos -----------------------------------------------------------------------------'''
-
-#def tramite_visados_list():
-#    tramites = Tramite.objects.en_estado(Visado)
-#    contexto = {'tramites': tramites}
-#    return contexto
-
-
-#def mostrar_popup_datos_agendar():
-#    pass
-
+'''Funcionalidades 2018 pre-final -----------------------------------------------------------------------'''
 
 def alta_persona(request):
     if request.method == "POST":
@@ -1800,6 +1833,13 @@ def alta_persona(request):
         form = FormularioPersona()
     return render(request, 'persona/alta/alta_persona.html', {'form': form})
 
+
+"""
+Metodo que se encarga de realizar el alta baja de los usuarios
+Se utiliza en la vista de director
+"""
+@login_required(login_url="login")
+@grupo_requerido('director')
 def alta_baja_usuarios(request):
     if request.method == 'POST':
         id_usuario = request.POST.get('id_form_usuario')
@@ -1812,6 +1852,13 @@ def alta_baja_usuarios(request):
         usuario.save()
     return redirect('director')
 
+
+"""
+Metodo que se encarga de devolver los grupos a los que pertenece un usuario
+Se utiliza en la vista de director
+"""
+@login_required(login_url="login")
+@grupo_requerido('director')
 def get_grupos_usuario(request):
     if request.is_ajax():
         id = request.GET.get('usuario_id')
@@ -1819,16 +1866,17 @@ def get_grupos_usuario(request):
         return JsonResponse(list(lista), safe=False)
 
 """
-Metodo que se encarga de devolver todos los profesionales con usuario
+Metodo que se encarga de devolver todos los profesionales que tienen un usuario
 Se utiliza en la vista de administrativo
 """
 @login_required(login_url="login")
 @grupo_requerido('administrativo')
 def listado_profesionales_administrativo(request):
-    personas = Persona.objects.all()    
+    personas = Persona.objects.all()
     profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
     contexto = {'profesionales': profesionales_con_usuario}
     return render(request, 'persona/profesional/profesional_list_con_usuario_administrativo.html', contexto)
+
 
 """
 Metodo que se encarga de devolver todos los propietarios con usuario
@@ -1840,7 +1888,6 @@ def listado_propietarios_administrativo(request):
     propietarios = Propietario.objects.all()
     propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
     contexto = {'propietarios': propietarios_con_usuario}
-    print(contexto)
     return render(request, 'persona/propietario/propietario_list_con_usuario_administrativo.html', contexto)
 
 
@@ -1851,10 +1898,11 @@ Se utiliza en la vista de director
 @login_required(login_url="login")
 @grupo_requerido('director')
 def listado_profesionales_director(request):
-    personas = Persona.objects.all()    
+    personas = Persona.objects.all()
     profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
     contexto = {'profesionales': profesionales_con_usuario}
     return render(request, 'persona/profesional/profesional_list_con_usuario_director.html', contexto)
+
 
 """
 Metodo que se encarga de devolver todos los propietarios con usuario
@@ -1866,5 +1914,4 @@ def listado_propietarios_director(request):
     propietarios = Propietario.objects.all()
     propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
     contexto = {'propietarios': propietarios_con_usuario}
-    print(contexto)
     return render(request, 'persona/propietario/propietario_list_con_usuario_director.html', contexto)
