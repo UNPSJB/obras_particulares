@@ -60,9 +60,16 @@ class Usuario(Rol, AbstractUser):
     def get_view_name(self):
         return self.groups.first().name
 
+
     def get_view_groups(self):
         return self.groups.all()
 
+
+    def pertenece_a_grupo(self, grupo):
+        if self.groups.filter(name=grupo).exists():
+            return True
+        else:
+            return False
 
 class Persona(models.Model):
     '''
@@ -149,4 +156,3 @@ def generar_password():
     password = ""
     password = password.join([choice(valores) for i in range(longitud)])
     return password
-
