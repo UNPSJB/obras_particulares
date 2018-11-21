@@ -1,0 +1,33 @@
+<!-- Template que se encarga de mostrar los tipos de documento -->
+{% load staticfiles %}
+
+{% block tipos_de_documento %}
+<div class="table-responsive">
+  <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripcion</th>
+        <th>Fecha de Alta</th>
+        <th>Fecha de Baja</th>
+        <th>Requerido</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if tipos_de_documento %}
+      {% for tipo_de_documento in tipos_de_documento %}
+      <tr>
+        <td class="col-xs-2">{{ tipo_de_documento.nombre }}</td>
+        <td class="col-xs-2">{{ tipo_de_documento.descripcion }}</td>
+        <td class="col-xs-2">{{ tipo_de_documento.fecha_baja }}</td>
+        <td class="col-xs-2">{{ tipo_de_documento.fecha_alta }}</td>
+        <td class="col-xs-2">{{ tipo_de_documento.requerido }}</td>
+        <th class="col-xs-2"><button type="button" class="btn btn-danger">Eliminar</button></th>
+      </tr>
+      {% endfor %}
+      {% endif%}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

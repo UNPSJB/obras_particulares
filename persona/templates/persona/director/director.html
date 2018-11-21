@@ -53,6 +53,7 @@
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite"),opcionesDatosTramite("nada")'>Datos tramite <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="tareasTramite">
 			<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_documento")'>Crear tipo de documento</a></li>
+			<li><a href="#" onclick='opcionesDatosTramite("tipos_de_documento")'>Tipos de documento</a></li>
 			<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_obra")'>Crear tipo de obra</a></li>
 		</ul>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Cambiar visador de tramite</a></li>
@@ -248,6 +249,7 @@
 								<select class="form-control input-sm" id="opcionesDelTramite" name="Opciones de Datos del tramite" onChange="opcionesDatosTramite(this.value);">
 									<option selected value="nada"> ¿Que desea hacer? </option>
 									<option value="alta_tipo_documento">Crear tipo de documento</option>
+									<option value="tipos_de_documento">Tipos de documento</option>
 									<option value="alta_tipo_de_obra">Crear tipo de obra</option>
 								</select>
 							</div>
@@ -273,6 +275,18 @@
 								</div>
 								<br>
 							</form>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid" id="tipos_de_documento" style="display: none;">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<hr>
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+								{% block tipos_de_documento %}
+									{% include "tipos/tipo_documento/listado_tipos_de_documento_director.html" with tipos_de_documento=tipos_de_documento %}
+								{% endblock %}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -540,19 +554,29 @@
 				if (id == "nada") {
 					$("#alta_tipo_documento").hide();
 					$("#alta_tipo_de_obra").hide();
+					$("#tipos_de_documento").hide();
 					$("#" + "opcionesDelTramite").val('nada');
 				}
 				if (id == "alta_tipo_documento") {
 					$("#alta_tipo_documento").show();
 					$("#alta_tipo_de_obra").hide();
+					$("#tipos_de_documento").hide();
 					//esto es por si dejo los submenu
 					$("#" + "opcionesDelTramite").val('alta_tipo_documento');
 				}
 				if (id == "alta_tipo_de_obra") {
 					$("#alta_tipo_documento").hide();
 					$("#alta_tipo_de_obra").show();
+					$("#tipos_de_documento").hide();
 					//esto es por si dejo los submenu
 					$("#" + "opcionesDelTramite").val('alta_tipo_de_obra');
+				}
+				if (id == "tipos_de_documento") {
+					$("#alta_tipo_documento").hide();
+					$("#alta_tipo_de_obra").hide();
+					$("#tipos_de_documento").show();
+					//esto es por si dejo los submenu
+					$("#" + "opcionesDelTramite").val('tipos_de_documento');
 				}
 		}
 	</script>
