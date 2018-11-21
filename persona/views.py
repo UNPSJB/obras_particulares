@@ -1416,7 +1416,7 @@ def mostrar_director(request):
     values = {
         "lista_usuarios": lista_usuarios,
         "perfil": perfil,
-        "datos_usuario": empleados(),
+        "datos_usuario": empleados(request.user),
         "tipos_de_documento" : tipos_de_documento,
         "ctxvisadorescontramitesagendados": []#tramites_con_visado_agendado(),
     }
@@ -1447,8 +1447,8 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
 ]}
 
 
-def empleados():
-    usuarios = Usuario.objects.all()
+def empleados(director):
+    usuarios = Usuario.objects.all().exclude(id=director.id)
     empleados = []
     for u in usuarios:
         lista = list(u.groups.values_list('name', flat=True))
