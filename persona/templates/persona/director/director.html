@@ -180,34 +180,44 @@
 								<thead>
 									<tr style="align-content: center">
 										<th style="text-align:center">Id</th>
-										<th style="text-align:center">Email</th>
-										<th style="text-align:center">Staff</th>
-										<th style="text-align:center">Estado</th>
 										<th style="text-align:center">Nombre de Usuario</th>
-										<th style="text-align:center">Relacionado</th>
+										<th style="text-align:center">Grupo</th>
+										<th style="text-align:center">Estado</th>
+										<th style="text-align:center">Email</th>
 									</tr>
 								</thead>
 								<tbody>
 									{% for usuario in lista_usuarios %}
 									<tr>
 										<td>{{usuario.id}}</td>
-										<td>{{usuario.email}}</td>
-										<td>{{usuario.is_staff}}</td>
-										{% if usuario.is_active %}
+										<td>{{usuario.username}}</td>
+
+										{% if usuario.groups.values %}
+											{% for grupo in usuario.groups.values %}
+												<td>{{grupo.name}}</td>
+											{% endfor %}
+										{% else %}
+											<td>-</td>
+										{% endif %}
+
+										{% if usuario.relacionado %}
+											<td>
+												<a class="label label-default" href="#" data-toggle="tooltip" data-html="true" title="{{usuario.descripcion}}">Asignado</a>
+											</td>
+										{% elif usuario.is_active %}
 											<td>
 												<a class="label label-success" href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",true)'>Activo</a>
 											</td>
-										{%else%}
-
-											<td>
-												<a class="label label-danger" href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",false)'>Inactivo</a>
-											</td>
-										{%endif%}
-										<td>{{usuario.username}}</td>
-										{% if usuario.relacionado %}
-											<td>RELACIONADO</td>
 										{% else %}
-											<td>NO RELACIONADO</td>
+											<td>
+												<a class="label label-danger"href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",false)'>Inactivo</a>
+											</td>
+										{% endif %}
+
+										{% if usuario.email %}
+											<td>{{usuario.email}}</td>
+										{% else %}
+											<td>-</td>
 										{% endif %}
 									</tr>
 									{% endfor %}
@@ -437,8 +447,9 @@
 
 {% block scripts %}
 	<script type="text/javascript">
-	$('#id_usuario_seleccionado').hide();
-	$("label[for=id_usuario_seleccionado]").hide();
+		$('[data-toggle="tooltip"]').tooltip();
+		$('#id_usuario_seleccionado').hide();
+		$("label[for=id_usuario_seleccionado]").hide();
 
 		function alta_baja_usuarios(id_usuario, usuario, indicador){
 			if(indicador)

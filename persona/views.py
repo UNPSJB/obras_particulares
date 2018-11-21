@@ -1353,12 +1353,16 @@ def ver_documentos_tramite_inspector_por_jefeinspector(request, pk_estado):
 determina que usuarios pueden o no darse de baja logica segun esten relacionados a algun tramite
 """
 def usuarios_no_borrables(usuario):
-    #adminstrativo
-    #director
+
+    #Propietario CONSULTAR: nunca se puede dar de baja. se crea a la par de un tramite asiq siempre esta ligado a un tramite en curso.
     #profesional
+
+    #administrativo
+    #director: YO lo dejo. poruqe saca todos los directores menos el de la sesion digamos.
     #visador
     #inspector
     #jefe inspector
+
     estados = Estado.objects.all()
     setattr(usuario, "relacionado", False)
     setattr(usuario, "descripcion", "")
@@ -1366,26 +1370,36 @@ def usuarios_no_borrables(usuario):
     try:
         if (usuario.persona.profesional):
             tramites = Tramite.objects.filter(profesional=usuario.persona.profesional.id).values_list('id', flat=True)
-            if (len(tramites)>1):
+            if (len(tramites)>0):
                 setattr(usuario, "relacionado", True)
-                setattr(usuario, "descripcion", "Profesional asignado a tramites:" + tramites)
+                setattr(usuario, "descripcion", "Profesional asignado a tramite: " + ", ".join([str(id_tramite) for id_tramite in tramites]))
+
+        elif(usuario.persona.propietario):
+            tramites = Tramite.objects.filter(propietario=usuario.persona.propietario.id).values_list('id', flat=True)
+            if (len(tramites)>0):
+                setattr(usuario, "relacionado", True)
+                setattr(usuario, "descripcion", "Propietario asignado a tramite: " + ", ".join([str(id_tramite) for id_tramite in tramites]))
 
         elif (usuario.pertenece_a_grupo('visador')):
             tipo = 7
-            lista_estados = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoParaVisado') and (e.tipo == tipo)), estados)
-            if (any(e.usuario.id == usuario.id for e in lista_estados)):
+            estados_agendados = list(filter(lambda e: (e.usuario is not None and str(e.tramite.estado()) == "AgendadoParaVisado" and (e.tipo == tipo)), estados))
+            if (any(e.usuario.id == usuario.id for e in estados_agendados)):
                 setattr(usuario, "relacionado", True)
-                setattr(usuario, "descripcion", "Visador asignado a tramites:")
+                setattr(usuario, "descripcion", "Visador asignado a tramite: " +", ".join([str(e.tramite.id) for e in estados_agendados]))
 
         elif (usuario.pertenece_a_grupo('inspector')):
+            tipos = [6, 14]
+            estados_agendados= filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or str(e.tramite.estado()) == 'AgendadoInspeccion') and (e.tipo == tipos[0] or e.tipo == tipos[1])), estados)
+            if (any(e.usuario.id == usuario.id for e in estados_agendados)):
                 setattr(usuario, "relacionado", True)
-                setattr(usuario, "descripcion", "Inspector asignado a un tramite en curso")
+                setattr(usuario, "descripcion", "Inspector asignado a tramite: " +", ".join([str(e.tramite.id) for e in estados_agendados]))
 
         elif (usuario.pertenece_a_grupo('jefeinspector')):
+            #CHEQUEAR ESTA PARTE VER SI TENGO QUE DARLO DE BAJA O SI TIENE RESTRICCIONES
             setattr(usuario, "relacionado", True)
             setattr(usuario, "descripcion", "Jefe Inspector asignado a un tramite en curso")
 
-    except Exception: #Puede originarse por usuarios sin persona
+    except Exception as e: #Puede originarse por usuarios sin persona
         pass
     return usuario
 

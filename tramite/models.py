@@ -160,6 +160,7 @@ class Estado(models.Model):
     def related(self):
         return self.__class__ != Estado and self or getattr(self, self.get_tipo_display())
 
+
     @classmethod
     def register(cls, klass):
         cls.TIPOS.append((klass.TIPO, klass.__name__.lower()))
@@ -562,6 +563,8 @@ class FinalObraTotalSolicitado(Estado):
     def agendar_inspeccion(self, tramite, fecha_inspeccion, inspector=None):
         return AgendadoInspeccionFinal(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
 
+    def __str__(self):
+        return str(self.__class__.__name__)
 
 class FinalObraParcialSolicitado(Estado):
     TIPO = 24
