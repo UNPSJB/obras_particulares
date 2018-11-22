@@ -130,18 +130,30 @@
 							<form action= ""  method="post" enctype="multipart/form-data"> {% csrf_token %}
 							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 								<label>Usuarios actuales:</label>
-								<table class="table table-stripped table-hover"> <!--Esta tabla no lleva tbody ni thead por cuesitones de tamaño y de visualizacion!-->
+
+								<div class="table-responsive">
+
+
+								<table class="table-stripped table-hover"> <!--Esta tabla no lleva tbody ni thead por cuesitones de tamaño y de visualizacion!-->
+									<thead>
 									<tr style="background-color: rgb(39, 55, 70); color:white;">
-										<th>Nombre de usuario</th>
-										<th>Id</th>
+											<th>Nombre de usuario</th>
+											<th>Id</th>
 									</tr>
+									</thead>
+									<tbody>
 										{% for usuario in datos_usuario %}
 											<tr style="cursor: pointer;" onclick='agregarGruposUsuario("{{usuario.id}}", "{{usuario}}");'>
 												<td>{{usuario}}</td>
 												<td>{{usuario.id}}</td>
 											</tr>
 										{% endfor %}
+									</tbody>
+
 								</table>
+</div>
+
+
 							</div>
 
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
@@ -282,7 +294,7 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<hr>
-							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								{% block tipos_de_documento %}
 									{% include "tipos/tipo_documento/listado_tipos_de_documento_director.html" with tipos_de_documento=tipos_de_documento %}
 								{% endblock %}

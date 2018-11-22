@@ -91,7 +91,7 @@ def listado_tramites_propietario(request):
     tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == usuario.persona.pk), tramites)
     tipos_ag = [11, 21, 28]  # agendados para inspeccion
     dia_hoy = date.today()
-    tramites_no_aprobado_o_no_final_o_inspeccion = filter(lambda t: ((datetime.strftime(t.estado().timestamp, '%d/%m/%Y') == datetime.strftime(dia_hoy, '%d/%m/%Y') and
+    tramites_no_aprobado_o_no_final_o_inspeccion = filter(lambda t: ((datetime.datetime.strftime(t.estado().timestamp, '%d/%m/%Y') == datetime.datetime.strftime(dia_hoy, '%d/%m/%Y') and
                                                                       (t.estado().tipo == tipos_ag[0] or
                                                                        t.estado().tipo == tipos_ag[1] or
                                                                        t.estado().tipo == tipos_ag[2])) or
@@ -331,7 +331,7 @@ def listado_tramites_de_profesional(request):
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
     tipos_ag = [11, 21, 28]  # agendados para inspeccion
     tipo_ip = 12  # primer inspeccion
-    tramites_inspecion_dia = filter(lambda t: ((datetime.strftime(t.estado().timestamp, '%d/%m/%Y') == datetime.strftime(datetime.now(), '%d/%m/%Y') and
+    tramites_inspecion_dia = filter(lambda t: ((datetime.datetime.strftime(t.estado().timestamp, '%d/%m/%Y') == datetime.datetime.strftime(datetime.datetime.now(), '%d/%m/%Y') and
                                                (t.estado().tipo == tipos_ag[0] or
                                                 t.estado().tipo == tipos_ag[1] or
                                                 t.estado().tipo == tipos_ag[2])) or (t.estado().tipo == tipo_ip and t.monto_pagado and t.monto_pagado >= (t.monto_a_pagar/12))), tramites_de_profesional)
@@ -664,7 +664,7 @@ def listado_tramites_vencidos():
     tramites_vencidos = []
     for t in tramites_ap:
         for e in estados_iniciado:
-            if e.tramite == t and (e.timestamp + timedelta(days=60)).strftime("%Y/%m/%d") < datetime.now().strftime(
+            if e.tramite == t and (e.timestamp + timedelta(days=60)).strftime("%Y/%m/%d") < datetime.datetime.now().strftime(
                     "%Y/%m/%d"):
                 tramites_vencidos.append(t)
     tramites_vencidos_no_pagados_no_renovados = []
