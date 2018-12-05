@@ -44,7 +44,7 @@ class TipoDocumento(models.Model):
     requerido = models.IntegerField(default=0)
 
     def __str__(self):
-        return "{} - {} - {}".format(self.nombre, self.descripcion, self.requerido)
+        return "{} - {} - Requerido para {}".format(self.nombre, self.descripcion, self.requerido_para())
 
     @staticmethod
     def get_tipos_documentos_para_momento(accion):
@@ -61,7 +61,13 @@ class TipoDocumento(models.Model):
         match = [accion for accion in TipoDocumento.ACCIONES if accion[0] == self.requerido]
         return match[0][1].split(" - ")[1]
         
-
+    """
+    Metodo que se encarga de devolver la persona que utiliza el tipo de documento en el
+    sistema
+    """
+    def quien_lo_utiliza(self):
+        match = [accion for accion in TipoDocumento.ACCIONES if accion[0] == self.requerido]
+        return match[0][1].split(" - ")[0]
 
 class TipoObra(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
