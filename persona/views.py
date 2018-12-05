@@ -86,9 +86,9 @@ FORMS_PROPIETARIO = {(k.NAME, k.SUBMIT): k for k in [
 
 
 def listado_tramites_propietario(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.persona.pk)
+    pk_persona = request.user.persona.pk
     tramites = Tramite.objects.all()
-    tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == usuario.persona.pk), tramites)
+    tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == pk_persona), tramites)
     tipos_ag = [11, 21, 28]  # agendados para inspeccion
     dia_hoy = date.today()
     tramites_no_aprobado_o_no_final_o_inspeccion = filter(lambda t: ((datetime.datetime.strftime(t.estado().timestamp, '%d/%m/%Y') == datetime.datetime.strftime(dia_hoy, '%d/%m/%Y') and
@@ -202,11 +202,14 @@ def documentos_de_estado(request, pk_estado):
     contexto= {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
 
-
+"""
+Metodo que se encarga de devolver un listado con los tramites correspondientes
+para que el propietario los pueda cambar de profesional si lo desea
+"""
 def listado_tramites_cambiar_profesional(request):
-    usuario = get_object_or_404(Usuario, pk=request.user.persona.pk)
+    pk_persona = request.user.persona.pk
     tramites = Tramite.objects.all()
-    tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == usuario.persona.pk
+    tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == pk_persona
                                                 and str(t.estado()) != 'NoAprobadoSolicitado'
                                                 and str(t.estado()) != 'NoAprobado'
                                                 and str(t.estado()) != 'AprobadoSolicitadoPorPropietario'
