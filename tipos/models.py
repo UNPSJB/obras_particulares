@@ -44,7 +44,7 @@ class TipoDocumento(models.Model):
     requerido = models.IntegerField(default=0)
 
     def __str__(self):
-        return "{}, {}".format(self.nombre, self.descripcion)
+        return "{} - {} - {}".format(self.nombre, self.descripcion, self.requerido)
 
     @staticmethod
     def get_tipos_documentos_para_momento(accion):
@@ -53,6 +53,14 @@ class TipoDocumento(models.Model):
             if (tipo.requerido & accion) == accion:
                 devolucion.append(tipo)
         return devolucion
+
+    """
+    Metodo que se encarga de devolver la accion para la que se lo requiere al tramite
+    """
+    def requerido_para(self):
+        match = [accion for accion in TipoDocumento.ACCIONES if accion[0] == self.requerido]
+        return match[0][1].split(" - ")[1]
+        
 
 
 class TipoObra(models.Model):
