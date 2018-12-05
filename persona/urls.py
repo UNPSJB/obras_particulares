@@ -75,7 +75,7 @@ urlpatterns = [
     url(r'^documentos_tramite_inspector/(?P<pk_estado>\d+)/$', views.ver_documentos_tramite_inspector, name="documentos_tramite_inspector"),
 
     #jefeinspector --------------------------------------------------------------------------------------------------
-    url(r'^jefeinspector$', views.mostrar_jefe_inspector, name="jefe_inspector"),
+    url(r'^jefeinspector$', views.mostrar_jefe_inspector, name="jefeinspector"),
     url(r'^cargar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.cargar_inspeccion_final, name="cargar_inspeccion_final"),
     url(r'^agendar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.agendar_inspeccion_final, name="agendar_inspeccion_final"),
     url(r'^aceptar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.aceptar_inspeccion_final, name="aceptar_inspeccion_final"),
