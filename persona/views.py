@@ -1889,9 +1889,11 @@ Se utiliza en la vista de administrativo
 @login_required(login_url="login")
 @grupo_requerido('administrativo')
 def listado_profesionales_administrativo(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
     personas = Persona.objects.all()
     profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
-    contexto = {'profesionales': profesionales_con_usuario}
+    contexto = {'profesionales': profesionales_con_usuario, "perfil": perfil}
     return render(request, 'persona/profesional/profesional_list_con_usuario_administrativo.html', contexto)
 
 
@@ -1902,9 +1904,11 @@ Se utiliza en la vista de administrativo
 @login_required(login_url="login")
 @grupo_requerido('administrativo')
 def listado_propietarios_administrativo(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
     propietarios = Propietario.objects.all()
     propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
-    contexto = {'propietarios': propietarios_con_usuario}
+    contexto = {'propietarios': propietarios_con_usuario, "perfil": perfil}
     return render(request, 'persona/propietario/propietario_list_con_usuario_administrativo.html', contexto)
 
 
@@ -1915,9 +1919,11 @@ Se utiliza en la vista de director
 @login_required(login_url="login")
 @grupo_requerido('director')
 def listado_profesionales_director(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
     personas = Persona.objects.all()
     profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
-    contexto = {'profesionales': profesionales_con_usuario}
+    contexto = {'profesionales': profesionales_con_usuario, "perfil": perfil}
     return render(request, 'persona/profesional/profesional_list_con_usuario_director.html', contexto)
 
 
@@ -1928,7 +1934,9 @@ Se utiliza en la vista de director
 @login_required(login_url="login")
 @grupo_requerido('director')
 def listado_propietarios_director(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
     propietarios = Propietario.objects.all()
     propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
-    contexto = {'propietarios': propietarios_con_usuario}
+    contexto = {'propietarios': propietarios_con_usuario, "perfil": perfil}
     return render(request, 'persona/propietario/propietario_list_con_usuario_director.html', contexto)
