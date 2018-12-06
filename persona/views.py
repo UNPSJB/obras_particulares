@@ -1553,7 +1553,6 @@ def ver_listado_todos_usuarios(request):
         if not total_usuarios_grupos.has_key(lg):
             total_usuarios_grupos.setdefault(lg, 0)
     datos_grupos = total_usuarios_grupos.values()
-    usuarios = empleados()
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
     return render(request, 'persona/director/vista_de_usuarios.html', {'todos_los_usuarios': usuarios, "label_grupos": label_grupos, "datos_grupos": datos_grupos,  "perfil": perfil})
