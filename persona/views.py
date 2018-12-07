@@ -16,6 +16,7 @@ from persona.models import *
 from tramite.models import Tramite, Estado
 import re
 from datetime import datetime, date, time, timedelta
+from dateutil import parser
 from django.views.generic.base import TemplateView
 from openpyxl import Workbook
 from django.http.response import HttpResponse
@@ -46,8 +47,14 @@ DATETIME = re.compile("^(\d{4})-(\d{2})-(\d{2})\s(\d{1,2}):(\d{2})$")
 
 
 def convertidor_de_fechas(fecha):
-    fecha = datetime(*[int(n) for n in DATETIME.match(fecha).groups()], tzinfo=timezone.utc)
-    return fecha
+    # print(fecha)
+    # fecha = datetime(*[int(n) for n in DATETIME.match(fecha).groups()], tzinfo=timezone.utc)
+
+    d = parser.parse(fecha)
+    print("-------")
+    print(d)
+    print("-----------")
+    return d
 
 
 '''propietario ------------------------------------------------------------------------------------------'''
@@ -1076,7 +1083,7 @@ def tramites_agendados_por_inspector(request):
     argumentos = [AgendadoPrimerInspeccion, AgendadoInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
-    tramites_del_inspector_del_dia = filter(lambda t: datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.strftime(datetime.now(), '%Y-%m-%d'), tramites_del_inspector)
+    tramites_del_inspector_del_dia = filter(lambda t: datetime.datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d'), tramites_del_inspector)
     contexto = {'tramites': tramites_del_inspector, 'len_tramites': len(list(tramites_del_inspector_del_dia))}
     return contexto
 
