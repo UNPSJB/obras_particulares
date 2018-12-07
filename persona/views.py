@@ -990,9 +990,9 @@ def ver_documentos_visados(request, pk_estado):
     perfil = 'css/' + usuario.persona.perfilCSS
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
-    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    fecha_str = datetime.datetime.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e: (datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    documentos_fecha = filter(lambda e: (datetime.datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto = {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
     return render(request, 'persona/visador/ver_documentos_visados.html', contexto)
 
