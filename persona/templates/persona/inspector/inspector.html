@@ -237,8 +237,8 @@
     function agregarHora(boton){
         fecha = $($(boton).parent().parent()).find('.mi-datepicker').val();
         id_tramite = $($(boton).parent().parent().find('td')[0]).text();
-		var d = new Date();
-		var n = d.toISOString();
+		var d = new Date(fecha);
+		var n = d.toLocaleString();
         url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+n;
         location.href = url;
     }
