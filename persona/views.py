@@ -93,7 +93,6 @@ def listado_tramites_propietario(request):
     return contexto
 
 
-
 def cargar_aprobacion_propietario(request, pk_tramite):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
