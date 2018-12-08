@@ -216,9 +216,9 @@ class FormularioUsuarioPersona(FormularioPersona):
         :param self, commit: self: commit indica si se debe guardar, self es referencia al objeto
         :return usuario: instancia de usuario.
         '''
-        persona = super(FormularioUsuarioPersona, self).save(commit=False)
         datos = self.cleaned_data
-        persona.usuario = Usuario.objects.create_user(username=datos['usuario'], email=datos['mail'],password=datos['password'], )
+        persona = super(FormularioUsuarioPersona, self).save(commit=False)
+        persona.usuario = Usuario.objects.create_user(username=datos['usuario'], email=datos['mail'], password=datos['password'], )
 
         grupo_post = datos['grupo']
 
@@ -230,6 +230,18 @@ class FormularioUsuarioPersona(FormularioPersona):
                     usuario = persona.usuario
                     usuario.groups.add(gp)
         '''return usuario'''
+
+    def clean_usuario(self):
+        '''
+        Funcion clean usuario:
+        Funcion que controla la el usuario cargado en el Formulario de Persona
+        :param self: referencia al objeto
+        :return usuario: usuario de la persona
+        '''
+        dato = self.cleaned_data['usuario']
+        if Usuario.objects.filter(username=dato).exists():
+            raise ValidationError('Usuario ya existe')
+        return dato
 
 
 class FormularioArchivoPago(forms.Form):
