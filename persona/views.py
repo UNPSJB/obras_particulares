@@ -928,7 +928,7 @@ def tramites_agendados(request):
     usuario = request.user
     argumentos = [AgendadoParaVisado]
     agendados = Tramite.objects.en_estado(argumentos)
-    tramites_del_visador = filter(lambda t: t.estado().usuario == usuario, agendados)
+    tramites_del_visador = list(filter(lambda t: t.estado().usuario == usuario, agendados))
     contexto = {'tramites': tramites_del_visador, 'len_tramites_del_visador': len(list(tramites_del_visador))}
     return contexto
 
@@ -1066,10 +1066,33 @@ def tramites_agendados_por_inspector(request):
     return contexto
 
 def agendar_tramite(request, pk_tramite):
+    cant_max_tramites = 1 #Cantidad maxima permitida de tramites a inspeccionar por dia por inspector
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     fecha = parser.parse(request.GET["msg"])
-    tramite.hacer(Tramite.AGENDAR_INSPECCION, request.user, fecha)
-    messages.add_message(request, messages.SUCCESS, "La inspeccion ha sido agendada")
+
+    usuario = request.user
+    argumentos = [AgendadoPrimerInspeccion, AgendadoInspeccion]
+    tramites = Tramite.objects.en_estado(argumentos)
+    tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
+    print("---------------")
+    print(datetime.datetime.strftime(list(tramites_del_inspector)[0].estado().fecha, '%Y-%m-%d'))
+    print(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%d-%m'))
+    print(".............")
+
+
+    hoy = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%d-%m')
+    tramites_del_inspector_del_dia = filter(lambda t: datetime.datetime.strftime(t.estado().fecha, '%Y-%m-%d') == hoy, list(tramites_del_inspector))
+
+
+    print("_-----------------")
+    print(len(list(tramites_del_inspector_del_dia)))
+    print("_-----------------")
+
+    if(len(list(tramites_del_inspector_del_dia))>cant_max_tramites):
+        messages.add_message(request, messages.SUCCESS, "No es posible asignar mas tramites hasta que no inspeccione al menos uno de sus tramites asignados.")
+    else:
+        #tramite.hacer(Tramite.AGENDAR_INSPECCION, request.user, fecha)
+        messages.add_message(request, messages.SUCCESS, "La inspeccion ha sido agendada")
     return redirect('inspector')
 
 
