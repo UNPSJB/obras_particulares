@@ -1630,28 +1630,31 @@ class ReporteTramitesDirectorPdf(View):
         doc = SimpleDocTemplate(
             response,
             pagesize=letter,
-            rightMargin=72,
-            leftMargin=72,
-            topMargin=15,
-            bottomMargin=28,
+            rightMargin=0,
+            leftMargin=0,
+            topMargin=0,
+            bottomMargin=0,
         )
+
         story = []
         styles = getSampleStyleSheet()
-        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
-        styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
         styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
-        usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + ' ... aca va la fecha'
+
+        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
         story.append(Paragraph(usuario, styles["Usuario"]))
         story.append(Spacer(0, cm * 0.15))
-        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
-        im0.hAlign = 'CENTER'
-        story.append(im0)
-        titulo = 'SISTEMA OBRAS PARTICULARES'
-        story.append(Paragraph(titulo, styles["Titulo"]))
-        story.append(Spacer(0, cm * 0.20))
+
+        im1 = Image(settings.MEDIA_ROOT + '/imagenes/banner_municipio_3.png', width=630, height=50)
+        im1.hAlign = 'CENTER'
+        story.append(im1)
+
+        story.append(Spacer(0, cm * 0.05))
         subtitulo = 'Reporte de tramites'
         story.append(Paragraph(subtitulo, styles["Subtitulo"]))
         story.append(Spacer(0, cm * 0.15))
+
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
         story.append(im0)
         story.append(Spacer(0, cm * 0.5))
         encabezados = ('NRO', 'TIPO_DE_OBRA', 'PROFESIONAL', 'PROPIETARIO', 'MEDIDAS', 'ESTADO')
