@@ -1245,7 +1245,7 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
             messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
     else:
         return render(request, 'persona/jefe_inspector/cambiar_inspector_de_inspeccion.html', {'estado': estado, "perfil": perfil, 'inspectores': inspectores_sin_insp_agendadas})
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 
 def inspecciones_agendadas_por_inspectores():
@@ -1260,7 +1260,7 @@ def agendar_inspeccion_final(request, pk_tramite):
     fecha = parser.parse(request.GET["msg"])
     tramite.hacer(Tramite.AGENDAR_INSPECCION, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user)
     messages.add_message(request, messages.SUCCESS, "La inspeccion final ha sido agendada")
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 
 def cargar_inspeccion_final(request, pk_tramite):
@@ -1286,21 +1286,21 @@ def cargar_inspeccion_final(request, pk_tramite):
                                                                             'ctxdocumentoset': documento_set,
                                                                             'documentos_requeridos': tipos_de_documentos_requeridos,
                                                                             "perfil": perfil})
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 
 def rechazar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.CORREGIR, request.user, request.POST["observaciones"])
     messages.add_message(request, messages.SUCCESS, 'Inspeccion final rechazada')
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 
 def aceptar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.APROBAR_INSPECCION, request.user)
     messages.add_message(request, messages.SUCCESS, 'Inspeccion final aprobada')
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 
 def ver_inspecciones(request, pk_tramite):

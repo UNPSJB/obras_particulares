@@ -180,11 +180,6 @@
 						</div>
 					</div>
 				</div>
-
-
-
-
-
 				<div class="container-fluid" id="baja_usuarios" style="display: none;">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -195,8 +190,8 @@
 										<th style="text-align:center">Id</th>
 										<th style="text-align:center">Nombre de Usuario</th>
 										<th style="text-align:center">Grupo</th>
-										<th style="text-align:center">Estado</th>
 										<th style="text-align:center">Email</th>
+										<th style="text-align:center">Estado</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -212,7 +207,11 @@
 										{% else %}
 											<td>-</td>
 										{% endif %}
-
+										{% if usuario.email %}
+											<td>{{usuario.email}}</td>
+										{% else %}
+											<td>-</td>
+										{% endif %}
 										{% if usuario.relacionado %}
 											<td>
 												<a class="label label-default" href="#" data-toggle="tooltip" data-html="true" title="{{usuario.descripcion}}">Asignado</a>
@@ -223,14 +222,8 @@
 											</td>
 										{% else %}
 											<td>
-												<a class="label label-danger"href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",false)'>Inactivo</a>
+												<a class="label label-danger" href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",false)'>Inactivo</a>
 											</td>
-										{% endif %}
-
-										{% if usuario.email %}
-											<td>{{usuario.email}}</td>
-										{% else %}
-											<td>-</td>
 										{% endif %}
 									</tr>
 									{% endfor %}
