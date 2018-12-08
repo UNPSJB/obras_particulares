@@ -1357,6 +1357,7 @@ def usuarios_no_borrables(usuario):
     setattr(usuario, "descripcion", "")
 
     try:
+
         if (usuario.persona.profesional):
             tramites = Tramite.objects.filter(profesional=usuario.persona.profesional.id).values_list('id', flat=True)
             if (len(tramites)>0):
@@ -1368,6 +1369,7 @@ def usuarios_no_borrables(usuario):
             if (len(tramites)>0):
                 setattr(usuario, "relacionado", True)
                 setattr(usuario, "descripcion", "Propietario asignado a tramite: " + ", ".join([str(id_tramite) for id_tramite in tramites]))
+
 
         elif (usuario.pertenece_a_grupo('visador')):
             tipo = 7
@@ -1398,6 +1400,9 @@ def usuarios_no_borrables(usuario):
 def mostrar_director(request):
     usuario = request.user
     lista_usuarios = map(usuarios_no_borrables, Usuario.objects.all().exclude(id=request.user.id))
+    print("--------------------------------------------------")
+    print(Usuario.objects.all().exclude(id=request.user.id))
+    print("--------------------------------------------------")
     perfil = 'css/' + usuario.persona.perfilCSS
     tipos_de_documento = TipoDocumento.objects.all()
     print(tipos_de_documento)
@@ -1521,6 +1526,19 @@ def ver_listado_todos_tramites(request):
     contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":lab, "perfil" : perfil}
     return render(request, 'persona/director/vista_de_tramites.html', contexto)
 
+
+def empleados_con_director():
+    usuarios = Usuario.objects.all()
+    empleados = []
+    for u in usuarios:
+        lista = list(u.groups.values_list('name', flat=True))
+        for i in range(len(lista)):
+            if lista[i] != 'profesional' and lista[i] != 'propietario':
+                if u not in empleados:
+                    empleados.append(u)
+    return empleados
+
+
 def ver_listado_todos_usuarios(request):
     grupos = Group.objects.all()
     label_grupos = []
@@ -1538,16 +1556,20 @@ def ver_listado_todos_usuarios(request):
         if not total_usuarios_grupos.has_key(lg):
             total_usuarios_grupos.setdefault(lg, 0)
     datos_grupos = total_usuarios_grupos.values()
+    usuarios = empleados_con_director()
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
-    return render(request, 'persona/director/vista_de_usuarios.html', {'todos_los_usuarios': usuarios, "label_grupos": label_grupos, "datos_grupos": datos_grupos,  "perfil": perfil})
+    return render(request,
+                  'persona/director/vista_de_usuarios.html',
+                  {'todos_los_usuarios': usuarios, "label_grupos": label_grupos,
+                   "datos_grupos": datos_grupos, "perfil": perfil})
 
 
 def ver_actividad_usuario(request, usuario):
     usuarios = Usuario.objects.all()
     usuario_req = filter(lambda u: (str(u) == usuario), usuarios)
     estados = Estado.objects.all()
-    estados_usuario_req = filter(lambda estado:(str(estado.usuario) == str(usuario_req[0])), estados)
+    estados_usuario_req = filter(lambda estado: (str(estado.usuario) == str(usuario_req[0])), estados)
     fechas_del_estado = []
     estados_por_fecha = []
     for e in estados_usuario_req:
