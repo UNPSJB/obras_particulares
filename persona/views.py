@@ -16,6 +16,7 @@ from persona.models import *
 from tramite.models import Tramite, Estado
 import re
 from datetime import datetime, date, time, timedelta
+from dateutil import parser
 from django.views.generic.base import TemplateView
 from openpyxl import Workbook
 from django.http.response import HttpResponse
@@ -38,16 +39,6 @@ from django.utils import timezone
 from django.http import JsonResponse
 from tipos.models import *
 from django.db.models import F, Q, When
-
-
-'''generales --------------------------------------------------------------------------------------------'''
-
-DATETIME = re.compile("^(\d{4})-(\d{2})-(\d{2})\s(\d{1,2}):(\d{2})$")
-
-
-def convertidor_de_fechas(fecha):
-    fecha = datetime(*[int(n) for n in DATETIME.match(fecha).groups()], tzinfo=timezone.utc)
-    return fecha
 
 
 '''propietario ------------------------------------------------------------------------------------------'''
@@ -100,7 +91,6 @@ def listado_tramites_propietario(request):
 
     contexto = {'tramites': tramites_de_propietario, 'tramites_no_aprobado_o_no_final': len(list(tramites_no_aprobado_o_no_final_o_inspeccion))}
     return contexto
-
 
 
 def cargar_aprobacion_propietario(request, pk_tramite):
@@ -196,9 +186,9 @@ def documentos_de_estado(request, pk_estado):
     perfil = 'css/' + usuario.persona.perfilCSS
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
-    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    fecha_str = datetime.datetime.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    documentos_fecha = filter(lambda e:(datetime.datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
 
@@ -552,9 +542,9 @@ def documento_de_estado(request, pk_estado):
     perfil = 'css/' + usuario.persona.perfilCSS
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
-    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    fecha_str = datetime.datetime.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    documentos_fecha = filter(lambda e:(datetime.datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
 
@@ -667,8 +657,7 @@ def listado_tramites_vencidos():
     tramites_vencidos = []
     for t in tramites_ap:
         for e in estados_iniciado:
-            if e.tramite == t and (e.timestamp + timedelta(days=60)).strftime("%Y/%m/%d") < datetime.datetime.now().strftime(
-                    "%Y/%m/%d"):
+            if e.tramite == t and (e.timestamp + timedelta(days=60)).strftime("%Y/%m/%d") < datetime.datetime.now().strftime("%Y/%m/%d"):
                 tramites_vencidos.append(t)
     tramites_vencidos_no_pagados_no_renovados = []
     for tr in tramites_vencidos:
@@ -678,13 +667,9 @@ def listado_tramites_vencidos():
     for t in tramites_fo:
         estado_t = filter(lambda e: (e.tipo == tipoFOPS and str(e.tramite.pk) == str(t.pk)), estados)
         for e in estados_iniciado:
-            if e.tramite == t and len(list(estado_t)) == 0 and (e.timestamp + timedelta(days=1095)).strftime(
-                    "%Y/%m/%d") < datetime.now().strftime(
-                    "%Y/%m/%d"):
+            if e.tramite == t and len(list(estado_t)) == 0 and (e.timestamp + timedelta(days=1095)).strftime("%Y/%m/%d") < datetime.datetime.now().strftime("%Y/%m/%d"):
                 tramites_vencidos_no_pagados_no_renovados.append(t)
-            elif e.tramite == t and len(list(estado_t)) > 0 and (e.timestamp + timedelta(days=1825)).strftime(
-                    "%Y/%m/%d") < datetime.now().strftime(
-                    "%Y/%m/%d"):
+            elif e.tramite == t and len(list(estado_t)) > 0 and (e.timestamp + timedelta(days=1825)).strftime("%Y/%m/%d") < datetime.datetime.now().strftime("%Y/%m/%d"):
                 tramites_vencidos_no_pagados_no_renovados.append(t)
     contexto = {'tramites': tramites_vencidos_no_pagados_no_renovados, 'tramites_vencidos_no_pagados_no_renovados': len(tramites_vencidos)}
     return contexto
@@ -990,9 +975,9 @@ def ver_documentos_visados(request, pk_estado):
     perfil = 'css/' + usuario.persona.perfilCSS
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
-    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    fecha_str = datetime.datetime.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e: (datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    documentos_fecha = filter(lambda e: (datetime.datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto = {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
     return render(request, 'persona/visador/ver_documentos_visados.html', contexto)
 
@@ -1076,13 +1061,13 @@ def tramites_agendados_por_inspector(request):
     argumentos = [AgendadoPrimerInspeccion, AgendadoInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
-    tramites_del_inspector_del_dia = filter(lambda t: datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.strftime(datetime.now(), '%Y-%m-%d'), tramites_del_inspector)
+    tramites_del_inspector_del_dia = filter(lambda t: datetime.datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d'), tramites_del_inspector)
     contexto = {'tramites': tramites_del_inspector, 'len_tramites': len(list(tramites_del_inspector_del_dia))}
     return contexto
 
 def agendar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    fecha = convertidor_de_fechas(request.GET["msg"])
+    fecha = parser.parse(request.GET["msg"])
     tramite.hacer(Tramite.AGENDAR_INSPECCION, request.user, fecha)
     messages.add_message(request, messages.SUCCESS, "La inspeccion ha sido agendada")
     return redirect('inspector')
@@ -1133,9 +1118,9 @@ def ver_documentos_tramite_inspector(request, pk_estado):
     perfil = 'css/' + usuario.persona.perfilCSS
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
-    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    fecha_str = datetime.datetime.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e: (datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    documentos_fecha = filter(lambda e: (datetime.datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto = {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
     return render(request, 'persona/inspector/documentos_tramite_inspector.html', contexto)
 
@@ -1145,9 +1130,9 @@ def ver_documentos_tramite_inspector(request, pk_estado):
 #    perfil = 'css/' + usuario.persona.perfilCSS
 #    estado = get_object_or_404(Estado, pk=pk_estado)
 #    fecha = estado.timestamp
-#    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+#    fecha_str = datetime.datetime.strftime(fecha, '%d/%m/%Y %H:%M')
 #    documentos = estado.tramite.documentos.all()
-#    documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+#    documentos_fecha = filter(lambda e:(datetime.datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
 #    contexto= {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
 #    return render(request, 'persona/inspector/documentos_del_estado.html', contexto)
 
@@ -1204,7 +1189,7 @@ def tramites_agendados_por_jefeinspector(request):
     tramites = Tramite.objects.en_estado(argumentos)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
     dia_hoy = date.today()
-    tramites_del_inspector_del_dia = filter(lambda t: datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.strftime(dia_hoy, '%Y-%m-%d'), tramites_del_inspector)
+    tramites_del_inspector_del_dia = filter(lambda t: datetime.datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.datetime.strftime(dia_hoy, '%Y-%m-%d'), tramites_del_inspector)
     contexto = {'tramites': tramites_del_inspector, 'len_tramites': len(list(tramites_del_inspector_del_dia))}
     return contexto
 
@@ -1259,7 +1244,7 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
             messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
     else:
         return render(request, 'persona/jefe_inspector/cambiar_inspector_de_inspeccion.html', {'estado': estado, "perfil": perfil, 'inspectores': inspectores_sin_insp_agendadas})
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 
 def inspecciones_agendadas_por_inspectores():
@@ -1271,10 +1256,10 @@ def inspecciones_agendadas_por_inspectores():
 
 def agendar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    fecha = convertidor_de_fechas(request.GET["msg"])
+    fecha = parser.parse(request.GET["msg"])
     tramite.hacer(Tramite.AGENDAR_INSPECCION, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user)
     messages.add_message(request, messages.SUCCESS, "La inspeccion final ha sido agendada")
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 
 def cargar_inspeccion_final(request, pk_tramite):
@@ -1300,21 +1285,21 @@ def cargar_inspeccion_final(request, pk_tramite):
                                                                             'ctxdocumentoset': documento_set,
                                                                             'documentos_requeridos': tipos_de_documentos_requeridos,
                                                                             "perfil": perfil})
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 
 def rechazar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.CORREGIR, request.user, request.POST["observaciones"])
     messages.add_message(request, messages.SUCCESS, 'Inspeccion final rechazada')
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 
 def aceptar_inspeccion_final(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.APROBAR_INSPECCION, request.user)
     messages.add_message(request, messages.SUCCESS, 'Inspeccion final aprobada')
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 
 def ver_inspecciones(request, pk_tramite):
@@ -1333,9 +1318,9 @@ def ver_documentos_tramite_jefeinspector(request, pk_estado):
     perfil = 'css/' + usuario.persona.perfilCSS
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
-    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    fecha_str = datetime.datetime.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e: (datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    documentos_fecha = filter(lambda e: (datetime.datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto = {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
     return render(request, 'persona/jefe_inspector/documentos_tramite_jefeinspector.html', contexto)
 
@@ -1344,9 +1329,9 @@ def ver_documentos_tramite_inspector_por_jefeinspector(request, pk_estado):
     perfil = 'css/' + usuario.persona.perfilCSS
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
-    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    fecha_str = datetime.datetime.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e: (datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    documentos_fecha = filter(lambda e: (datetime.datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto = {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
     return render(request, 'persona/jefe_inspector/documentos_tramite_inspector_por_jefeinspector.html', contexto)
 
@@ -1372,6 +1357,7 @@ def usuarios_no_borrables(usuario):
     setattr(usuario, "descripcion", "")
 
     try:
+
         if (usuario.persona.profesional):
             tramites = Tramite.objects.filter(profesional=usuario.persona.profesional.id).values_list('id', flat=True)
             if (len(tramites)>0):
@@ -1383,6 +1369,7 @@ def usuarios_no_borrables(usuario):
             if (len(tramites)>0):
                 setattr(usuario, "relacionado", True)
                 setattr(usuario, "descripcion", "Propietario asignado a tramite: " + ", ".join([str(id_tramite) for id_tramite in tramites]))
+
 
         elif (usuario.pertenece_a_grupo('visador')):
             tipo = 7
@@ -1413,6 +1400,9 @@ def usuarios_no_borrables(usuario):
 def mostrar_director(request):
     usuario = request.user
     lista_usuarios = map(usuarios_no_borrables, Usuario.objects.all().exclude(id=request.user.id))
+    print("--------------------------------------------------")
+    print(Usuario.objects.all().exclude(id=request.user.id))
+    print("--------------------------------------------------")
     perfil = 'css/' + usuario.persona.perfilCSS
     tipos_de_documento = TipoDocumento.objects.all()
     print(tipos_de_documento)
@@ -1536,6 +1526,19 @@ def ver_listado_todos_tramites(request):
     contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":lab, "perfil" : perfil}
     return render(request, 'persona/director/vista_de_tramites.html', contexto)
 
+
+def empleados_con_director():
+    usuarios = Usuario.objects.all()
+    empleados = []
+    for u in usuarios:
+        lista = list(u.groups.values_list('name', flat=True))
+        for i in range(len(lista)):
+            if lista[i] != 'profesional' and lista[i] != 'propietario':
+                if u not in empleados:
+                    empleados.append(u)
+    return empleados
+
+
 def ver_listado_todos_usuarios(request):
     grupos = Group.objects.all()
     label_grupos = []
@@ -1553,17 +1556,20 @@ def ver_listado_todos_usuarios(request):
         if not total_usuarios_grupos.has_key(lg):
             total_usuarios_grupos.setdefault(lg, 0)
     datos_grupos = total_usuarios_grupos.values()
-    usuarios = empleados()
+    usuarios = empleados_con_director()
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
-    return render(request, 'persona/director/vista_de_usuarios.html', {'todos_los_usuarios': usuarios, "label_grupos": label_grupos, "datos_grupos": datos_grupos,  "perfil": perfil})
+    return render(request,
+                  'persona/director/vista_de_usuarios.html',
+                  {'todos_los_usuarios': usuarios, "label_grupos": label_grupos,
+                   "datos_grupos": datos_grupos, "perfil": perfil})
 
 
 def ver_actividad_usuario(request, usuario):
     usuarios = Usuario.objects.all()
     usuario_req = filter(lambda u: (str(u) == usuario), usuarios)
     estados = Estado.objects.all()
-    estados_usuario_req = filter(lambda estado:(str(estado.usuario) == str(usuario_req[0])), estados)
+    estados_usuario_req = filter(lambda estado: (str(estado.usuario) == str(usuario_req[0])), estados)
     fechas_del_estado = []
     estados_por_fecha = []
     for e in estados_usuario_req:
@@ -1600,9 +1606,9 @@ def ver_documentos_del_estado(request, pk_estado):
     perfil = 'css/' + usuario.persona.perfilCSS
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
-    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    fecha_str = datetime.datetime.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    documentos_fecha = filter(lambda e:(datetime.datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
     return render(request, 'persona/director/ver_documentos_del_estado.html', contexto)
 
@@ -1645,28 +1651,31 @@ class ReporteTramitesDirectorPdf(View):
         doc = SimpleDocTemplate(
             response,
             pagesize=letter,
-            rightMargin=72,
-            leftMargin=72,
-            topMargin=15,
-            bottomMargin=28,
+            rightMargin=0,
+            leftMargin=0,
+            topMargin=0,
+            bottomMargin=0,
         )
+
         story = []
         styles = getSampleStyleSheet()
-        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
-        styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
         styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
-        usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + ' ... aca va la fecha'
+
+        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
         story.append(Paragraph(usuario, styles["Usuario"]))
         story.append(Spacer(0, cm * 0.15))
-        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
-        im0.hAlign = 'CENTER'
-        story.append(im0)
-        titulo = 'SISTEMA OBRAS PARTICULARES'
-        story.append(Paragraph(titulo, styles["Titulo"]))
-        story.append(Spacer(0, cm * 0.20))
+
+        im1 = Image(settings.MEDIA_ROOT + '/imagenes/banner_municipio_3.png', width=630, height=50)
+        im1.hAlign = 'CENTER'
+        story.append(im1)
+
+        story.append(Spacer(0, cm * 0.05))
         subtitulo = 'Reporte de tramites'
         story.append(Paragraph(subtitulo, styles["Subtitulo"]))
         story.append(Spacer(0, cm * 0.15))
+
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
         story.append(im0)
         story.append(Spacer(0, cm * 0.5))
         encabezados = ('NRO', 'TIPO_DE_OBRA', 'PROFESIONAL', 'PROPIETARIO', 'MEDIDAS', 'ESTADO')
@@ -1752,7 +1761,7 @@ class ReporteEmpleadosDirectorPdf(View):
         styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
         styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
 
-        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.now().strftime("%Y/%m/%d")
+        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
         story.append(Paragraph(usuario, styles["Usuario"]))
         story.append(Spacer(0, cm * 0.15))
 
@@ -1889,9 +1898,11 @@ Se utiliza en la vista de administrativo
 @login_required(login_url="login")
 @grupo_requerido('administrativo')
 def listado_profesionales_administrativo(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
     personas = Persona.objects.all()
     profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
-    contexto = {'profesionales': profesionales_con_usuario}
+    contexto = {'profesionales': profesionales_con_usuario, "perfil": perfil}
     return render(request, 'persona/profesional/profesional_list_con_usuario_administrativo.html', contexto)
 
 
@@ -1902,9 +1913,11 @@ Se utiliza en la vista de administrativo
 @login_required(login_url="login")
 @grupo_requerido('administrativo')
 def listado_propietarios_administrativo(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
     propietarios = Propietario.objects.all()
     propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
-    contexto = {'propietarios': propietarios_con_usuario}
+    contexto = {'propietarios': propietarios_con_usuario, "perfil": perfil}
     return render(request, 'persona/propietario/propietario_list_con_usuario_administrativo.html', contexto)
 
 
@@ -1915,9 +1928,11 @@ Se utiliza en la vista de director
 @login_required(login_url="login")
 @grupo_requerido('director')
 def listado_profesionales_director(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
     personas = Persona.objects.all()
     profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
-    contexto = {'profesionales': profesionales_con_usuario}
+    contexto = {'profesionales': profesionales_con_usuario, "perfil": perfil}
     return render(request, 'persona/profesional/profesional_list_con_usuario_director.html', contexto)
 
 
@@ -1928,7 +1943,9 @@ Se utiliza en la vista de director
 @login_required(login_url="login")
 @grupo_requerido('director')
 def listado_propietarios_director(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
     propietarios = Propietario.objects.all()
     propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
-    contexto = {'propietarios': propietarios_con_usuario}
+    contexto = {'propietarios': propietarios_con_usuario, "perfil": perfil}
     return render(request, 'persona/propietario/propietario_list_con_usuario_director.html', contexto)

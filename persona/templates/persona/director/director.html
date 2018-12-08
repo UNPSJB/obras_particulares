@@ -53,7 +53,7 @@
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite"),opcionesDatosTramite("nada")'>Datos tramite <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="tareasTramite">
 			<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_documento")'>Crear tipo de documento</a></li>
-			<li><a href="#" onclick='opcionesDatosTramite("tipos_de_documento")'>Tipos de documento</a></li>
+			<li><a href="#" onclick='opcionesDatosTramite("tipos_de_documento")'>Modificar tipo de documento</a></li>
 			<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_obra")'>Crear tipo de obra</a></li>
 		</ul>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Cambiar visador de tramite</a></li>
@@ -128,34 +128,23 @@
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<hr>
 							<form action= ""  method="post" enctype="multipart/form-data"> {% csrf_token %}
-							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-								<label>Usuarios actuales:</label>
-
-								<div class="table-responsive">
-
-
-								<table class="table-stripped table-hover"> <!--Esta tabla no lleva tbody ni thead por cuesitones de tamaño y de visualizacion!-->
-									<thead>
-									<tr style="background-color: rgb(39, 55, 70); color:white;">
+								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+									<label>Usuarios actuales:</label>
+									<table class="table-bordered table-hover table-condensed col-xs-12 col-sm-12 col-md-12 col-lg-12"> <!--Esta tabla no lleva tbody ni thead por cuesitones de tamaño y de visualizacion!-->
+										<thead>
+										<tr style="background-color: rgb(39, 55, 70); color:white;">
 											<th>Nombre de usuario</th>
-											<th>Id</th>
-									</tr>
-									</thead>
-									<tbody>
-										{% for usuario in datos_usuario %}
-											<tr style="cursor: pointer;" onclick='agregarGruposUsuario("{{usuario.id}}", "{{usuario}}");'>
-												<td>{{usuario}}</td>
-												<td>{{usuario.id}}</td>
-											</tr>
-										{% endfor %}
-									</tbody>
-
-								</table>
-</div>
-
-
-							</div>
-
+										</tr>
+										</thead>
+										<tbody>
+											{% for usuario in datos_usuario %}
+												<tr style="cursor: pointer;" onclick='agregarGruposUsuario("{{usuario.id}}", "{{usuario}}");'>
+													<td>{{usuario}}</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 									<div class="form-group">
 										<label>Grupos actuales:</label>
@@ -180,29 +169,22 @@
 						</div>
 					</div>
 				</div>
-
-
-
-
-
 				<div class="container-fluid" id="baja_usuarios" style="display: none;">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<hr>
-							<table class="table table-stripped table-bordered" style="text-align:center">
+							<table class="table table-stripped table-bordered">
 								<thead>
-									<tr style="align-content: center">
-										<th style="text-align:center">Id</th>
-										<th style="text-align:center">Nombre de Usuario</th>
-										<th style="text-align:center">Grupo</th>
-										<th style="text-align:center">Estado</th>
-										<th style="text-align:center">Email</th>
+									<tr style="">
+										<th>Nombre de Usuario</th>
+										<th>Grupo</th>
+										<th>Email</th>
+										<th >Estado</th>
 									</tr>
 								</thead>
 								<tbody>
 									{% for usuario in lista_usuarios %}
 									<tr>
-										<td>{{usuario.id}}</td>
 										<td>{{usuario.username}}</td>
 
 										{% if usuario.groups.values %}
@@ -212,25 +194,23 @@
 										{% else %}
 											<td>-</td>
 										{% endif %}
-
-										{% if usuario.relacionado %}
-											<td>
-												<a class="label label-default" href="#" data-toggle="tooltip" data-html="true" title="{{usuario.descripcion}}">Asignado</a>
-											</td>
-										{% elif usuario.is_active %}
-											<td>
-												<a class="label label-success" href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",true)'>Activo</a>
-											</td>
-										{% else %}
-											<td>
-												<a class="label label-danger"href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",false)'>Inactivo</a>
-											</td>
-										{% endif %}
-
 										{% if usuario.email %}
 											<td>{{usuario.email}}</td>
 										{% else %}
 											<td>-</td>
+										{% endif %}
+										{% if usuario.relacionado %}
+											<td align="center">
+												<a class="label label-default" href="#" data-toggle="tooltip" data-html="true" title="{{usuario.descripcion}}">Asignado</a>
+											</td>
+										{% elif usuario.is_active %}
+											<td align="center">
+												<a class="label label-success" href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",true)'>Activo</a>
+											</td>
+										{% else %}
+											<td align="center">
+												<a class="label label-danger" href="#" onclick='alta_baja_usuarios("{{usuario.id}}","{{usuario}}",false)'>Inactivo</a>
+											</td>
 										{% endif %}
 									</tr>
 									{% endfor %}

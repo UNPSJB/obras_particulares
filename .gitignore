@@ -9,3 +9,5 @@ media/certificado/*
 media/documentos/*
 .vscode/*
 media/fotoperfil/*
+users.xlsx
+.directory

@@ -35,7 +35,7 @@ class FormularioIniciarTramite(forms.ModelForm):
         self.fields['propietario'].widget.attrs['min'] = "9999999"
         self.fields['domicilio'].widget.attrs['placeholder'] = "Ingresar Domicilio de la Obra"
         self.fields['domicilio'].widget.attrs['title'] = "Ingresar Domicilio de la Obra"
-        self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50} [0-9]{0,5}$"
+        #self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50} [0-9]{0,5}$"
 
 
     def save(self, commit=True, propietario=None):
