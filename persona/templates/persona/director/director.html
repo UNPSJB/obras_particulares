@@ -28,6 +28,9 @@
 		overflow: hidden;
 		background-color: #f1f1f1;
 	}
+	.label-danger,.label-success, .label-default{
+		font-size: 90%;
+	}
 </style>
 {% endblock %}
 
@@ -201,7 +204,7 @@
 										{% endif %}
 										{% if usuario.relacionado %}
 											<td align="center">
-												<a class="label label-default" href="#" data-toggle="tooltip" data-html="true" title="{{usuario.descripcion}}">Asignado</a>
+												<a style="width:50px;" class="label label-default" href="#" data-toggle="tooltip" data-html="true" title="{{usuario.descripcion}}">Asignado</a>
 											</td>
 										{% elif usuario.is_active %}
 											<td align="center">
