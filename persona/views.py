@@ -371,7 +371,7 @@ def ver_documentos_tramite_profesional(request, pk_tramite):
 def profesional_solicita_aprobar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
-        if str(tramite.estado()) != 'NoAprobado':
+        if str(tramite.estado()) == 'PrimerInspeccion' and str(tramite.estado()) != 'NoAprobado':
             tramite.hacer(Tramite.SOLICITAR_APROBAR_TRAMITE, request.user)
             messages.add_message(request, messages.SUCCESS, 'Solicitud de aprobar tramite realizada.')
         else:

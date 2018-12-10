@@ -69,8 +69,8 @@ class Tramite(models.Model):
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50, blank=True)
     destino_obra = models.IntegerField(choices=DESTINOS, default=1)
-    monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, default=0)
+    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, default=0)
     objects = TramiteManager()
 
     def __str__(self):
