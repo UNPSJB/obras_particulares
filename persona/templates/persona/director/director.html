@@ -456,6 +456,59 @@
 
 {% block scripts %}
 	<script type="text/javascript">
+		$('#id_boton_ayuda_2').hide();
+		$('#id_boton_ayuda').show();
+		$('#id_boton_ayuda').click(function() {
+			nombre_colapsable = $(".panel-collapse[aria-expanded='true']");
+			if (nombre_colapsable.length>0){
+				nombre_colapsable = $(nombre_colapsable).parent().find('.panel-title a')[0].innerText;
+
+				if (nombre_colapsable == "Usuarios"){
+						descripcion = $('#opcionesDelUsuario').val();
+						if (descripcion == 'alta_usuario') {
+							window.open("{% url 'manual' 'archivos/crear_usuarios.html' %}", '_blank');
+						}
+						if (descripcion == 'modificar_usuario_grupo'){
+							window.open("{% url 'manual' 'archivos/cambiar_usuario_grupo.html' %}", '_blank');
+						}
+						if(descripcion == 'baja_usuarios'){
+							window.open("{% url 'manual' 'archivos/alta_baja.html' %}", '_blank');
+						}
+				}
+				else if (nombre_colapsable == 'Datos Trámite'){
+						descripcion = $('#opcionesDelTramite').val();
+						alert(descripcion)
+						if (descripcion == 'alta_tipo_documento') {
+							window.open("{% url 'manual' 'archivos/crear_tipo_documento.html' %}", '_blank');
+						}
+						if (descripcion == 'tipos_de_documento'){
+							//falta la documentacion hacerla
+							//window.open("{% url 'manual' 'archivos/.html' %}", '_blank');
+						}
+						if (descripcion == 'alta_tipo_de_obra') {
+							window.open("{% url 'manual' 'archivos/crear_tipo_obra.html' %}", '_blank');
+
+						}
+				}
+				else if (nombre_colapsable == 'Cambiar visador de trámite') {
+						window.open("{% url 'manual' 'archivos/cambiar_visador_tramite.html' %}", '_blank');
+				}
+				else {
+						descripcion = $('#opcionesDeDatosPersonales').val();
+						if (descripcion == 'alta_datos_personales') {
+							window.open("{% url 'manual' 'archivos/datos_personales.html' %}", '_blank');
+						}
+						if (descripcion == 'alta_contrasenia'){
+							window.open("{% url 'manual' 'archivos/cambiar_contraseña.html' %}", '_blank');
+						}
+				}
+			}
+			else{
+				window.open("{% url 'manual' 'index.html' %}", '_blank');
+			}
+		});
+	</script>
+	<script type="text/javascript">
 		$('[data-toggle="tooltip"]').tooltip();
 		$('#id_usuario_seleccionado').hide();
 		$("label[for=id_usuario_seleccionado]").hide();

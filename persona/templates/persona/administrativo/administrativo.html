@@ -32,7 +32,7 @@
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_contrasenia")'>Contraseña</a></li>
 		</ul>
-		
+
 		<!-- Item consultas, listado de profesionales y usuarios -->
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultas")'>Consultas<span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="consultas">
@@ -324,6 +324,55 @@
 
 {% block scripts %}
 	<script>
+		$('#id_boton_ayuda_2').hide();
+		$('#id_boton_ayuda').show();
+		$('#id_boton_ayuda').click(function() {
+			nombre_colapsable = $(".panel-collapse[aria-expanded='true']");
+			if (nombre_colapsable.length>0){
+				cosa = $(nombre_colapsable).parent().find('.panel-title a')[0].innerText;
+
+				if (cosa == "Trámites iniciados"){
+					window.open("{% url 'manual' 'archivos/tramites_iniciado.html' %}", '_blank');
+				}
+				else if (cosa == 'Tramites con solicitud de aprobación'){
+					window.open("{% url 'manual' 'archivos/tramites_con_solicitud_aprobacion.html' %}", '_blank');
+				}
+				else if (cosa == 'Tramites con solicitud de no aprobación') {
+					window.open("{% url 'manual' 'archivos/tramites_con_solicitud_no_aprobacion.html' %}", '_blank');
+				}
+				else if (cosa == 'Tramites con solicitud de final de obra total') {
+					window.open("{% url 'manual' 'archivos/tramites_con_solicitud_obra_total.html' %}", '_blank');
+				}
+				else if (cosa == 'Baja de tramites') {
+					window.open("{% url 'manual' 'archivos/baja_tramite.html' %}", '_blank');
+				}
+				else if (cosa == 'Alta profesional') {
+					window.open("{% url 'manual' 'archivos/alta_profesional.html' %}", '_blank');
+				}
+				else if (cosa == 'Alta propietario') {
+					window.open("{% url 'manual' 'archivos/alta_propietario.html' %}", '_blank');
+				}
+				else if (cosa == 'Registrar pago') {
+					window.open("{% url 'manual' 'archivos/registrar_pago.html' %}", '_blank');
+				}
+				else {
+					descripcion = $('#opcionesDeDatosPersonales').val();
+					if (descripcion == 'alta_datos_personales') {
+						window.open("{% url 'manual' 'archivos/datos_personales.html' %}", '_blank');
+					}
+					if (descripcion == 'Modificar contrasena'){
+						window.open("{% url 'manual' 'archivos/cambiar_contraseña.html' %}", '_blank');
+					}
+				}
+			}
+			else{
+				window.open("{% url 'manual' 'index.html' %}", '_blank');
+			}
+		});
+
+
+
+
 		$(".file").fileinput({
 			showCaption: false,
 			browseClass: "btn btn-primary btn-sm",
@@ -336,10 +385,10 @@
 	</script>
 
 	<script type="text/javascript">
-		function mostrarSubmenu(subformulario)
-		{
+		function mostrarSubmenu(subformulario){
+
 			if(subformulario=="sin_submenu"){
-				$('.' + "sidebar-2").hide();
+					$('.' + "sidebar-2").hide();
 			}
 			else{
 				var idSubformulario=document.getElementById(subformulario).id;

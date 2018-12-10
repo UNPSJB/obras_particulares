@@ -8,5 +8,6 @@ urlpatterns = [
 
     #Documentacion
     url(r'^documentacion/$', views.documentation),
-    url(r'^documentacion/(?P<path>.*)$', views.documentation, name="manual")
+    url(r'^documentacion/(?P<path>.*)$', views.documentation, name="manual"),
+    url(r'^documentacion_indice/(?P<path>.*)$', views.documentacion_indice, name="manual_indice")
 ]
