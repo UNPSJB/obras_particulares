@@ -1065,8 +1065,33 @@ def tramites_agendados_por_inspector(request):
     contexto = {'tramites': tramites_del_inspector, 'len_tramites': len(list(tramites_del_inspector_del_dia))}
     return contexto
 
+'''
+Metodo que calcula si la hora que quiero agendar un tramite cumple una diferencia de 3 horas con los tramites agendados
+es una suposicion sino podria agendar el mismo dia 3 tramites distintos en menos de media hora para un mismo inspector.
+'''
+def cumple_distancia_en_horas(tramites, fecha):
+    horas_de_diferencia = 2
+    respuesta = True
+
+    if(len(tramites)>0):
+        lista_horas = [t.estado().fecha.hour for t in tramites]
+        lista_horas.append(fecha.hour)
+    else:
+        lista_horas = []
+
+    lista_horas = sorted(lista_horas)
+
+    if (len(lista_horas) > 1):
+        for i in range(0,len(lista_horas)-1):
+            if lista_horas[i+1] - lista_horas[i] < horas_de_diferencia:
+                respuesta = False
+                break
+    else:
+        return True
+    return respuesta
+
 def agendar_tramite(request, pk_tramite):
-    cant_max_tramites = 1 #Cantidad maxima permitida de tramites a inspeccionar por dia por inspector
+    cant_max_tramites = 3 #Cantidad maxima permitida de tramites a inspeccionar por dia por inspector
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     fecha = parser.parse(request.GET["msg"])
 
@@ -1074,25 +1099,14 @@ def agendar_tramite(request, pk_tramite):
     argumentos = [AgendadoPrimerInspeccion, AgendadoInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
-    print("---------------")
-    print(datetime.datetime.strftime(list(tramites_del_inspector)[0].estado().fecha, '%Y-%m-%d'))
-    print(datetime.datetime.strftime(datetime.datetime.now(), '%Y-%d-%m'))
-    print(".............")
+    tramites_del_inspector_en_fecha = filter(lambda t: datetime.datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.datetime.strftime(fecha, '%Y-%m-%d'), tramites_del_inspector)
 
-
-    hoy = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%d-%m')
-    tramites_del_inspector_del_dia = filter(lambda t: datetime.datetime.strftime(t.estado().fecha, '%Y-%m-%d') == hoy, list(tramites_del_inspector))
-
-
-    print("_-----------------")
-    print(len(list(tramites_del_inspector_del_dia)))
-    print("_-----------------")
-
-    if(len(list(tramites_del_inspector_del_dia))>cant_max_tramites):
-        messages.add_message(request, messages.SUCCESS, "No es posible asignar mas tramites hasta que no inspeccione al menos uno de sus tramites asignados.")
-    else:
-        #tramite.hacer(Tramite.AGENDAR_INSPECCION, request.user, fecha)
+    
+    if(len(list(tramites_del_inspector_en_fecha))<cant_max_tramites and cumple_distancia_en_horas(list(tramites_del_inspector_en_fecha), fecha)):
+        tramite.hacer(Tramite.AGENDAR_INSPECCION, request.user, fecha)
         messages.add_message(request, messages.SUCCESS, "La inspeccion ha sido agendada")
+    else:
+        messages.add_message(request, messages.ERROR, "No es posible asignar mas tramites hasta que no inspeccione al menos uno de sus tramites asignados.")
     return redirect('inspector')
 
 
