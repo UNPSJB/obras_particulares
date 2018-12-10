@@ -356,8 +356,8 @@ class PrimerInspeccion(Estado):
         else:
             raise Exception("Todavia no se puede solicitar el no aprobado")
 
-    def corregir(self, tramite, observacion):
-        return ConCorreccionesDePrimerInspeccion(tramite=tramite, observacion=observacion)
+    #def corregir(self, tramite, observacion):
+    #    return ConCorreccionesDePrimerInspeccion(tramite=tramite, observacion=observacion)
 
     def dar_de_baja(self, tramite, observacion):
         return Baja(tramite=tramite, observacion=observacion)
