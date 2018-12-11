@@ -1760,34 +1760,51 @@ def visadores_sin_visado_agendado(request, pk_estado):
 def ver_listado_todos_tramites(request):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
-    argumentos = [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
-              AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario,
-              AprobadoPorPropietario]
-    argumentos2 = [AgendadoInspeccion, Inspeccionado, FinalObraTotalSolicitado,
-              FinalObraParcialSolicitado, NoFinalObraTotalSolicitado, AgendadoInspeccionFinal, InspeccionFinal,
-              Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]
-    lab = ['Iniciado', 'Aceptado', 'A.Visado', 'Visado', 'A.Inspeccion', 'Inspeccion', 'A.Solicitado', 'Aprobado',
-           'N.A.Solicitado', 'NoAprobado', 'A.S.x Propietario', 'A.x Propietario']
-    lab2 = ['A.Inspeccion', 'Inspeccionado', 'F.O.T.S.', 'F.O.P.S.', 'NoF.O.T.S.', 'A.InspeccionFinal', 'InspeccionFinal',
-                   'Finalizado', 'NoFinalizado', 'F.O.T.S.x Prop.', 'Baja']
+
+    argumentos = [Iniciado, ConCorrecciones, ConCorreccionesRealizadas, Aceptado, ConCorreccionesDeVisado,
+    CorreccionesDeVisadoRealizadas, AgendadoParaVisado, Visado, ConCorreccionesDePrimerInspeccion,
+    CorreccionesDePrimerInspeccionRealizadas, AgendadoPrimerInspeccion, PrimerInspeccion, AprobadoSolicitado,
+    Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario, AprobadoPorPropietario]
+    lab = ['Iniciado', 'Con Correc.', 'Con Correc. Realizadas', 'Aceptado', 'Con Correc. de Vis.',
+    'Correc. Vis. Realizadas', 'Ag.Visado', 'Visado', 'Con Correc. de Insp. I.',
+    'Correc. Insp. I. Realizadas', 'Ag. Inspeccion I.', 'Inspeccion I.', 'Aprob. Sol.',
+    'Aprobado', 'No Aprob. Sol.', 'No Aprobado', 'Aprob. Sol. x Prop.', 'Aprob. x Prop.']
+
+    argumentos1 = [ConCorreccionesDeInspeccion, CorreccionesDeInspeccionRealizadas, AgendadoInspeccion, Inspeccionado,
+    FinalObraTotalSolicitado, FinalObraParcialSolicitado, NoFinalObraTotalSolicitado,
+    ConCorreccionesDeInspeccionFinal, CorreccionesDeInspeccionFinalRealizadas, AgendadoInspeccionFinal,
+    InspeccionFinal, Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]
+    lab1 = ['Con Correc. de Insp.', 'Correc. de Insp. Realizadas', 'Agendado Insp.', 'Inspeccionado',
+    'F.O.T.S.', 'F.O.P.S.', 'N.F.O.T.S.',
+    'Con Correc. de Insp. F.', 'Correc. de Insp. F. Realizadas', 'Ag. Insp. F.',
+    'Inspeccion F.', 'Finalizado', 'NoFinalizado', 'F.O.T.S. x Prop.', 'Baja']
+
     len_argumentos = len(argumentos)
     tramites = Tramite.objects.en_estado(argumentos)
     estados = []
     for t in tramites:
         estados.append(t.estado().tipo)
-    #print("----------------------------")
-    #print(estados)
-    #print("----------------------------")
     estados_cant = dict(collections.Counter(estados))
-    #print(estados_cant)
-    #print("----------------------------")
     for n in range(1, (len_argumentos+1)):
         if (not estados_cant.has_key(n)):
             estados_cant.setdefault(n, 0)
     estados_datos = estados_cant.values()
-    #print(estados_datos)
-    #print("----------------------------")
-    contexto = {'todos_los_tramites': tramites, "datos_estados": estados_datos, "label_estados": lab, "perfil": perfil}
+
+    len_argumentos1 = len(argumentos1)
+    tramites1 = Tramite.objects.en_estado(argumentos1)
+    estados1 = []
+    for t1 in tramites1:
+        estados1.append(t1.estado().tipo)
+    estados_cant1 = dict(collections.Counter(estados1))
+    for n1 in range(1, (len_argumentos1+1)):
+        if (not estados_cant1.has_key(n)):
+            estados_cant1.setdefault(n, 0)
+    estados_datos1 = estados_cant1.values()
+
+
+    print (nmap())
+    contexto = {'todos_los_tramites': tramites, "datos_estados": estados_datos, "label_estados": lab,
+                'todos_los_tramites1': tramites1, "datos_estados1": estados_datos1, "label_estados1": lab1, "perfil": perfil}
     return render(request, 'persona/director/vista_de_tramites.html', contexto)
 
 
