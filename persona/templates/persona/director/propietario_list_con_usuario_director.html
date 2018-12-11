@@ -17,7 +17,7 @@
 </div>
 <ul class="sidebar sidebar-1">
 	<font size="2">
-		<li><a href="javascript:history.back(-1);" class="current"><font>Administrativo</font></a></li>
+		<li><a href="javascript:history.back(-1);" class="current"><font>Director</font></a></li>
 	</font>
 </ul>
 {% endblock %}
@@ -66,7 +66,7 @@
 							<hr>
 						</div>
 						<div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
-							<a id="crear_detalle" href="{% url 'reporte_tramites_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+							<a id="crear_detalle" href="{% url 'reporte_propietarios_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
 								<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
 							</a>
 							<a href="{% url 'reporte_tramites_director_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >

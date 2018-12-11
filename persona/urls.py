@@ -20,8 +20,6 @@ urlpatterns = [
     url(r'^cargar_aprobacion_propietario/(?P<pk_tramite>\d+)/$', views.cargar_aprobacion_propietario, name="cargar_aprobacion_propietario"),
     url(r'^cargar_final_de_obra_total_propietario/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total_propietario, name="cargar_final_de_obra_total_propietario"),
     url(r'^cambiar_profesional_de_tramite/(?P<pk_tramite>\d+)/$', views.cambiar_profesional_de_tramite, name="cambiar_profesional_de_tramite"),
-    url(r'^administrativo/listado_propietarios/$', views.listado_propietarios_administrativo, name="listado_propietarios_administrativo"),
-    url(r'^director/listado_propietarios/$', views.listado_propietarios_director, name="listado_propietarios_director"),
 
     # profesional ---------------------------------------------------------------------------------------------------
     url(r'^profesional$', views.mostrar_profesional, name="profesional"),
@@ -38,8 +36,6 @@ urlpatterns = [
     url(r'^cargar_final_de_obra_total_profesional/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total_profesional, name="cargar_final_de_obra_total_profesional"),
     url(r'^cargar_no_final_de_obra_total_profesional/(?P<pk_tramite>\d+)/$', views.cargar_no_final_de_obra_total_profesional, name="cargar_no_final_de_obra_total_profesional"),
     url(r'^cargar_no_aprobar_profesional/(?P<pk_tramite>\d+)/$', views.cargar_no_aprobar_profesional, name="cargar_no_aprobar_profesional"),
-    url(r'^administrativo/listado_profesionales/$', views.listado_profesionales_administrativo, name="listado_profesioanles_administrativo"),
-    url(r'^director/listado_profesionales/$', views.listado_profesionales_director, name="listado_profesioanles_administrativo"),
 
     # administrativo ------------------------------------------------------------------------------------------------
     url(r'^administrativo$', views.mostrar_administrativo, name="administrativo"),
@@ -56,6 +52,11 @@ urlpatterns = [
     url(r'^aprobar_final_de_obra/(?P<pk_tramite>\d+)/$', views.habilitar_final_obra, name="habilitar_final_obra"),
     url(r'^cargar_final_de_obra_total/(?P<pk_tramite>\d+)/$', views.cargar_final_de_obra_total,name="cargar_final_de_obra_total"),
     url(r'^dar_baja_tramite/(?P<pk_tramite>\d+)/$', views.dar_baja_tramite, name="dar_baja_tramite"),
+    url(r'^administrativo/listado_profesionales/$', views.listado_profesionales_administrativo, name="listado_profesionales"),
+    url(r'^reporte_profesionales_administrativo_excel/', ReporteProfesionalesAdministrativoExcel.as_view(), name="reporte_profesionales_administrativo_excel"),
+    url(r'^administrativo/listado_propietarios/$', views.listado_propietarios_administrativo, name="listado_propietarios_administrativo"),
+    url(r'^reporte_propietarios_administrativo_excel/', ReportePropietariosAdministrativoExcel.as_view(), name="reporte_propietarios_administrativo_excel"),
+    url(r'^reporte_profesionales_administrativo_pdf/$', login_required(ReporteProfesionalesAdministrativoPdf.as_view()), name="reporte_profesionales_administrativo_pdf"),
 
     # visador -------------------------------------------------------------------------------------------------------
     url(r'^visador$', views.mostrar_visador, name="visador"),
@@ -97,6 +98,11 @@ urlpatterns = [
     url(r'^ver_documentos_del_estado/(?P<pk_estado>\d+)/$', views.ver_documentos_del_estado, name="ver_documentos_del_estado"),
     url(r'^alta_baja_usuarios/$', views.alta_baja_usuarios, name="alta_baja_usuarios"),
     url(r'^get_grupos_usuario/$', views.get_grupos_usuario, name="get_grupos_usuario"),
+    url(r'^director/listado_profesionales/$', views.listado_profesionales_director, name="listado_profesionales"),
+    url(r'^reporte_profesionales_director_excel/', ReporteProfesionalesDirectorExcel.as_view(), name="reporte_profesionales_director_excel"),
+    url(r'^director/listado_propietarios/$', views.listado_propietarios_director, name="listado_propietarios_director"),
+    url(r'^reporte_propietarios_director_excel/', ReportePropietariosDirectorExcel.as_view(), name="reporte_propietarios_director_excel"),
+    url(r'^reporte_profesionales_director_pdf/$', login_required(ReporteProfesionalesDirectorPdf.as_view()), name="reporte_profesionales_director_pdf"),
 
 
     #general ----------------------------------------------------------------------------------------------------
