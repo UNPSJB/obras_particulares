@@ -1,0 +1,30 @@
+.wy-breadcrumbs{
+
+}
+.wy-nav-content{
+  max-width:90%
+}
+#img_escudo{
+  background-color:#6aa3c0;
+  border-radius:5px;
+}
+
+.boton-azul {
+  color: #fff;
+  background-color: #337ab7;  
+  border-color: #2e6da4;
+  padding: 1px 5px;
+  font-size: 70%;
+  line-height: 1.5;
+  border-radius: 3px;
+}
+
+.boton-rojo{
+  color: #fff;
+  background-color: #ec3a34;
+  border-color: #d1302a;
+  padding: 1px 5px;
+  font-size: 12px;
+  line-height: 1.5;
+  border-radius: 3px;
+}

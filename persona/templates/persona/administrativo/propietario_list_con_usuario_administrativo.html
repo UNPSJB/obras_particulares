@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block estilos %}
+<link rel="stylesheet" type="text/css" href="{% static perfil %}">
+{% endblock %}
+
+{% block imagenusuario %}
+<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
+{% endblock %}
+
+{% block barra %}
+<div id="contenedor_botoncalapsable_sidebar">
+	<button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
+		<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+	</button>
+</div>
+<ul class="sidebar sidebar-1">
+	<font size="2">
+		<li><a href="javascript:history.back(-1);" class="current"><font>Administrativo</font></a></li>
+	</font>
+</ul>
+{% endblock %}
+
+{% block contenido %}
+<div id="contenedor_botoncalapsable_resto"></div>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	<div class="panel">
+		<div class="panel-heading box" role="tab" id="headingOne">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+					<font color="#ffffff" size="2">Propietarios</font>
+				</a>
+			</h5>
+		</div>
+    	<div id="collapseOne" class="panel-collapse colorp" role="tabpanel" aria-labelledby="headingOne">
+      		<div class="panel-body">
+        		<div class="container-fluid">
+          			<div class="row">
+            			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="table-responsive">
+                      <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+                        <thead>
+                          <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>CUIL</th>
+                            <th>Telefono</th>
+                            <th>Email</th>
+                        </thead>
+                        <tbody>
+                          {% if propietarios %}
+													{% for propietario in propietarios %}
+                          <tr>
+                            <td class="col-xs-2">{{ propietario.persona.nombre }}</td>
+                            <td class="col-xs-2">{{ propietario.persona.apellido }} </td>
+                            <td class="col-xs-2">{{ propietario.persona.cuil }}</td>
+                            <td class="col-xs-2">{{ propietario.persona.telefono }}</td>
+                            <td class="col-xs-2">{{ propietario.persona.mail}}</td>
+                          </tr>
+                          {% endfor %}
+                          {% endif%}
+                        </tbody>
+                      </table>
+                    </div>
+							<hr>
+						</div>
+						<div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
+							<a id="crear_detalle" href="{% url 'reporte_propietarios_administrativo_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+								<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
+							</a>
+							<a href="{% url 'reporte_propietarios_administrativo_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
+								<i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
+							</a>
+						</div>
+						<div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4" align="right">
+							<a href="javascript:history.back(-1);">
+								<button type="button" class="btn btn-primary" name="Volver">
+									Volver
+								</button>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+	<script>
+		var c = document.getElementById("botonConfiguracion");
+		c.style.display= '';
+		var d = document.getElementById("imagenusuario");
+		d.style.display= '';
+	</script>
+{% endblock %}

@@ -74,9 +74,6 @@
 	</style>
 
 	<script language="javaScript">
-		function mostrarayuda() {
-				window.open("{% url 'manual' 'index.html' %}", '_blank');
-		}
 		//Reacomoda algunos elementos del dom cuando la ventana pasa de
 		var width;
 		var auxwidthp = 0;
@@ -243,7 +240,11 @@
 			<div class=" col-xs-12 col-sm-12 col-md-12">
 				<div id="id_botonredondoayuda" style="position: absolute; right: 45px;">
 					<!--input type="button" class="botonredondoayuda" onclick="mostrarayuda()" onmousemove="mostrarayudarapida()" onmouseout="ocultarayudarapida()" id="id_boton_ayuda" name="btn1" value="?"  /-->
-					<button type="button" class="botonredondoayuda" onclick="mostrarayuda()" onmousemove="mostrarayudarapida()" onmouseout="ocultarayudarapida()" id="id_boton_ayuda">
+					<button style="display:none;" type="button" class="botonredondoayuda" onmousemove="mostrarayudarapida()" onmouseout="ocultarayudarapida()" id="id_boton_ayuda">
+						<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+					</button>
+
+					<button type="button" class="botonredondoayuda" onmousemove="mostrarayudarapida()" onmouseout="ocultarayudarapida()" id="id_boton_ayuda_2">
 						<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
 					</button>
 				</div>
@@ -266,6 +267,10 @@
 
 
 	<script type="text/javascript">
+		$('#id_boton_ayuda_2').click(function() {
+			window.open("{% url 'manual_indice' 'index.html' %}", '_blank');
+		});
+
 		// Lo usa el boton configuracion
 		$('.dropdown-toggle').dropdown()
 	</script>

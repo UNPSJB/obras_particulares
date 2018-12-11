@@ -177,6 +177,8 @@ def acceso(user):
             return 5
         elif user.groups.filter(name='director'):
             return 6
+        elif user.groups.filter(name='jefeinspector'):
+            return 7
     except AttributeError:
         return 0
 
@@ -201,3 +203,9 @@ DOCUMENTATION_HTML_ROOT_INSPECTOR = os.path.join(BASE_DIR, 'documentacion_sistem
 
 DOCUMENTATION_ROOT_DIRECTOR = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_director')
 DOCUMENTATION_HTML_ROOT_DIRECTOR = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_director', 'build' ,'html')
+
+DOCUMENTATION_ROOT_JEFEINSPECTOR = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_jefeinspector')
+DOCUMENTATION_HTML_ROOT_JEFEINSPECTOR = os.path.join(BASE_DIR, 'documentacion_sistema/manual_ayuda_jefeinspector', 'build' ,'html')
+
+DOCUMENTATION_ROOT_INDICE = os.path.join(BASE_DIR, 'documentacion_sistema/manual_indice')
+DOCUMENTATION_HTML_ROOT_INDICE = os.path.join(BASE_DIR, 'documentacion_sistema/manual_indice', 'build' ,'html')

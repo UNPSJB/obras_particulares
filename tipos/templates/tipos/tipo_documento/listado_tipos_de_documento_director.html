@@ -24,7 +24,11 @@
         <td class="col-xs-2">{{ tipo_de_documento.fecha_baja }}</td>
         <td class="col-xs-2">{{ tipo_de_documento.quien_lo_utiliza }}</td>
         <td class="col-xs-2">{{ tipo_de_documento.requerido_para }}</td>
+<<<<<<< HEAD
         <th class="col-xs-2"><a href="#" onclick='abrir_modal_eliminar_tipo_de_documento("{{tipo_de_documento.id}}", "{{tipo_de_documento.nombre}}")'> <button type="button" class="btn btn-danger">Eliminar</button></a></th>
+=======
+        <th class="col-xs-2"><button type="button" class="btn btn-danger btn-xs">Eliminar</button></th>
+>>>>>>> ea8f1e2cb169c41898311e631a25bb8199be3199
       </tr>
       {% endfor %}
       {% endif%}

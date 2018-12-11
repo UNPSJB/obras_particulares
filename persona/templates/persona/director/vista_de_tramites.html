@@ -30,7 +30,7 @@
 		<div class="panel-heading box" role="tab" id="headingFive">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-					<font color="#ffffff" size="2">Detalle de todos los tramites en curso</font>
+					<font color="#ffffff" size="2">Grafico de tramites hasta aprobado incluido</font>
 				</a>
 			</h5>
 		</div>
@@ -38,8 +38,14 @@
 			<div class="panel-body">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<canvas id="chartDirectorTramites" height="80"></canvas> <!--style="padding-left:25px;"-->
+						<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 ">
+							<canvas id="chartDirectorTramites" height="130"></canvas> <!--style="padding-left:25px;"-->
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+							{% for la in label_estados %}
+								<strong>{{la}}</strong>
+								<br>
+							{% endfor %}
 						</div>
 					</div>
 				</div>
@@ -50,7 +56,7 @@
 		<div class="panel-heading box" role="tab" id="headingOne">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-					<font color="#ffffff" size="2">Datos usuarios por grupo</font>
+					<font color="#ffffff" size="2">Detalle de tramites hasta aprobado incluido</font>
 				</a>
 			</h5>
 		</div>
@@ -75,7 +81,7 @@
 									<tbody>
 										{% if todos_los_tramites %}
 										{% for tramite in todos_los_tramites %}
-										<tr>
+										<!tr>
 											<td class="col-xs-1" align="center">{{tramite.id}}</td>
 											<td class="col-xs-2">{{tramite.propietario}}</td>
 											<td class="col-xs-3">{{tramite.profesional}}</td>
@@ -117,6 +123,112 @@
 			</div>
 		</div>
 	</div>
+
+
+
+
+
+	<div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFive">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+					<font color="#ffffff" size="2">Grafico de tramites de aprobado en adelante</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseFive" class="panel-collapse colorG" role="tabpanel" aria-labelledby="headingFive">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 ">
+							<canvas id="chartDirectorTramites1" height="130"></canvas> <!--style="padding-left:25px;"-->
+						</div>
+						<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+							{% for la in label_estados1 %}
+								<strong>{{la}}</strong>
+								<br>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel">
+		<div class="panel-heading box" role="tab" id="headingOne">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+					<font color="#ffffff" size="2">Detalle de tramites de aprobado en adelante</font>
+				</a>
+			</h5>
+		</div>
+    	<div id="collapseOne" class="panel-collapse colorp" role="tabpanel" aria-labelledby="headingOne">
+      		<div class="panel-body">
+        		<div class="container-fluid">
+          			<div class="row">
+            			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="table-responsive">
+								<table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+									<thead>
+										<tr>
+											<th>Nro</th>
+											<th>Propietario</th>
+											<th>Profesional</th>
+											<th>Estado</th>
+											<th>Medidas</th>
+											<th>Tipo</th>
+											<th>Detalle</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% if todos_los_tramites1 %}
+										{% for tramite in todos_los_tramites1 %}
+										<!tr>
+											<td class="col-xs-1" align="center">{{tramite.id}}</td>
+											<td class="col-xs-2">{{tramite.propietario}}</td>
+											<td class="col-xs-3">{{tramite.profesional}}</td>
+											<td class="col-xs-2">{{tramite.estado}}</td>
+											<td class="col-xs-1">{{tramite.medidas}}</td>
+											<td class="col-xs-2" align="center">{{tramite.tipo_obra}}</td>
+											<td align="center" class="col-xs-1">
+												<a href="{% url 'detalle_de_tramite' tramite.pk %}">
+													<button type="button" class="btn btn-primary btn-xs" name="detalle">
+														<span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
+													</button>
+												</a>
+											</td>
+										</tr>
+										{% endfor %}
+										{% endif%}
+									</tbody>
+								</table>
+							</div>
+							<hr>
+						</div>
+						<div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
+							<a id="crear_detalle" href="{% url 'reporte_tramites_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+								<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
+							</a>
+							<a href="{% url 'reporte_tramites_director_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
+								<i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
+							</a>
+						</div>
+						<div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4" align="right">
+							<a href="javascript:history.back(-1);">
+								<button type="button" class="btn btn-primary" name="Volver">
+									Volver
+								</button>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
 </div>
 {% endblock %}
 
@@ -185,10 +297,9 @@
 				scales: {
 					xAxes: [{
 						barPercentage: 0.5,
-
 						ticks: {
 							fontColor:"#444444",
-							fontSize: 9,
+							fontSize: 4,
 						},
 						gridLines:{
 							color:"#808b96",
@@ -197,7 +308,6 @@
 						}
 					}],
 					yAxes: [{
-
 						ticks: {
 							beginAtZero:true,
 							stepSize: 1,
@@ -213,6 +323,98 @@
 			}
 		});
 	</script>
+
+	<script>
+		labelsEstados = [];
+		dataEstados = [];
+
+		{% for da in datos_estados1 %}
+			dataEstados.push({{da}});
+		{% endfor %}
+
+		{% for la in label_estados1 %}
+			labelsEstados.push("{{la}}");
+		{% endfor %}
+
+		var ctx = document.getElementById("chartDirectorTramites1");
+		var chartDirectorTramites1 = new Chart( ctx, {
+			type: 'bar',
+			data: {
+			  labels: labelsEstados,
+			  datasets: [
+				{
+				  backgroundColor: [
+				  'rgba(255, 255, 0, 1.0)',
+				  'rgba(0, 255, 0, 1.0)',
+				  'rgba(0, 234, 236, 1.0)',
+				  'rgba(44, 0, 255, 1.0)',
+				  'rgba(183, 92, 224, 1.0)',
+				  'rgba(255, 0, 211, 1.0)',
+				  'rgba(255, 0, 0, 1.0)',
+				  'rgba(0, 128, 128, 1.0)',
+				  'rgba(255, 255, 0, 1.0)',
+				  'rgba(0, 255, 0, 1.0)',
+				  'rgba(0, 234, 236, 1.0)',
+				  'rgba(44, 0, 255, 1.0)',
+				  'rgba(183, 92, 224, 1.0)',
+				  'rgba(255, 0, 211, 1.0)',
+				  'rgba(255, 0, 0, 1.0)',
+				  'rgba(0, 128, 128, 1.0)',
+				  'rgba(255, 255, 0, 1.0)',
+				  'rgba(0, 255, 0, 1.0)',
+				  'rgba(0, 234, 236, 1.0)',
+				  'rgba(44, 0, 255, 1.0)',
+				  'rgba(183, 92, 224, 1.0)',
+				  'rgba(255, 0, 211, 1.0)',
+				  'rgba(255, 0, 0, 1.0)',
+				  'rgba(0, 128, 128, 1.0)'
+				  ],
+				  data: dataEstados
+				}
+			  ]
+			},
+			options: {
+				responsive: true,
+				legend: {
+					display: false,
+				},
+				title:{
+					display:true,
+					text:'Cantidad de tramites por estado',
+					fontSize: 16,
+					padding: 14,
+					fontColor:"#929292",
+				},
+				scales: {
+					xAxes: [{
+						barPercentage: 0.5,
+						ticks: {
+							fontColor:"#444444",
+							fontSize: 4,
+						},
+						gridLines:{
+							color:"#808b96",
+							zeroLineColor: "#a6a6a6",
+							zeroLineWidth: 2,
+						}
+					}],
+					yAxes: [{
+						ticks: {
+							beginAtZero:true,
+							stepSize: 1,
+							fontColor:"#444444",
+						},
+						gridLines:{
+							color:"#808b96",
+							zeroLineColor: "#a6a6a6",
+							zeroLineWidth: 2,
+						}
+					}]
+				}
+			}
+		});
+	</script>
+
 	<script>
 		var c = document.getElementById("botonConfiguracion");
 		c.style.display= '';

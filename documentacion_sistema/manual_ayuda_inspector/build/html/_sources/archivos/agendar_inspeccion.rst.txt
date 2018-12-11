@@ -1,6 +1,16 @@
 Agendar inspeccion
 ==================
 
-Agendar inspeccion
+Esta opcion permite agendar la inspeccion de un tramite dentro del sistema. Se debe considerar que un inspector no puede agendar mas de 3 inspecciones en un dia teniendo estas, ademas, un minimo de 2 horas entre si. Las opciones a visualizar son las siguientes:
+
+- **Nro**: Indica el numero del tramite a agendar.
+- **Propietario**: Indica el propietario del tramite.
+- **Profesional**: Indica el profesional a cargo del tramite.
+- **Medidas**: Indica las medidas ocupadas por la obra en curso.
+- **Tipo de Obra**: Indica el tipo de obra del tramite.
+- **Estado**: Indica el estado actual del tramite.
+- **Fecha Inspeccion**: Se debe ingresar la fecha en la que el inspector realizara la inspeccion del tramite.
+
+Puede agendar la inspeccion del tramite haciendo click en el agendar.
 
 .. image:: ../_static/inspector.1.png

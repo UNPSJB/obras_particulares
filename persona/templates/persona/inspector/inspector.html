@@ -84,7 +84,7 @@
 							<form action="" class="" >
 								<div class="row">
 									<!--div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-									
+
 									</div-->
 									<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
 										<!--hr-->
@@ -215,6 +215,37 @@
 
 {% block scripts %}
 <script type="text/javascript">
+	$('#id_boton_ayuda_2').hide();
+	$('#id_boton_ayuda').show();
+	$('#id_boton_ayuda').click(function() {
+		nombre_colapsable = $(".panel-collapse[aria-expanded='true']");
+		if (nombre_colapsable.length>0){
+			cosa = $(nombre_colapsable).parent().find('.panel-title a')[0].innerText;
+
+			if (cosa == "Agendar inspección"){
+				window.open("{% url 'manual' 'archivos/agendar_inspeccion.html' %}", '_blank');
+			}
+			else if (cosa == 'Cargar inspección'){
+				window.open("{% url 'manual' 'archivos/cargar_inspeccion.html' %}", '_blank');
+			}
+			else if (cosa == 'Mis inspecciones') {
+				window.open("{% url 'manual' 'archivos/mis_inspecciones.html' %}", '_blank');
+			}
+			else {
+				descripcion = $('#opcionesDeDatosPersonales').val();
+				if (descripcion == 'alta_datos_personales') {
+					window.open("{% url 'manual' 'archivos/datos_personales.html' %}", '_blank');
+				}
+				if (descripcion == 'alta_contrasenia'){
+					window.open("{% url 'manual' 'archivos/cambiar_contraseña.html' %}", '_blank');
+				}
+			}
+		}
+		else{
+			window.open("{% url 'manual' 'index.html' %}", '_blank');
+		}
+	});
+
 	function mostrarSubmenu(subformulario)
 	{
 		var idSubformulario=document.getElementById(subformulario).id;
@@ -236,15 +267,19 @@
 <script>
     function agregarHora(boton){
         fecha = $($(boton).parent().parent()).find('.mi-datepicker').val();
-        id_tramite = $($(boton).parent().parent().find('td')[0]).text();
-        url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
-        location.href = url;
+		if(fecha){
+			id_tramite = $($(boton).parent().parent().find('td')[0]).text();
+			var d = new Date(fecha);
+			var n = d.toLocaleString();
+			url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+n;
+			location.href = url;
+		}
     }
 </script>
 
 <script>
 	$(function(){
-		$('#datetimepicker1').datetimepicker({
+		$('.mi-datepicker').datetimepicker({
             useCurrent: false,
             minDate: moment(),
             autoclose: true,
