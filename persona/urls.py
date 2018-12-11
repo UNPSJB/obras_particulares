@@ -57,6 +57,7 @@ urlpatterns = [
     url(r'^administrativo/listado_propietarios/$', views.listado_propietarios_administrativo, name="listado_propietarios_administrativo"),
     url(r'^reporte_propietarios_administrativo_excel/', ReportePropietariosAdministrativoExcel.as_view(), name="reporte_propietarios_administrativo_excel"),
     url(r'^reporte_profesionales_administrativo_pdf/$', login_required(ReporteProfesionalesAdministrativoPdf.as_view()), name="reporte_profesionales_administrativo_pdf"),
+    url(r'^reporte_propietarios_administrativo_pdf/$', login_required(ReportePropietariosAdministrativoPdf.as_view()), name="reporte_propietarios_administrativo_pdf"),
 
     # visador -------------------------------------------------------------------------------------------------------
     url(r'^visador$', views.mostrar_visador, name="visador"),
@@ -103,7 +104,7 @@ urlpatterns = [
     url(r'^director/listado_propietarios/$', views.listado_propietarios_director, name="listado_propietarios_director"),
     url(r'^reporte_propietarios_director_excel/', ReportePropietariosDirectorExcel.as_view(), name="reporte_propietarios_director_excel"),
     url(r'^reporte_profesionales_director_pdf/$', login_required(ReporteProfesionalesDirectorPdf.as_view()), name="reporte_profesionales_director_pdf"),
-
+    url(r'^reporte_propietarios_director_pdf/$', login_required(ReportePropietariosDirectorPdf.as_view()), name="reporte_propietarios_director_pdf"),
 
     #general ----------------------------------------------------------------------------------------------------
     url(r'^cambiar_perfil/$', views.cambiar_perfil, name="cambiar_perfil"),

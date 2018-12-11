@@ -1041,6 +1041,65 @@ class ReporteProfesionalesAdministrativoPdf(View):
         return response
 
 
+"""
+Se encarga de devolver todos los propietarios con usuario en un archivo de pdf
+Se utiliza en la vista de administrativo
+"""
+class ReportePropietariosAdministrativoPdf(View):
+
+    def get(self, request, *args, **kwargs):
+        filename = "Listado de propietarios Administrativo.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=0,
+            leftMargin=0,
+            topMargin=0,
+            bottomMargin=0,
+        )
+        story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
+        story.append(Paragraph(usuario, styles["Usuario"]))
+        story.append(Spacer(0, cm * 0.15))
+        im1 = Image(settings.MEDIA_ROOT + '/imagenes/banner_municipio_3.png', width=630, height=50)
+        im1.hAlign = 'CENTER'
+        story.append(im1)
+        story.append(Spacer(0, cm * 0.05))
+        subtitulo = 'Listado de propietarios'
+        story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        story.append(Spacer(0, cm * 0.15))
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
+        story.append(im0)
+        story.append(Spacer(0, cm * 0.5))
+
+        encabezados = ('NOMBRE', 'APELLIDO', 'CUIL', 'TELEFONO', 'EMAIL')
+        propietarios = Propietario.objects.all()
+        propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None),propietarios)
+        detalles = [(p.persona.nombre, p.persona.apellido, p.persona.cuil, p.persona.telefono, p.persona.mail)
+            for p in propietarios_con_usuario]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 3 * cm, 3 * cm, 3 * cm, 5 * cm])
+
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        story.append(detalle_orden)
+        doc.build(story)
+        return response
+
+
 '''visador -----------------------------------------------------------------------------------------------'''
 
 
@@ -1969,6 +2028,65 @@ class ReporteProfesionalesDirectorPdf(View):
             (p.nombre, p.apellido, p.mail, p.domicilio, p.cuil, p.telefono, p.profesional.profesion, p.profesional.categoria, p.profesional.matricula)
             for p in profesionales_con_usuario]
         detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 3 * cm, 3 * cm, 3 * cm, 2 * cm, 2 * cm, 1 * cm, 1 * cm])
+
+
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        story.append(detalle_orden)
+        doc.build(story)
+        return response
+
+"""
+Se encarga de devolver todos los propietarios con usuario en un archivo de pdf
+Se utiliza en la vista de director
+"""
+class ReportePropietariosDirectorPdf(View):
+
+    def get(self, request, *args, **kwargs):
+        filename = "Listado de propietarios Director.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=0,
+            leftMargin=0,
+            topMargin=0,
+            bottomMargin=0,
+        )
+        story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
+        story.append(Paragraph(usuario, styles["Usuario"]))
+        story.append(Spacer(0, cm * 0.15))
+        im1 = Image(settings.MEDIA_ROOT + '/imagenes/banner_municipio_3.png', width=630, height=50)
+        im1.hAlign = 'CENTER'
+        story.append(im1)
+        story.append(Spacer(0, cm * 0.05))
+        subtitulo = 'Listado de propietarios'
+        story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        story.append(Spacer(0, cm * 0.15))
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
+        story.append(im0)
+        story.append(Spacer(0, cm * 0.5))
+
+        encabezados = ('NOMBRE', 'APELLIDO', 'CUIL', 'TELEFONO', 'EMAIL')
+        propietarios = Propietario.objects.all()
+        propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None),propietarios)
+        detalles = [(p.persona.nombre, p.persona.apellido, p.persona.cuil, p.persona.telefono, p.persona.mail)
+            for p in propietarios_con_usuario]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 3 * cm, 3 * cm, 3 * cm, 5 * cm])
 
         detalle_orden.setStyle(TableStyle(
             [
