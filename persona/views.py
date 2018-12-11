@@ -1775,19 +1775,19 @@ def ver_listado_todos_tramites(request):
     estados = []
     for t in tramites:
         estados.append(t.estado().tipo)
-    print("----------------------------")
-    print(estados)
-    print("----------------------------")
+    #print("----------------------------")
+    #print(estados)
+    #print("----------------------------")
     estados_cant = dict(collections.Counter(estados))
-    print(estados_cant)
-    print("----------------------------")
+    #print(estados_cant)
+    #print("----------------------------")
     for n in range(1, (len_argumentos+1)):
         if (not estados_cant.has_key(n)):
             estados_cant.setdefault(n, 0)
     estados_datos = estados_cant.values()
-    print(estados_datos)
-    print("----------------------------")
-    contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":lab, "perfil" : perfil}
+    #print(estados_datos)
+    #print("----------------------------")
+    contexto = {'todos_los_tramites': tramites, "datos_estados": estados_datos, "label_estados": lab, "perfil": perfil}
     return render(request, 'persona/director/vista_de_tramites.html', contexto)
 
 
@@ -2020,7 +2020,6 @@ class ReporteProfesionalesDirectorPdf(View):
         im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
         story.append(im0)
         story.append(Spacer(0, cm * 0.5))
-
         encabezados = ('NOMBRE', 'APELLIDO', 'MAIL', 'DIRECCION', 'CUIL', 'TELEFONO', 'PROFESION', 'CAT.', 'MAT.')
         personas = Persona.objects.all()
         profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
@@ -2028,8 +2027,6 @@ class ReporteProfesionalesDirectorPdf(View):
             (p.nombre, p.apellido, p.mail, p.domicilio, p.cuil, p.telefono, p.profesional.profesion, p.profesional.categoria, p.profesional.matricula)
             for p in profesionales_con_usuario]
         detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 3 * cm, 3 * cm, 3 * cm, 2 * cm, 2 * cm, 1 * cm, 1 * cm])
-
-
         detalle_orden.setStyle(TableStyle(
             [
                 ('ALIGN', (0, 0), (0, 0), 'CENTER'),
@@ -2080,14 +2077,12 @@ class ReportePropietariosDirectorPdf(View):
         im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
         story.append(im0)
         story.append(Spacer(0, cm * 0.5))
-
         encabezados = ('NOMBRE', 'APELLIDO', 'CUIL', 'TELEFONO', 'EMAIL')
         propietarios = Propietario.objects.all()
         propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None),propietarios)
         detalles = [(p.persona.nombre, p.persona.apellido, p.persona.cuil, p.persona.telefono, p.persona.mail)
             for p in propietarios_con_usuario]
         detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 3 * cm, 3 * cm, 3 * cm, 5 * cm])
-
         detalle_orden.setStyle(TableStyle(
             [
                 ('ALIGN', (0, 0), (0, 0), 'CENTER'),
@@ -2102,6 +2097,7 @@ class ReportePropietariosDirectorPdf(View):
         story.append(detalle_orden)
         doc.build(story)
         return response
+
 
 class ReporteTramitesDirectorExcel(TemplateView):
 
