@@ -94,7 +94,7 @@
 											<td class="col-xs-2">{{usuario.persona.mail}}</td>
 											<td class="col-xs-2">{{usuario.persona.domicilio}}</td>
 											<td class="col-xs-1" align="center">
-												<a href="{% url 'ver_actividad_usuario' usuario %}">
+												<a href="{% url 'ver_actividad_usuario' usuario.persona.dni %}">
 													<button type="button" class="btn btn-primary btn-xs" name="Ver actividad">
 														<span class="glyphicon glyphicon-equalizer" aria-hidden="true"></span>
 													</button>
