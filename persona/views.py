@@ -1321,14 +1321,11 @@ def agendar_tramite(request, pk_tramite):
     cant_max_tramites = 3 #Cantidad maxima permitida de tramites a inspeccionar por dia por inspector
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     fecha = parser.parse(request.GET["msg"])
-
     usuario = request.user
     argumentos = [AgendadoPrimerInspeccion, AgendadoInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
     tramites_del_inspector_en_fecha = filter(lambda t: datetime.datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.datetime.strftime(fecha, '%Y-%m-%d'), tramites_del_inspector)
-
-    
     if(len(list(tramites_del_inspector_en_fecha))<cant_max_tramites and cumple_distancia_en_horas(list(tramites_del_inspector_en_fecha), fecha)):
         tramite.hacer(Tramite.AGENDAR_INSPECCION, request.user, fecha)
         messages.add_message(request, messages.SUCCESS, "La inspeccion ha sido agendada")
@@ -1717,11 +1714,8 @@ def tramites_con_visado_agendado():
     estados = Estado.objects.all()
     tipos = [7]
     estados_agendados= filter(lambda e: (e.usuario is not None and str(e.tramite.estado()) == 'AgendadoParaVisado' and e.tipo == tipos[0]), estados)
-
     for estado in estados_agendados:
         print (estado.tramite.id)
-
-
     return estados_agendados
 
 
@@ -1800,18 +1794,16 @@ def ver_listado_todos_tramites(request):
     argumentos = [Iniciado, ConCorrecciones, ConCorreccionesRealizadas, Aceptado, ConCorreccionesDeVisado,
     CorreccionesDeVisadoRealizadas, AgendadoParaVisado, Visado, ConCorreccionesDePrimerInspeccion,
     CorreccionesDePrimerInspeccionRealizadas, AgendadoPrimerInspeccion, PrimerInspeccion, AprobadoSolicitado,
-    Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario, AprobadoPorPropietario]
-    lab = ['Iniciado', 'Con Correc.', 'Con Correc. Realizadas', 'Aceptado', 'Con Correc. de Vis.',
-    'Correc. Vis. Realizadas', 'Ag.Visado', 'Visado', 'Con Correc. de 1er Insp.',
-    'Correc. 1er. Insp. Realizadas', 'Ag. 1er. Inspeccion', '1er Inspeccion', 'Aprob. Sol.',
-    'Aprobado', 'No Aprob. Sol.', 'No Aprobado', 'Aprob. Sol. x Prop.', 'Aprob. x Prop.']
-
-    argumentos1 = [ConCorreccionesDeInspeccion, CorreccionesDeInspeccionRealizadas, AgendadoInspeccion, Inspeccionado,
+    Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario, AprobadoPorPropietario,
+    ConCorreccionesDeInspeccion, CorreccionesDeInspeccionRealizadas, AgendadoInspeccion, Inspeccionado,
     FinalObraTotalSolicitado, FinalObraParcialSolicitado, NoFinalObraTotalSolicitado,
     ConCorreccionesDeInspeccionFinal, CorreccionesDeInspeccionFinalRealizadas, AgendadoInspeccionFinal,
     InspeccionFinal, Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]
-    lab1 = ['Con Correc. de Insp.', 'Correc. de Insp. Realizadas', 'Agendado Insp.', 'Inspeccionado',
-    'F.O.T.S.', 'F.O.P.S.', 'N.F.O.T.S.',
+    lab = ['Iniciado', 'Con Correc.', 'Con Correc. Realizadas', 'Aceptado', 'Con Correc. de Vis.',
+    'Correc. Vis. Realizadas', 'Ag.Visado', 'Visado', 'Con Correc. de 1er Insp.',
+    'Correc. 1er. Insp. Realizadas', 'Ag. 1er. Inspeccion', '1er Inspeccion', 'Aprob. Sol.',
+    'Aprobado', 'No Aprob. Sol.', 'No Aprobado', 'Aprob. Sol. x Prop.', 'Aprob. x Prop.', 'Con Correc. de Insp.',
+    'Correc. de Insp. Realizadas', 'Agendado Insp.', 'Inspeccionado', 'F.O.T.S.', 'F.O.P.S.', 'N.F.O.T.S.',
     'Con Correc. de Insp. F.', 'Correc. de Insp. F. Realizadas', 'Ag. Insp. F.',
     'Inspeccion F.', 'Finalizado', 'NoFinalizado', 'F.O.T.S. x Prop.', 'Baja']
 
@@ -1826,22 +1818,9 @@ def ver_listado_todos_tramites(request):
             estados_cant.setdefault(n, 0)
     estados_datos = estados_cant.values()
 
-    len_argumentos1 = len(argumentos1)
-    tramites1 = Tramite.objects.en_estado(argumentos1)
-    estados1 = []
-    for t1 in tramites1:
-        estados1.append(t1.estado().tipo)
-    estados_cant1 = dict(collections.Counter(estados1))
-    for n1 in range(1, (len_argumentos1+1)):
-        if (not estados_cant1.has_key(n)):
-            estados_cant1.setdefault(n, 0)
-    estados_datos1 = estados_cant1.values()
-
     cant_est_x_est = dict(zip(lab, estados_datos))
-    cant_est_x_est1 = dict(zip(lab1, estados_datos1))
 
-    contexto = {'todos_los_tramites': tramites, "datos_estados": estados_datos, "label_estados": lab, "cant_est_x_est": cant_est_x_est,
-                'todos_los_tramites1': tramites1, "datos_estados1": estados_datos1, "label_estados1": lab1, "cant_est_x_est1": cant_est_x_est1, "perfil": perfil}
+    contexto = {'todos_los_tramites': tramites, "datos_estados": estados_datos, "label_estados": lab, "cant_est_x_est": cant_est_x_est, "perfil": perfil}
     return render(request, 'persona/director/vista_de_tramites.html', contexto)
 
 
@@ -1849,44 +1828,94 @@ def reporte_de_tramites(request):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
 
+    argumentos = [Iniciado, ConCorrecciones, ConCorreccionesRealizadas, Aceptado, ConCorreccionesDeVisado,
+                  CorreccionesDeVisadoRealizadas, AgendadoParaVisado, Visado, ConCorreccionesDePrimerInspeccion,
+                  CorreccionesDePrimerInspeccionRealizadas, AgendadoPrimerInspeccion, PrimerInspeccion,
+                  AprobadoSolicitado,
+                  Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario, AprobadoPorPropietario,
+                  ConCorreccionesDeInspeccion, CorreccionesDeInspeccionRealizadas, AgendadoInspeccion, Inspeccionado,
+                  FinalObraTotalSolicitado, FinalObraParcialSolicitado, NoFinalObraTotalSolicitado,
+                  ConCorreccionesDeInspeccionFinal, CorreccionesDeInspeccionFinalRealizadas, AgendadoInspeccionFinal,
+                  InspeccionFinal, Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]
+    lab = ['Iniciado', 'Con Correc.', 'Con Correc. Realizadas', 'Aceptado', 'Con Correc. de Vis.',
+           'Correc. Vis. Realizadas', 'Ag.Visado', 'Visado', 'Con Correc. de 1er Insp.',
+           'Correc. 1er. Insp. Realizadas', 'Ag. 1er. Inspeccion', '1er Inspeccion', 'Aprob. Sol.',
+           'Aprobado', 'No Aprob. Sol.', 'No Aprobado', 'Aprob. Sol. x Prop.', 'Aprob. x Prop.', 'Con Correc. de Insp.',
+           'Correc. de Insp. Realizadas', 'Agendado Insp.', 'Inspeccionado', 'F.O.T.S.', 'F.O.P.S.', 'N.F.O.T.S.',
+           'Con Correc. de Insp. F.', 'Correc. de Insp. F. Realizadas', 'Ag. Insp. F.',
+           'Inspeccion F.', 'Finalizado', 'NoFinalizado', 'F.O.T.S. x Prop.', 'Baja']
+
     if request.method == "POST":
 
         if request.POST.get('id_campo') == '0':
-            print ("filtro por numero de tramite")
-            tram = Tramite.objects.all()
-            print (tram)
+            print("---------------------------------------")
+            print (request.POST.get('valor_a_comparar'))
+            tramites = Tramite.objects.filter(pk=request.POST.get('valor_a_comparar'))
+
 
 
         if request.POST.get('id_campo') == '1':
-            print ("filtro por propietario")
+            print ("filtro por propietario - falta mayor, menor, entre")
+            nombre = request.POST.get('valor_a_comparar')
+            nombreT = nombre.split(', ')
+            personas = Persona.objects.filter(nombre=nombreT[1], apellido=nombreT[0])
+
+
+            propietarios = Propietario.objects.all()
+
+            #propietario = filter(lambda p: (p.persona.nombre == persona.nombre and p.persona.apellido == persona.apellido), propietarios)
+
+
+            #tramites = Tramite.objects.all()
+            #tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == pk_persona), tramites)
+
+
+
+            #prop = Propietario.objects.filter()
+            #tram = Tramite.objects.filter(propietario=request.POST.get('valor_a_comparar'))
+            print("---------------------------------------")
+            print (persona)
+            print (persona.nombre)
+            print("---------------------------------------")
+            print(propietarios)
+            for p in propietarios:
+                print (p.persona.pk)
+                print (p.persona)
+                print (p.persona.nombre)
+                print (p.persona.apellido)
+
+            print("---------------------------------------")
+            #print (propietario)
+            #print (tramites_de_propietario)
+            print("---------------------------------------")
 
         if request.POST.get('id_campo') == '2':
             print ("filtro por profesional")
 
         if request.POST.get('id_campo') == '3':
-            print ("filtro por estado")
 
-        if request.POST.get('id_campo') == '4':
-            print ("filtro por medidas")
+
+            '''estoy con filtro por estaado'''
+
+            print ("filtro por estado")
+            nombre_estado = request.POST.get('valor_a_comparar')
+
+            tramites = Tramite.objects.all()
+            #tramites = Tramite.objects.en_estado(arg)
+
+        if request  .POST.get('id_campo') == '4':
+            print ("filtro por medidas - falta mayor, menor, entre")
+            tramites = Tramite.objects.filter(medidas=request.POST.get('valor_a_comparar'))
 
         if request.POST.get('id_campo') == '5':
-            print ("filtro por tipo")
+            print ("ok")
+            tipo = TipoObra.objects.get(nombre=request.POST.get('valor_a_comparar'))
+            tramites = Tramite.objects.filter(tipo_obra=tipo.pk)
 
-        argumentos = [Iniciado, ConCorrecciones, ConCorreccionesRealizadas, Aceptado, ConCorreccionesDeVisado,
-        CorreccionesDeVisadoRealizadas, AgendadoParaVisado, Visado, ConCorreccionesDePrimerInspeccion,
-        CorreccionesDePrimerInspeccionRealizadas, AgendadoPrimerInspeccion, PrimerInspeccion, AprobadoSolicitado,
-        Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario, AprobadoPorPropietario,
-        ConCorreccionesDeInspeccion, CorreccionesDeInspeccionRealizadas, AgendadoInspeccion, Inspeccionado,
-        FinalObraTotalSolicitado, FinalObraParcialSolicitado, NoFinalObraTotalSolicitado,
-        ConCorreccionesDeInspeccionFinal, CorreccionesDeInspeccionFinalRealizadas, AgendadoInspeccionFinal,
-        InspeccionFinal, Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]
-        lab = ['Iniciado', 'Con Correc.', 'Con Correc. Realizadas', 'Aceptado', 'Con Correc. de Vis.',
-        'Correc. Vis. Realizadas', 'Ag.Visado', 'Visado', 'Con Correc. de 1er Insp.',
-        'Correc. 1er. Insp. Realizadas', 'Ag. 1er. Inspeccion', '1er Inspeccion', 'Aprob. Sol.',
-        'Aprobado', 'No Aprob. Sol.', 'No Aprobado', 'Aprob. Sol. x Prop.', 'Aprob. x Prop.', 'Con Correc. de Insp.',
-        'Correc. de Insp. Realizadas', 'Agendado Insp.', 'Inspeccionado', 'F.O.T.S.', 'F.O.P.S.', 'N.F.O.T.S.',
-        'Con Correc. de Insp. F.', 'Correc. de Insp. F. Realizadas', 'Ag. Insp. F.',
-        'Inspeccion F.', 'Finalizado', 'NoFinalizado', 'F.O.T.S. x Prop.', 'Baja']
+        print(tramites)
+
+
+
 
 
         #estados = Estado.objects.all()
@@ -1896,7 +1925,7 @@ def reporte_de_tramites(request):
         #for est in estados_de_tramite:
         #    fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"))
 
-
+        '''
         len_argumentos = len(argumentos)
         tramites = Tramite.objects.en_estado(argumentos)
         estados = []
@@ -1908,12 +1937,14 @@ def reporte_de_tramites(request):
                 estados_cant.setdefault(n, 0)
         estados_datos = estados_cant.values()
         cant_est_x_est = dict(zip(lab, estados_datos))
+        '''
 
 
-
-        contexto = {'todos_los_tramites': tramites, "datos_estados": estados_datos, "label_estados": lab, "cant_est_x_est": cant_est_x_est, "perfil": perfil}
+        #contexto = {'todos_los_tramites': tramites, "datos_estados": estados_datos, "label_estados": lab, "cant_est_x_est": cant_est_x_est, "perfil": perfil}
+        contexto = {'todos_los_tramites': tramites, "label_estados": lab, "perfil": perfil}
     else:
-        contexto = {"perfil": perfil}
+        tramites = Tramite.objects.all()
+        contexto = {'todos_los_tramites': tramites, "perfil": perfil}
     return render(request, 'persona/director/reporte_de_tramites.html', contexto)
 
 def empleados_con_director():
