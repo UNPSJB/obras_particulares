@@ -44,45 +44,143 @@
                         </div>
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<form method="post" enctype="multipart/form-data">
-								<div class="col-sm-2 controls">
-									<select class="form-control input-sm" id="id_campo" name="id_campo" >
-										<option value="0" selected>Nro</option>
-										<option value="1">Propietario</option>
-										<option value="2">Profesional</option>
-										<option value="3">Estado</option>
-										<option value="4">Medidas</option>
-										<option value="5">Tipo</option>
-									</select>
-								</div>
-								<div class="col-sm-2 controls">
-									<select class="form-control input-sm" id="id_operacion" name="id_operacion">
-										<option value="0" selected>Es igual a</option>
-										<option value="1">No es igual a</option>
-										<option value="2">Contiene</option>
-										<option value="3">No contiene</option>
-										<option value="4">Empieza por</option>
-										<option value="5">No empieza por</option>
-										<option value="6">Acaba por</option>
-										<option value="7">No acaba por</option>
-										<option value="8">Es menor que</option>
-										<option value="9">Es menor o igual que</option>
-										<option value="10">Es mayor que</option>
-										<option value="11">Es mayor o igual que</option>
-									</select>
-								</div>
-								<div class="controls col-sm-2">
-									<input type="text" class="form-control input-sm" name="valor_a_comparar" id="valor_a_comparar">
-								</div>
-								<div class="controls col-sm-2">
-									<input type="text" class="form-control input-sm" name="valor_a_comparar1" id="valor_a_comparar1">
-								</div>
-								<div class="col-sm-1">
-									<input type="submit" name="buscar" value="Buscar" class="btn btn-primary btn-sm" id="boton_buscar" disabled>
-								</div>
-								<div class="col-sm-2">
-									<input type="button" class="btn btn-warning btn-sm" id="boton_resetear" value="Resetear búsqueda" disabled>
-								</div>
 
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <br>
+                                    <div class="col-sm-3 controls" >
+                                        <select class="form-control input-sm" id="id_campoNro" name="id_campoNro" disabled>
+                                            <option value="0" selected>Nro</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3 controls">
+                                        <select class="form-control input-sm" id="id_operacionNro" name="id_operacionNro">
+                                            <option value="0" selected>Es igual a</option>
+                                            <option value="8">Es menor que</option>
+                                            <option value="9">Es menor o igual que</option>
+                                            <option value="10">Es mayor que</option>
+                                            <option value="11">Es mayor o igual que</option>
+                                            <option value="12">Esta entre</option>
+                                        </select>
+                                    </div>
+                                    <div class="controls col-sm-3">
+                                        <input type="number" class="form-control input-sm" name="valor_a_comparar01" id="valor_a_comparar01">
+                                    </div>
+                                    <div class="controls col-sm-3">
+                                        <input type="number" class="form-control input-sm" name="valor_a_comparar02" id="valor_a_comparar02">
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <br>
+                                    <div class="col-sm-3 controls">
+                                        <select class="form-control input-sm" id="id_campoPropietario" name="id_campoPropietario" disabled>
+                                            <option value="1" selected>Propietario</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3 controls">
+                                        <select class="form-control input-sm" id="id_operacionPropietario" name="id_operacionPropietario" disabled>
+                                            <option value="0" selected>Es igual a</option>
+                                        </select>
+                                    </div>
+                                    <div class="controls col-sm-3">
+                                        <input type="text" class="form-control input-sm" name="valor_a_comparar11" id="valor_a_comparar11">
+                                    </div>
+                                    <div class="controls col-sm-3">
+                                        <input type="text" class="form-control input-sm" name="valor_a_comparar12" id="valor_a_comparar12" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <br>
+                                    <div class="col-sm-3 controls">
+                                        <select class="form-control input-sm" id="id_campoProfesional" name="id_campoProfesional" disabled>
+                                            <option value="2" selected>Profesional</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3 controls">
+                                        <select class="form-control input-sm" id="id_operacionProfesional" name="id_operacionProfesional" disabled>
+                                            <option value="0" selected>Es igual a</option>
+                                        </select>
+                                    </div>
+                                    <div class="controls col-sm-3">
+                                        <input type="text" class="form-control input-sm" name="valor_a_comparar21" id="valor_a_comparar21">
+                                    </div>
+                                    <div class="controls col-sm-3">
+                                        <input type="text" class="form-control input-sm" name="valor_a_comparar22" id="valor_a_comparar22" disabled>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <br>
+                                    <div class="col-sm-3 controls">
+                                        <select class="form-control input-sm" id="id_campoEstado" name="id_campoEstado" disabled>
+                                            <option value="3" selected>Estado</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3 controls">
+                                        <select class="form-control input-sm" id="id_operacionEstado" name="id_operacionEstado" disabled>
+                                            <option value="0" selected>Es igual a</option>
+                                        </select>
+                                    </div>
+                                    <div class="controls col-sm-3">
+                                        <input type="text" class="form-control input-sm" name="valor_a_comparar31" id="valor_a_comparar31">
+                                    </div>
+                                    <div class="controls col-sm-3">
+                                        <input type="text" class="form-control input-sm" name="valor_a_comparar32" id="valor_a_comparar32" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <br>
+                                    <div class="col-sm-3 controls">
+                                        <select class="form-control input-sm" id="id_campoMedidas" name="id_campoMedidas" disabled>
+                                            <option value="4" selected>Medidas</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3 controls">
+                                        <select class="form-control input-sm" id="id_operacionMedidas" name="id_operacionMedidas">
+                                            <option value="0" selected>Es igual a</option>
+                                            <option value="8">Es menor que</option>
+                                            <option value="9">Es menor o igual que</option>
+                                            <option value="10">Es mayor que</option>
+                                            <option value="11">Es mayor o igual que</option>
+                                            <option value="12">Esta entre</option>
+                                        </select>
+                                    </div>
+                                    <div class="controls col-sm-3">
+                                        <input type="number" class="form-control input-sm" name="valor_a_comparar41" id="valor_a_comparar41">
+                                    </div>
+                                    <div class="controls col-sm-3">
+                                        <input type="number" class="form-control input-sm" name="valor_a_comparar42" id="valor_a_comparar42">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <br>
+                                    <div class="col-sm-3 controls">
+                                        <select class="form-control input-sm" id="id_campoTipo" name="id_campoTipo" disabled>
+                                            <option value="5" selected>Tipo</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3 controls">
+                                        <select class="form-control input-sm" id="id_operacionTipo" name="id_operacionTipo" disabled>
+                                            <option value="0" selected>Es igual a</option>
+                                        </select>
+                                    </div>
+                                    <div class="controls col-sm-3">
+                                        <input type="text" class="form-control input-sm" name="valor_a_comparar51" id="valor_a_comparar51">
+                                    </div>
+                                    <div class="controls col-sm-3">
+                                        <input type="text" class="form-control input-sm" name="valor_a_comparar52" id="valor_a_comparar52" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                                    <br>
+                                    <!--div class="col-sm-3"-->
+                                        <input type="submit" name="buscar" value="Buscar" class="btn btn-primary btn-sm" id="boton_buscar">
+                                    <!--/div-->
+                                    <!--div class="col-sm-3">
+                                        <input type="button" class="btn btn-warning btn-sm" id="boton_resetear" value="Resetear búsqueda" disabled>
+                                    </div-->
+                                </div>
 							</form>
 
 						</div>

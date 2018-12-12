@@ -1845,74 +1845,105 @@ def reporte_de_tramites(request):
            'Con Correc. de Insp. F.', 'Correc. de Insp. F. Realizadas', 'Ag. Insp. F.',
            'Inspeccion F.', 'Finalizado', 'NoFinalizado', 'F.O.T.S. x Prop.', 'Baja']
 
+
+
     if request.method == "POST":
 
-        if request.POST.get('id_campo') == '0':
-            print("---------------------------------------")
-            print (request.POST.get('valor_a_comparar'))
-            tramites = Tramite.objects.filter(pk=request.POST.get('valor_a_comparar'))
+        tramites = Tramite.objects.all()
+
+        #print("-----------------------------")
+        #print(request.POST)
+        #print("-----------------------------")
+
+        if request.POST.get('valor_a_comparar01') or request.POST.get('valor_a_comparar02'):
+            #print("---------------------------------------")
+            #print (request.POST.get('valor_a_comparar'))
+            tramites = Tramite.objects.filter(pk=request.POST.get('valor_a_comparar01'))
+            print (tramites)
 
 
-
-        if request.POST.get('id_campo') == '1':
+        if request.POST.get('id_campoPropietario'):
             print ("filtro por propietario - falta mayor, menor, entre")
-            nombre = request.POST.get('valor_a_comparar')
-            nombreT = nombre.split(', ')
-            personas = Persona.objects.filter(nombre=nombreT[1], apellido=nombreT[0])
+            #nombre = request.POST.get('valor_a_comparar')
+            #nombreT = nombre.split(', ')
+            #personas = Persona.objects.filter(nombre=nombreT[1], apellido=nombreT[0])
 
 
-            propietarios = Propietario.objects.all()
+            #propietarios = Propietario.objects.all()
 
             #propietario = filter(lambda p: (p.persona.nombre == persona.nombre and p.persona.apellido == persona.apellido), propietarios)
 
 
-            #tramites = Tramite.objects.all()
+            tramites = Tramite.objects.all()
             #tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == pk_persona), tramites)
 
 
 
             #prop = Propietario.objects.filter()
             #tram = Tramite.objects.filter(propietario=request.POST.get('valor_a_comparar'))
-            print("---------------------------------------")
-            print (persona)
-            print (persona.nombre)
-            print("---------------------------------------")
-            print(propietarios)
-            for p in propietarios:
-                print (p.persona.pk)
-                print (p.persona)
-                print (p.persona.nombre)
-                print (p.persona.apellido)
+            #print("---------------------------------------")
+            #print (persona)
+            #print (persona.nombre)
+            #print("---------------------------------------")
+            #print(propietarios)
+            #for p in propietarios:
+              #  print (p.persona.pk)
+             #   print (p.persona)
+             #   print (p.persona.nombre)
+             #   print (p.persona.apellido)
 
-            print("---------------------------------------")
+            #print("---------------------------------------")
             #print (propietario)
             #print (tramites_de_propietario)
-            print("---------------------------------------")
+            #print("---------------------------------------")
 
-        if request.POST.get('id_campo') == '2':
+        if request.POST.get('valor_a_comparar21'):
             print ("filtro por profesional")
-
-        if request.POST.get('id_campo') == '3':
-
-
-            '''estoy con filtro por estaado'''
-
-            print ("filtro por estado")
-            nombre_estado = request.POST.get('valor_a_comparar')
-
             tramites = Tramite.objects.all()
+
+            nombre = request.POST.get('valor_a_comparar21')
+            nombreT = nombre.split(', ')
+
+            #print (nombreT[0])
+            #print (nombreT[1])
+
+            personas = Persona.objects.filter(nombre=nombreT[1], apellido=nombreT[0])
+
+            #print (personas)
+
+            t = []
+            print("-------------------------")
+            for p in personas:
+                pk_profesional = p.profesional.pk
+                print(filter(lambda t: (t.propietario.persona.pk == pk_profesional), tramites))
+            print("-------------------------")
+
+            print (t)
+
+
+
+
+
+
+        if request.POST.get('id_campoEstado') == '3':
+            print ("filtro por estado")
+            tramites = Tramite.objects.all()
+            #nombre_estado = request.POST.get('valor_a_comparar')
+
+            #tramites = Tramite.objects.all()
             #tramites = Tramite.objects.en_estado(arg)
 
-        if request  .POST.get('id_campo') == '4':
+        if request.POST.get('valor_a_comparar41') or request.POST.get('valor_a_comparar42'):
             print ("filtro por medidas - falta mayor, menor, entre")
-            tramites = Tramite.objects.filter(medidas=request.POST.get('valor_a_comparar'))
+            tramites = Tramite.objects.filter(medidas=request.POST.get('valor_a_comparar41'))
 
-        if request.POST.get('id_campo') == '5':
-            print ("ok")
-            tipo = TipoObra.objects.get(nombre=request.POST.get('valor_a_comparar'))
+        if request.POST.get('valor_a_comparar51'):
+            print ("filtro por tipo - ok")
+            tipo = TipoObra.objects.get(nombre=request.POST.get('valor_a_comparar51'))
             tramites = Tramite.objects.filter(tipo_obra=tipo.pk)
+            print (tramites)
 
-        print(tramites)
+        #print(tramites)
 
 
 
@@ -1987,6 +2018,12 @@ def ver_listado_todos_usuarios(request):
 
 def ver_actividad_usuario(request, usuario):
     usuarios = Usuario.objects.all()
+
+    print ("+++++++++++++++++++++++++++++++++++++++++")
+    print (usuario)
+    print ("+++++++++++++++++++++++++++++++++++++++++")
+    print (usuarios)
+    print ("+++++++++++++++++++++++++++++++++++++++")
     usuario_req = filter(lambda u: (str(u) == usuario), usuarios)
     estados = Estado.objects.all()
     estados_usuario_req = filter(lambda estado: (str(estado.usuario) == str(usuario_req[0])), estados)
