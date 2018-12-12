@@ -1504,7 +1504,7 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
         else:
             messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
     else:
-        return render(request, 'persona/jefe_inspector/cambiar_inspector_d_inspeccion.html', {'estado': estado, "perfil": perfil, 'inspectores': inspectores_sin_insp_agendadas})
+        return render(request, 'persona/jefe_inspector/cambiar_inspector_de_inspeccion.html', {'estado': estado, "perfil": perfil, 'inspectores': inspectores_sin_insp_agendadas})
     return redirect('jefeinspector')
 
 
