@@ -68,10 +68,11 @@
 		</ul>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
-			<li><a href="vista_de_tramites">Tramites en curso</a></li>
-			<li><a href="vista_de_usuarios">Empleados</a></li>
+			<!--li><a href="vista_de_tramites">Tramites en curso</a></li-->
 			<li><a href="director/listado_profesionales">Profesionales</a></li>
 			<li><a href="director/listado_propietarios">Propietarios</a></li>
+			<li><a href="vista_de_usuarios">Empleados</a></li>
+			<li><a href="reporte_de_tramites">Reporte de tramites</a></li>
 		</ul>
 	</font>
 </ul>
@@ -349,7 +350,7 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							{% block contenido_cambiar_inspectores_de_inspeccion %}
-							{% include "persona/jefe_inspector/inspectores_con_inspeccion_agendada.html" with estados=ctxinspectoresconinspeccionesagendadas%}
+							{% include "persona/director/inspectores_con_inspeccion_agendada.html" with estados=ctxinspectoresconinspeccionesagendadas%}
 							{% endblock %}
 						</div>
 					</div>
@@ -471,7 +472,7 @@
 		</div>
 	</div>
 	</div>
-	<form action="{% url 'alta_baja_usuarios' %}"method="POST" style="display:none" id="formAltaBaja">{%csrf_token%}
+	<form action="{% url 'alta_baja_usuarios' %}" method="POST" style="display:none" id="formAltaBaja">{%csrf_token%}
 		<input type="text" name="id_form_usuario" id="id_form_usuario" value=" ">
 		<input type="text" name="id_form_opcion" id="id_form_opcion" value=" ">
 	</form>

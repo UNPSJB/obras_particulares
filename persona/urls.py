@@ -99,12 +99,14 @@ urlpatterns = [
     url(r'^ver_documentos_del_estado/(?P<pk_estado>\d+)/$', views.ver_documentos_del_estado, name="ver_documentos_del_estado"),
     url(r'^alta_baja_usuarios/$', views.alta_baja_usuarios, name="alta_baja_usuarios"),
     url(r'^get_grupos_usuario/$', views.get_grupos_usuario, name="get_grupos_usuario"),
+url(r'^inspectores_sin_inspeccion_agendada/(?P<pk_estado>\d+)/$', views.inspectores_sin_inspeccion_agendada, name="inspectores_sin_inspeccion_agendada"),
     url(r'^director/listado_profesionales/$', views.listado_profesionales_director, name="listado_profesionales"),
     url(r'^reporte_profesionales_director_excel/', ReporteProfesionalesDirectorExcel.as_view(), name="reporte_profesionales_director_excel"),
     url(r'^director/listado_propietarios/$', views.listado_propietarios_director, name="listado_propietarios_director"),
     url(r'^reporte_propietarios_director_excel/', ReportePropietariosDirectorExcel.as_view(), name="reporte_propietarios_director_excel"),
     url(r'^reporte_profesionales_director_pdf/$', login_required(ReporteProfesionalesDirectorPdf.as_view()), name="reporte_profesionales_director_pdf"),
     url(r'^reporte_propietarios_director_pdf/$', login_required(ReportePropietariosDirectorPdf.as_view()), name="reporte_propietarios_director_pdf"),
+    url(r'^reporte_de_tramites/$', views.reporte_de_tramites, name="reporte_de_tramites"),
 
     #general ----------------------------------------------------------------------------------------------------
     url(r'^cambiar_perfil/$', views.cambiar_perfil, name="cambiar_perfil"),

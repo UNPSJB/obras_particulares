@@ -1,0 +1,255 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block estilos %}
+<link rel="stylesheet" type="text/css" href="{% static perfil %}">
+{% endblock %}
+
+{% block imagenusuario %}
+<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
+{% endblock %}
+
+{% block barra %}
+<div id="contenedor_botoncalapsable_sidebar">
+	<button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
+		<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+	</button>
+</div>
+<ul class="sidebar sidebar-1">
+	<font size="2">
+		<li><a href="javascript:history.back(-1);" class="current"><font>Director</font></a></li>
+	</font>
+</ul>
+{% endblock %}
+
+{% block contenido %}
+<div id="contenedor_botoncalapsable_resto"></div>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+
+	<div class="panel">
+		<div class="panel-heading box" role="tab" id="headingTwo">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+					<font color="#ffffff" size="2">Reporte tramites</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseTwo" class="panel-collapse colorG" role="tabpanel" aria-labelledby="headingTwo">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+
+							<form method="post" enctype="multipart/form-data">
+								<div class="col-sm-1">
+									<h6><strong for="id_campo">Filtrar x:</strong></h6>
+								</div>
+								<div class="col-sm-2 controls">
+									<select class="form-control input-sm" id="id_campo" name="id_campo" >
+										<option value="0" selected>Nro</option>
+										<option value="1">Propietario</option>
+										<option value="2">Profesional</option>
+										<option value="3">Estado</option>
+										<option value="4">Medidas</option>
+										<option value="5">Tipo</option>
+									</select>
+								</div>
+								<div class="col-sm-2 controls">
+									<select class="form-control input-sm" id="id_operacion" name="id_operacion">
+										<option value="0" selected>Es igual a</option>
+										<option value="1">No es igual a</option>
+										<option value="2">Contiene</option>
+										<option value="3">No contiene</option>
+										<option value="4">Empieza por</option>
+										<option value="5">No empieza por</option>
+										<option value="6">Acaba por</option>
+										<option value="7">No acaba por</option>
+										<option value="8">Es menor que</option>
+										<option value="9">Es menor o igual que</option>
+										<option value="10">Es mayor que</option>
+										<option value="11">Es mayor o igual que</option>
+									</select>
+								</div>
+								<div class="controls col-sm-2">
+									<input type="text" class="form-control input-sm" name="valor_a_comparar" id="valor_a_comparar">
+								</div>
+								<div class="controls col-sm-2">
+									<input type="text" class="form-control input-sm" name="valor_a_comparar1" id="valor_a_comparar1">
+								</div>
+								<div class="col-sm-1">
+									<input type="submit" name="buscar" value="Buscar" class="btn btn-primary btn-sm" id="boton_buscar" disabled>
+								</div>
+								<div class="col-sm-2">
+									<input type="button" class="btn btn-warning btn-sm" id="boton_resetear" value="Resetear búsqueda" disabled>
+								</div>
+
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+		<div class="panel">
+		<div class="panel-heading box" role="tab" id="headingOne">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+					<font color="#ffffff" size="2">Detalle de tramites filtrados</font>
+				</a>
+			</h5>
+		</div>
+    	<div id="collapseOne" class="panel-collapse colorp" role="tabpanel" aria-labelledby="headingOne">
+      		<div class="panel-body">
+        		<div class="container-fluid">
+          			<div class="row">
+            			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="table-responsive">
+								<table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+									<thead>
+										<tr>
+											<th>Nro</th>
+											<th>Propietario</th>
+											<th>Profesional</th>
+											<th>Estado</th>
+											<th>Medidas</th>
+											<th>Tipo</th>
+											<th>Detalle</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% if todos_los_tramites %}
+										{% for tramite in todos_los_tramites %}
+										<!tr>
+											<td class="col-xs-1" align="center">{{tramite.id}}</td>
+											<td class="col-xs-2">{{tramite.propietario}}</td>
+											<td class="col-xs-3">{{tramite.profesional}}</td>
+											<td class="col-xs-2">{{tramite.estado}}</td>
+											<td class="col-xs-1">{{tramite.medidas}}</td>
+											<td class="col-xs-2" align="center">{{tramite.tipo_obra}}</td>
+											<td align="center" class="col-xs-1">
+												<a href="{% url 'detalle_de_tramite' tramite.pk %}">
+													<button type="button" class="btn btn-primary btn-xs" name="detalle">
+														<span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
+													</button>
+												</a>
+											</td>
+										</tr>
+										{% endfor %}
+										{% endif%}
+									</tbody>
+								</table>
+							</div>
+							<hr>
+						</div>
+						<div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
+							<a id="crear_detalle" href="{% url 'reporte_tramites_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+								<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
+							</a>
+							<a href="{% url 'reporte_tramites_director_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
+								<i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
+							</a>
+						</div>
+						<div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4" align="right">
+							<a href="javascript:history.back(-1);">
+								<button type="button" class="btn btn-primary" name="Volver">
+									Volver
+								</button>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+
+<script>
+		/* Comprobamos si se activa o desactiva el botón de búsqueda personalizada y el de reseteo. */
+		$('#valor_a_comparar').on('keyup keypress change', function(){
+			$('#boton_buscar').prop('disabled', ($('#valor_a_comparar').prop('value') == ""));
+			$('#boton_resetear').prop('disabled', ($('#id_campo').prop('value') == "0" && $('#id_operacion').prop('value') == "0" && $('#id_campo').prop('value') == ""));
+		});
+		$('#id_campo, #id_operacion').on('change', function(){
+			$('#boton_resetear').prop('disabled', ($('#id_campo').prop('value') == "0" && $('#id_operacion').prop('value') == "0" && $('#valor_a_comparar').prop('value') == ""));
+		});
+
+		/* Si se pulsa el botón de reset. */
+		$('#boton_resetear').on('click', function(){
+			$('#id_campo, #id_operacion').prop('value', '0');
+			$('#valor_a_comparar, #valor_a_comparar1').prop('value', '');
+			$('#boton_buscar').prop('disabled', true);
+			$('#boton_resetear').prop('disabled', true);
+			objetoDataTables_tramites
+				.columns([0,1,2,3,4,5])
+				.search('')
+				.draw();
+		});
+
+		/* Cuando se pulsa el botón de búsqueda se construye la regla de búsqueda según se ha solicitado. */
+		$('#boton_buscaraqaqaq').on('click', function(){
+			var clausula = "";
+			switch ($('#id_operacion').prop('value')) {
+				case '0':
+					clausula = " = '" + $('#valor_a_comparar').prop('value') + "' "; // Es igual a lo que hay en el campo de texto
+					break;
+				case '1':
+					clausula = " != '" + $('#valor_a_comparar').prop('value') + "' "; // No es igual a lo que hay en el campo de texto
+					break;
+				case '2':
+					clausula = " LIKE '%" + $('#valor_a_comparar').prop('value') + "%' "; // Contiene lo que hay en el campo de texto
+					break;
+				case '3':
+					clausula = " NOT LIKE '%" + $('#valor_a_comparar').prop('value') + "%' "; // No contiene lo que hay en el campo de texto
+					break;
+				case '4':
+					clausula = " LIKE '" + $('#valor_a_comparar').prop('value') + "%' "; // Empieza por lo que hay en el campo de texto
+					break;
+				case '5':
+					clausula = " NOT LIKE '" + $('#valor_a_comparar').prop('value') + "%' "; // No empieza por lo que hay en el campo de texto
+					break;
+				case '6':
+					clausula = " LIKE '%" + $('#valor_a_comparar').prop('value') + "' "; // Acaba por lo que hay en el campo de texto
+					break;
+				case '7':
+					clausula = " NOT LIKE '%" + $('#valor_a_comparar').prop('value') + "' "; // No acaba por lo que hay en el campo de texto
+					break;
+				case '8':
+					clausula = " < '" + $('#valor_a_comparar').prop('value') + "' "; // Es menor que lo que hay en el campo de texto
+					break;
+				case '9':
+					clausula = " <= '" + $('#valor_a_comparar').prop('value') + "' "; // Es menor o igual que lo que hay en el campo de texto
+					break;
+				case '10':
+					clausula = " > '" + $('#valor_a_comparar').prop('value') + "' "; // Es mayor que lo que hay en el campo de texto
+					break;
+				case '11':
+					clausula = " >= '" + $('#valor_a_comparar').prop('value') + "' "; // Es mayor o igual que lo que hay en el campo de texto
+					break;
+			}
+			objetoDataTables_tramites
+				.columns([0,1,2,3,4,5])
+				.search('')
+				.column($('#id_campo').prop('value'))
+				.search(clausula)
+				.draw();
+		});
+	</script>
+
+	<script>
+		var c = document.getElementById("botonConfiguracion");
+		c.style.display= '';
+		var d = document.getElementById("imagenusuario");
+		d.style.display= '';
+	</script>
+{% endblock %}
