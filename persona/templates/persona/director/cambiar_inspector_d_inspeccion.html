@@ -102,26 +102,26 @@
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 									<div class="form-group">
 										<label>Usuario:</label>
-										<input class="form-control input-sm" id="usuarioUsuarioS" name="usuarioempleado" type="text" placeholder="Usuario seleccionado" title="Usuario seleccionado"  disabled/>
+										<input class="form-control input-sm" id="usuarioUsuarioS" name="usuarioUsuarioS" type="text" placeholder="Usuario seleccionado" title="Usuario seleccionado"  disabled/>
 										<br>
 									</div>
 									<div class="form-group" style="display: none">
 										<label>Id:</label>
-										<input class="form-control input-sm" id="idusuarioUsuarioS" name="idempleado" type="text" placeholder="Id Usuario seleccionado" title="Id usuario seleccionado"/>
+										<input class="form-control input-sm" id="idusuarioUsuarioS" name="idusuarioUsuarioS" type="text" placeholder="Id Usuario seleccionado" title="Id usuario seleccionado"/>
 										<br>
 									</div>
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 									<div class="form-group">
 										<label>Nombre:</label>
-										<input class="form-control input-sm" id="nombreUsuarioS" name="nombreempleado" type="text" placeholder="Nombre del usuario seleccionado" title="Nombre del usuario seleccionado"  disabled/>
+										<input class="form-control input-sm" id="nombreUsuarioS" name="nombreUsuarioS" type="text" placeholder="Nombre del usuario seleccionado" title="Nombre del usuario seleccionado"  disabled/>
 										<br>
 									</div>
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 									<div class="form-group">
 										<label>Apellido:</label>
-										<input class="form-control input-sm" id="apellidoUsuarioS" name="apellidoempleado" type="text" placeholder="Apellido del usuario seleccionado" title="Apellido del usuario seleccionado"  disabled/>
+										<input class="form-control input-sm" id="apellidoUsuarioS" name="apellidoUsuarioS" type="text" placeholder="Apellido del usuario seleccionado" title="Apellido del usuario seleccionado"  disabled/>
 										<br>
 									</div>
 								</div>
@@ -182,7 +182,7 @@
 			{% for uf in inspectores %}
 				if ("{{uf.persona.dni}}" == document.getElementById("usuarios").value){
 					usuario_filtrado_usuario.push("{{uf}}");
-					usuario_filtrado_pk.push("{{uf.persona.id}}");
+					usuario_filtrado_pk.push({{uf.persona.id}} + 1);
 					usuario_filtrado_nombre.push("{{uf.persona.nombre}}");
 					usuario_filtrado_apellido.push("{{uf.persona.apellido}}");
 				}

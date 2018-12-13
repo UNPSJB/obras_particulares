@@ -1488,21 +1488,33 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
                     inspectores.append(u)
     estados = Estado.objects.all()
     tipos = [11, 21]
-    estados_agendados = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or str(e.tramite.estado()) == 'AgendadoInspeccion') and (e.tipo == tipos[0] or e.tipo == tipos[1])), estados)
+    estados_agendados = filter(
+        lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or
+                                              str(e.tramite.estado()) == 'AgendadoInspeccion') and
+                   (e.tipo == tipos[0] or e.tipo == tipos[1])) and
+                  e.timestamp.date() == estado.timestamp.date()
+        , estados)
     inspectores_estados_agendados = []
     for i in range(len(list(estados_agendados))):
         inspectores_estados_agendados.append(estados_agendados[i].usuario)
+    inspectores_tres_estados_agendados = []
+    for i in range(len(list(inspectores_estados_agendados))):
+        if inspectores_estados_agendados.count(inspectores_estados_agendados[i]) >= 3:
+            inspectores_tres_estados_agendados.append(inspectores_estados_agendados[i])
     inspectores_sin_insp_agendadas = []
     for inp in inspectores:
-        if inp not in inspectores_estados_agendados:
+        if inp not in inspectores_tres_estados_agendados and inp != estado.usuario:
             inspectores_sin_insp_agendadas.append(inp)
     if request.method == "POST" and "cambiar_inspector" in request.POST:
-        inspector = get_object_or_404(Usuario, pk=request.POST["idempleado"])
-        if estado.usuario.persona.id != inspector.persona.id:
-            estado.cambiar_usuario(inspector)
-            messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
+        if request.POST["idusuarioUsuarioS"]:
+            inspector = get_object_or_404(Usuario, pk=request.POST["idusuarioUsuarioS"])
+            if estado.usuario.persona.id != inspector.persona.id:
+                estado.cambiar_usuario(inspector)
+                messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
+            else:
+                messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
         else:
-            messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
+            messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. No ha sido seleccionado un inspector")
     else:
         return render(request, 'persona/jefe_inspector/cambiar_inspector_de_inspeccion.html', {'estado': estado, "perfil": perfil, 'inspectores': inspectores_sin_insp_agendadas})
     return redirect('jefeinspector')
@@ -1714,20 +1726,6 @@ def tramites_con_visado_agendado():
     estados = Estado.objects.all()
     tipos = [7]
     estados_agendados= filter(lambda e: (e.usuario is not None and str(e.tramite.estado()) == 'AgendadoParaVisado' and e.tipo == tipos[0]), estados)
-
-
-    print("--------------------------------------")
-    for estado in estados_agendados:
-        print (estado)
-        print (estado.tramite.id)
-        print (estado.usuario)
-        #print (estado.tramite.estado.timestamp.timestamp)
-        print (estado.tramite.tipo_obra)
-        print (estado.tramite.profesional)
-        print (estado.tramite.propietario)
-        print (estado.tramite.medidas)
-    print("--------------------------------------")
-
     return estados_agendados
 
 
@@ -1754,15 +1752,8 @@ def visadores_sin_visado_agendado(request, pk_estado):
         if vis not in visadores_estados_agendados:
             visadores_sin_vis_agendadas.append(vis)
     if request.method == "POST" and "cambiar_visador" in request.POST:
-
-        print ("++++++++++++++++++++ recibo +++++++++++++++++++++")
         if request.POST["idusuarioUsuarioS"]:
-
             visador = get_object_or_404(Usuario, pk=request.POST["idusuarioUsuarioS"])
-
-            print (visador)
-            print ("++++++++++++++++++++++++++++++++++++++++++++++++++")
-
             if estado.usuario.persona.id != visador.persona.id:
                 estado.cambiar_usuario(visador)
                 messages.add_message(request, messages.SUCCESS, "El visador del tramite ha sido cambiado")
@@ -1789,21 +1780,34 @@ def inspectores_sin_inspeccion_agendada(request, pk_estado):
                     inspectores.append(u)
     estados = Estado.objects.all()
     tipos = [11, 21]
-    estados_agendados = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or str(e.tramite.estado()) == 'AgendadoInspeccion') and (e.tipo == tipos[0] or e.tipo == tipos[1])), estados)
+    estados_agendados = filter(
+        lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or
+                                              str(e.tramite.estado()) == 'AgendadoInspeccion') and
+                   (e.tipo == tipos[0] or e.tipo == tipos[1])) and
+                  e.timestamp.date() == estado.timestamp.date()
+        , estados)
     inspectores_estados_agendados = []
     for i in range(len(list(estados_agendados))):
         inspectores_estados_agendados.append(estados_agendados[i].usuario)
+    inspectores_tres_estados_agendados = []
+    for i in range(len(list(inspectores_estados_agendados))):
+        if inspectores_estados_agendados.count(inspectores_estados_agendados[i]) >= 3:
+            inspectores_tres_estados_agendados.append(inspectores_estados_agendados[i])
     inspectores_sin_insp_agendadas = []
     for inp in inspectores:
-        if inp not in inspectores_estados_agendados:
+        if inp not in inspectores_tres_estados_agendados and inp != estado.usuario:
             inspectores_sin_insp_agendadas.append(inp)
     if request.method == "POST" and "cambiar_inspector" in request.POST:
-        inspector = get_object_or_404(Usuario, pk=request.POST["idempleado"])
-        if estado.usuario.persona.id != inspector.persona.id:
-            estado.cambiar_usuario(inspector)
-            messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
+        if request.POST["idusuarioUsuarioS"]:
+            inspector = get_object_or_404(Usuario, pk=request.POST["idusuarioUsuarioS"])
+            if estado.usuario.persona.id != inspector.persona.id:
+                estado.cambiar_usuario(inspector)
+                messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
+            else:
+                messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
         else:
-            messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
+            messages.add_message(request, messages.ERROR,
+                                 "El inspector del tramite no ha sido cambiado. No se ha seleccionado inspector")
     else:
         return render(request, 'persona/director/cambiar_inspector_d_inspeccion.html', {'estado': estado, "perfil": perfil, 'inspectores': inspectores_sin_insp_agendadas})
     return redirect('director')
