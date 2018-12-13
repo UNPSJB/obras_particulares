@@ -309,6 +309,8 @@
 			{
 				$('#collapseOne').collapse();
 				$("#id_dni").val($("#id_propietario").val())
+				$("#id_dni").attr("disabled", true);
+				$("#id_propietario").attr("disabled", true);
 			}
 		});
 	</script>

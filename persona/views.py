@@ -1852,7 +1852,7 @@ def ver_listado_todos_tramites(request):
     return render(request, 'persona/director/vista_de_tramites.html', contexto)
 
 
-def reporte_de_tramites(request):
+def reporte_de_tramites_por_tipo(request):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
 
@@ -1873,15 +1873,30 @@ def reporte_de_tramites(request):
            'Con Correc. de Insp. F.', 'Correc. de Insp. F. Realizadas', 'Ag. Insp. F.',
            'Inspeccion F.', 'Finalizado', 'NoFinalizado', 'F.O.T.S. x Prop.', 'Baja']
 
-
-
     if request.method == "POST":
 
         tramites = Tramite.objects.all()
+        tiposObra = TipoObra.objects.all()
 
+        tramites_por_tipo = {}
+
+        for to in tiposObra:
+            print("-----------------------------")
+            #print (to)
+            #print("-----------------------------")
+            for t in tramites:
+                if t.tipo_obra == to:
+                    #print(t)
+                    tramites_por_tipo[to] = t
+
+            print("-----------------------------")
+
+        print (tramites_por_tipo)
+        print("-----------------------------")
         #print("-----------------------------")
         #print(request.POST)
         #print("-----------------------------")
+
 
         if request.POST.get('valor_a_comparar01') or request.POST.get('valor_a_comparar02'):
             #print("---------------------------------------")
@@ -1889,23 +1904,18 @@ def reporte_de_tramites(request):
             tramites = Tramite.objects.filter(pk=request.POST.get('valor_a_comparar01'))
             print (tramites)
 
-
         if request.POST.get('id_campoPropietario'):
             print ("filtro por propietario - falta mayor, menor, entre")
             #nombre = request.POST.get('valor_a_comparar')
             #nombreT = nombre.split(', ')
             #personas = Persona.objects.filter(nombre=nombreT[1], apellido=nombreT[0])
 
-
             #propietarios = Propietario.objects.all()
 
             #propietario = filter(lambda p: (p.persona.nombre == persona.nombre and p.persona.apellido == persona.apellido), propietarios)
 
-
             tramites = Tramite.objects.all()
             #tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == pk_persona), tramites)
-
-
 
             #prop = Propietario.objects.filter()
             #tram = Tramite.objects.filter(propietario=request.POST.get('valor_a_comparar'))
@@ -1948,11 +1958,6 @@ def reporte_de_tramites(request):
 
             print (t)
 
-
-
-
-
-
         if request.POST.get('id_campoEstado') == '3':
             print ("filtro por estado")
             tramites = Tramite.objects.all()
@@ -1972,10 +1977,6 @@ def reporte_de_tramites(request):
             print (tramites)
 
         #print(tramites)
-
-
-
-
 
         #estados = Estado.objects.all()
         #estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
@@ -1997,14 +1998,12 @@ def reporte_de_tramites(request):
         estados_datos = estados_cant.values()
         cant_est_x_est = dict(zip(lab, estados_datos))
         '''
-
-
         #contexto = {'todos_los_tramites': tramites, "datos_estados": estados_datos, "label_estados": lab, "cant_est_x_est": cant_est_x_est, "perfil": perfil}
         contexto = {'todos_los_tramites': tramites, "label_estados": lab, "perfil": perfil}
     else:
         tramites = Tramite.objects.all()
         contexto = {'todos_los_tramites': tramites, "perfil": perfil}
-    return render(request, 'persona/director/reporte_de_tramites.html', contexto)
+    return render(request, 'persona/director/reporte_de_tramites_por_tipo.html', contexto)
 
 def empleados_con_director():
     usuarios = Usuario.objects.all()
