@@ -53,7 +53,7 @@ class TipoDocumento(models.Model):
     @staticmethod
     def get_tipos_documentos_para_momento(accion):
         devolucion = []
-        for tipo in TipoDocumento.objects.filter(activo=True):  # Se filtran los tipos de documentos que estan activos.
+        for tipo in TipoDocumento.objects.filter(activo=True): #Se filtran los tipos de documentos que estan activos.
             if (tipo.requerido & accion) == accion:
                 devolucion.append(tipo)
         return devolucion
@@ -65,7 +65,7 @@ class TipoDocumento(models.Model):
     def requerido_para(self):
         match = [accion for accion in TipoDocumento.ACCIONES if accion[0] == self.requerido]
         return match[0][1].split(" - ")[1]
-
+        
     """
     Metodo que se encarga de devolver la persona que utiliza el tipo de documento en el
     sistema

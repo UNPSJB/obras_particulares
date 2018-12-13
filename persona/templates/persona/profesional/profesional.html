@@ -309,8 +309,9 @@
 			{
 				$('#collapseOne').collapse();
 				$("#id_dni").val($("#id_propietario").val())
-				$("#id_dni").attr("disabled", true);
-				$("#id_propietario").attr("disabled", true);
+                $('#id_dni').attr('readonly', true);
+                $('#id_propietario').attr('readonly', true);
+                //$('input[title="Ingresar Domicilio"]').val('');
 			}
 		});
 	</script>

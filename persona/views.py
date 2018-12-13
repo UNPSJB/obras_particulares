@@ -264,6 +264,7 @@ def mostrar_profesional(request):
             tramite_form = FormularioIniciarTramite(request.POST)
             documento_set = FormularioDocumentoSet(request.POST, request.FILES)
             propietario = propietario_form.obtener_o_crear(persona)
+
             if propietario is not None and tramite_form.is_valid() and documento_set.is_valid():
                 tramite = tramite_form.save(propietario=propietario, commit=False)
                 lista = []
@@ -2595,5 +2596,3 @@ def get_grupos_usuario(request):
         id = request.GET.get('usuario_id')
         lista = Usuario.objects.filter(id=int(id)).values_list('groups__name',flat=True)
         return JsonResponse(list(lista), safe=False)
-
-
