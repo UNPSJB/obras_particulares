@@ -45,7 +45,7 @@ def home(request):
         return redirect(usuario.get_view_name()) #cuando estoy loqueado y quiero ir a localhost/8000 me devuelve a la vista que me corresponde. no al inicio!
     except Exception as e:
         pass #cuando no estoy logueado vengo a parar aca y sigo el camino normal de abajo.
-    
+
     if request.method == "POST":
         form = FormularioProfesional(request.POST, request.FILES)
         if form.is_valid():
@@ -54,7 +54,7 @@ def home(request):
             messages.add_message(request, messages.SUCCESS, "Solicitud de Registro Enviada")
             return redirect('home')
         else:
-            messages.add_message(request, messages.SUCCESS, "Solicitud de NO Registro Enviada - Comuniquese con el administrador")
+            messages.add_message(request, messages.ERROR, "Error de carga de formulario. Revise los datos ingresados.")
     else:
         form = FormularioProfesional()
     return render(request, 'home.html',{'login_usuario_form': forms.FormularioLogin(),'form':form})

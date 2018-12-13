@@ -61,6 +61,12 @@ class FormularioPersona(forms.ModelForm):
             raise ValidationError('La persona ya existe en el sistema')
         return dato
 
+    def clean_mail(self):
+        mail = self.cleaned_data['mail']
+        if (Persona.objects.filter(mail=mail).exists()):
+            raise ValidationError('Email actualmente en uso')
+        return mail
+
 
 class FormularioProfesional(FormularioPersona):
     '''
@@ -99,6 +105,7 @@ class FormularioProfesional(FormularioPersona):
         persona.save()
         return p
 
+
     def clean_matricula(self):
         '''
         Funcion clean matricula:
@@ -123,6 +130,7 @@ class FormularioPropietario(FormularioPersona):
         super(FormularioPropietario, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = False
+
 
     def save(self, commit=False):
         '''
