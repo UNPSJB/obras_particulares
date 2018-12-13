@@ -30,7 +30,7 @@
 		<div class="panel-heading box" role="tab" id="headingFive">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-					<font color="#ffffff" size="2">Detalle de todos los tramites en curso</font>
+					<font color="#ffffff" size="2">Grafico de tramites</font>
 				</a>
 			</h5>
 		</div>
@@ -38,8 +38,28 @@
 			<div class="panel-body">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<canvas id="chartDirectorTramites" height="80"></canvas> <!--style="padding-left:25px;"-->
+						<div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 ">
+							<canvas id="chartDirectorTramites" height="200"></canvas> <!--style="padding-left:25px;"-->
+						</div>
+						<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+							<div class="">
+								<table  class="table-bordered table-striped table-hover table-condensed" style="background: white;">
+									<thead>
+										<tr style="font-size:10px;">
+											<th>Estado</th>
+											<th>Cantidad</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for key, value in cant_est_x_est.items %}
+										<tr style="font-size:10px;">
+											<td class="col-xs-3" align="center">{{key}}</td>
+											<td class="col-xs-1" align="center">{{value}}</td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -50,7 +70,7 @@
 		<div class="panel-heading box" role="tab" id="headingOne">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-					<font color="#ffffff" size="2">Datos usuarios por grupo</font>
+					<font color="#ffffff" size="2">Detalle de tramites</font>
 				</a>
 			</h5>
 		</div>
@@ -75,7 +95,7 @@
 									<tbody>
 										{% if todos_los_tramites %}
 										{% for tramite in todos_los_tramites %}
-										<tr>
+										<!tr>
 											<td class="col-xs-1" align="center">{{tramite.id}}</td>
 											<td class="col-xs-2">{{tramite.propietario}}</td>
 											<td class="col-xs-3">{{tramite.profesional}}</td>
@@ -185,10 +205,9 @@
 				scales: {
 					xAxes: [{
 						barPercentage: 0.5,
-
 						ticks: {
 							fontColor:"#444444",
-							fontSize: 9,
+							fontSize: 4,
 						},
 						gridLines:{
 							color:"#808b96",
@@ -197,7 +216,6 @@
 						}
 					}],
 					yAxes: [{
-
 						ticks: {
 							beginAtZero:true,
 							stepSize: 1,
@@ -213,6 +231,7 @@
 			}
 		});
 	</script>
+
 	<script>
 		var c = document.getElementById("botonConfiguracion");
 		c.style.display= '';

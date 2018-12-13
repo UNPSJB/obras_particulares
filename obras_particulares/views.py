@@ -40,6 +40,12 @@ def home(request):
     :param request: Requerimiento HTTP.
     :return: Devuelve un formulario de profesional.
     '''
+    try:
+        usuario = request.user
+        return redirect(usuario.get_view_name()) #cuando estoy loqueado y quiero ir a localhost/8000 me devuelve a la vista que me corresponde. no al inicio!
+    except Exception as e:
+        pass #cuando no estoy logueado vengo a parar aca y sigo el camino normal de abajo.
+    
     if request.method == "POST":
         form = FormularioProfesional(request.POST, request.FILES)
         if form.is_valid():

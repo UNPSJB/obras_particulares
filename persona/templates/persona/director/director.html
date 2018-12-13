@@ -69,9 +69,10 @@
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
 			<li><a href="vista_de_tramites">Tramites en curso</a></li>
-			<li><a href="vista_de_usuarios">Empleados</a></li>
 			<li><a href="director/listado_profesionales">Profesionales</a></li>
 			<li><a href="director/listado_propietarios">Propietarios</a></li>
+			<li><a href="vista_de_usuarios">Empleados</a></li>
+			<li><a href="reporte_de_tramites">Reporte de tramites</a></li>
 		</ul>
 	</font>
 </ul>
@@ -245,7 +246,7 @@
 								<select class="form-control input-sm" id="opcionesDelTramite" name="Opciones de Datos del tramite" onChange="opcionesDatosTramite(this.value);">
 									<option selected value="nada"> ¿Que desea hacer? </option>
 									<option value="alta_tipo_documento">Crear tipo de documento</option>
-									<option value="tipos_de_documento">Tipos de documento</option>
+									<option value="tipos_de_documento">Modificar tipo de documento</option>
 									<option value="alta_tipo_de_obra">Crear tipo de obra</option>
 								</select>
 							</div>
@@ -349,7 +350,7 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							{% block contenido_cambiar_inspectores_de_inspeccion %}
-							{% include "persona/jefe_inspector/inspectores_con_inspeccion_agendada.html" with estados=ctxinspectoresconinspeccionesagendadas%}
+							{% include "persona/director/inspectores_con_inspeccion_agendada.html" with estados=ctxinspectoresconinspeccionesagendadas%}
 							{% endblock %}
 						</div>
 					</div>
@@ -471,10 +472,33 @@
 		</div>
 	</div>
 	</div>
-	<form action="{% url 'alta_baja_usuarios' %}"method="POST" style="display:none" id="formAltaBaja">{%csrf_token%}
+	<form action="{% url 'alta_baja_usuarios' %}" method="POST" style="display:none" id="formAltaBaja">{%csrf_token%}
 		<input type="text" name="id_form_usuario" id="id_form_usuario" value=" ">
 		<input type="text" name="id_form_opcion" id="id_form_opcion" value=" ">
 	</form>
+
+	<!-- Modal -->
+	<div class="modal fade" id="eliminar_tipo_de_documento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 align="center">
+					<strong>Eliminar Tipo de Documento<strong>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</h4>
+				</div>
+				<div class="modal-body" style="text-align:center">
+					<strong><h5>Desea eliminar el tipo de documento: </h5><h5 id="id_tipo_documento" value=""></h5></strong>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+					<a href="#"><button type="button" class="btn btn-primary">Confirmar</button></a>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 {% endblock %}

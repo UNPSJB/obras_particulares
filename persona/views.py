@@ -222,15 +222,18 @@ def cambiar_profesional_de_tramite(request, pk_tramite):
         lista = list(u.groups.values_list('name', flat=True))
         for i in range(len(lista)):
             if lista[i] == 'profesional':
-                if u not in profesionales:
+                if u not in profesionales and u != tramite.profesional.persona.usuario:
                     profesionales.append(u)
     if request.method == "POST" and "cambiar_profesional" in request.POST:
-        pers_profesional = get_object_or_404(Persona, pk=request.POST["idempleado"])
-        if tramite.profesional.persona.id != pers_profesional.id:
-            tramite.cambiar_profesional(pers_profesional.profesional)
-            messages.add_message(request, messages.SUCCESS, "El profesional del tramite ha sido cambiado")
+        if request.POST["idempleado"]:
+            pers_profesional = get_object_or_404(Persona, pk=request.POST["idempleado"])
+            if tramite.profesional.persona.id != pers_profesional.id:
+                tramite.cambiar_profesional(pers_profesional.profesional)
+                messages.add_message(request, messages.SUCCESS, "El profesional del tramite ha sido cambiado")
+            else:
+                messages.add_message(request, messages.ERROR, "El profesional del tramite no ha sido cambiado. Selecciono el mismo profesional.")
         else:
-            messages.add_message(request, messages.ERROR, "El profesional del tramite no ha sido cambiado. Selecciono el mismo profesional.")
+            messages.add_message(request, messages.ERROR,"El profesional del tramite no ha sido cambiado. No se selecciono un profesional.")
     else:
         return render(request, 'persona/propietario/cambiar_profesional_de_tramite.html', {'tramite': tramite, "perfil": perfil, 'profesionales': profesionales})
     return redirect('propietario')
@@ -873,6 +876,233 @@ def ver_documentos_tramite_administrativo(request, pk_tramite):
                                                                                               "perfil": perfil})
 
 
+"""
+Metodo que se encarga de devolver todos los profesionales que tienen un usuario
+Se utiliza en la vista de administrativo
+"""
+@login_required(login_url="login")
+@grupo_requerido('administrativo')
+def listado_profesionales_administrativo(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+    personas = Persona.objects.all()
+    profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
+    contexto = {'profesionales': profesionales_con_usuario, "perfil": perfil}
+    return render(request, 'persona/administrativo/profesional_list_con_usuario_administrativo.html', contexto)
+
+
+"""
+Metodo que se encarga de devolver todos los propietarios con usuario
+Se utiliza en la vista de administrativo
+"""
+@login_required(login_url="login")
+@grupo_requerido('administrativo')
+def listado_propietarios_administrativo(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+    propietarios = Propietario.objects.all()
+    propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
+    contexto = {'propietarios': propietarios_con_usuario, "perfil": perfil}
+    return render(request, 'persona/administrativo/propietario_list_con_usuario_administrativo.html', contexto)
+
+
+"""
+Se encarga de devolver todos los profesionales con usuario en un archivo de excel
+Se utiliza en la vista de administrativo
+"""
+class ReporteProfesionalesAdministrativoExcel(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        cont = 0
+        personas = Persona.objects.all()
+        profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
+        wb = Workbook()
+        ws = wb.active
+        ws['A1'] = 'LISTADO DE PROFESIONALES'
+        ws.merge_cells('B1:K1')
+        ws['B2'] = 'NOMBRE'
+        ws['C2'] = 'APELLIDO'
+        ws['D2'] = 'MAIL'
+        ws['E2'] = 'DIRECCION'
+        ws['F2'] = 'CUIL'
+        ws['G2'] = 'TELEFONO'
+        ws['H2'] = 'PROFESION'
+        ws['I2'] = 'CATEGORIA'
+        ws['J2'] = 'MATRICULA'
+        cont = 3
+        for p in profesionales_con_usuario:
+            ws.cell(row=cont, column=2).value = str(p.nombre)
+            ws.cell(row=cont, column=3).value = str(p.apellido)
+            ws.cell(row=cont, column=4).value = str(p.mail)
+            ws.cell(row=cont, column=5).value = str(p.domicilio)
+            ws.cell(row=cont, column=6).value = str(p.cuil)
+            ws.cell(row=cont, column=7).value = str(p.telefono)
+            ws.cell(row=cont, column=8).value = str(p.profesional.profesion)
+            ws.cell(row=cont, column=9).value = str(p.profesional.categoria)
+            ws.cell(row=cont, column=10).value = str(p.profesional.matricula)
+            cont = cont + 1
+        nombre_archivo = "ListadoProfesionalesAdministrativoExcel.xlsx"
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+        return response
+
+
+"""
+Se encarga de devolver todos los propietarios con usuario en un archivo de excel
+Se utiliza en la vista de administrativo
+"""
+class ReportePropietariosAdministrativoExcel(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        cont = 0
+        propietarios = Propietario.objects.all()
+        propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None), propietarios)
+        wb = Workbook()
+        ws = wb.active
+        ws['A1'] = 'LISTADO DE PROPIETARIOS'
+        ws.merge_cells('B1:G1')
+        ws['B2'] = 'NOMBRE'
+        ws['C2'] = 'APELLIDO'
+        ws['D2'] = 'CUIL'
+        ws['E2'] = 'TELEFONO'
+        ws['F2'] = 'EMAIL'
+        cont = 3
+        for p in propietarios_con_usuario:
+            ws.cell(row=cont, column=2).value = str(p.persona.nombre)
+            ws.cell(row=cont, column=3).value = str(p.persona.apellido)
+            ws.cell(row=cont, column=4).value = str(p.persona.cuil)
+            ws.cell(row=cont, column=5).value = str(p.persona.telefono)
+            ws.cell(row=cont, column=6).value = str(p.persona.mail)
+            cont = cont + 1
+        nombre_archivo = "ListadoPropietariosAdministrativoExcel.xlsx"
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+        return response
+
+
+"""
+Se encarga de devolver todos los profesionales con usuario en un archivo de pdf
+Se utiliza en la vista de administrativo
+"""
+class ReporteProfesionalesAdministrativoPdf(View):
+
+    def get(self, request, *args, **kwargs):
+        filename = "Listado de profesionales Administrativo.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=0,
+            leftMargin=0,
+            topMargin=0,
+            bottomMargin=0,
+        )
+        story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
+        story.append(Paragraph(usuario, styles["Usuario"]))
+        story.append(Spacer(0, cm * 0.15))
+        im1 = Image(settings.MEDIA_ROOT + '/imagenes/banner_municipio_3.png', width=630, height=50)
+        im1.hAlign = 'CENTER'
+        story.append(im1)
+        story.append(Spacer(0, cm * 0.05))
+        subtitulo = 'Listado de profesionales'
+        story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        story.append(Spacer(0, cm * 0.15))
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
+        story.append(im0)
+        story.append(Spacer(0, cm * 0.5))
+
+        encabezados = ('NOMBRE', 'APELLIDO', 'MAIL', 'DIRECCION', 'CUIL', 'TELEFONO', 'PROFESION', 'CAT.', 'MAT.')
+        personas = Persona.objects.all()
+        profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
+        detalles = [
+            (p.nombre, p.apellido, p.mail, p.domicilio, p.cuil, p.telefono, p.profesional.profesion, p.profesional.categoria, p.profesional.matricula)
+            for p in profesionales_con_usuario]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 3 * cm, 3 * cm, 3 * cm, 2 * cm, 2 * cm, 1 * cm, 1 * cm])
+
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        story.append(detalle_orden)
+        doc.build(story)
+        return response
+
+
+"""
+Se encarga de devolver todos los propietarios con usuario en un archivo de pdf
+Se utiliza en la vista de administrativo
+"""
+class ReportePropietariosAdministrativoPdf(View):
+
+    def get(self, request, *args, **kwargs):
+        filename = "Listado de propietarios Administrativo.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=0,
+            leftMargin=0,
+            topMargin=0,
+            bottomMargin=0,
+        )
+        story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
+        story.append(Paragraph(usuario, styles["Usuario"]))
+        story.append(Spacer(0, cm * 0.15))
+        im1 = Image(settings.MEDIA_ROOT + '/imagenes/banner_municipio_3.png', width=630, height=50)
+        im1.hAlign = 'CENTER'
+        story.append(im1)
+        story.append(Spacer(0, cm * 0.05))
+        subtitulo = 'Listado de propietarios'
+        story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        story.append(Spacer(0, cm * 0.15))
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
+        story.append(im0)
+        story.append(Spacer(0, cm * 0.5))
+
+        encabezados = ('NOMBRE', 'APELLIDO', 'CUIL', 'TELEFONO', 'EMAIL')
+        propietarios = Propietario.objects.all()
+        propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None),propietarios)
+        detalles = [(p.persona.nombre, p.persona.apellido, p.persona.cuil, p.persona.telefono, p.persona.mail)
+            for p in propietarios_con_usuario]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 3 * cm, 3 * cm, 3 * cm, 5 * cm])
+
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        story.append(detalle_orden)
+        doc.build(story)
+        return response
+
+
 '''visador -----------------------------------------------------------------------------------------------'''
 
 
@@ -1094,14 +1324,11 @@ def agendar_tramite(request, pk_tramite):
     cant_max_tramites = 3 #Cantidad maxima permitida de tramites a inspeccionar por dia por inspector
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     fecha = parser.parse(request.GET["msg"])
-
     usuario = request.user
     argumentos = [AgendadoPrimerInspeccion, AgendadoInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
     tramites_del_inspector_en_fecha = filter(lambda t: datetime.datetime.strftime(t.estado().fecha, '%Y-%m-%d') == datetime.datetime.strftime(fecha, '%Y-%m-%d'), tramites_del_inspector)
-
-    
     if(len(list(tramites_del_inspector_en_fecha))<cant_max_tramites and cumple_distancia_en_horas(list(tramites_del_inspector_en_fecha), fecha)):
         tramite.hacer(Tramite.AGENDAR_INSPECCION, request.user, fecha)
         messages.add_message(request, messages.SUCCESS, "La inspeccion ha sido agendada")
@@ -1263,22 +1490,34 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
                 if u not in inspectores:
                     inspectores.append(u)
     estados = Estado.objects.all()
-    tipos = [6, 14]
-    estados_agendados = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or str(e.tramite.estado()) == 'AgendadoInspeccion') and (e.tipo == tipos[0] or e.tipo == tipos[1])), estados)
+    tipos = [11, 21]
+    estados_agendados = filter(
+        lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or
+                                              str(e.tramite.estado()) == 'AgendadoInspeccion') and
+                   (e.tipo == tipos[0] or e.tipo == tipos[1])) and
+                  e.timestamp.date() == estado.timestamp.date()
+        , estados)
     inspectores_estados_agendados = []
     for i in range(len(list(estados_agendados))):
         inspectores_estados_agendados.append(estados_agendados[i].usuario)
+    inspectores_tres_estados_agendados = []
+    for i in range(len(list(inspectores_estados_agendados))):
+        if inspectores_estados_agendados.count(inspectores_estados_agendados[i]) >= 3:
+            inspectores_tres_estados_agendados.append(inspectores_estados_agendados[i])
     inspectores_sin_insp_agendadas = []
     for inp in inspectores:
-        if inp not in inspectores_estados_agendados:
+        if inp not in inspectores_tres_estados_agendados and inp != estado.usuario:
             inspectores_sin_insp_agendadas.append(inp)
     if request.method == "POST" and "cambiar_inspector" in request.POST:
-        inspector = get_object_or_404(Usuario, pk=request.POST["idempleado"])
-        if estado.usuario.persona.id != inspector.persona.id:
-            estado.cambiar_usuario(inspector)
-            messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
+        if request.POST["idusuarioUsuarioS"]:
+            inspector = get_object_or_404(Usuario, pk=request.POST["idusuarioUsuarioS"])
+            if estado.usuario.persona.id != inspector.persona.id:
+                estado.cambiar_usuario(inspector)
+                messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
+            else:
+                messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
         else:
-            messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
+            messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. No ha sido seleccionado un inspector")
     else:
         return render(request, 'persona/jefe_inspector/cambiar_inspector_de_inspeccion.html', {'estado': estado, "perfil": perfil, 'inspectores': inspectores_sin_insp_agendadas})
     return redirect('jefeinspector')
@@ -1286,7 +1525,7 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
 
 def inspecciones_agendadas_por_inspectores():
     estados = Estado.objects.all()
-    tipos = [6, 14]
+    tipos = [11, 21]
     estados_agendados= filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or str(e.tramite.estado()) == 'AgendadoInspeccion') and (e.tipo == tipos[0] or e.tipo == tipos[1])), estados)
     return estados_agendados
 
@@ -1437,18 +1676,15 @@ def usuarios_no_borrables(usuario):
 def mostrar_director(request):
     usuario = request.user
     lista_usuarios = map(usuarios_no_borrables, Usuario.objects.all().exclude(id=request.user.id))
-    print("--------------------------------------------------")
-    print(Usuario.objects.all().exclude(id=request.user.id))
-    print("--------------------------------------------------")
     perfil = 'css/' + usuario.persona.perfilCSS
     tipos_de_documento = TipoDocumento.objects.all()
-    print(tipos_de_documento)
     values = {
         "lista_usuarios": lista_usuarios,
         "perfil": perfil,
         "datos_usuario": empleados(request.user),
         "tipos_de_documento" : tipos_de_documento,
-        "ctxvisadorescontramitesagendados": []#tramites_con_visado_agendado(),
+        "ctxvisadorescontramitesagendados": tramites_con_visado_agendado(),
+        "ctxinspectoresconinspeccionesagendadas": inspecciones_agendadas_por_inspectores(),
     }
     for form_name, submit_name in FORMS_DIRECTOR:
         KlassForm = FORMS_DIRECTOR[(form_name, submit_name)]
@@ -1519,50 +1755,257 @@ def visadores_sin_visado_agendado(request, pk_estado):
         if vis not in visadores_estados_agendados:
             visadores_sin_vis_agendadas.append(vis)
     if request.method == "POST" and "cambiar_visador" in request.POST:
-        visador = get_object_or_404(Usuario, pk=request.POST["idempleado"])
-        if estado.usuario.persona.id != visador.persona.id:
-            estado.cambiar_usuario(visador)
-            messages.add_message(request, messages.SUCCESS, "El visador del tramite ha sido cambiado")
+        if request.POST["idusuarioUsuarioS"]:
+            visador = get_object_or_404(Usuario, pk=request.POST["idusuarioUsuarioS"])
+            if estado.usuario.persona.id != visador.persona.id:
+                estado.cambiar_usuario(visador)
+                messages.add_message(request, messages.SUCCESS, "El visador del tramite ha sido cambiado")
+            else:
+                messages.add_message(request, messages.ERROR, "El visador del tramite no ha sido cambiado. Ha seleccionado el mismo visador")
         else:
-            messages.add_message(request, messages.ERROR, "El visador del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
+            messages.add_message(request, messages.ERROR, "El visador del tramite no ha sido cambiado. No se ha seleccionado un visador")
     else:
         return render(request, 'persona/director/cambiar_visador_de_tramite.html', {'estado': estado, "perfil": perfil, 'visadores': visadores_sin_vis_agendadas})
+    return redirect('director')
+
+
+def inspectores_sin_inspeccion_agendada(request, pk_estado):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    usuarios = Usuario.objects.all()
+    inspectores = []
+    for u in usuarios:
+        lista = list(u.groups.values_list('name', flat=True))
+        for i in range(len(list(lista))):
+            if lista[i] == 'inspector':
+                if u not in inspectores:
+                    inspectores.append(u)
+    estados = Estado.objects.all()
+    tipos = [11, 21]
+    estados_agendados = filter(
+        lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or
+                                              str(e.tramite.estado()) == 'AgendadoInspeccion') and
+                   (e.tipo == tipos[0] or e.tipo == tipos[1])) and
+                  e.timestamp.date() == estado.timestamp.date()
+        , estados)
+    inspectores_estados_agendados = []
+    for i in range(len(list(estados_agendados))):
+        inspectores_estados_agendados.append(estados_agendados[i].usuario)
+    inspectores_tres_estados_agendados = []
+    for i in range(len(list(inspectores_estados_agendados))):
+        if inspectores_estados_agendados.count(inspectores_estados_agendados[i]) >= 3:
+            inspectores_tres_estados_agendados.append(inspectores_estados_agendados[i])
+    inspectores_sin_insp_agendadas = []
+    for inp in inspectores:
+        if inp not in inspectores_tres_estados_agendados and inp != estado.usuario:
+            inspectores_sin_insp_agendadas.append(inp)
+    if request.method == "POST" and "cambiar_inspector" in request.POST:
+        if request.POST["idusuarioUsuarioS"]:
+            inspector = get_object_or_404(Usuario, pk=request.POST["idusuarioUsuarioS"])
+            if estado.usuario.persona.id != inspector.persona.id:
+                estado.cambiar_usuario(inspector)
+                messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
+            else:
+                messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
+        else:
+            messages.add_message(request, messages.ERROR,
+                                 "El inspector del tramite no ha sido cambiado. No se ha seleccionado inspector")
+    else:
+        return render(request, 'persona/director/cambiar_inspector_d_inspeccion.html', {'estado': estado, "perfil": perfil, 'inspectores': inspectores_sin_insp_agendadas})
     return redirect('director')
 
 
 def ver_listado_todos_tramites(request):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
-    argumentos = [Iniciado, Aceptado, AgendadoParaVisado, Visado, AgendadoPrimerInspeccion, PrimerInspeccion,
-              AprobadoSolicitado, Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario,
-              AprobadoPorPropietario]
-    argumentos2 = [AgendadoInspeccion, Inspeccionado, FinalObraTotalSolicitado,
-              FinalObraParcialSolicitado, NoFinalObraTotalSolicitado, AgendadoInspeccionFinal, InspeccionFinal,
-              Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]
-    lab = ['Iniciado', 'Aceptado', 'A.Visado', 'Visado', 'A.Inspeccion', 'Inspeccion', 'A.Solicitado', 'Aprobado',
-           'N.A.Solicitado', 'NoAprobado', 'A.S.x Propietario', 'A.x Propietario']
-    lab2 = ['A.Inspeccion', 'Inspeccionado', 'F.O.T.S.', 'F.O.P.S.', 'NoF.O.T.S.', 'A.InspeccionFinal', 'InspeccionFinal',
-                   'Finalizado', 'NoFinalizado', 'F.O.T.S.x Prop.', 'Baja']
+
+    argumentos = [Iniciado, ConCorrecciones, ConCorreccionesRealizadas, Aceptado, ConCorreccionesDeVisado,
+    CorreccionesDeVisadoRealizadas, AgendadoParaVisado, Visado, ConCorreccionesDePrimerInspeccion,
+    CorreccionesDePrimerInspeccionRealizadas, AgendadoPrimerInspeccion, PrimerInspeccion, AprobadoSolicitado,
+    Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario, AprobadoPorPropietario,
+    ConCorreccionesDeInspeccion, CorreccionesDeInspeccionRealizadas, AgendadoInspeccion, Inspeccionado,
+    FinalObraTotalSolicitado, FinalObraParcialSolicitado, NoFinalObraTotalSolicitado,
+    ConCorreccionesDeInspeccionFinal, CorreccionesDeInspeccionFinalRealizadas, AgendadoInspeccionFinal,
+    InspeccionFinal, Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]
+    lab = ['Iniciado', 'Con Correc.', 'Con Correc. Realizadas', 'Aceptado', 'Con Correc. de Vis.',
+    'Correc. Vis. Realizadas', 'Ag.Visado', 'Visado', 'Con Correc. de 1er Insp.',
+    'Correc. 1er. Insp. Realizadas', 'Ag. 1er. Inspeccion', '1er Inspeccion', 'Aprob. Sol.',
+    'Aprobado', 'No Aprob. Sol.', 'No Aprobado', 'Aprob. Sol. x Prop.', 'Aprob. x Prop.', 'Con Correc. de Insp.',
+    'Correc. de Insp. Realizadas', 'Agendado Insp.', 'Inspeccionado', 'F.O.T.S.', 'F.O.P.S.', 'N.F.O.T.S.',
+    'Con Correc. de Insp. F.', 'Correc. de Insp. F. Realizadas', 'Ag. Insp. F.',
+    'Inspeccion F.', 'Finalizado', 'NoFinalizado', 'F.O.T.S. x Prop.', 'Baja']
+
     len_argumentos = len(argumentos)
     tramites = Tramite.objects.en_estado(argumentos)
     estados = []
     for t in tramites:
         estados.append(t.estado().tipo)
-    print("----------------------------")
-    print(estados)
-    print("----------------------------")
     estados_cant = dict(collections.Counter(estados))
-    print(estados_cant)
-    print("----------------------------")
     for n in range(1, (len_argumentos+1)):
         if (not estados_cant.has_key(n)):
             estados_cant.setdefault(n, 0)
     estados_datos = estados_cant.values()
-    print(estados_datos)
-    print("----------------------------")
-    contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":lab, "perfil" : perfil}
+
+    cant_est_x_est = dict(zip(lab, estados_datos))
+
+    contexto = {'todos_los_tramites': tramites, "datos_estados": estados_datos, "label_estados": lab, "cant_est_x_est": cant_est_x_est, "perfil": perfil}
     return render(request, 'persona/director/vista_de_tramites.html', contexto)
 
+
+def reporte_de_tramites(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+
+    argumentos = [Iniciado, ConCorrecciones, ConCorreccionesRealizadas, Aceptado, ConCorreccionesDeVisado,
+                  CorreccionesDeVisadoRealizadas, AgendadoParaVisado, Visado, ConCorreccionesDePrimerInspeccion,
+                  CorreccionesDePrimerInspeccionRealizadas, AgendadoPrimerInspeccion, PrimerInspeccion,
+                  AprobadoSolicitado,
+                  Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario, AprobadoPorPropietario,
+                  ConCorreccionesDeInspeccion, CorreccionesDeInspeccionRealizadas, AgendadoInspeccion, Inspeccionado,
+                  FinalObraTotalSolicitado, FinalObraParcialSolicitado, NoFinalObraTotalSolicitado,
+                  ConCorreccionesDeInspeccionFinal, CorreccionesDeInspeccionFinalRealizadas, AgendadoInspeccionFinal,
+                  InspeccionFinal, Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]
+    lab = ['Iniciado', 'Con Correc.', 'Con Correc. Realizadas', 'Aceptado', 'Con Correc. de Vis.',
+           'Correc. Vis. Realizadas', 'Ag.Visado', 'Visado', 'Con Correc. de 1er Insp.',
+           'Correc. 1er. Insp. Realizadas', 'Ag. 1er. Inspeccion', '1er Inspeccion', 'Aprob. Sol.',
+           'Aprobado', 'No Aprob. Sol.', 'No Aprobado', 'Aprob. Sol. x Prop.', 'Aprob. x Prop.', 'Con Correc. de Insp.',
+           'Correc. de Insp. Realizadas', 'Agendado Insp.', 'Inspeccionado', 'F.O.T.S.', 'F.O.P.S.', 'N.F.O.T.S.',
+           'Con Correc. de Insp. F.', 'Correc. de Insp. F. Realizadas', 'Ag. Insp. F.',
+           'Inspeccion F.', 'Finalizado', 'NoFinalizado', 'F.O.T.S. x Prop.', 'Baja']
+
+
+
+    if request.method == "POST":
+
+        tramites = Tramite.objects.all()
+
+        #print("-----------------------------")
+        #print(request.POST)
+        #print("-----------------------------")
+
+        if request.POST.get('valor_a_comparar01') or request.POST.get('valor_a_comparar02'):
+            #print("---------------------------------------")
+            #print (request.POST.get('valor_a_comparar'))
+            tramites = Tramite.objects.filter(pk=request.POST.get('valor_a_comparar01'))
+            print (tramites)
+
+
+        if request.POST.get('id_campoPropietario'):
+            print ("filtro por propietario - falta mayor, menor, entre")
+            #nombre = request.POST.get('valor_a_comparar')
+            #nombreT = nombre.split(', ')
+            #personas = Persona.objects.filter(nombre=nombreT[1], apellido=nombreT[0])
+
+
+            #propietarios = Propietario.objects.all()
+
+            #propietario = filter(lambda p: (p.persona.nombre == persona.nombre and p.persona.apellido == persona.apellido), propietarios)
+
+
+            tramites = Tramite.objects.all()
+            #tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == pk_persona), tramites)
+
+
+
+            #prop = Propietario.objects.filter()
+            #tram = Tramite.objects.filter(propietario=request.POST.get('valor_a_comparar'))
+            #print("---------------------------------------")
+            #print (persona)
+            #print (persona.nombre)
+            #print("---------------------------------------")
+            #print(propietarios)
+            #for p in propietarios:
+              #  print (p.persona.pk)
+             #   print (p.persona)
+             #   print (p.persona.nombre)
+             #   print (p.persona.apellido)
+
+            #print("---------------------------------------")
+            #print (propietario)
+            #print (tramites_de_propietario)
+            #print("---------------------------------------")
+
+        if request.POST.get('valor_a_comparar21'):
+            print ("filtro por profesional")
+            tramites = Tramite.objects.all()
+
+            nombre = request.POST.get('valor_a_comparar21')
+            nombreT = nombre.split(', ')
+
+            #print (nombreT[0])
+            #print (nombreT[1])
+
+            personas = Persona.objects.filter(nombre=nombreT[1], apellido=nombreT[0])
+
+            #print (personas)
+
+            t = []
+            print("-------------------------")
+            for p in personas:
+                pk_profesional = p.profesional.pk
+                print(filter(lambda t: (t.propietario.persona.pk == pk_profesional), tramites))
+            print("-------------------------")
+
+            print (t)
+
+
+
+
+
+
+        if request.POST.get('id_campoEstado') == '3':
+            print ("filtro por estado")
+            tramites = Tramite.objects.all()
+            #nombre_estado = request.POST.get('valor_a_comparar')
+
+            #tramites = Tramite.objects.all()
+            #tramites = Tramite.objects.en_estado(arg)
+
+        if request.POST.get('valor_a_comparar41') or request.POST.get('valor_a_comparar42'):
+            print ("filtro por medidas - falta mayor, menor, entre")
+            tramites = Tramite.objects.filter(medidas=request.POST.get('valor_a_comparar41'))
+
+        if request.POST.get('valor_a_comparar51'):
+            print ("filtro por tipo - ok")
+            tipo = TipoObra.objects.get(nombre=request.POST.get('valor_a_comparar51'))
+            tramites = Tramite.objects.filter(tipo_obra=tipo.pk)
+            print (tramites)
+
+        #print(tramites)
+
+
+
+
+
+        #estados = Estado.objects.all()
+        #estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
+        #contexto1 = {'estados_del_tramite': estados_de_tramite}
+        #fechas_del_estado = []
+        #for est in estados_de_tramite:
+        #    fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"))
+
+        '''
+        len_argumentos = len(argumentos)
+        tramites = Tramite.objects.en_estado(argumentos)
+        estados = []
+        for t in tramites:
+            estados.append(t.estado().tipo)
+        estados_cant = dict(collections.Counter(estados))
+        for n in range(1, (len_argumentos+1)):
+            if (not estados_cant.has_key(n)):
+                estados_cant.setdefault(n, 0)
+        estados_datos = estados_cant.values()
+        cant_est_x_est = dict(zip(lab, estados_datos))
+        '''
+
+
+        #contexto = {'todos_los_tramites': tramites, "datos_estados": estados_datos, "label_estados": lab, "cant_est_x_est": cant_est_x_est, "perfil": perfil}
+        contexto = {'todos_los_tramites': tramites, "label_estados": lab, "perfil": perfil}
+    else:
+        tramites = Tramite.objects.all()
+        contexto = {'todos_los_tramites': tramites, "perfil": perfil}
+    return render(request, 'persona/director/reporte_de_tramites.html', contexto)
 
 def empleados_con_director():
     usuarios = Usuario.objects.all()
@@ -1604,6 +2047,12 @@ def ver_listado_todos_usuarios(request):
 
 def ver_actividad_usuario(request, usuario):
     usuarios = Usuario.objects.all()
+
+    print ("+++++++++++++++++++++++++++++++++++++++++")
+    print (usuario)
+    print ("+++++++++++++++++++++++++++++++++++++++++")
+    print (usuarios)
+    print ("+++++++++++++++++++++++++++++++++++++++")
     usuario_req = filter(lambda u: (str(u) == usuario), usuarios)
     estados = Estado.objects.all()
     estados_usuario_req = filter(lambda estado: (str(estado.usuario) == str(usuario_req[0])), estados)
@@ -1648,6 +2097,228 @@ def ver_documentos_del_estado(request, pk_estado):
     documentos_fecha = filter(lambda e:(datetime.datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha, "perfil": perfil}
     return render(request, 'persona/director/ver_documentos_del_estado.html', contexto)
+
+
+"""
+Metodo que se encarga de devolver todos los profesionales con usuario
+Se utiliza en la vista de director
+"""
+@login_required(login_url="login")
+@grupo_requerido('director')
+def listado_profesionales_director(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+    personas = Persona.objects.all()
+    profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
+    contexto = {'profesionales': profesionales_con_usuario, "perfil": perfil}
+    return render(request, 'persona/director/profesional_list_con_usuario_director.html', contexto)
+
+
+"""
+Metodo que se encarga de devolver todos los propietarios con usuario
+Se utiliza en la vista de director
+"""
+@login_required(login_url="login")
+@grupo_requerido('director')
+def listado_propietarios_director(request):
+    usuario = request.user
+    perfil = 'css/' + usuario.persona.perfilCSS
+    propietarios = Propietario.objects.all()
+    propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
+    contexto = {'propietarios': propietarios_con_usuario, "perfil": perfil}
+    return render(request, 'persona/director/propietario_list_con_usuario_director.html', contexto)
+
+
+"""
+Se encarga de devolver todos los profesionales con usuario en una archivo de excel
+Se utiliza en la vista de director
+"""
+class ReporteProfesionalesDirectorExcel(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        cont = 0
+        personas = Persona.objects.all()
+        profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
+        wb = Workbook()
+        ws = wb.active
+        ws['A1'] = 'lISTADO DE PROFESIONALES'
+        ws.merge_cells('B1:K1')
+        ws['B2'] = 'NOMBRE'
+        ws['C2'] = 'APELLIDO'
+        ws['D2'] = 'MAIL'
+        ws['E2'] = 'DIRECCION'
+        ws['F2'] = 'CUIL'
+        ws['G2'] = 'TELEFONO'
+        ws['H2'] = 'PROFESION'
+        ws['I2'] = 'CATEGORIA'
+        ws['J2'] = 'MATRICULA'
+        cont = 3
+        for p in profesionales_con_usuario:
+            ws.cell(row=cont, column=2).value = str(p.nombre)
+            ws.cell(row=cont, column=3).value = str(p.apellido)
+            ws.cell(row=cont, column=4).value = str(p.mail)
+            ws.cell(row=cont, column=5).value = str(p.domicilio)
+            ws.cell(row=cont, column=6).value = str(p.cuil)
+            ws.cell(row=cont, column=7).value = str(p.telefono)
+            ws.cell(row=cont, column=8).value = str(p.profesional.profesion)
+            ws.cell(row=cont, column=9).value = str(p.profesional.categoria)
+            ws.cell(row=cont, column=10).value = str(p.profesional.matricula)
+            cont = cont + 1
+        nombre_archivo = "ListadoProfesionalesDirectorExcel.xlsx"
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+        return response
+
+
+"""
+Se encarga de devolver todos los propietarios con usuario en una archivo de excel
+Se utiliza en la vista de director
+"""
+class ReportePropietariosDirectorExcel(TemplateView):
+
+    def get(self, request, *args, **kwargs):
+        cont = 0
+        propietarios = Propietario.objects.all()
+        propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None), propietarios)
+        wb = Workbook()
+        ws = wb.active
+        ws['A1'] = 'LISTADO DE PROPIETARIOS'
+        ws.merge_cells('B1:G1')
+        ws['B2'] = 'NOMBRE'
+        ws['C2'] = 'APELLIDO'
+        ws['D2'] = 'CUIL'
+        ws['E2'] = 'TELEFONO'
+        ws['F2'] = 'EMAIL'
+        cont = 3
+        for p in propietarios_con_usuario:
+            ws.cell(row=cont, column=2).value = str(p.persona.nombre)
+            ws.cell(row=cont, column=3).value = str(p.persona.apellido)
+            ws.cell(row=cont, column=4).value = str(p.persona.cuil)
+            ws.cell(row=cont, column=5).value = str(p.persona.telefono)
+            ws.cell(row=cont, column=6).value = str(p.persona.mail)
+            cont = cont + 1
+        nombre_archivo = "ListadoPropietariosDirectorExcel.xlsx"
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+        return response
+
+
+"""
+Se encarga de devolver todos los profesionales con usuario en un archivo de pdf
+Se utiliza en la vista de director
+"""
+class ReporteProfesionalesDirectorPdf(View):
+
+    def get(self, request, *args, **kwargs):
+        filename = "Listado de profesionales Director.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=0,
+            leftMargin=0,
+            topMargin=0,
+            bottomMargin=0,
+        )
+        story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
+        story.append(Paragraph(usuario, styles["Usuario"]))
+        story.append(Spacer(0, cm * 0.15))
+        im1 = Image(settings.MEDIA_ROOT + '/imagenes/banner_municipio_3.png', width=630, height=50)
+        im1.hAlign = 'CENTER'
+        story.append(im1)
+        story.append(Spacer(0, cm * 0.05))
+        subtitulo = 'Listado de profesionales'
+        story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        story.append(Spacer(0, cm * 0.15))
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
+        story.append(im0)
+        story.append(Spacer(0, cm * 0.5))
+        encabezados = ('NOMBRE', 'APELLIDO', 'MAIL', 'DIRECCION', 'CUIL', 'TELEFONO', 'PROFESION', 'CAT.', 'MAT.')
+        personas = Persona.objects.all()
+        profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
+        detalles = [
+            (p.nombre, p.apellido, p.mail, p.domicilio, p.cuil, p.telefono, p.profesional.profesion, p.profesional.categoria, p.profesional.matricula)
+            for p in profesionales_con_usuario]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 3 * cm, 3 * cm, 3 * cm, 2 * cm, 2 * cm, 1 * cm, 1 * cm])
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        story.append(detalle_orden)
+        doc.build(story)
+        return response
+
+"""
+Se encarga de devolver todos los propietarios con usuario en un archivo de pdf
+Se utiliza en la vista de director
+"""
+class ReportePropietariosDirectorPdf(View):
+
+    def get(self, request, *args, **kwargs):
+        filename = "Listado de propietarios Director.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=0,
+            leftMargin=0,
+            topMargin=0,
+            bottomMargin=0,
+        )
+        story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
+        story.append(Paragraph(usuario, styles["Usuario"]))
+        story.append(Spacer(0, cm * 0.15))
+        im1 = Image(settings.MEDIA_ROOT + '/imagenes/banner_municipio_3.png', width=630, height=50)
+        im1.hAlign = 'CENTER'
+        story.append(im1)
+        story.append(Spacer(0, cm * 0.05))
+        subtitulo = 'Listado de propietarios'
+        story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        story.append(Spacer(0, cm * 0.15))
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
+        story.append(im0)
+        story.append(Spacer(0, cm * 0.5))
+        encabezados = ('NOMBRE', 'APELLIDO', 'CUIL', 'TELEFONO', 'EMAIL')
+        propietarios = Propietario.objects.all()
+        propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None),propietarios)
+        detalles = [(p.persona.nombre, p.persona.apellido, p.persona.cuil, p.persona.telefono, p.persona.mail)
+            for p in propietarios_con_usuario]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[3 * cm, 3 * cm, 3 * cm, 3 * cm, 5 * cm])
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        story.append(detalle_orden)
+        doc.build(story)
+        return response
 
 
 class ReporteTramitesDirectorExcel(TemplateView):
@@ -1815,14 +2486,13 @@ class ReporteEmpleadosDirectorPdf(View):
         story.append(im0)
         story.append(Spacer(0, cm * 0.5))
 
-        encabezados = ('NRO', 'TIPO_DE_OBRA', 'PROFESIONAL', 'PROPIETARIO', 'MEDIDAS', 'ESTADO')
+        encabezados = ('USUARIO', 'GRUPO', 'NOMBRE', 'DOCUMENTO ', 'TELEFONO', 'MAIL')
         detalles = []
-        '''
-        detalles = [
-            (tramite.id, tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.medidas, tramite.estado())
-            for tramite in
-            Tramite.objects.all()]
-        '''
+
+        #detalles = [
+        #    (tramite.id, tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.medidas, tramite.estado())
+        #    for tramite in Tramite.objects.all()]
+
         detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 3 * cm, 4 * cm, 4 * cm, 2 * cm, 3 * cm])
         detalle_orden.setStyle(TableStyle(
             [
@@ -1928,61 +2598,4 @@ def get_grupos_usuario(request):
         lista = Usuario.objects.filter(id=int(id)).values_list('groups__name',flat=True)
         return JsonResponse(list(lista), safe=False)
 
-"""
-Metodo que se encarga de devolver todos los profesionales que tienen un usuario
-Se utiliza en la vista de administrativo
-"""
-@login_required(login_url="login")
-@grupo_requerido('administrativo')
-def listado_profesionales_administrativo(request):
-    usuario = request.user
-    perfil = 'css/' + usuario.persona.perfilCSS
-    personas = Persona.objects.all()
-    profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
-    contexto = {'profesionales': profesionales_con_usuario, "perfil": perfil}
-    return render(request, 'persona/profesional/profesional_list_con_usuario_administrativo.html', contexto)
 
-
-"""
-Metodo que se encarga de devolver todos los propietarios con usuario
-Se utiliza en la vista de administrativo
-"""
-@login_required(login_url="login")
-@grupo_requerido('administrativo')
-def listado_propietarios_administrativo(request):
-    usuario = request.user
-    perfil = 'css/' + usuario.persona.perfilCSS
-    propietarios = Propietario.objects.all()
-    propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
-    contexto = {'propietarios': propietarios_con_usuario, "perfil": perfil}
-    return render(request, 'persona/propietario/propietario_list_con_usuario_administrativo.html', contexto)
-
-
-"""
-Metodo que se encarga de devolver todos los profesionales con usuario
-Se utiliza en la vista de director
-"""
-@login_required(login_url="login")
-@grupo_requerido('director')
-def listado_profesionales_director(request):
-    usuario = request.user
-    perfil = 'css/' + usuario.persona.perfilCSS
-    personas = Persona.objects.all()
-    profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
-    contexto = {'profesionales': profesionales_con_usuario, "perfil": perfil}
-    return render(request, 'persona/profesional/profesional_list_con_usuario_director.html', contexto)
-
-
-"""
-Metodo que se encarga de devolver todos los propietarios con usuario
-Se utiliza en la vista de director
-"""
-@login_required(login_url="login")
-@grupo_requerido('director')
-def listado_propietarios_director(request):
-    usuario = request.user
-    perfil = 'css/' + usuario.persona.perfilCSS
-    propietarios = Propietario.objects.all()
-    propietarios_con_usuario = filter(lambda propietario: (propietario.persona.usuario is not None and propietario.persona is not None ), propietarios)
-    contexto = {'propietarios': propietarios_con_usuario, "perfil": perfil}
-    return render(request, 'persona/propietario/propietario_list_con_usuario_director.html', contexto)

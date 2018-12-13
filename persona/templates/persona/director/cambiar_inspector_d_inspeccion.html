@@ -18,7 +18,7 @@
 </div>
 <ul class="sidebar sidebar-1">
     <font size="2">
-        <li><a href="javascript:history.back(-1);" class="current"><font>Jefe Inspector</font></a></li>
+        <li><a href="javascript:history.back(-1);" class="current"><font>Director</font></a></li>
     </font>
 </ul>
 {% endblock %}
@@ -182,7 +182,7 @@
 			{% for uf in inspectores %}
 				if ("{{uf.persona.dni}}" == document.getElementById("usuarios").value){
 					usuario_filtrado_usuario.push("{{uf}}");
-					usuario_filtrado_pk.push({{uf.persona.id}}+1);
+					usuario_filtrado_pk.push({{uf.persona.id}} + 1);
 					usuario_filtrado_nombre.push("{{uf.persona.nombre}}");
 					usuario_filtrado_apellido.push("{{uf.persona.apellido}}");
 				}

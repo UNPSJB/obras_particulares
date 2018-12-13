@@ -207,6 +207,10 @@ class FormularioUsuarioPersona(FormularioPersona):
         self.fields['password'].widget.attrs['placeholder'] = "Ingresar Contrasena"
         self.fields['password'].widget.attrs['pattern'] = ".{6,}"
         self.fields['usuario'].widget.attrs['title'] = "Ingresar Usuario"
+
+        self.fields['usuario'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z]{0,50}"
+
+
         self.fields['password'].widget.attrs['title'] = "Ingresar Contrasena"
 
     def save(self, commit=False):
