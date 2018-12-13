@@ -4,12 +4,12 @@ from .models import *
 class ALtaPersona(admin.ModelAdmin):
     _fieldsets = [
         ('Datos Persona', {'fields':['dni','nombre','apellido']}),
-        ('Informacion general',{'fields':['mail','cuil','domicilio','telefono']}),
+        ('Informacion general',{'fields':['mail','cuil','domicilio_persona','telefono']}),
         ('ROLES', {'fields':['usuario', 'propietario', 'profesional']})
     ]
 
     search_fields = ['nombre','apellido','dni']
-    list_display = ('apellido','nombre','dni','mail','cuil','domicilio','telefono')
+    list_display = ('apellido','nombre','dni','mail','cuil','domicilio_persona','telefono')
 
 class AltaProfesional(admin.ModelAdmin):
     _fieldsets = [
