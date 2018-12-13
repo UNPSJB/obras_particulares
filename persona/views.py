@@ -712,12 +712,12 @@ def cargar_final_de_obra_total(request, pk_tramite):
     perfil = 'css/' + usuario.persona.perfilCSS
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     estados = Estado.objects.all()
-    tipoFOS = 16
+    tipoFOS = 23
     tipos_de_documentos_requeridos = []
     estadoFOS = filter(lambda e: (e.tipo == tipoFOS and str(e.tramite.pk) == str(pk_tramite)), estados)
     if len(list(estadoFOS)) > 0:
         tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.FINALIZAR)
-    tipoNFOS = 18
+    tipoNFOS = 25
     estadoNFOS = filter(lambda e: (e.tipo == tipoNFOS and str(e.tramite.pk) == str(pk_tramite)), estados)
     if len(list(estadoNFOS)) > 0:
         tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.NO_FINALIZAR)
@@ -746,12 +746,12 @@ def habilitar_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         estados = Estado.objects.all()
-        tipoFOS = 16
+        tipoFOS = 23
         estadoFOS = filter(lambda e: (e.tipo == tipoFOS and str(e.tramite.pk) == str(pk_tramite)), estados)
         if len(list(estadoFOS)) > 0:
             tramite.hacer(tramite.FINALIZAR, request.user)
             messages.add_message(request, messages.SUCCESS, 'Final de obra aprobado.')
-        tipoNFOS = 18
+        tipoNFOS = 25
         estadoNFOS = filter(lambda e: (e.tipo == tipoNFOS and str(e.tramite.pk) == str(pk_tramite)), estados)
         if len(list(estadoNFOS)) > 0 and str(tramite.estado()) != 'FinalObraTotalSolicitadoPorPropietario':
             tramite.hacer(tramite.NO_FINALIZAR, request.user)
@@ -763,7 +763,6 @@ def habilitar_final_obra(request, pk_tramite):
         messages.add_message(request, messages.ERROR, 'No se puede otorgar final de obra total para ese tramite.')
     finally:
         return redirect('administrativo')
-
 
 def cargar_aprobacion(request, pk_tramite):
     usuario = request.user

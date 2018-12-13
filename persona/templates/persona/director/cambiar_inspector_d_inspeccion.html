@@ -100,11 +100,11 @@
 							<hr>
 							<form action= ""  method="post" enctype="multipart/form-data"> {% csrf_token %}
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									<div class="form-group">
+									<!--div class="form-group">
 										<label>Usuario:</label>
 										<input class="form-control input-sm" id="usuarioUsuarioS" name="usuarioUsuarioS" type="text" placeholder="Usuario seleccionado" title="Usuario seleccionado"  disabled/>
 										<br>
-									</div>
+									</div-->
 									<div class="form-group" style="display: none">
 										<label>Id:</label>
 										<input class="form-control input-sm" id="idusuarioUsuarioS" name="idusuarioUsuarioS" type="text" placeholder="Id Usuario seleccionado" title="Id usuario seleccionado"/>
@@ -112,18 +112,18 @@
 									</div>
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									<div class="form-group">
+									<!--div class="form-group">
 										<label>Nombre:</label>
 										<input class="form-control input-sm" id="nombreUsuarioS" name="nombreUsuarioS" type="text" placeholder="Nombre del usuario seleccionado" title="Nombre del usuario seleccionado"  disabled/>
 										<br>
-									</div>
+									</div-->
 								</div>
 								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									<div class="form-group">
+									<!--div class="form-group">
 										<label>Apellido:</label>
 										<input class="form-control input-sm" id="apellidoUsuarioS" name="apellidoUsuarioS" type="text" placeholder="Apellido del usuario seleccionado" title="Apellido del usuario seleccionado"  disabled/>
 										<br>
-									</div>
+									</div-->
 								</div>
 								<br>
 								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right" id="id_contenedor_boton_cambiar-grupo">
@@ -159,7 +159,7 @@
 
 		$(document).ready(function() {
 			{% for dtu in inspectores %}
-				usuarios.push("{{dtu.persona.dni}}");
+				usuarios.push("{{dtu.persona.dni}} - {{dtu.persona}}");
 			{% endfor %}
 			usuarios.sort();
 			for(var i=0; i < usuarios.length; i++){
@@ -167,9 +167,9 @@
 				$(option).html(usuarios[i]);
 				$(option).appendTo("#usuarios");
 			}
-			document.getElementById("usuarioUsuarioS").value = '';
-			document.getElementById("nombreUsuarioS").value = '';
-			document.getElementById("apellidoUsuarioS").value = '';
+			//document.getElementById("usuarioUsuarioS").value = '';
+			//document.getElementById("nombreUsuarioS").value = '';
+			//document.getElementById("apellidoUsuarioS").value = '';
 
 		});
 
@@ -179,18 +179,19 @@
 			usuario_filtrado_nombre = [];
 			usuario_filtrado_apellido = [];
     		var x = document.getElementById("usuarios").value;
+			var res = x.split(" - ");
 			{% for uf in inspectores %}
-				if ("{{uf.persona.dni}}" == document.getElementById("usuarios").value){
+				if ("{{uf.persona.dni}}" == res[0]){
 					usuario_filtrado_usuario.push("{{uf}}");
 					usuario_filtrado_pk.push({{uf.persona.id}} + 1);
-					usuario_filtrado_nombre.push("{{uf.persona.nombre}}");
-					usuario_filtrado_apellido.push("{{uf.persona.apellido}}");
+					//usuario_filtrado_nombre.push("{{uf.persona.nombre}}");
+					//usuario_filtrado_apellido.push("{{uf.persona.apellido}}");
 				}
 			{% endfor %}
-			document.getElementById("usuarioUsuarioS").value = usuario_filtrado_usuario[0];
+			//document.getElementById("usuarioUsuarioS").value = usuario_filtrado_usuario[0];
 			document.getElementById("idusuarioUsuarioS").value = usuario_filtrado_pk[0];
-			document.getElementById("nombreUsuarioS").value = usuario_filtrado_nombre[0];
-			document.getElementById("apellidoUsuarioS").value = usuario_filtrado_apellido[0];
+			//document.getElementById("nombreUsuarioS").value = usuario_filtrado_nombre[0];
+			//document.getElementById("apellidoUsuarioS").value = usuario_filtrado_apellido[0];
  		}
 
 		function eliminarTodos(){
