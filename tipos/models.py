@@ -46,10 +46,14 @@ class TipoDocumento(models.Model):
     def __str__(self):
         return "{} - {} - Requerido para {}".format(self.nombre, self.descripcion, self.requerido_para())
 
+    """
+    Metodo que se encarga de obtener los tipos de documentos que son necesarios para tal accion de cambio de estado.
+    """
+
     @staticmethod
     def get_tipos_documentos_para_momento(accion):
         devolucion = []
-        for tipo in TipoDocumento.objects.all():
+        for tipo in TipoDocumento.objects.filter(activo=True):  # Se filtran los tipos de documentos que estan activos.
             if (tipo.requerido & accion) == accion:
                 devolucion.append(tipo)
         return devolucion
@@ -57,17 +61,20 @@ class TipoDocumento(models.Model):
     """
     Metodo que se encarga de devolver la accion para la que se lo requiere al tramite
     """
+
     def requerido_para(self):
         match = [accion for accion in TipoDocumento.ACCIONES if accion[0] == self.requerido]
         return match[0][1].split(" - ")[1]
-        
+
     """
     Metodo que se encarga de devolver la persona que utiliza el tipo de documento en el
     sistema
     """
+
     def quien_lo_utiliza(self):
         match = [accion for accion in TipoDocumento.ACCIONES if accion[0] == self.requerido]
         return match[0][1].split(" - ")[0]
+
 
 class TipoObra(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
