@@ -46,10 +46,13 @@ class TipoDocumento(models.Model):
     def __str__(self):
         return "{} - {} - Requerido para {}".format(self.nombre, self.descripcion, self.requerido_para())
 
+    """
+    Metodo que se encarga de obtener los tipos de documentos que son necesarios para tal accion de cambio de estado.
+    """
     @staticmethod
     def get_tipos_documentos_para_momento(accion):
         devolucion = []
-        for tipo in TipoDocumento.objects.all():
+        for tipo in TipoDocumento.objects.filter(activo=True): #Se filtran los tipos de documentos que estan activos.
             if (tipo.requerido & accion) == accion:
                 devolucion.append(tipo)
         return devolucion
