@@ -201,7 +201,7 @@
 		<div class="panel-heading box" role="tab" id="headingNine">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>
-					<font color="#ffffff" size="2">Consultas e Informes</font>
+						<font color="#ffffff" size="2">Consultas e Informes</font>
 				</a>
 			</h5>
 		</div>
@@ -246,13 +246,18 @@
 		}
 	});
 
-	function mostrarSubmenu(subformulario)
-	{
-		var idSubformulario=document.getElementById(subformulario).id;
-		if($('#' + idSubformulario).is(':hidden')){
-			$('#' + idSubformulario).show();
-		}else{
-			$('#' + idSubformulario).hide();
+	function mostrarSubmenu(subformulario){
+		if(subformulario=="sin_submenu"){
+			$('.' + "sidebar-2").hide();
+		}
+		else{
+			var idSubformulario=document.getElementById(subformulario).id;
+			if($('#' + idSubformulario).is(':hidden')){
+				$('.' + "sidebar-2").hide();
+				$('#' + idSubformulario).show();
+			}else{
+				$('#' + idSubformulario).hide();
+			}
 		}
 	}
 </script>

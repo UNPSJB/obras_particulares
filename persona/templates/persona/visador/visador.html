@@ -244,13 +244,18 @@
 		}
 	});
 
-	function mostrarSubmenu(subformulario)
-	{
-		var idSubformulario=document.getElementById(subformulario).id;
-		if($('#' + idSubformulario).is(':hidden')){
-			$('#' + idSubformulario).show();
-		}else{
-			$('#' + idSubformulario).hide();
+	function mostrarSubmenu(subformulario){
+		if(subformulario=="sin_submenu"){
+			$('.' + "sidebar-2").hide();
+		}
+		else{
+			var idSubformulario=document.getElementById(subformulario).id;
+			if($('#' + idSubformulario).is(':hidden')){
+				$('.' + "sidebar-2").hide();
+				$('#' + idSubformulario).show();
+			}else{
+				$('#' + idSubformulario).hide();
+			}
 		}
 	}
 </script>
