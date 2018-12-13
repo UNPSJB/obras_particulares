@@ -222,15 +222,18 @@ def cambiar_profesional_de_tramite(request, pk_tramite):
         lista = list(u.groups.values_list('name', flat=True))
         for i in range(len(lista)):
             if lista[i] == 'profesional':
-                if u not in profesionales:
+                if u not in profesionales and u != tramite.profesional.persona.usuario:
                     profesionales.append(u)
     if request.method == "POST" and "cambiar_profesional" in request.POST:
-        pers_profesional = get_object_or_404(Persona, pk=request.POST["idempleado"])
-        if tramite.profesional.persona.id != pers_profesional.id:
-            tramite.cambiar_profesional(pers_profesional.profesional)
-            messages.add_message(request, messages.SUCCESS, "El profesional del tramite ha sido cambiado")
+        if request.POST["idempleado"]:
+            pers_profesional = get_object_or_404(Persona, pk=request.POST["idempleado"])
+            if tramite.profesional.persona.id != pers_profesional.id:
+                tramite.cambiar_profesional(pers_profesional.profesional)
+                messages.add_message(request, messages.SUCCESS, "El profesional del tramite ha sido cambiado")
+            else:
+                messages.add_message(request, messages.ERROR, "El profesional del tramite no ha sido cambiado. Selecciono el mismo profesional.")
         else:
-            messages.add_message(request, messages.ERROR, "El profesional del tramite no ha sido cambiado. Selecciono el mismo profesional.")
+            messages.add_message(request, messages.ERROR,"El profesional del tramite no ha sido cambiado. No se selecciono un profesional.")
     else:
         return render(request, 'persona/propietario/cambiar_profesional_de_tramite.html', {'tramite': tramite, "perfil": perfil, 'profesionales': profesionales})
     return redirect('propietario')
