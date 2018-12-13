@@ -763,7 +763,6 @@ def habilitar_final_obra(request, pk_tramite):
     finally:
         return redirect('administrativo')
 
-
 def cargar_aprobacion(request, pk_tramite):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
