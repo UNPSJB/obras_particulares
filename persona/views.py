@@ -1510,14 +1510,16 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
             inspectores_sin_insp_agendadas.append(inp)
     if request.method == "POST" and "cambiar_inspector" in request.POST:
         if request.POST["idusuarioUsuarioS"]:
+            print(request.POST["idusuarioUsuarioS"])
             inspector = get_object_or_404(Usuario, pk=request.POST["idusuarioUsuarioS"])
+            print(inspector)
             if estado.usuario.persona.id != inspector.persona.id:
                 estado.cambiar_usuario(inspector)
                 messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
             else:
-                messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
+                messages.add_message(request, messages.INFO, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
         else:
-            messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. No ha sido seleccionado un inspector")
+            messages.add_message(request, messages.INFO, "El inspector del tramite no ha sido cambiado. No ha sido seleccionado un inspector")
     else:
         return render(request, 'persona/jefe_inspector/cambiar_inspector_de_inspeccion.html', {'estado': estado, "perfil": perfil, 'inspectores': inspectores_sin_insp_agendadas})
     return redirect('jefeinspector')
@@ -1761,9 +1763,9 @@ def visadores_sin_visado_agendado(request, pk_estado):
                 estado.cambiar_usuario(visador)
                 messages.add_message(request, messages.SUCCESS, "El visador del tramite ha sido cambiado")
             else:
-                messages.add_message(request, messages.ERROR, "El visador del tramite no ha sido cambiado. Ha seleccionado el mismo visador")
+                messages.add_message(request, messages.INFO, "El visador del tramite no ha sido cambiado. Ha seleccionado el mismo visador")
         else:
-            messages.add_message(request, messages.ERROR, "El visador del tramite no ha sido cambiado. No se ha seleccionado un visador")
+            messages.add_message(request, messages.INFO, "El visador del tramite no ha sido cambiado. No se ha seleccionado un visador")
     else:
         return render(request, 'persona/director/cambiar_visador_de_tramite.html', {'estado': estado, "perfil": perfil, 'visadores': visadores_sin_vis_agendadas})
     return redirect('director')
@@ -1807,9 +1809,9 @@ def inspectores_sin_inspeccion_agendada(request, pk_estado):
                 estado.cambiar_usuario(inspector)
                 messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
             else:
-                messages.add_message(request, messages.ERROR, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
+                messages.add_message(request, messages.INFO, "El inspector del tramite no ha sido cambiado. Ha seleccionado el mismo inspector")
         else:
-            messages.add_message(request, messages.ERROR,
+            messages.add_message(request, messages.INFO,
                                  "El inspector del tramite no ha sido cambiado. No se ha seleccionado inspector")
     else:
         return render(request, 'persona/director/cambiar_inspector_d_inspeccion.html', {'estado': estado, "perfil": perfil, 'inspectores': inspectores_sin_insp_agendadas})
