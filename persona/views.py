@@ -1856,32 +1856,63 @@ def ver_listado_todos_tramites(request):
 def reporte_de_tramites_por_tipo(request):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
-
     tramitesAll = Tramite.objects.all()
     tiposObra = TipoObra.objects.all()
     tramites = {}
     for to in tiposObra:
         tp = filter(lambda t: t.tipo_obra == to, tramitesAll)
-        tramites[to] = len(tp)
-
+        tramites[to] = len(tp) #sumo todos
     if request.method == "POST":
+        operacion = request.POST.get('id_operacionNro')
+        rango_fechas = request.POST.get('daterange')
+        rango_fechas_list = rango_fechas.split(' - ')
+        fecha_inicial = datetime.datetime.strptime(rango_fechas_list[0], "%m/%d/%Y").strftime("%Y-%m-%d")
+        fecha_final = datetime.datetime.strptime(rango_fechas_list[1], "%m/%d/%Y").strftime("%Y-%m-%d")
 
+        # Genero rangos de fechas
+        rfli = rango_fechas_list[0].split('/')
+        rflf = rango_fechas_list[1].split('/')
+        inicio = datetime.datetime(int(rfli[2]), int(rfli[0]), int(rfli[1]))
+        lista_dias = []
+        dia = datetime.datetime(int(rflf[2]), int(rflf[0]), int(rflf[1]))
+        lista_dias.append(dia.date())
+        while dia - timedelta(days=5) > inicio:
+            dia = dia - timedelta(days=5)
+            lista_dias.append(dia.date())
+        lista_dias.append(inicio.date())
+        lista_dias.sort()
 
-        tramitesAll = Tramite.objects.all()
+        # Filtro tramites por fecha
+        estados = Estado.objects.all()
+        estados_iniciados = []
+        for e in estados:
+            if e.tipo == 1:
+                fecha = e.timestamp.date()
+                if str(fecha_inicial) <= str(fecha) <= str(fecha_final):
+                    estados_iniciados.append(e)
+
+        # Dependiendo de la operacion agrupo los tramites
         tiposObra = TipoObra.objects.all()
         tramites = {}
         for to in tiposObra:
-            tp = filter(lambda t: t.tipo_obra == to, tramitesAll)
 
-            #print("---------------------------------------")
-            #print (tp)
-            #print (len(tp))
+            if str(operacion) == str(1):
+                operacion = 1
+                tp = filter(lambda e: e.tramite.tipo_obra == to, estados_iniciados)
+                tramites[to] = len(tp)
+            if str(operacion) == str(2):
+                operacion = 2
+                tp = filter(lambda e: e.tramite.tipo_obra == to, estados_iniciados)
+                tramites[to] = len(tp)
+            if str(operacion) == str(3):
+                operacion = 3
+                tp = filter(lambda e: e.tramite.tipo_obra == to, estados_iniciados)
+                tramites[to] = len(tp)
 
-            tramites[to] = len(tp)
-
-        contexto = {'todos_los_tramites': tramites, "perfil": perfil}
+        contexto = {'todos_los_tramites': tramites, "perfil": perfil, 'operacion': operacion}
     else:
-        contexto = {'todos_los_tramites': tramites, "perfil": perfil}
+        operacion = 0
+        contexto = {'todos_los_tramites': tramites, "perfil": perfil, 'operacion': operacion}
     return render(request, 'persona/director/reporte_de_tramites_por_tipo.html', contexto)
 
 def empleados_con_director():
@@ -1924,12 +1955,6 @@ def ver_listado_todos_usuarios(request):
 
 def ver_actividad_usuario(request, usuario):
     usuarios = Usuario.objects.all()
-
-    print ("+++++++++++++++++++++++++++++++++++++++++")
-    print (usuario)
-    print ("+++++++++++++++++++++++++++++++++++++++++")
-    print (usuarios)
-    print ("+++++++++++++++++++++++++++++++++++++++")
     usuario_req = filter(lambda u: (str(u) == usuario), usuarios)
     estados = Estado.objects.all()
     estados_usuario_req = filter(lambda estado: (str(estado.usuario) == str(usuario_req[0])), estados)

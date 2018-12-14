@@ -40,23 +40,41 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<canvas id="chartDirectorTramites" height="100"></canvas> <!--style="padding-left:25px;"-->
-						</div>
+							{% if operacion == 0 %}
+                            <h4><strong>Tramites agrupados por tipo</strong></h4>
+                            <canvas id="chartDirectorTramites" height="90"></canvas>
+						    {% endif %}
+
+                            <!-- esto va a cambiar dependiendo de la operacion, de momento esta igual -->
+
+                            {% if operacion == 1 %}
+                            <h4><strong>Tramites agrupados por tipo y por día</strong></h4>
+                            <canvas id="chartDirectorTramites" height="90"></canvas>
+						    {% endif %}
+                            {% if operacion == 2 %}
+                            <h4><strong>Tramites agrupados por tipo y por mes</strong></h4>
+                            <canvas id="chartDirectorTramites" height="90"></canvas>
+						    {% endif %}
+                            {% if operacion == 3 %}
+                            <h4><strong>Tramites agrupados por tipo y por año</strong></h4>
+                            <canvas id="chartDirectorTramites" height="90"></canvas>
+						    {% endif %}
+                        </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-top: 16px;">
                             <h6 style="padding-left: 16px;"><strong for="id_campo">Filtrar x por:</strong></h6>
                         </div>
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<form method="post" enctype="multipart/form-data">
                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 controls">
-                                    <select class="form-control input-sm" id="id_operacionNro" name="id_operacionNro">
+                                    <select class="form-control input-sm" id="id_operacionNro" name="id_operacionNro" required>
                                         <option value="">Seleccionar rango</option>
-                                        <option value="0">Diario</option>
-                                        <option value="1">Mensual</option>
-                                        <option value="2">Anual</option>
+                                        <option value="1">Diario</option>
+                                        <option value="2">Mensual</option>
+                                        <option value="3">Anual</option>
                                     </select>
                                 </div>
                                 <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                    <input type="number" class="form-control input-sm" name="valor_a_comparar01" id="valor_a_comparar01">
+                                    <input type="text" class="form-control input-sm" name="daterange" value="" />
                                 </div>
                                 <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                     <input type="number" class="form-control input-sm" name="valor_a_comparar02" id="valor_a_comparar02">
@@ -199,13 +217,7 @@
 			options: {
 				responsive: true,
 				legend: false,
-				title:{
-					display:true,
-					text:'Cantidad de tramites por tipo',
-					fontSize: 16,
-					padding: 14,
-					fontColor:"#929292",
-				},
+				title: false,
 				scales: {
 					xAxes: [{
 						barPercentage: 0.5,
@@ -235,6 +247,38 @@
 			}
 		});
 	</script>
+
+    <script>
+
+        $('input[name="daterange"]').daterangepicker({
+            "minYear": 2000,
+            ranges: {
+                'Hoy': [moment(), moment()],
+                'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Ultimos 7 días': [moment().subtract(6, 'days'), moment()],
+                'Ultimos 30 días': [moment().subtract(29, 'days'), moment()],
+                'Este mes': [moment().startOf('month'), moment().endOf('month')],
+                'Ultimo mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            },
+            "alwaysShowCalendars": true,
+            "startDate": "12/08/2018",
+            "endDate": "12/14/2018",
+            "drops": "up"
+        }, function(start, end, label) {
+          console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+        });
+
+
+
+
+
+
+
+
+
+
+
+    </script>
 
 	<script>
 		var c = document.getElementById("botonConfiguracion");
