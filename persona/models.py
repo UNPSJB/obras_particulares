@@ -135,7 +135,7 @@ class Persona(models.Model):
         if mail:
             self.mail = mail
         if domicilio:
-            self.domicilio = domicilio
+            self.domicilio_persona = domicilio
         if telefono:
             self.telefono = telefono
         if imagen:
