@@ -934,7 +934,7 @@ class ReporteProfesionalesAdministrativoExcel(TemplateView):
             ws.cell(row=cont, column=2).value = str(p.nombre)
             ws.cell(row=cont, column=3).value = str(p.apellido)
             ws.cell(row=cont, column=4).value = str(p.mail)
-            ws.cell(row=cont, column=5).value = str(p.domicilio)
+            ws.cell(row=cont, column=5).value = str(p.domicilio_persona)
             ws.cell(row=cont, column=6).value = str(p.cuil)
             ws.cell(row=cont, column=7).value = str(p.telefono)
             ws.cell(row=cont, column=8).value = str(p.profesional.profesion)
@@ -1024,7 +1024,7 @@ class ReporteProfesionalesAdministrativoPdf(View):
         personas = Persona.objects.all()
         profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
         detalles = [
-            (p.nombre, p.apellido, p.mail, p.domicilio, p.cuil, p.telefono, p.profesional.profesion, p.profesional.categoria, p.profesional.matricula)
+            (p.nombre, p.apellido, p.mail, p.domicilio_persona, p.cuil, p.telefono, p.profesional.profesion, p.profesional.categoria, p.profesional.matricula)
             for p in profesionales_con_usuario]
         detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 3 * cm, 3 * cm, 3 * cm, 2 * cm, 2 * cm, 1 * cm, 1 * cm])
 
@@ -2157,7 +2157,7 @@ class ReporteProfesionalesDirectorExcel(TemplateView):
             ws.cell(row=cont, column=2).value = str(p.nombre)
             ws.cell(row=cont, column=3).value = str(p.apellido)
             ws.cell(row=cont, column=4).value = str(p.mail)
-            ws.cell(row=cont, column=5).value = str(p.domicilio)
+            ws.cell(row=cont, column=5).value = str(p.domicilio_persona)
             ws.cell(row=cont, column=6).value = str(p.cuil)
             ws.cell(row=cont, column=7).value = str(p.telefono)
             ws.cell(row=cont, column=8).value = str(p.profesional.profesion)
@@ -2246,7 +2246,7 @@ class ReporteProfesionalesDirectorPdf(View):
         personas = Persona.objects.all()
         profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
         detalles = [
-            (p.nombre, p.apellido, p.mail, p.domicilio, p.cuil, p.telefono, p.profesional.profesion, p.profesional.categoria, p.profesional.matricula)
+            (p.nombre, p.apellido, p.mail, p.domicilio_persona, p.cuil, p.telefono, p.profesional.profesion, p.profesional.categoria, p.profesional.matricula)
             for p in profesionales_con_usuario]
         detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 3 * cm, 3 * cm, 3 * cm, 2 * cm, 2 * cm, 1 * cm, 1 * cm])
         detalle_orden.setStyle(TableStyle(
