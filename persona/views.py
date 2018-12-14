@@ -1857,152 +1857,30 @@ def reporte_de_tramites_por_tipo(request):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
 
-    argumentos = [Iniciado, ConCorrecciones, ConCorreccionesRealizadas, Aceptado, ConCorreccionesDeVisado,
-                  CorreccionesDeVisadoRealizadas, AgendadoParaVisado, Visado, ConCorreccionesDePrimerInspeccion,
-                  CorreccionesDePrimerInspeccionRealizadas, AgendadoPrimerInspeccion, PrimerInspeccion,
-                  AprobadoSolicitado,
-                  Aprobado, NoAprobadoSolicitado, NoAprobado, AprobadoSolicitadoPorPropietario, AprobadoPorPropietario,
-                  ConCorreccionesDeInspeccion, CorreccionesDeInspeccionRealizadas, AgendadoInspeccion, Inspeccionado,
-                  FinalObraTotalSolicitado, FinalObraParcialSolicitado, NoFinalObraTotalSolicitado,
-                  ConCorreccionesDeInspeccionFinal, CorreccionesDeInspeccionFinalRealizadas, AgendadoInspeccionFinal,
-                  InspeccionFinal, Finalizado, NoFinalizado, FinalObraTotalSolicitadoPorPropietario, Baja]
-    lab = ['Iniciado', 'Con Correc.', 'Con Correc. Realizadas', 'Aceptado', 'Con Correc. de Vis.',
-           'Correc. Vis. Realizadas', 'Ag.Visado', 'Visado', 'Con Correc. de 1er Insp.',
-           'Correc. 1er. Insp. Realizadas', 'Ag. 1er. Inspeccion', '1er Inspeccion', 'Aprob. Sol.',
-           'Aprobado', 'No Aprob. Sol.', 'No Aprobado', 'Aprob. Sol. x Prop.', 'Aprob. x Prop.', 'Con Correc. de Insp.',
-           'Correc. de Insp. Realizadas', 'Agendado Insp.', 'Inspeccionado', 'F.O.T.S.', 'F.O.P.S.', 'N.F.O.T.S.',
-           'Con Correc. de Insp. F.', 'Correc. de Insp. F. Realizadas', 'Ag. Insp. F.',
-           'Inspeccion F.', 'Finalizado', 'NoFinalizado', 'F.O.T.S. x Prop.', 'Baja']
+    tramitesAll = Tramite.objects.all()
+    tiposObra = TipoObra.objects.all()
+    tramites = {}
+    for to in tiposObra:
+        tp = filter(lambda t: t.tipo_obra == to, tramitesAll)
+        tramites[to] = len(tp)
 
     if request.method == "POST":
 
-        tramites = Tramite.objects.all()
+
+        tramitesAll = Tramite.objects.all()
         tiposObra = TipoObra.objects.all()
-
-        tramites_por_tipo = {}
-
+        tramites = {}
         for to in tiposObra:
-            print("-----------------------------")
-            #print (to)
-            #print("-----------------------------")
-            for t in tramites:
-                if t.tipo_obra == to:
-                    #print(t)
-                    tramites_por_tipo[to] = t
-
-            print("-----------------------------")
-
-        print (tramites_por_tipo)
-        print("-----------------------------")
-        #print("-----------------------------")
-        #print(request.POST)
-        #print("-----------------------------")
-
-
-        if request.POST.get('valor_a_comparar01') or request.POST.get('valor_a_comparar02'):
-            #print("---------------------------------------")
-            #print (request.POST.get('valor_a_comparar'))
-            tramites = Tramite.objects.filter(pk=request.POST.get('valor_a_comparar01'))
-            print (tramites)
-
-        if request.POST.get('id_campoPropietario'):
-            print ("filtro por propietario - falta mayor, menor, entre")
-            #nombre = request.POST.get('valor_a_comparar')
-            #nombreT = nombre.split(', ')
-            #personas = Persona.objects.filter(nombre=nombreT[1], apellido=nombreT[0])
-
-            #propietarios = Propietario.objects.all()
-
-            #propietario = filter(lambda p: (p.persona.nombre == persona.nombre and p.persona.apellido == persona.apellido), propietarios)
-
-            tramites = Tramite.objects.all()
-            #tramites_de_propietario = filter(lambda t: (t.propietario.persona.pk == pk_persona), tramites)
-
-            #prop = Propietario.objects.filter()
-            #tram = Tramite.objects.filter(propietario=request.POST.get('valor_a_comparar'))
-            #print("---------------------------------------")
-            #print (persona)
-            #print (persona.nombre)
-            #print("---------------------------------------")
-            #print(propietarios)
-            #for p in propietarios:
-              #  print (p.persona.pk)
-             #   print (p.persona)
-             #   print (p.persona.nombre)
-             #   print (p.persona.apellido)
+            tp = filter(lambda t: t.tipo_obra == to, tramitesAll)
 
             #print("---------------------------------------")
-            #print (propietario)
-            #print (tramites_de_propietario)
-            #print("---------------------------------------")
+            #print (tp)
+            #print (len(tp))
 
-        if request.POST.get('valor_a_comparar21'):
-            print ("filtro por profesional")
-            tramites = Tramite.objects.all()
+            tramites[to] = len(tp)
 
-            nombre = request.POST.get('valor_a_comparar21')
-            nombreT = nombre.split(', ')
-
-            #print (nombreT[0])
-            #print (nombreT[1])
-
-            personas = Persona.objects.filter(nombre=nombreT[1], apellido=nombreT[0])
-
-            #print (personas)
-
-            t = []
-            print("-------------------------")
-            for p in personas:
-                pk_profesional = p.profesional.pk
-                print(filter(lambda t: (t.propietario.persona.pk == pk_profesional), tramites))
-            print("-------------------------")
-
-            print (t)
-
-        if request.POST.get('id_campoEstado') == '3':
-            print ("filtro por estado")
-            tramites = Tramite.objects.all()
-            #nombre_estado = request.POST.get('valor_a_comparar')
-
-            #tramites = Tramite.objects.all()
-            #tramites = Tramite.objects.en_estado(arg)
-
-        if request.POST.get('valor_a_comparar41') or request.POST.get('valor_a_comparar42'):
-            print ("filtro por medidas - falta mayor, menor, entre")
-            tramites = Tramite.objects.filter(medidas=request.POST.get('valor_a_comparar41'))
-
-        if request.POST.get('valor_a_comparar51'):
-            print ("filtro por tipo - ok")
-            tipo = TipoObra.objects.get(nombre=request.POST.get('valor_a_comparar51'))
-            tramites = Tramite.objects.filter(tipo_obra=tipo.pk)
-            print (tramites)
-
-        #print(tramites)
-
-        #estados = Estado.objects.all()
-        #estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
-        #contexto1 = {'estados_del_tramite': estados_de_tramite}
-        #fechas_del_estado = []
-        #for est in estados_de_tramite:
-        #    fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"))
-
-        '''
-        len_argumentos = len(argumentos)
-        tramites = Tramite.objects.en_estado(argumentos)
-        estados = []
-        for t in tramites:
-            estados.append(t.estado().tipo)
-        estados_cant = dict(collections.Counter(estados))
-        for n in range(1, (len_argumentos+1)):
-            if (not estados_cant.has_key(n)):
-                estados_cant.setdefault(n, 0)
-        estados_datos = estados_cant.values()
-        cant_est_x_est = dict(zip(lab, estados_datos))
-        '''
-        #contexto = {'todos_los_tramites': tramites, "datos_estados": estados_datos, "label_estados": lab, "cant_est_x_est": cant_est_x_est, "perfil": perfil}
-        contexto = {'todos_los_tramites': tramites, "label_estados": lab, "perfil": perfil}
+        contexto = {'todos_los_tramites': tramites, "perfil": perfil}
     else:
-        tramites = Tramite.objects.all()
         contexto = {'todos_los_tramites': tramites, "perfil": perfil}
     return render(request, 'persona/director/reporte_de_tramites_por_tipo.html', contexto)
 
