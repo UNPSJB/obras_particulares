@@ -108,6 +108,8 @@ urlpatterns = [
     url(r'^reporte_propietarios_director_pdf/$', login_required(ReportePropietariosDirectorPdf.as_view()), name="reporte_propietarios_director_pdf"),
     url(r'^reporte_de_tramites_por_tipo/$', views.reporte_de_tramites_por_tipo, name="reporte_de_tramites_por_tipo"),
 
+
+    url(r'^reporte_boxplot/$', views.boxplot, name="reporte_boxplot"),
     #general ----------------------------------------------------------------------------------------------------
     url(r'^cambiar_perfil/$', views.cambiar_perfil, name="cambiar_perfil"),
 

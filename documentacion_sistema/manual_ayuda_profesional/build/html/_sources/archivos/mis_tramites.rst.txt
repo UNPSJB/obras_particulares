@@ -15,9 +15,9 @@ Ademas es posible visualizar opciones para:
 
 .. image:: ../_static/profesional.3_a.png
 
-- **Aprobar**: Esta opcion permite solicitar al sistema la aprobacion del tramite seleccionado. Debera tener en cuenta FALTA REALIZAR CAPTURA porque no me dan las opciones 
+- **Aprobar**: Esta opcion permite solicitar al sistema la aprobacion del tramite seleccionado solicitando al administrativo el permiso de construccion correspondiente. [#]_
 
-- **No Aprobar**: Esta opcion permite seleccionar no aprobacion de un tramite seleccionado.
+- **No Aprobar**: Esta opcion permite solicitar al sistema la aprobacion del tramite seleccionado solicitando al administrativo el permiso de construccion correspondiente. [#]_
 
 .. image:: ../_static/profesional.3_c.png
 
@@ -32,3 +32,12 @@ Ademas es posible visualizar opciones para:
 - **Final de Obra Parcial**: Esta opcion permite solicitar al sistema el final de obra parcial del tramite seleccionado.
 
 .. image:: ../_static/profesional.3_e.png
+
+.. rubric:: Footnotes
+
+.. [#] Debera tener en cuenta que el tramite puede no estar pagado totalemente para solicitar esta accion.
+  porque no me dan las opciones
+
+.. [#] Debera tener en cuenta que esta opcion sera solicitada cuando un profesional acuse no haber recibido el pago correspondiente por parte del propietario.
+
+.. [#] Debera tener en cuenta que esta opcion sera solicitada cuando un profesional acuse no haber recibido el pago correspondiente por parte del propietario.
