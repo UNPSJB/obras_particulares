@@ -8,3 +8,5 @@ Esta opcion permite cambiar sus datos personales. Las opciones a poder cambiar s
 - **Domicilio usuario**: Cambia el domicilio de la persona.
 
 Puede confirmar el cambio de datos haciendo click en el boton Modificar mis datos o volver a cargar los campos haciendo click en el boton Limpiar.
+
+.. image:: ../_static/jefeinspector_6.png

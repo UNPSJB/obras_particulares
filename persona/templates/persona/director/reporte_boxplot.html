@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block barra %}
+<div id="contenedor_botoncalapsable_sidebar">
+	<button type="button" class="btn-collapsible-sidebar" onclick='mostrarBarra()' id="botonOn">
+		<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span>
+	</button>
+</div>
+<ul class="sidebar sidebar-1">
+	<font size="2">
+		<li><a href="/persona/director" class="current"><font>Director</font></a></li>
+	</font>
+</ul>
+{% endblock %}
+
+{% block contenido %}
+
+<script src="{% static 'js/plotly-latest.min.js' %}"></script>
+<div class="row">
+  <div class="col-md-12">
+    <body>
+    <div id="myDiv"></div>
+    </body>
+    <script type="text/javascript">
+
+      var data = []
+      {% for l in lista%}
+        {% for key,values in l.items %}
+          var dict = {
+            y: {{values}},
+            type:'box',
+            name: "{{key}}"
+          }
+          data.push(dict);
+        {% endfor %}
+      {% endfor %}
+      var layout = {
+        title: 'Productividad de Empleados'
+      };
+      Plotly.newPlot('myDiv', data,layout, {showSendToCloud: true});
+    </script>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+      {%autoescape off %}{{df}}{%endautoescape%}
+  </div>
+</div>
+{% endblock %}
