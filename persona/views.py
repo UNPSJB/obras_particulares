@@ -2540,6 +2540,8 @@ def boxplot(request):
     contexto['lista_inspectores']=lista_inspectores
     contexto['lista_visadores']=lista_visadores
 
+    parametros = [7,8,5]
+    usuarios = [lista_visadores.first().id]
 
     if 'boton_plotbox' in request.POST:
         if 'opciones' in request.POST:
