@@ -226,7 +226,9 @@ def cambiar_profesional_de_tramite(request, pk_tramite):
                     profesionales.append(u)
     if request.method == "POST" and "cambiar_profesional" in request.POST:
         if request.POST["idempleado"]:
-            pers_profesional = get_object_or_404(Persona, pk=request.POST["idempleado"])
+
+            pk_profesional = int(request.POST["idempleado"])
+            profesional = Usuario.objects.get(pk=pk_profesional)
             if tramite.profesional.persona.id != pers_profesional.id:
                 tramite.cambiar_profesional(pers_profesional.profesional)
                 messages.add_message(request, messages.SUCCESS, "El profesional del tramite ha sido cambiado")
@@ -518,6 +520,8 @@ def ver_documentos_corregidos(request, pk_tramite):
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INGRESAR_CORRECCIONES)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
+
+
     documento_set = FormularioDocumentoSet(initial=inicial)
     if request.method == "POST" and "enviar_correcciones" in request.POST:
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
@@ -1510,9 +1514,8 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
             inspectores_sin_insp_agendadas.append(inp)
     if request.method == "POST" and "cambiar_inspector" in request.POST:
         if request.POST["idusuarioUsuarioS"]:
-            print(request.POST["idusuarioUsuarioS"])
-            inspector = get_object_or_404(Usuario, pk=request.POST["idusuarioUsuarioS"])
-            print(inspector)
+            pk_inspector = int(request.POST["idusuarioUsuarioS"])
+            inspector = Usuario.objects.get(pk=pk_inspector)
             if estado.usuario.persona.id != inspector.persona.id:
                 estado.cambiar_usuario(inspector)
                 messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
@@ -1758,7 +1761,8 @@ def visadores_sin_visado_agendado(request, pk_estado):
             visadores_sin_vis_agendadas.append(vis)
     if request.method == "POST" and "cambiar_visador" in request.POST:
         if request.POST["idusuarioUsuarioS"]:
-            visador = get_object_or_404(Usuario, pk=request.POST["idusuarioUsuarioS"])
+            pk_visador = int(request.POST["idusuarioUsuarioS"])
+            visador = Usuario.objects.get(pk=pk_visador)
             if estado.usuario.persona.id != visador.persona.id:
                 estado.cambiar_usuario(visador)
                 messages.add_message(request, messages.SUCCESS, "El visador del tramite ha sido cambiado")
@@ -1804,7 +1808,8 @@ def inspectores_sin_inspeccion_agendada(request, pk_estado):
             inspectores_sin_insp_agendadas.append(inp)
     if request.method == "POST" and "cambiar_inspector" in request.POST:
         if request.POST["idusuarioUsuarioS"]:
-            inspector = get_object_or_404(Usuario, pk=request.POST["idusuarioUsuarioS"])
+            pk_inspector = int(request.POST["idusuarioUsuarioS"])
+            inspector = Usuario.objects.get(pk=pk_inspector)
             if estado.usuario.persona.id != inspector.persona.id:
                 estado.cambiar_usuario(inspector)
                 messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")

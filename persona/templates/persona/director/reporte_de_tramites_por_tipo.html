@@ -43,7 +43,7 @@
                             {% if titulosLabels %}
                             <h4><strong>Reporte de tramites </strong></h4><h5><strong>Agrupados por {{titulosLabels.3}} de tramite, estado {{titulosLabels.0}}, en el periodo {{titulosLabels.1}} a {{titulosLabels.2}}</strong></h5>
                             {% else %}
-                            <h4><strong>Reporte de tramites</strong></h4><h5><strong>Seleccionar criterios para agrupar y filtrar</strong></h5>
+                            <h4><strong>Reporte de tramites</strong></h4><h5 style="color:red"><strong>Seleccionar criterios para agrupar y filtrar</strong></h5>
                             {% endif %}
                             <canvas id="chartDirectorTramites" height="80"></canvas>
                         </div>
@@ -55,10 +55,10 @@
                                 <div>
                                     <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                         <select class="form-control input-sm" id="id_agrupamiento" name="id_agrupamiento" required>
-                                            <option value="">Sel. agrupamiento de datos</option>
-                                            <option value="1">Diario</option>
-                                            <option value="2">Mensual</option>
-                                            <option value="3">Anual</option>
+                                            <option value="">Selec. int. de agrupamiento</option>
+                                            <option value="1">Intervalo de 1 día</option>
+                                            <option value="2">Intervalo de 30 días</option>
+                                            <option value="3">Intervalo de 360 días</option>
                                         </select>
                                     </div>
                                     <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
@@ -66,14 +66,14 @@
                                     </div>
                                     <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                         <select class="form-control input-sm" id="id_tipo_destino" name="id_tipo_destino" required>
-                                            <option value="" >Sel. Destino o Tipo </option>
+                                            <option value="" >Seleccionar Destino o Tipo </option>
                                             <option value="1" >Destino de obra</option>
                                             <option value="2" >Tipo de obra</option>
                                         </select>
                                     </div>
                                     <div class="controls col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                         <select class="form-control input-sm" id="id_estado" name="id_estado" required>
-                                            <option value="" >Sel. Estado </option>
+                                            <option value="" >Selec. Estado </option>
                                             <option value="1" >Iniciado</option>
                                             <option value="2">Finalizado</option>
                                             <option value="3">Baja</option>
@@ -131,12 +131,11 @@
 										{% endfor %}
 										{% endif%}
 									</tbody>
-
-
 								</table>
 							</div>
 							<hr>
 						</div>
+						<input type="text" class="form-control input-sm" name="datos_exportacion" value="{{tramites_tabla}}">
 						<div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
 							<a id="crear_detalle" href="{% url 'reporte_tramites_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
 								<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
