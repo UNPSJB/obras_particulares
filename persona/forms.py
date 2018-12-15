@@ -19,7 +19,7 @@ class FormularioPersona(forms.ModelForm):
 
     class Meta:
         model = Persona
-        fields = ('dni', 'nombre', 'apellido', 'telefono', 'domicilio', 'cuil', 'mail')
+        fields = ('dni', 'nombre', 'apellido', 'telefono', 'domicilio_persona', 'cuil', 'mail')
 
     def __init__(self, *args, **kwargs):
         super(FormularioPersona, self).__init__(*args, **kwargs)
@@ -44,7 +44,7 @@ class FormularioPersona(forms.ModelForm):
         self.fields['apellido'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
         self.fields['telefono'].widget.attrs['title'] = "Ingresar Nro de Telefono"
         self.fields['telefono'].widget.attrs['pattern'] = "^[0-9]{0,15}"
-        self.fields['domicilio'].widget.attrs['title'] = "Ingresar Domicilio"
+        self.fields['domicilio_persona'].widget.attrs['title'] = "Ingresar Domicilio"
         #self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50} [0-9]{0,5}$"
         self.fields['mail'].widget.attrs['title'] = "Ingresar Mail"
         self.fields['mail'].widget.attrs['placeholder'] = "Ingresar Mail - Formato: xxxxxxx@xxx.xxx"

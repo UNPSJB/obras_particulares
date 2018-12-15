@@ -81,7 +81,7 @@ class Persona(models.Model):
     nombre = models.CharField(max_length=50)
     mail = models.EmailField(max_length=40)
     cuil = models.CharField(max_length=14)
-    domicilio = models.CharField(max_length=50)
+    domicilio_persona = models.CharField(max_length=50)
     telefono = models.CharField(max_length=15)
     profesional = models.OneToOneField(Profesional, blank=True, null=True)
     propietario = models.OneToOneField(Propietario, blank=True, null=True)
@@ -135,7 +135,7 @@ class Persona(models.Model):
         if mail:
             self.mail = mail
         if domicilio:
-            self.domicilio = domicilio
+            self.domicilio_persona = domicilio
         if telefono:
             self.telefono = telefono
         if imagen:

@@ -72,8 +72,8 @@
 			<li><a href="director/listado_profesionales">Profesionales</a></li>
 			<li><a href="director/listado_propietarios">Propietarios</a></li>
 			<li><a href="vista_de_usuarios">Empleados</a></li>
-			<li><a href="reporte_de_tramites">Reporte de tramites</a></li>
-			<li><a href="{% url 'reporte_boxplot'%}"> Reporte Caja y Bigotes</a></li>
+			<li><a href="reporte_de_tramites_por_tipo">Reporte de Tramites</a></li>
+			<li><a href="{% url 'reporte_boxplot'%}"> Reporte Caja y Bigotes</a></li>		
 		</ul>
 	</font>
 </ul>
@@ -173,7 +173,7 @@
 							</form>
 							<br>
 						</div>
-					</div>	
+					</div>
 				</div>
 				<div class="container-fluid" id="baja_usuarios" style="display: none;">
 					<div class="row">
@@ -478,30 +478,6 @@
 		<input type="text" name="id_form_opcion" id="id_form_opcion" value=" ">
 	</form>
 
-	<!-- Modal -->
-	<div class="modal fade" id="eliminar_tipo_de_documento" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h4 align="center">
-					<strong>Eliminar Tipo de Documento<strong>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</h4>
-				</div>
-				<div class="modal-body" style="text-align:center">
-					<strong><h5>Desea eliminar el tipo de documento: </h5><h5 id="id_tipo_documento" value=""></h5></strong>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-					<a href="#"><button type="button" class="btn btn-primary">Confirmar</button></a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
 {% endblock %}
 
 {% block scripts %}
@@ -705,7 +681,7 @@
 		$('#div_id_nombre').appendTo('#persona_administrativo');
 		$('#div_id_apellido').appendTo('#persona_administrativo');
 		$('#div_id_telefono').appendTo('#persona_administrativo');
-		$('#div_id_domicilio').appendTo('#profesional_administrativo');
+		$('#div_id_domicilio_persona').appendTo('#profesional_administrativo');
 		$('#div_id_cuil').appendTo('#profesional_administrativo');
 		$('#div_id_mail').appendTo('#profesional_administrativo');
 		$('#div_id_matricula').appendTo('#profesional_administrativo');
