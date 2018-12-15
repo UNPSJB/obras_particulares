@@ -31,7 +31,7 @@
 		<div class="panel-heading box" role="tab" id="headingFive">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-					<font color="#ffffff" size="2">Grafico de tramites por tipo</font>
+					<font color="#ffffff" size="2">Grafico de tramites</font>
 				</a>
 			</h5>
 		</div>
@@ -40,47 +40,48 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							{% if operacion == 0 %}
-                            <h4><strong>Tramites agrupados por tipo</strong></h4>
-                            <canvas id="chartDirectorTramites" height="90"></canvas>
-						    {% endif %}
-
-                            <!-- esto va a cambiar dependiendo de la operacion, de momento esta igual -->
-
-                            {% if operacion == 1 %}
-                            <h4><strong>Tramites agrupados por tipo y por día</strong></h4>
-                            <canvas id="chartDirectorTramites" height="90"></canvas>
-						    {% endif %}
-                            {% if operacion == 2 %}
-                            <h4><strong>Tramites agrupados por tipo y por mes</strong></h4>
-                            <canvas id="chartDirectorTramites" height="90"></canvas>
-						    {% endif %}
-                            {% if operacion == 3 %}
-                            <h4><strong>Tramites agrupados por tipo y por año</strong></h4>
-                            <canvas id="chartDirectorTramites" height="90"></canvas>
-						    {% endif %}
+                            {% if titulosLabels %}
+                            <h4><strong>Reporte de tramites </strong></h4><h5><strong>Agrupados por {{titulosLabels.3}} de tramite, estado {{titulosLabels.0}}, en el periodo {{titulosLabels.1}} a {{titulosLabels.2}}</strong></h5>
+                            {% else %}
+                            <h4><strong>Reporte de tramites</strong></h4><h5><strong>Seleccionar criterios para agrupar y filtrar</strong></h5>
+                            {% endif %}
+                            <canvas id="chartDirectorTramites" height="80"></canvas>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-top: 16px;">
-                            <h6 style="padding-left: 16px;"><strong for="id_campo">Filtrar x por:</strong></h6>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-top: 0px;">
+                            <h6 style="padding-left: 16px;"><strong>Agrupar y filtrar por:</strong></h6>
                         </div>
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<form method="post" enctype="multipart/form-data">
-                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 controls">
-                                    <select class="form-control input-sm" id="id_operacionNro" name="id_operacionNro" required>
-                                        <option value="">Seleccionar rango</option>
-                                        <option value="1">Diario</option>
-                                        <option value="2">Mensual</option>
-                                        <option value="3">Anual</option>
-                                    </select>
-                                </div>
-                                <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                    <input type="text" class="form-control input-sm" name="daterange" value="" />
-                                </div>
-                                <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                    <input type="number" class="form-control input-sm" name="valor_a_comparar02" id="valor_a_comparar02">
-                                </div>
-                                <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                    <input type="submit" name="buscar" value="Buscar" class="btn btn-primary btn-sm" id="boton_buscar" style="width:100%;">
+                                <div>
+                                    <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <select class="form-control input-sm" id="id_agrupamiento" name="id_agrupamiento" required>
+                                            <option value="">Sel. agrupamiento de datos</option>
+                                            <option value="1">Diario</option>
+                                            <option value="2">Mensual</option>
+                                            <option value="3">Anual</option>
+                                        </select>
+                                    </div>
+                                    <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <input type="text" class="form-control input-sm" name="daterange" value="" required>
+                                    </div>
+                                    <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <select class="form-control input-sm" id="id_tipo_destino" name="id_tipo_destino" required>
+                                            <option value="" >Sel. Destino o Tipo </option>
+                                            <option value="1" >Destino de obra</option>
+                                            <option value="2" >Tipo de obra</option>
+                                        </select>
+                                    </div>
+                                    <div class="controls col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                        <select class="form-control input-sm" id="id_estado" name="id_estado" required>
+                                            <option value="" >Sel. Estado </option>
+                                            <option value="1" >Iniciado</option>
+                                            <option value="2">Finalizado</option>
+                                            <option value="3">Baja</option>
+                                        </select>
+                                    </div>
+                                    <div class="controls col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                        <input type="submit" name="buscar" value="Buscar" class="btn btn-primary btn-sm" id="boton_buscar">
+                                    </div>
                                 </div>
 							</form>
 						</div>
@@ -97,14 +98,14 @@
 				</a>
 			</h5>
 		</div>
-    	<div id="collapseOne" class="panel-collapse colorp" role="tabpanel" aria-labelledby="headingOne">
+    	<div id="collapseOne" class="panel-collapse collapse colorp" role="tabpanel" aria-labelledby="headingOne">
       		<div class="panel-body">
         		<div class="container-fluid">
           			<div class="row">
-            			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<div class="table-responsive">
-								<table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-									<thead>
+								<table  class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-bordered table-striped table-hover table-condensed" style="background: white;">
+                                    <thead>
 										<tr>
 											<th>Nro</th>
 											<th>Propietario</th>
@@ -112,30 +113,26 @@
 											<th>Estado</th>
 											<th>Medidas</th>
 											<th>Tipo</th>
-											<th>Detalle</th>
+                                            <th>Destino</th>
 										</tr>
 									</thead>
 									<tbody>
-										{% if todos_los_tramites %}
-										{% for tramite in todos_los_tramites %}
-										<!tr>
+										{% if tramites_tabla %}
+										{% for tramite in tramites_tabla%}
+										<tr>
 											<td class="col-xs-1" align="center">{{tramite.id}}</td>
 											<td class="col-xs-2">{{tramite.propietario}}</td>
-											<td class="col-xs-3">{{tramite.profesional}}</td>
-											<td class="col-xs-2">{{tramite.estado}}</td>
-											<td class="col-xs-1">{{tramite.medidas}}</td>
+											<td class="col-xs-2">{{tramite.profesional}}</td>
+											<td class="col-xs-2" align="center">{{tramite.estado}}</td>
+											<td class="col-xs-1" align="center">{{tramite.medidas}}</td>
 											<td class="col-xs-2" align="center">{{tramite.tipo_obra}}</td>
-											<td align="center" class="col-xs-1">
-												<a href="{% url 'detalle_de_tramite' tramite.pk %}">
-													<button type="button" class="btn btn-primary btn-xs" name="detalle">
-														<span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
-													</button>
-												</a>
-											</td>
+                                            <td class="col-xs-2" align="center">{{tramite.destino_obra}}</td>
 										</tr>
 										{% endfor %}
 										{% endif%}
 									</tbody>
+
+
 								</table>
 							</div>
 							<hr>
@@ -160,15 +157,101 @@
 			</div>
 		</div>
 	</div>
-
-
-
-
 </div>
 {% endblock %}
 
 {% block scripts %}
-
+    <script>
+        bgcColor = [
+            'rgba(255, 255, 0, 1.0)',
+            'rgba(0, 255, 0, 1.0)',
+            'rgba(0, 234, 236, 1.0)',
+            'rgba(44, 0, 255, 1.0)',
+            'rgba(183, 92, 224, 1.0)',
+            'rgba(255, 0, 211, 1.0)',
+            'rgba(255, 0, 0, 1.0)',
+            'rgba(0, 128, 128, 1.0)',
+            'rgba(255, 255, 0, 1.0)',
+            'rgba(0, 255, 0, 1.0)',
+            'rgba(0, 234, 236, 1.0)',
+            'rgba(44, 0, 255, 1.0)',
+            'rgba(183, 92, 224, 1.0)',
+            'rgba(255, 0, 211, 1.0)',
+            'rgba(255, 0, 0, 1.0)',
+            'rgba(0, 128, 128, 1.0)',
+            'rgba(255, 255, 0, 1.0)',
+            'rgba(0, 255, 0, 1.0)',
+            'rgba(0, 234, 236, 1.0)',
+            'rgba(44, 0, 255, 1.0)',
+            'rgba(183, 92, 224, 1.0)',
+            'rgba(255, 0, 211, 1.0)',
+            'rgba(255, 0, 0, 1.0)',
+            'rgba(0, 128, 128, 1.0)'
+        ]
+		datalabel = [];
+		dataTipos = [];
+        xlabel = []
+        {% for key, value in todos_los_tramites.items %}
+			datalabel.push("{{key}}");
+			dataTipos.push([{{value}}]);
+		{% endfor %}
+        {% for l in rangosLabels %}
+            xlabel.push("{{l}}");
+        {% endfor %}
+		var barChartData = {
+			labels: xlabel,
+			datasets: [
+			]
+		};
+        for(x=0;x<datalabel.length;x++){
+			var color = bgcColor[x];
+			var newDataset = {
+				label: datalabel[x],
+				backgroundColor: color,
+				borderColor: color,
+				borderWidth: 1,
+				data: dataTipos[x][0]
+			};
+            barChartData.datasets.push(newDataset);
+        }
+		var ctx = document.getElementById("chartDirectorTramites");
+		var chartDirectorTramites = new Chart( ctx, {
+            type: 'bar',
+            data: barChartData,
+            options: {
+                responsive: true,
+				legend: true,
+				title: false,
+				scales: {
+					xAxes: [{
+						barPercentage: 0.5,
+						ticks: {
+							fontColor:"#444444",
+							fontSize: 10,
+						},
+						gridLines:{
+							color:"#808b96",
+							zeroLineColor: "#a6a6a6",
+							zeroLineWidth: 2,
+						}
+					}],
+					yAxes: [{
+						ticks: {
+							beginAtZero:true,
+							stepSize: 5,
+							fontColor:"#444444",
+							fontSize: 10,
+						},
+						gridLines:{
+							color:"#808b96",
+							zeroLineColor: "#a6a6a6",
+							zeroLineWidth: 2,
+						}
+					}]
+				}
+            }
+		});
+	</script>
 
     <script>
 		labelsTipos = [];
@@ -177,42 +260,40 @@
 			labelsTipos.push("{{key}}");
 			dataTipos.push({{value}});
 		{% endfor %}
-		var ctx = document.getElementById("chartDirectorTramites");
+		var ctx = document.getElementById("chartDirectorTramitesPorTipoInicialnhnnh");
 		var chartDirectorTramites = new Chart( ctx, {
 			type: 'bar',
 			data: {
-			  labels: labelsTipos,
-			  datasets: [
-				{
-				  backgroundColor: [
-				  'rgba(255, 255, 0, 1.0)',
-				  'rgba(0, 255, 0, 1.0)',
-				  'rgba(0, 234, 236, 1.0)',
-				  'rgba(44, 0, 255, 1.0)',
-				  'rgba(183, 92, 224, 1.0)',
-				  'rgba(255, 0, 211, 1.0)',
-				  'rgba(255, 0, 0, 1.0)',
-				  'rgba(0, 128, 128, 1.0)',
-				  'rgba(255, 255, 0, 1.0)',
-				  'rgba(0, 255, 0, 1.0)',
-				  'rgba(0, 234, 236, 1.0)',
-				  'rgba(44, 0, 255, 1.0)',
-				  'rgba(183, 92, 224, 1.0)',
-				  'rgba(255, 0, 211, 1.0)',
-				  'rgba(255, 0, 0, 1.0)',
-				  'rgba(0, 128, 128, 1.0)',
-				  'rgba(255, 255, 0, 1.0)',
-				  'rgba(0, 255, 0, 1.0)',
-				  'rgba(0, 234, 236, 1.0)',
-				  'rgba(44, 0, 255, 1.0)',
-				  'rgba(183, 92, 224, 1.0)',
-				  'rgba(255, 0, 211, 1.0)',
-				  'rgba(255, 0, 0, 1.0)',
-				  'rgba(0, 128, 128, 1.0)'
-				  ],
-				  data: dataTipos
-				}
-			  ]
+                labels: labelsTipos,
+                datasets: [{
+                    backgroundColor: [
+                        'rgba(255, 255, 0, 1.0)',
+                        'rgba(0, 255, 0, 1.0)',
+                        'rgba(0, 234, 236, 1.0)',
+                        'rgba(44, 0, 255, 1.0)',
+                        'rgba(183, 92, 224, 1.0)',
+                        'rgba(255, 0, 211, 1.0)',
+                        'rgba(255, 0, 0, 1.0)',
+                        'rgba(0, 128, 128, 1.0)',
+                        'rgba(255, 255, 0, 1.0)',
+                        'rgba(0, 255, 0, 1.0)',
+                        'rgba(0, 234, 236, 1.0)',
+                        'rgba(44, 0, 255, 1.0)',
+                        'rgba(183, 92, 224, 1.0)',
+                        'rgba(255, 0, 211, 1.0)',
+                        'rgba(255, 0, 0, 1.0)',
+                        'rgba(0, 128, 128, 1.0)',
+                        'rgba(255, 255, 0, 1.0)',
+                        'rgba(0, 255, 0, 1.0)',
+                        'rgba(0, 234, 236, 1.0)',
+                        'rgba(44, 0, 255, 1.0)',
+                        'rgba(183, 92, 224, 1.0)',
+                        'rgba(255, 0, 211, 1.0)',
+                        'rgba(255, 0, 0, 1.0)',
+                        'rgba(0, 128, 128, 1.0)'
+                    ],
+                    data: dataTipos
+                }]
 			},
 			options: {
 				responsive: true,
@@ -249,7 +330,6 @@
 	</script>
 
     <script>
-
         $('input[name="daterange"]').daterangepicker({
             "minYear": 2000,
             ranges: {
@@ -267,16 +347,6 @@
         }, function(start, end, label) {
           console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
         });
-
-
-
-
-
-
-
-
-
-
 
     </script>
 
