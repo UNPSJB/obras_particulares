@@ -2532,35 +2532,59 @@ def cambiar_descrip_filas(columna):
     return columna
 
 def boxplot(request):
-    #lista = [{'pepe':[5,6,6,7,7,8,8,9,9,9,10,10,10,10,11,11,12,12,13,14]},{'rodrigo':[1,2,3,2,1,3,2,1,2,2,10]}]
-
-    parametros = [7,8,5]          #VISDOR AgendadoParaVisado, Visado, ConCorreccionesDeVisado
-    #parametros= [11,12,9]         #INSPECTOR AgendadoPrimerInspeccion, PrimerInspeccion, ConCorreccionesDePrimerInspeccion
-    usuarios = Usuario.objects.filter(groups__name='visador').values_list('id',flat=True)
-
     contexto={}
     lista=[]
+
+    lista_visadores = Usuario.objects.filter(groups__name='visador')
+    lista_inspectores = Usuario.objects.filter(groups__name='inspector')
+    contexto['lista_inspectores']=lista_inspectores
+    contexto['lista_visadores']=lista_visadores
+
+
+    if 'boton_plotbox' in request.POST:
+        if 'opciones' in request.POST:
+            if 'todos_visadores' in request.POST.get('opciones'):
+                parametros = [7,8,5]          #VISADOR AgendadoParaVisado, Visado, ConCorreccionesDeVisado
+                usuarios = Usuario.objects.filter(groups__name='visador').values_list('id',flat=True)
+
+            elif 'todos_inspectores' in request.POST.get('opciones'):
+                parametros= [11,12,9]         #INSPECTOR AgendadoPrimerInspeccion, PrimerInspeccion, ConCorreccionesDePrimerInspeccion
+                usuarios = Usuario.objects.filter(groups__name='inspector').values_list('id',flat=True)
+
+            else:
+                id = request.POST.get('opciones')
+                u = Usuario.objects.get(id=int(id))
+                usuarios = [u.id]
+                if u.get_view_name() == 'inspector':
+                    parametros = [11,12,9]
+                else:
+                    parametros = parametros = [7,8,5]
+
     tramites_agendados = Estado.objects.filter(tipo__in=parametros, usuario__in=usuarios).values('usuario__username','tramite_id','timestamp','tipo').order_by('tramite_id','timestamp')
     df_tramites = pd.DataFrame.from_records(tramites_agendados)
-    tramite_id = df_tramites.groupby(['tramite_id']).timestamp.count().items()
-    tramites_a_borrar = [x[0] for x in tramite_id if x[1]%2!=0]
+    if not df_tramites.empty:
+        tramite_id = df_tramites.groupby(['tramite_id']).timestamp.count().items()
+        tramites_a_borrar = [x[0] for x in tramite_id if x[1]%2!=0]
 
-    if tramites_a_borrar:
-        for t in reversed(tramites_a_borrar): #la tengo que dar vuelta sino los indices no coinciden
-            indice = df_tramites[(df_tramites.tramite_id == t)].index.max()
-            df_tramites = df_tramites.drop(df_tramites.index[indice])
+        if tramites_a_borrar:
+            for t in reversed(tramites_a_borrar): #la tengo que dar vuelta sino los indices no coinciden
+                indice = df_tramites[(df_tramites.tramite_id == t)].index.max()
+                df_tramites = df_tramites.drop(df_tramites.index[indice])
 
-    df=pd.pivot_table(df_tramites,index=['tramite_id','timestamp','usuario__username'], values='tipo', aggfunc='first', fill_value=0).reset_index()
-    df['tipo'] = df['tipo'].apply(cambiar_descrip_filas)
-    df['timestamp'] = df['timestamp'].apply(lambda row: row.strftime('%d/%m/%Y'))
-    for nombre in df.usuario__username.unique():
-        columna_temporal =  df[(df.usuario__username == nombre)].timestamp
-        pares = [datetime.datetime.strptime(x,'%d/%m/%Y').date() for x in columna_temporal[::2]]
-        impares = [datetime.datetime.strptime(y,'%d/%m/%Y').date() for y in columna_temporal[1::2]]
-        resta = [t.days for t in list(map(operator.sub, impares,pares))]
-        lista.append({nombre:resta})
+        df=pd.pivot_table(df_tramites,index=['tramite_id','timestamp','usuario__username'], values='tipo', aggfunc='first', fill_value=0).reset_index()
+        df['tipo'] = df['tipo'].apply(cambiar_descrip_filas)
+        df['timestamp'] = df['timestamp'].apply(lambda row: row.strftime('%d/%m/%Y'))
+        for nombre in df.usuario__username.unique():
+            columna_temporal =  df[(df.usuario__username == nombre)].timestamp
+            pares = [datetime.datetime.strptime(x,'%d/%m/%Y').date() for x in columna_temporal[::2]]
+            impares = [datetime.datetime.strptime(y,'%d/%m/%Y').date() for y in columna_temporal[1::2]]
+            resta = [t.days for t in list(map(operator.sub, impares,pares))]
+            lista.append({nombre:resta})
 
-    df=df.to_html(index=False, classes=["table table-condensed", "table-bordered"])
-    contexto['lista']=lista
-    contexto['df']=df
+        df=df.to_html(index=False, classes=["table table-condensed", "table-bordered"])
+        contexto['lista']=lista
+        contexto['df']=df
+    else:
+        messages.add_message(request, messages.WARNING, "No existen datos disponibles para la consulta")
+
     return render(request, 'persona/director/reporte_boxplot.html', contexto)

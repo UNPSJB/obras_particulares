@@ -15,36 +15,71 @@
 {% endblock %}
 
 {% block contenido %}
+    {% if lista %}
+        <script src="{% static 'js/plotly-latest.min.js' %}"></script>
+        <div class="row">
+          <div class="col-md-12">
+            <body>
+            <div id="myDiv"></div>
+            </body>
+            <script type="text/javascript">
 
-<script src="{% static 'js/plotly-latest.min.js' %}"></script>
-<div class="row">
-  <div class="col-md-12">
-    <body>
-    <div id="myDiv"></div>
-    </body>
-    <script type="text/javascript">
+              var data = []
+              {% for l in lista%}
+                {% for key,values in l.items %}
+                  var dict = {
+                    y: {{values}},
+                    type:'box',
+                    name: "{{key}}"
+                  }
+                  data.push(dict);
+                {% endfor %}
+              {% endfor %}
+              var layout = {
+                title: 'Productividad de Empleados'
+              };
+              Plotly.newPlot('myDiv', data,layout, {showSendToCloud: true});
+            </script>
+          </div>
+        </div>
+        <div id="collapseFive" class="panel-collapse colorG" role="tabpanel" aria-labelledby="headingFive">
+            <div class="row">
+                <div class="col-md-12">
+                    <form method="post">
+                        <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <label> Visadores e Inspectores</label>
+                            <select class="form-control input-sm" name="opciones">
+                                <optgroup label="Visadores">
+                                    {% for visador in lista_visadores %}
+                                        <option value="{{visador.id}}">{{visador.username}}</option>
+                                    {% endfor %}
+                                    <option value="todos_visadores">Todos los Visadores</option>
+                                </optgroup>
+                                <optgroup label="Inspectores">
+                                    {% for inspector in lista_inspectores %}
+                                        <option value="{{inspector.id}}">{{inspector.username}}</option>
+                                    {% endfor %}
+                                    <option value="todos_inspectores">Todos los Inspectores</option>
+                                </optgroup>
+                            </select>
+                        </div>
 
-      var data = []
-      {% for l in lista%}
-        {% for key,values in l.items %}
-          var dict = {
-            y: {{values}},
-            type:'box',
-            name: "{{key}}"
-          }
-          data.push(dict);
-        {% endfor %}
-      {% endfor %}
-      var layout = {
-        title: 'Productividad de Empleados'
-      };
-      Plotly.newPlot('myDiv', data,layout, {showSendToCloud: true});
-    </script>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-12">
-      {%autoescape off %}{{df}}{%endautoescape%}
-  </div>
-</div>
+
+                        <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <button type="submit" class="btn btn-info" name="boton_plotbox" style="margin-top:6%">Filtrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <br>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-12">
+              {% if df %}
+              {%autoescape off %}{{df}}{%endautoescape%}
+              {% endif %}              
+          </div>
+        </div>
+    {% endif %}
 {% endblock %}
