@@ -42,10 +42,13 @@
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             {% if titulosLabels %}
                             <h4><strong>Reporte de tramites </strong></h4><h5><strong>Agrupados por {{titulosLabels.3}} de tramite, estado {{titulosLabels.0}}, en el periodo {{titulosLabels.1}} a {{titulosLabels.2}}</strong></h5>
-                            {% else %}
-                            <h4><strong>Reporte de tramites</strong></h4><h5 style="color:red"><strong>Seleccionar criterios para agrupar y filtrar</strong></h5>
-                            {% endif %}
                             <canvas id="chartDirectorTramites" height="80"></canvas>
+							{% else %}
+                            <h4><strong>Reporte de tramites</strong></h4><h5 style="color:red"><strong>Seleccionar criterios para agrupar y filtrar</strong></h5>
+							<div style="padding-bottom: 250px;">
+								<br style="padding-bottom: 50px;">
+							</div>
+							{% endif %}
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-top: 0px;">
                             <h6 style="padding-left: 16px;"><strong>Agrupar y filtrar por:</strong></h6>
@@ -337,11 +340,13 @@
                 'Ultimos 7 días': [moment().subtract(6, 'days'), moment()],
                 'Ultimos 30 días': [moment().subtract(29, 'days'), moment()],
                 'Este mes': [moment().startOf('month'), moment().endOf('month')],
-                'Ultimo mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                'Ultimo mes': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+                'Este año': [moment().startOf('year'), moment().endOf('month')],
+                'Ultimos 365 días': [moment().subtract(365, 'days'), moment()]
             },
             "alwaysShowCalendars": true,
-            "startDate": "12/08/2018",
-            "endDate": "12/14/2018",
+            "startDate": moment().startOf('month'),
+            "endDate": moment(),
             "drops": "up"
         }, function(start, end, label) {
           console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
