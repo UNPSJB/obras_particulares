@@ -698,6 +698,8 @@ def crear_usuario(request, pk_persona):
     usuario = request.user
     persona = get_object_or_404(Persona, pk=pk_persona)
     creado, password, usuario_creado = persona.crear_usuario()
+    print(password)
+    print(usuario_creado.username)
     if creado:
         messages.add_message(request, messages.SUCCESS, 'Profesional fue aceptado y su usuario creado.')
         send_mail(
@@ -781,10 +783,8 @@ def cargar_aprobacion(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "aprobar_tramite" in request.POST:
-                aprobar_tramite(request, pk_tramite)
+                aprobar_tramite(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/administrativo/cargar_aprobacion.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -793,10 +793,12 @@ def cargar_aprobacion(request, pk_tramite):
     return redirect('administrativo')
 
 
-def aprobar_tramite(request, pk_tramite):
+def aprobar_tramite(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(tramite.APROBAR_TRAMITE, request.user)
+        for docForm in documento_set:
+                docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'Tramite aprobado.')
     except:
         messages.add_message(request, messages.ERROR, 'No se puede aprobar este tramite.')
@@ -816,10 +818,8 @@ def cargar_no_aprobacion(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "no_aprobar_tramite" in request.POST:
-                no_aprobar_tramite(request, pk_tramite)
+                no_aprobar_tramite(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/administrativo/cargar_no_aprobacion.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -828,10 +828,12 @@ def cargar_no_aprobacion(request, pk_tramite):
     return redirect('administrativo')
 
 
-def no_aprobar_tramite(request, pk_tramite):
+def no_aprobar_tramite(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(tramite.NO_APROBAR_TRAMITE, request.user)
+        for docForm in documento_set:
+                docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'Tramite no aprobado.')
     except:
         messages.add_message(request, messages.ERROR, 'No se puede no aprobar este tramite.')
