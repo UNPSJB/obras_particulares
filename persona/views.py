@@ -106,10 +106,8 @@ def cargar_aprobacion_propietario(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "aprobar_tramite" in request.POST:
-                aprobar_tramite_propietario(request, pk_tramite)
+                aprobar_tramite_propietario(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/propietario/cargar_aprobacion.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -118,10 +116,12 @@ def cargar_aprobacion_propietario(request, pk_tramite):
     return redirect('propietario')
 
 
-def aprobar_tramite_propietario(request, pk_tramite):
+def aprobar_tramite_propietario(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(tramite.SOLICITAR_APROBAR_TRAMITE_PROPIETARIO, request.user)
+        for docForm in documento_set:
+                docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'Solicitud de aprobar tramite realizada.')
     except:
         messages.add_message(request, messages.ERROR, 'No se puede solicitar aprobar tramite para este tramite.')
@@ -141,10 +141,8 @@ def cargar_final_de_obra_total_propietario(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "aprobar_final_de_obra_total" in request.POST:
-                propietario_solicita_final_obra(request, pk_tramite)
+                propietario_solicita_final_obra(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/propietario/cargar_final_de_obra_total.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -153,10 +151,12 @@ def cargar_final_de_obra_total_propietario(request, pk_tramite):
     return redirect('propietario')
 
 
-def propietario_solicita_final_obra(request, pk_tramite):
+def propietario_solicita_final_obra(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA_TOTAL_PROPIETARIO, request.user)
+        for docForm in documento_set:
+                docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'Final de obra total solicitado.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra total para ese tramite.')
@@ -401,10 +401,8 @@ def cargar_no_aprobar_profesional(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "no_aprobar_tramite" in request.POST:
-                profesional_solicita_no_aprobar_tramite(request, pk_tramite)
+                profesional_solicita_no_aprobar_tramite(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/profesional/cargar_no_aprobacion.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -413,10 +411,12 @@ def cargar_no_aprobar_profesional(request, pk_tramite):
     return redirect('profesional')
 
 
-def profesional_solicita_no_aprobar_tramite(request, pk_tramite):
+def profesional_solicita_no_aprobar_tramite(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(Tramite.SOLICITAR_NO_APROBAR_TRAMITE, request.user)
+        for docForm in documento_set:
+            docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'Solicitud de no aprobar tramite realizada.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar no aprobar tramite para ese tramite.')
@@ -436,10 +436,8 @@ def cargar_final_de_obra_total_profesional(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "aprobar_final_de_obra_total" in request.POST:
-                profesional_solicita_final_obra(request, pk_tramite)
+                profesional_solicita_final_obra(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/profesional/cargar_final_de_obra_total.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -448,11 +446,13 @@ def cargar_final_de_obra_total_profesional(request, pk_tramite):
     return redirect('profesional')
 
 
-def profesional_solicita_final_obra(request, pk_tramite):
+def profesional_solicita_final_obra(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         if str(tramite.estado()) != 'NoFinalizado':
             tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA_TOTAL, request.user)
+            for docForm in documento_set:
+                docForm.save(tramite=tramite)
             messages.add_message(request, messages.SUCCESS, 'Final de obra solicitado.')
         else:
             messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
@@ -474,10 +474,8 @@ def cargar_no_final_de_obra_total_profesional(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "no_aprobar_final_de_obra_total" in request.POST:
-                profesional_solicita_no_final_obra(request, pk_tramite)
+                profesional_solicita_no_final_obra(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/profesional/cargar_no_final_de_obra_total.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -486,10 +484,12 @@ def cargar_no_final_de_obra_total_profesional(request, pk_tramite):
     return redirect('profesional')
 
 
-def profesional_solicita_no_final_obra(request, pk_tramite):
+def profesional_solicita_no_final_obra(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(Tramite.SOLICITAR_NO_FINAL_OBRA_TOTAL, request.user)
+        for docForm in documento_set:
+                docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'No Final de obra solicitado.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar el no final de obra para ese tramite.')
