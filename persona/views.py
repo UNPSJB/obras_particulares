@@ -2588,10 +2588,119 @@ def boxplot(request):
             resta = [t.days for t in list(map(operator.sub, impares,pares))]
             lista.append({nombre:resta})
 
-        df=df.to_html(index=False, classes=["table table-condensed", "table-bordered"])
+        df=df.to_html(index=False, classes=["table table-condensed", "table-bordered", "table-striped", "table-hover"])
         contexto['lista']=lista
         contexto['df']=df
     else:
         messages.add_message(request, messages.WARNING, "No existen datos disponibles para la consulta")
 
     return render(request, 'persona/director/reporte_boxplot.html', contexto)
+
+
+def generar_boxplot():
+    import plotly.offline as offline
+    from selenium import webdriver
+    import plotly.plotly as py
+    import plotly.graph_objs as go
+    import numpy as np
+
+    y0 = np.random.randn(50)-1
+    y1 = np.random.randn(50)+1
+
+    trace0 = go.Box(
+        y=y0
+    )
+    trace1 = go.Box(
+        y=y1
+    )
+    data = [trace0, trace1]
+    fig = go.Figure(data=data)
+
+    offline.plot(fig, image='svg', auto_open=False, image_width=1000, image_height=500)
+
+    driver = webdriver.PhantomJS()
+    driver.set_window_size(1000, 500)
+    driver.get('temp-plot.html')
+    driver.save_screenshot(settings.MEDIA_ROOT + '/boxplot.png')
+
+
+
+from reportlab.platypus import SimpleDocTemplate, Image
+class boxplot_to_pdf(View):
+
+    def get(self, request, *args, **kwargs):
+        generar_boxplot()
+        filename = "Informe de rendimiento de empleados.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=0,
+            leftMargin=0,
+            topMargin=0,
+            bottomMargin=0,
+        )
+
+        story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+
+        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
+        story.append(Paragraph(usuario, styles["Usuario"]))
+        story.append(Spacer(0, cm * 0.15))
+
+        im1 = Image(settings.MEDIA_ROOT + '/imagenes/banner_municipio_3.png', width=630, height=50)
+        im1.hAlign = 'CENTER'
+        story.append(im1)
+
+        story.append(Spacer(0, cm * 0.05))
+        subtitulo = 'Reporte de empleados'
+        story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        story.append(Spacer(0, cm * 0.15))
+
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
+        story.append(im0)
+        story.append(Spacer(0, cm * 0.5))
+
+        boxplot = Image(settings.MEDIA_ROOT + '/boxplot.png', width=400, height=250)
+        story.append(boxplot)
+
+
+        encabezados = ('USUARIO', 'GRUPO', 'NOMBRE', 'DOCUMENTO ', 'TELEFONO', 'MAIL')
+        detalles = []
+
+        #detalles = [
+        #    (tramite.id, tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.medidas, tramite.estado())
+        #    for tramite in Tramite.objects.all()]
+
+        detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 3 * cm, 4 * cm, 4 * cm, 2 * cm, 3 * cm])
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        story.append(detalle_orden)
+
+        '''
+        trabajando con los graficos dentro del informe
+        '''
+        d = Drawing(500, 200)
+        data = [
+            (13, 5, 20, 22, 37, 45, 19, 4),
+            (14, 6, 21, 23, 38, 46, 20, 5)
+        ]
+
+        '''
+        hasta aca, anda pero ver los valores, colores y como se ubica dentro de pagina
+        '''
+
+        doc.build(story)
+        return response
