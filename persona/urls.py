@@ -107,11 +107,13 @@ urlpatterns = [
     url(r'^reporte_profesionales_director_pdf/$', login_required(ReporteProfesionalesDirectorPdf.as_view()), name="reporte_profesionales_director_pdf"),
     url(r'^reporte_propietarios_director_pdf/$', login_required(ReportePropietariosDirectorPdf.as_view()), name="reporte_propietarios_director_pdf"),
     url(r'^reporte_de_tramites_por_tipo/$', views.reporte_de_tramites_por_tipo, name="reporte_de_tramites_por_tipo"),
-    url(r'^reporte_boxplot/$', views.boxplot, name="reporte_boxplot"),
-    url(r'^reporte_de_correciones_profesional/$', views.reporte_de_correciones_profesional, name="reporte_de_correciones_profesional"),
+   r'^reporte_de_correciones_profesional/$', views.reporte_de_correciones_profesional, name="reporte_de_correciones_profesional"),
 
     url(r'^reporte_tramites_por_tipo_director_excel/(?P<pk_tramite>\d+)/$', views.reporteTramitesPorTipoDirectorExcel, name="reporte_tramites_por_tipo_director_excel"),
     url(r'^reporte_tramites_por_tipo_director_pdf/(?P<pk_tramite>\d+)/$', views.reporteTramitesPorTipoDirectorPdf, name="reporte_tramites_por_tipo_director_pdf"),
+
+    url(r'^reporte_boxplot/$', views.boxplot, name="reporte_boxplot"),
+    url(r'^pdf_boxplot/$', views.boxplot_to_pdf.as_view(), name="pdf_boxplot"),
 
     #general ----------------------------------------------------------------------------------------------------
     url(r'^cambiar_perfil/$', views.cambiar_perfil, name="cambiar_perfil"),

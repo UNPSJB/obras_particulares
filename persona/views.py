@@ -106,10 +106,8 @@ def cargar_aprobacion_propietario(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "aprobar_tramite" in request.POST:
-                aprobar_tramite_propietario(request, pk_tramite)
+                aprobar_tramite_propietario(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/propietario/cargar_aprobacion.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -118,10 +116,12 @@ def cargar_aprobacion_propietario(request, pk_tramite):
     return redirect('propietario')
 
 
-def aprobar_tramite_propietario(request, pk_tramite):
+def aprobar_tramite_propietario(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(tramite.SOLICITAR_APROBAR_TRAMITE_PROPIETARIO, request.user)
+        for docForm in documento_set:
+                docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'Solicitud de aprobar tramite realizada.')
     except:
         messages.add_message(request, messages.ERROR, 'No se puede solicitar aprobar tramite para este tramite.')
@@ -141,10 +141,8 @@ def cargar_final_de_obra_total_propietario(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "aprobar_final_de_obra_total" in request.POST:
-                propietario_solicita_final_obra(request, pk_tramite)
+                propietario_solicita_final_obra(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/propietario/cargar_final_de_obra_total.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -153,10 +151,12 @@ def cargar_final_de_obra_total_propietario(request, pk_tramite):
     return redirect('propietario')
 
 
-def propietario_solicita_final_obra(request, pk_tramite):
+def propietario_solicita_final_obra(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA_TOTAL_PROPIETARIO, request.user)
+        for docForm in documento_set:
+                docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'Final de obra total solicitado.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra total para ese tramite.')
@@ -401,10 +401,8 @@ def cargar_no_aprobar_profesional(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "no_aprobar_tramite" in request.POST:
-                profesional_solicita_no_aprobar_tramite(request, pk_tramite)
+                profesional_solicita_no_aprobar_tramite(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/profesional/cargar_no_aprobacion.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -413,10 +411,12 @@ def cargar_no_aprobar_profesional(request, pk_tramite):
     return redirect('profesional')
 
 
-def profesional_solicita_no_aprobar_tramite(request, pk_tramite):
+def profesional_solicita_no_aprobar_tramite(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(Tramite.SOLICITAR_NO_APROBAR_TRAMITE, request.user)
+        for docForm in documento_set:
+            docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'Solicitud de no aprobar tramite realizada.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar no aprobar tramite para ese tramite.')
@@ -436,10 +436,8 @@ def cargar_final_de_obra_total_profesional(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "aprobar_final_de_obra_total" in request.POST:
-                profesional_solicita_final_obra(request, pk_tramite)
+                profesional_solicita_final_obra(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/profesional/cargar_final_de_obra_total.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -448,11 +446,13 @@ def cargar_final_de_obra_total_profesional(request, pk_tramite):
     return redirect('profesional')
 
 
-def profesional_solicita_final_obra(request, pk_tramite):
+def profesional_solicita_final_obra(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         if str(tramite.estado()) != 'NoFinalizado':
             tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA_TOTAL, request.user)
+            for docForm in documento_set:
+                docForm.save(tramite=tramite)
             messages.add_message(request, messages.SUCCESS, 'Final de obra solicitado.')
         else:
             messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
@@ -474,10 +474,8 @@ def cargar_no_final_de_obra_total_profesional(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "no_aprobar_final_de_obra_total" in request.POST:
-                profesional_solicita_no_final_obra(request, pk_tramite)
+                profesional_solicita_no_final_obra(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/profesional/cargar_no_final_de_obra_total.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -486,10 +484,12 @@ def cargar_no_final_de_obra_total_profesional(request, pk_tramite):
     return redirect('profesional')
 
 
-def profesional_solicita_no_final_obra(request, pk_tramite):
+def profesional_solicita_no_final_obra(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(Tramite.SOLICITAR_NO_FINAL_OBRA_TOTAL, request.user)
+        for docForm in documento_set:
+                docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'No Final de obra solicitado.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar el no final de obra para ese tramite.')
@@ -698,6 +698,8 @@ def crear_usuario(request, pk_persona):
     usuario = request.user
     persona = get_object_or_404(Persona, pk=pk_persona)
     creado, password, usuario_creado = persona.crear_usuario()
+    print(password)
+    print(usuario_creado.username)
     if creado:
         messages.add_message(request, messages.SUCCESS, 'Profesional fue aceptado y su usuario creado.')
         send_mail(
@@ -781,10 +783,8 @@ def cargar_aprobacion(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "aprobar_tramite" in request.POST:
-                aprobar_tramite(request, pk_tramite)
+                aprobar_tramite(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/administrativo/cargar_aprobacion.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -793,10 +793,12 @@ def cargar_aprobacion(request, pk_tramite):
     return redirect('administrativo')
 
 
-def aprobar_tramite(request, pk_tramite):
+def aprobar_tramite(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(tramite.APROBAR_TRAMITE, request.user)
+        for docForm in documento_set:
+                docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'Tramite aprobado.')
     except:
         messages.add_message(request, messages.ERROR, 'No se puede aprobar este tramite.')
@@ -816,10 +818,8 @@ def cargar_no_aprobacion(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "no_aprobar_tramite" in request.POST:
-                no_aprobar_tramite(request, pk_tramite)
+                no_aprobar_tramite(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/administrativo/cargar_no_aprobacion.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -828,10 +828,12 @@ def cargar_no_aprobacion(request, pk_tramite):
     return redirect('administrativo')
 
 
-def no_aprobar_tramite(request, pk_tramite):
+def no_aprobar_tramite(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(tramite.NO_APROBAR_TRAMITE, request.user)
+        for docForm in documento_set:
+                docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'Tramite no aprobado.')
     except:
         messages.add_message(request, messages.ERROR, 'No se puede no aprobar este tramite.')
@@ -2731,10 +2733,119 @@ def boxplot(request):
             resta = [t.days for t in list(map(operator.sub, impares,pares))]
             lista.append({nombre:resta})
 
-        df=df.to_html(index=False, classes=["table table-condensed", "table-bordered"])
+        df=df.to_html(index=False, classes=["table table-condensed", "table-bordered", "table-striped", "table-hover"])
         contexto['lista']=lista
         contexto['df']=df
     else:
         messages.add_message(request, messages.WARNING, "No existen datos disponibles para la consulta")
 
     return render(request, 'persona/director/reporte_boxplot.html', contexto)
+
+
+def generar_boxplot():
+    import plotly.offline as offline
+    from selenium import webdriver
+    import plotly.plotly as py
+    import plotly.graph_objs as go
+    import numpy as np
+
+    y0 = np.random.randn(50)-1
+    y1 = np.random.randn(50)+1
+
+    trace0 = go.Box(
+        y=y0
+    )
+    trace1 = go.Box(
+        y=y1
+    )
+    data = [trace0, trace1]
+    fig = go.Figure(data=data)
+
+    offline.plot(fig, image='svg', auto_open=False, image_width=1000, image_height=500)
+
+    driver = webdriver.PhantomJS()
+    driver.set_window_size(1000, 500)
+    driver.get('temp-plot.html')
+    driver.save_screenshot(settings.MEDIA_ROOT + '/boxplot.png')
+
+
+
+from reportlab.platypus import SimpleDocTemplate, Image
+class boxplot_to_pdf(View):
+
+    def get(self, request, *args, **kwargs):
+        generar_boxplot()
+        filename = "Informe de rendimiento de empleados.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=0,
+            leftMargin=0,
+            topMargin=0,
+            bottomMargin=0,
+        )
+
+        story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=10))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+
+        usuario = 'Usuario: ' + str(request.user.persona) + ' -  Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
+        story.append(Paragraph(usuario, styles["Usuario"]))
+        story.append(Spacer(0, cm * 0.15))
+
+        im1 = Image(settings.MEDIA_ROOT + '/imagenes/banner_municipio_3.png', width=630, height=50)
+        im1.hAlign = 'CENTER'
+        story.append(im1)
+
+        story.append(Spacer(0, cm * 0.05))
+        subtitulo = 'Reporte de empleados'
+        story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        story.append(Spacer(0, cm * 0.15))
+
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
+        story.append(im0)
+        story.append(Spacer(0, cm * 0.5))
+
+        boxplot = Image(settings.MEDIA_ROOT + '/boxplot.png', width=400, height=250)
+        story.append(boxplot)
+
+
+        encabezados = ('USUARIO', 'GRUPO', 'NOMBRE', 'DOCUMENTO ', 'TELEFONO', 'MAIL')
+        detalles = []
+
+        #detalles = [
+        #    (tramite.id, tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.medidas, tramite.estado())
+        #    for tramite in Tramite.objects.all()]
+
+        detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 3 * cm, 4 * cm, 4 * cm, 2 * cm, 3 * cm])
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        story.append(detalle_orden)
+
+        '''
+        trabajando con los graficos dentro del informe
+        '''
+        d = Drawing(500, 200)
+        data = [
+            (13, 5, 20, 22, 37, 45, 19, 4),
+            (14, 6, 21, 23, 38, 46, 20, 5)
+        ]
+
+        '''
+        hasta aca, anda pero ver los valores, colores y como se ubica dentro de pagina
+        '''
+
+        doc.build(story)
+        return response
