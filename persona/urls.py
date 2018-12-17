@@ -110,6 +110,8 @@ urlpatterns = [
 
 
     url(r'^reporte_boxplot/$', views.boxplot, name="reporte_boxplot"),
+    url(r'^pdf_boxplot/$', views.boxplot_to_pdf.as_view(), name="pdf_boxplot"),
+
     #general ----------------------------------------------------------------------------------------------------
     url(r'^cambiar_perfil/$', views.cambiar_perfil, name="cambiar_perfil"),
 
