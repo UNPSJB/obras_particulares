@@ -40,26 +40,11 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            {% if titulosLabels %}
-                            <h4><strong>Reporte de tramites </strong></h4><h5><strong>Agrupados por {{titulosLabels.3}} de tramite, estado {{titulosLabels.0}}, en el periodo {{titulosLabels.1}} a {{titulosLabels.2}}</strong></h5>
+
+                            <h4><strong>Reporte de Correcciones de tramite </strong></h4><h5><strong>Agrupados por estado {{titulosLabels.0}}, en el periodo {{titulosLabels.1}} a {{titulosLabels.2}}</strong></h5>
                             <canvas id="chartDirectorTramites" height="80"></canvas>
-							{% else %}
-                            <h4><strong>Reporte de tramites</strong></h4><h5 style="color:red"><strong>Seleccionar criterios para agrupar y filtrar</strong></h5>
-							<div style="padding-bottom: 250px;">
-								<br style="padding-bottom: 50px;">
-							</div>
-							{% endif %}
+
                         </div>
-
-<!--div id="content">
-    <h3>Sample h3 tag</h3>
-    <p>Sample pararaph</p>
-</div>
-<div id="editor"></div>
-<button id="cmd">Generate PDF</button>
-
-<button id="hhh">Generate PDF img</button-->
-
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-top: 0px;">
                             <h6 style="padding-left: 16px;"><strong>Agrupar y filtrar por:</strong></h6>
                         </div>
@@ -71,25 +56,25 @@
                                     </div>
 									<div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                         <select class="form-control input-sm" id="id_agrupamiento" name="id_agrupamiento" required>
-                                            <option value="">Selec. int. de agrupamiento</option>
+                                            <option value="">Selec. intervalo de agrupamiento</option>
                                             <option value="1">Intervalo de 1 día</option>
                                             <option value="2">Intervalo de 30 días</option>
                                             <option value="3">Intervalo de 360 días</option>
                                         </select>
                                     </div>
-                                    <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                        <select class="form-control input-sm" id="id_tipo_destino" name="id_tipo_destino" required>
-                                            <option value="" >Seleccionar Destino o Tipo </option>
-                                            <option value="1" >Destino de obra</option>
-                                            <option value="2" >Tipo de obra</option>
+                                    <!--div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                        <select class="form-control input-sm" id="id_tipo_" name="id_tipo" required>
+                                            <option value="" >Seleccionar Tipo </option>
+                                            <option value="1" >De visado</option>
+                                            <option value="2" >de Inspeccion</option>
                                         </select>
-                                    </div>
-                                    <div class="controls col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                    </div-->
+                                    <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                         <select class="form-control input-sm" id="id_estado" name="id_estado" required>
-                                            <option value="" >Selec. Estado </option>
-                                            <option value="1" >Iniciado</option>
-                                            <option value="2">Finalizado</option>
-                                            <option value="3">Baja</option>
+                                            <option value="" >Selec. tipo corrección</option>
+                                            <option value="1" >De inicio</option>
+                                            <option value="2">De visado</option>
+                                            <option value="3">De inspección</option>
                                         </select>
                                     </div>
                                     <div class="controls col-xs-1 col-sm-1 col-md-1 col-lg-1">
@@ -107,7 +92,7 @@
 		<div class="panel-heading box" role="tab" id="headingOne">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-					<font color="#ffffff" size="2">Detalle de tramites filtrados</font>
+					<font color="#ffffff" size="2">Detalle de correcciones filtradas</font>
 				</a>
 			</h5>
 		</div>
@@ -148,9 +133,6 @@
 							</div>
 							<hr>
 						</div>
-
-						<!--input type="text" class="form-control input-sm" id="datos_exportacion" name="datos_exportacion" value="{{tramites_tabla}}"-->
-
 						<div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
 							<a href="javascript:enviarExcel()" class="btn btn-info btn-collapsible btn-sm" onclick="" title="Generar Archivo Excel" >
 								<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
@@ -202,70 +184,46 @@
             'rgba(255, 0, 0, 1.0)',
             'rgba(0, 128, 128, 1.0)'
         ]
+
 		datalabel = [];
 		dataTipos = [];
         xlabel = []
-        {% for key, value in todos_los_tramites.items %}
-			datalabel.push("{{key}}");
+
+        {% for value in todos_los_tramites.items %}
+			//datalabel.push("{{key}}");
 			dataTipos.push([{{value}}]);
 		{% endfor %}
         {% for l in rangosLabels %}
             xlabel.push("{{l}}");
         {% endfor %}
-		var barChartData = {
-			labels: xlabel,
-			datasets: [
-			]
-		};
-        for(x=0;x<datalabel.length;x++){
-			var color = bgcColor[x];
-			var newDataset = {
-				//type: 'line',
-				label: datalabel[x],
-				backgroundColor: color,
-				borderColor: color,
-				borderWidth: 1,
-				data: dataTipos[x][0]
-			};
-            barChartData.datasets.push(newDataset);
-        }
+
 		var ctx = document.getElementById("chartDirectorTramites");
-		var chartDirectorTramites = new Chart( ctx, {
-            type: 'bar',
-            data: barChartData,
+		var chartDirectorTramites = new Chart.Scatter( ctx, {
+            //type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Scatter Dataset',
+                    data: [{
+                        x: 15,
+                        y: 12
+                    }, {
+                        x: 20,
+                        y: 10
+                    }, {
+                        x: 25,
+                        y: 5
+                    }]
+                }]
+            },
             options: {
-                responsive: true,
-				legend: true,
-				title: false,
-				scales: {
-					xAxes: [{
-						barPercentage: 0.5,
-						ticks: {
-							fontColor:"#444444",
-							fontSize: 10,
-						},
-						gridLines:{
-							color:"#808b96",
-							zeroLineColor: "#a6a6a6",
-							zeroLineWidth: 2,
-						}
-					}],
-					yAxes: [{
-						ticks: {
-							beginAtZero:true,
-							stepSize: 5,
-							fontColor:"#444444",
-							fontSize: 10,
-						},
-						gridLines:{
-							color:"#808b96",
-							zeroLineColor: "#a6a6a6",
-							zeroLineWidth: 2,
-						}
-					}]
-				}
+                scales: {
+                    xAxes: [{
+                        type: 'linear',
+                        position: 'bottom'
+                    }]
+                }
             }
-		});
+        });
 	</script>
 
     <script>
@@ -315,44 +273,5 @@
 
 	</script-->
 
-
-
-<script>
-
-var doc = new jsPDF();
-var specialElementHandlers = {
-    '#editor': function (element, renderer) {
-        return true;
-    }
-};
-
-$('#cmd').click(function () {
-    doc.fromHTML($('#tabladatos').html(), 15, 15, {
-        'width': 170,
-            'elementHandlers': specialElementHandlers
-    });
-    doc.save('sample-file.pdf');
-});
-
-// This code is collected but useful, click below to jsfiddle link.
-
-</script>
-
-<script>
-	var newCanvas = document.querySelector('#chartDirectorTramites');
-$('#hhh').click(function () {
-  //create image from dummy canvas
-	var newCanvasImg = newCanvas.toDataURL("image/jpeg", 1.0);
-
-  	//creates PDF from img
-	var doc = new jsPDF('landscape');
-	doc.setFontSize(10);
-	doc.text(15, 15, "Super Cool Chart");
-	doc.addImage(newCanvasImg, 'JPEG', 10, 10, 280, 70);
-
-
-	doc.save('new-canvas.pdf');
-});
-</script>
 
 {% endblock %}

@@ -66,14 +66,15 @@
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_datos_personales")'>Datos personales</a></li>
 			<li><a href="#" onclick='opcionesDatosPersonales("alta_contrasenia")'>Contraseña</a></li>
 		</ul>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine" onclick='mostrarSubmenu("consultasInformes")'>Listados y Reportes<span class="caret"></span></a></li>
 		<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
 			<li><a href="vista_de_tramites">Listado tramites</a></li>
 			<li><a href="director/listado_profesionales">Listado Profesionales</a></li>
 			<li><a href="director/listado_propietarios">Listado Propietarios</a></li>
 			<li><a href="vista_de_usuarios">Listado Empleados</a></li>
 			<li><a href="reporte_de_tramites_por_tipo">Reporte de Tramites</a></li>
-			<li><a href="{% url 'reporte_boxplot'%}"> Reporte Caja y Bigotes</a></li>		
+			<li><a href="{% url 'reporte_boxplot'%}"> Reporte Caja y Bigotes</a></li>
+			<li><a href="reporte_de_correciones_profesional">Reporte de Correcciones</a></li>
 		</ul>
 	</font>
 </ul>
