@@ -401,10 +401,8 @@ def cargar_no_aprobar_profesional(request, pk_tramite):
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
             if "no_aprobar_tramite" in request.POST:
-                profesional_solicita_no_aprobar_tramite(request, pk_tramite)
+                profesional_solicita_no_aprobar_tramite(request, pk_tramite, documento_set)
     else:
         return render(request, 'persona/profesional/cargar_no_aprobacion.html', {'tramite': tramite,
                                                                         'ctxdocumentoset': documento_set,
@@ -413,10 +411,12 @@ def cargar_no_aprobar_profesional(request, pk_tramite):
     return redirect('profesional')
 
 
-def profesional_solicita_no_aprobar_tramite(request, pk_tramite):
+def profesional_solicita_no_aprobar_tramite(request, pk_tramite, documento_set):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(Tramite.SOLICITAR_NO_APROBAR_TRAMITE, request.user)
+        for docForm in documento_set:
+            docForm.save(tramite=tramite)
         messages.add_message(request, messages.SUCCESS, 'Solicitud de no aprobar tramite realizada.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar no aprobar tramite para ese tramite.')
