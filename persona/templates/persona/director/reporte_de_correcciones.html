@@ -158,63 +158,34 @@
 
 {% block scripts %}
     <script>
-        bgcColor = [
-            'rgba(255, 255, 0, 1.0)',
-            'rgba(0, 255, 0, 1.0)',
-            'rgba(0, 234, 236, 1.0)',
-            'rgba(44, 0, 255, 1.0)',
-            'rgba(183, 92, 224, 1.0)',
-            'rgba(255, 0, 211, 1.0)',
-            'rgba(255, 0, 0, 1.0)',
-            'rgba(0, 128, 128, 1.0)',
-            'rgba(255, 255, 0, 1.0)',
-            'rgba(0, 255, 0, 1.0)',
-            'rgba(0, 234, 236, 1.0)',
-            'rgba(44, 0, 255, 1.0)',
-            'rgba(183, 92, 224, 1.0)',
-            'rgba(255, 0, 211, 1.0)',
-            'rgba(255, 0, 0, 1.0)',
-            'rgba(0, 128, 128, 1.0)',
-            'rgba(255, 255, 0, 1.0)',
-            'rgba(0, 255, 0, 1.0)',
-            'rgba(0, 234, 236, 1.0)',
-            'rgba(44, 0, 255, 1.0)',
-            'rgba(183, 92, 224, 1.0)',
-            'rgba(255, 0, 211, 1.0)',
-            'rgba(255, 0, 0, 1.0)',
-            'rgba(0, 128, 128, 1.0)'
-        ]
-
 		datalabel = [];
 		dataTipos = [];
-        xlabel = []
-
-        {% for value in todos_los_tramites.items %}
-			//datalabel.push("{{key}}");
-			dataTipos.push([{{value}}]);
+        {% for key in rangosLabels %}
+			datalabel.push("{{key}}");
 		{% endfor %}
-        {% for l in rangosLabels %}
-            xlabel.push("{{l}}");
-        {% endfor %}
-
+        {% for value in todos_los_tramites %}
+			dataTipos.push("{{value}}");
+		{% endfor %}
+		data_d = []
+		for(i=0; i < datalabel.length ; i++){
+			var newData = {
+				x: datalabel[i],
+				y: dataTipos[i],
+			};
+			data_d.push(newData);
+		}
+		var barChartData ={
+			datasets: [{
+				label: 'Scatter Dataset',
+				borderColor: 'rgba(0, 255, 0, 1.0)',
+				backgroundColor: 'rgba(0, 255, 0, 1.0)',
+				data: data_d
+			}]
+        };
 		var ctx = document.getElementById("chartDirectorTramites");
 		var chartDirectorTramites = new Chart.Scatter( ctx, {
             //type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Scatter Dataset',
-                    data: [{
-                        x: 15,
-                        y: 12
-                    }, {
-                        x: 20,
-                        y: 10
-                    }, {
-                        x: 25,
-                        y: 5
-                    }]
-                }]
-            },
+            data: barChartData,
             options: {
                 scales: {
                     xAxes: [{

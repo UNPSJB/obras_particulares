@@ -41,6 +41,7 @@ from tipos.models import *
 from django.db.models import F, Q, When
 import pandas as pd
 import operator as operator
+from operator import attrgetter
 
 '''propietario ------------------------------------------------------------------------------------------'''
 
@@ -1496,14 +1497,12 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
             if lista[i] == 'inspector':
                 if u not in inspectores:
                     inspectores.append(u)
-    estados = Estado.objects.all()
-    tipos = [11, 21]
-    estados_agendados = filter(
-        lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or
-                                              str(e.tramite.estado()) == 'AgendadoInspeccion') and
-                   (e.tipo == tipos[0] or e.tipo == tipos[1])) and
-                  e.timestamp.date() == estado.timestamp.date()
-        , estados)
+    argumentos = [AgendadoPrimerInspeccion, AgendadoInspeccion]
+    tramites = Tramite.objects.en_estado(argumentos)
+    estados_ag = []
+    for t in tramites:
+        estados_ag.append(t.estado())
+    estados_agendados = filter(lambda e: e.timestamp.date() == estado.timestamp.date(), estados_ag)
     inspectores_estados_agendados = []
     for i in range(len(list(estados_agendados))):
         inspectores_estados_agendados.append(estados_agendados[i].usuario)
@@ -1511,15 +1510,23 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
     for i in range(len(list(inspectores_estados_agendados))):
         if inspectores_estados_agendados.count(inspectores_estados_agendados[i]) >= 3:
             inspectores_tres_estados_agendados.append(inspectores_estados_agendados[i])
+    inspectores_con_inspeccion_mismo_horario = []
+    for i in range(len(list(estados_agendados))):
+        if estados_agendados[i].fecha.time() == estado.timestamp.time():
+            inspectores_con_inspeccion_mismo_horario.append(estados_agendados[i].usuario)
+        if estados_agendados[i].fecha.time() < estado.timestamp.time() and estados_agendados[i].fecha.time() >= (estado.timestamp - timedelta(hours=2)).time():
+            inspectores_con_inspeccion_mismo_horario.append(estados_agendados[i].usuario)
+        if estados_agendados[i].fecha.time() > estado.timestamp.time() and estados_agendados[i].fecha.time() <= (estado.timestamp + timedelta(hours=2)).time():
+            inspectores_con_inspeccion_mismo_horario.append(estados_agendados[i].usuario)
     inspectores_sin_insp_agendadas = []
     for inp in inspectores:
-        if inp not in inspectores_tres_estados_agendados and inp != estado.usuario:
+        if inp.is_active and inp not in inspectores_tres_estados_agendados and inp != estado.usuario and inp not in inspectores_con_inspeccion_mismo_horario:
             inspectores_sin_insp_agendadas.append(inp)
     if request.method == "POST" and "cambiar_inspector" in request.POST:
         if request.POST["idusuarioUsuarioS"]:
             pk_inspector = int(request.POST["idusuarioUsuarioS"])
             inspector = Usuario.objects.get(pk=pk_inspector)
-            if estado.usuario.persona.id != inspector.persona.id:
+            if estado.usuario.id != inspector.id:
                 estado.cambiar_usuario(inspector)
                 messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
             else:
@@ -1532,9 +1539,11 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
 
 
 def inspecciones_agendadas_por_inspectores():
-    estados = Estado.objects.all()
-    tipos = [11, 21]
-    estados_agendados= filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or str(e.tramite.estado()) == 'AgendadoInspeccion') and (e.tipo == tipos[0] or e.tipo == tipos[1])), estados)
+    argumentos = [AgendadoPrimerInspeccion, AgendadoInspeccion]
+    tramites = Tramite.objects.en_estado(argumentos)
+    estados_agendados = []
+    for t in tramites:
+        estados_agendados.append(t.estado())
     return estados_agendados
 
 
@@ -1752,21 +1761,26 @@ def visadores_sin_visado_agendado(request, pk_estado):
             if lista[i] == 'visador':
                 if u not in visadores:
                     visadores.append(u)
-    estados = Estado.objects.all()
-    tipo = 7
-    estados_agendados = filter(lambda e: (e.usuario is not None and str(e.tramite.estado()) == 'AgendadoParaVisado' and e.tipo == tipo), estados)
+    #estados = Estado.objects.all()
+    #tipo = 7
+    #estados_agendados = filter(lambda e: (e.usuario is not None and str(e.tramite.estado()) == 'AgendadoParaVisado' and e.tipo == tipo), estados)
+    argumentos = [AgendadoParaVisado]
+    tramites = Tramite.objects.en_estado(argumentos)
+    estados_agendados = []
+    for t in tramites:
+        estados_agendados.append(t.estado())
     visadores_estados_agendados = []
     for i in range(len(list(estados_agendados))):
         visadores_estados_agendados.append(estados_agendados[i].usuario)
     visadores_sin_vis_agendadas = []
     for vis in visadores:
-        if vis not in visadores_estados_agendados:
+        if vis not in visadores_estados_agendados and vis.is_active:
             visadores_sin_vis_agendadas.append(vis)
     if request.method == "POST" and "cambiar_visador" in request.POST:
         if request.POST["idusuarioUsuarioS"]:
             pk_visador = int(request.POST["idusuarioUsuarioS"])
             visador = Usuario.objects.get(pk=pk_visador)
-            if estado.usuario.persona.id != visador.persona.id:
+            if estado.usuario.id != visador.id:
                 estado.cambiar_usuario(visador)
                 messages.add_message(request, messages.SUCCESS, "El visador del tramite ha sido cambiado")
             else:
@@ -1790,14 +1804,20 @@ def inspectores_sin_inspeccion_agendada(request, pk_estado):
             if lista[i] == 'inspector':
                 if u not in inspectores:
                     inspectores.append(u)
-    estados = Estado.objects.all()
-    tipos = [11, 21]
-    estados_agendados = filter(
-        lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or
-                                              str(e.tramite.estado()) == 'AgendadoInspeccion') and
-                   (e.tipo == tipos[0] or e.tipo == tipos[1])) and
-                  e.timestamp.date() == estado.timestamp.date()
-        , estados)
+    #estados = Estado.objects.all()
+    #tipos = [11, 21]
+    #estados_agendados = filter(
+    #    lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or
+    #                                          str(e.tramite.estado()) == 'AgendadoInspeccion') and
+    #               (e.tipo == tipos[0] or e.tipo == tipos[1])) and
+    #              e.timestamp.date() == estado.timestamp.date()
+    #    , estados)
+    argumentos = [AgendadoPrimerInspeccion, AgendadoInspeccion]
+    tramites = Tramite.objects.en_estado(argumentos)
+    estados_ag = []
+    for t in tramites:
+        estados_ag.append(t.estado())
+    estados_agendados = filter(lambda e: e.timestamp.date() == estado.timestamp.date(), estados_ag)
     inspectores_estados_agendados = []
     for i in range(len(list(estados_agendados))):
         inspectores_estados_agendados.append(estados_agendados[i].usuario)
@@ -1805,15 +1825,25 @@ def inspectores_sin_inspeccion_agendada(request, pk_estado):
     for i in range(len(list(inspectores_estados_agendados))):
         if inspectores_estados_agendados.count(inspectores_estados_agendados[i]) >= 3:
             inspectores_tres_estados_agendados.append(inspectores_estados_agendados[i])
+    inspectores_con_inspeccion_mismo_horario = []
+    for i in range(len(list(estados_agendados))):
+        if estados_agendados[i].fecha.time() == estado.timestamp.time():
+            inspectores_con_inspeccion_mismo_horario.append(estados_agendados[i].usuario)
+        if estados_agendados[i].fecha.time() < estado.timestamp.time() and estados_agendados[i].fecha.time() >= (estado.timestamp - timedelta(hours=2)).time():
+            inspectores_con_inspeccion_mismo_horario.append(estados_agendados[i].usuario)
+        if estados_agendados[i].fecha.time() > estado.timestamp.time() and estados_agendados[i].fecha.time() <= (estado.timestamp + timedelta(hours=2)).time():
+            inspectores_con_inspeccion_mismo_horario.append(estados_agendados[i].usuario)
     inspectores_sin_insp_agendadas = []
     for inp in inspectores:
-        if inp not in inspectores_tres_estados_agendados and inp != estado.usuario:
+        if inp.is_active and inp not in inspectores_tres_estados_agendados and inp != estado.usuario and inp not in inspectores_con_inspeccion_mismo_horario:
             inspectores_sin_insp_agendadas.append(inp)
     if request.method == "POST" and "cambiar_inspector" in request.POST:
         if request.POST["idusuarioUsuarioS"]:
+            print(request.POST["idusuarioUsuarioS"])
             pk_inspector = int(request.POST["idusuarioUsuarioS"])
+            print(pk_inspector)
             inspector = Usuario.objects.get(pk=pk_inspector)
-            if estado.usuario.persona.id != inspector.persona.id:
+            if estado.usuario.id != inspector.id:
                 estado.cambiar_usuario(inspector)
                 messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
             else:
@@ -1845,7 +1875,6 @@ def ver_listado_todos_tramites(request):
     'Correc. de Insp. Realizadas', 'Agendado Insp.', 'Inspeccionado', 'F.O.T.S.', 'F.O.P.S.', 'N.F.O.T.S.',
     'Con Correc. de Insp. F.', 'Correc. de Insp. F. Realizadas', 'Ag. Insp. F.',
     'Inspeccion F.', 'Finalizado', 'NoFinalizado', 'F.O.T.S. x Prop.', 'Baja']
-
     len_argumentos = len(argumentos)
     tramites = Tramite.objects.en_estado(argumentos)
     estados = []
@@ -1856,9 +1885,7 @@ def ver_listado_todos_tramites(request):
         if (not estados_cant.has_key(n)):
             estados_cant.setdefault(n, 0)
     estados_datos = estados_cant.values()
-
     cant_est_x_est = dict(zip(lab, estados_datos))
-
     contexto = {'todos_los_tramites': tramites, "datos_estados": estados_datos, "label_estados": lab, "cant_est_x_est": cant_est_x_est, "perfil": perfil}
     return render(request, 'persona/director/vista_de_tramites.html', contexto)
 
@@ -1903,7 +1930,7 @@ def reporte_de_tramites_por_tipo(request):
         while start <= end:
             lista_dias.append(start.date())
             start += step
-        if start != end:
+        if start != end and start <= end:
             lista_dias.append(end.date())
         rangosLabels = []
         if str(agrupamiento_req) == str(1):
@@ -1924,7 +1951,7 @@ def reporte_de_tramites_por_tipo(request):
             for ld in argumentos_destino:
                 listaPorFecha = []
                 for i in range(len(lista_dias)):
-                    if i + 1 < len(lista_dias):
+                    if i + 1 <= len(lista_dias):
                         tp = filter(lambda t: t.destino_obra == ld and str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1]), tramites)
                         listaPorFecha.append(len(tp))
                 lista_por_fecha_por_destino[label_destino[ld-1]] = listaPorFecha
@@ -1936,7 +1963,7 @@ def reporte_de_tramites_por_tipo(request):
             for to in tipos_obra:
                 listaPorFecha = []
                 for i in range(len(lista_dias)):
-                    if i + 1 < len(lista_dias):
+                    if i + 1 <= len(lista_dias):
                         tp = filter(lambda t: t.tipo_obra == to and str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1]), tramites)
                         listaPorFecha.append(len(tp))
                 lista_por_fecha_por_tipo[to] = listaPorFecha
@@ -1954,17 +1981,29 @@ def reporte_de_correciones_profesional(request):
     perfil = 'css/' + usuario.persona.perfilCSS
     tipos_obra = TipoObra.objects.all()
     tramites = []
+    estados = Estado.objects.all()
     if request.method == "POST":
-        if (request.POST.get('id_estado') == '1'):
-            estado = ConCorrecciones
-        elif (request.POST.get('id_estado') == '2'):
-            estado = ConCorreccionesDeVisado
+        if request.POST.get('id_estado') == '1':
+            tipos = [2]
+            # 'ConCorrecciones'
+            tramites_estado_requerido = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'ConCorrecciones' and (e.tipo == tipos[0]))), estados)
+        elif request.POST.get('id_estado') == '2':
+            tipos = [5]
+            # 'ConCorreccionesDeVisado'
+            tramites_estado_requerido = filter(lambda e:(e.usuario is not None and (str(e.tramite.estado()) == 'ConCorreccionesDeVisado' and (e.tipo == tipos[0]))), estados)
         else:
-            estado = [ConCorreccionesDePrimerInspeccion, ConCorreccionesDeInspeccion, ConCorreccionesDeInspeccionFinal]
-        # Se filtran tramites por estado
-        tramites_estado_requerido = Tramite.objects.en_estado(estado)
+            tipos = [9, 19, 26]
+            # 'ConCorreccionesDePrimerInspeccion', 'ConCorreccionesDeInspeccion', 'ConCorreccionesDeInspeccionFinal'
+            tramites_estado_requerido = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'ConCorreccionesDePrimerInspeccion' or str(e.tramite.estado()) == 'ConCorreccionesDeInspeccion' or str(e.tramite.estado()) == 'ConCorreccionesDeInspeccionFinal') and (e.tipo == tipos[0] or e.tipo == tipos[1] or e.tipo == tipos[2])), estados)
 
-        print(tramites_estado_requerido )
+
+        print("---------------------------------------------------------------------------")
+        print(tramites_estado_requerido)
+        print("---------------------------------------------------------------------------")
+
+        for e in tramites_estado_requerido:
+            print e.timestamp.date()
+        print("---------------------------------------------------------------------------")
 
         rango_fechas = request.POST.get('daterange')
         fechas = rango_fechas.split(' - ')
@@ -1972,9 +2011,14 @@ def reporte_de_correciones_profesional(request):
         fecha_fin = datetime.datetime.strptime(fechas[1], "%m/%d/%Y").strftime("%Y-%m-%d")
         # Se filtra tramites por fecha
         for tramite in tramites_estado_requerido:
-            fecha_tramite = tramite.estado().timestamp.date()
+            #fecha_tramite = tramite.estado().timestamp.date()
+            fecha_tramite = tramite.timestamp.date()
             if str(fecha_inicio) <= str(fecha_tramite) <= str(fecha_fin):
                 tramites.append(tramite)
+
+        print tramites
+        print("---------------------------------------------------------------------------")
+
         # Se genera rangos de fechas por agrupamiento
         agrupamiento_req = request.POST.get('id_agrupamiento')
         if str(agrupamiento_req) == str(1):
@@ -2018,14 +2062,15 @@ def reporte_de_correciones_profesional(request):
         listaPorFecha = []
         for i in range(len(lista_dias)):
             if i + 1 < len(lista_dias):
-                tp = filter(lambda t: str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1]), tramites)
+                tp = filter(lambda t: str(lista_dias[i]) <= str(t.timestamp.date()) < str(lista_dias[i + 1]), tramites)
                 listaPorFecha.append(len(tp))
         #lista_por_fecha_por_tipo[to] = listaPorFecha
         tram = listaPorFecha
         #tram = lista_por_fecha_por_tipo
 
-        print (tram)
         print(rangosLabels)
+        print (tram)
+
 
         contexto = {'todos_los_tramites': tram, 'tramites_tabla': tramites, "perfil": perfil, 'rangosLabels': rangosLabels}
         return render(request, 'persona/director/reporte_de_correcciones.html', contexto)
@@ -2435,7 +2480,6 @@ def reporteTramitesPorTipoDirectorPdf(request, pk_tramite):
     response["Content-Disposition"] = contenido
     wb.save(response)
     return response
-
 
 
 def reporteTramitesPorTipoDirectorExcel(request, pk_tramite):
