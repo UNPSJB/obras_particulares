@@ -2735,6 +2735,9 @@ def boxplot(request):
             resta = [t.days for t in list(map(operator.sub, impares,pares))]
             lista.append({nombre:resta})
 
+        df.rename(columns={'usuario__username': 'Usuario',
+                        'tramite_id': 'Tramite',
+                        'timestamp':'Fecha'}, inplace=True)
         df=df.to_html(index=False, classes=["table table-condensed", "table-bordered", "table-striped", "table-hover"])
         contexto['lista']=lista
         contexto['df']=df
@@ -2806,7 +2809,9 @@ def generar_boxplot(request):
             resta = [t.days for t in list(map(operator.sub, impares,pares))]
             lista.append({nombre:resta})
 
-
+    df.rename(columns={'usuario__username': 'Usuario',
+                    'tramite_id': 'Tramite',
+                    'timestamp':'Fecha'}, inplace=True)
     #Genero el boxplot
     for dic in lista:
         for k,v in dic.items():
@@ -2870,10 +2875,10 @@ class boxplot_to_pdf(View):
 
         story.append(Spacer(0, cm * 0.5))
 
-        encabezados = ('TRAMITE', 'TIMESTAMP', 'NOMBRE DE USUARIO', 'TIPO ')
+        encabezados = ('TRAMITE ID', 'FECHA', 'USUARIO', 'TIPO ')
         detalles = df.values.tolist()
 
-        detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 3 * cm, 4 * cm, 4 * cm, 2 * cm, 3 * cm])
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 3 * cm, 4 * cm, 4 * cm, 2 * cm, 3 * cm])
         detalle_orden.setStyle(TableStyle(
             [
                 ('ALIGN', (0, 0), (0, 0), 'CENTER'),
@@ -2937,6 +2942,9 @@ class boxplot_to_excel(View):
             df['timestamp'] = df['timestamp'].apply(lambda row: row.strftime('%d/%m/%Y'))
 
 
+        df.rename(columns={'usuario__username': 'Usuario',
+                        'tramite_id': 'Tramite',
+                        'timestamp':'Fecha'}, inplace=True)
         excel_file = IO()
         xlwriter = pd.ExcelWriter(excel_file, engine='xlsxwriter')
         df.set_index(df.columns[0], inplace=True)
