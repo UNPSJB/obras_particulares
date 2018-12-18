@@ -1901,7 +1901,7 @@ def reporte_de_tramites_por_tipo(request):
             estado = Iniciado
         elif (request.POST.get('id_estado') == '2'):
             estado = Finalizado
-        else:
+        elif (request.POST.get('id_estado') == '3'):
             estado = Baja
         # Se filtran tramites por estado
         tramites_estado_requerido = Tramite.objects.en_estado(estado)
@@ -1929,8 +1929,9 @@ def reporte_de_tramites_por_tipo(request):
         while start <= end:
             lista_dias.append(start.date())
             start += step
-        if start != end:
+        if start != end and start < end:
             lista_dias.append(end.date())
+        lista_dias.append(start.date())
         rangosLabels = []
         if str(agrupamiento_req) == str(1):
             rangosLabels = lista_dias
@@ -1951,7 +1952,7 @@ def reporte_de_tramites_por_tipo(request):
                 listaPorFecha = []
                 for i in range(len(lista_dias)):
                     if i + 1 < len(lista_dias):
-                        tp = filter(lambda t: t.destino_obra == ld and str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1]), tramites)
+                        tp = filter(lambda t: t.destino_obra == ld and (str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i+1])), tramites)
                         listaPorFecha.append(len(tp))
                 lista_por_fecha_por_destino[label_destino[ld-1]] = listaPorFecha
             tram = lista_por_fecha_por_destino
@@ -1963,7 +1964,7 @@ def reporte_de_tramites_por_tipo(request):
                 listaPorFecha = []
                 for i in range(len(lista_dias)):
                     if i + 1 < len(lista_dias):
-                        tp = filter(lambda t: t.tipo_obra == to and str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1]), tramites)
+                        tp = filter(lambda t: t.tipo_obra == to and (str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1])), tramites)
                         listaPorFecha.append(len(tp))
                 lista_por_fecha_por_tipo[to] = listaPorFecha
             tram = lista_por_fecha_por_tipo
