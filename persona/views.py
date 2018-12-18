@@ -1930,7 +1930,7 @@ def reporte_de_tramites_por_tipo(request):
         while start <= end:
             lista_dias.append(start.date())
             start += step
-        if start != end:
+        if start != end and start <= end:
             lista_dias.append(end.date())
         rangosLabels = []
         if str(agrupamiento_req) == str(1):
@@ -1951,7 +1951,7 @@ def reporte_de_tramites_por_tipo(request):
             for ld in argumentos_destino:
                 listaPorFecha = []
                 for i in range(len(lista_dias)):
-                    if i + 1 < len(lista_dias):
+                    if i + 1 <= len(lista_dias):
                         tp = filter(lambda t: t.destino_obra == ld and str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1]), tramites)
                         listaPorFecha.append(len(tp))
                 lista_por_fecha_por_destino[label_destino[ld-1]] = listaPorFecha
@@ -1963,7 +1963,7 @@ def reporte_de_tramites_por_tipo(request):
             for to in tipos_obra:
                 listaPorFecha = []
                 for i in range(len(lista_dias)):
-                    if i + 1 < len(lista_dias):
+                    if i + 1 <= len(lista_dias):
                         tp = filter(lambda t: t.tipo_obra == to and str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1]), tramites)
                         listaPorFecha.append(len(tp))
                 lista_por_fecha_por_tipo[to] = listaPorFecha
@@ -1981,23 +1981,28 @@ def reporte_de_correciones_profesional(request):
     perfil = 'css/' + usuario.persona.perfilCSS
     tipos_obra = TipoObra.objects.all()
     tramites = []
+    estados = Estado.objects.all()
     if request.method == "POST":
-
-        if (request.POST.get('id_estado') == '1'):
-            estado = ConCorrecciones
-        elif (request.POST.get('id_estado') == '2'):
-            estado = ConCorreccionesDeVisado
+        if request.POST.get('id_estado') == '1':
+            tipos = [2]
+            # 'ConCorrecciones'
+            tramites_estado_requerido = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'ConCorrecciones' and (e.tipo == tipos[0]))), estados)
+        elif request.POST.get('id_estado') == '2':
+            tipos = [5]
+            # 'ConCorreccionesDeVisado'
+            tramites_estado_requerido = filter(lambda e:(e.usuario is not None and (str(e.tramite.estado()) == 'ConCorreccionesDeVisado' and (e.tipo == tipos[0]))), estados)
         else:
-            estado = [ConCorreccionesDePrimerInspeccion, ConCorreccionesDeInspeccion, ConCorreccionesDeInspeccionFinal]
-        # Se filtran tramites por estado
-        tramites_estado_requerido = Tramite.objects.en_estado(estado)
+            tipos = [9, 19, 26]
+            # 'ConCorreccionesDePrimerInspeccion', 'ConCorreccionesDeInspeccion', 'ConCorreccionesDeInspeccionFinal'
+            tramites_estado_requerido = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'ConCorreccionesDePrimerInspeccion' or str(e.tramite.estado()) == 'ConCorreccionesDeInspeccion' or str(e.tramite.estado()) == 'ConCorreccionesDeInspeccionFinal') and (e.tipo == tipos[0] or e.tipo == tipos[1] or e.tipo == tipos[2])), estados)
+
 
         print("---------------------------------------------------------------------------")
         print(tramites_estado_requerido)
         print("---------------------------------------------------------------------------")
 
         for e in tramites_estado_requerido:
-            print e.estado().timestamp.date()
+            print e.timestamp.date()
         print("---------------------------------------------------------------------------")
 
         rango_fechas = request.POST.get('daterange')
@@ -2006,7 +2011,8 @@ def reporte_de_correciones_profesional(request):
         fecha_fin = datetime.datetime.strptime(fechas[1], "%m/%d/%Y").strftime("%Y-%m-%d")
         # Se filtra tramites por fecha
         for tramite in tramites_estado_requerido:
-            fecha_tramite = tramite.estado().timestamp.date()
+            #fecha_tramite = tramite.estado().timestamp.date()
+            fecha_tramite = tramite.timestamp.date()
             if str(fecha_inicio) <= str(fecha_tramite) <= str(fecha_fin):
                 tramites.append(tramite)
 
@@ -2056,7 +2062,7 @@ def reporte_de_correciones_profesional(request):
         listaPorFecha = []
         for i in range(len(lista_dias)):
             if i + 1 < len(lista_dias):
-                tp = filter(lambda t: str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1]), tramites)
+                tp = filter(lambda t: str(lista_dias[i]) <= str(t.timestamp.date()) < str(lista_dias[i + 1]), tramites)
                 listaPorFecha.append(len(tp))
         #lista_por_fecha_por_tipo[to] = listaPorFecha
         tram = listaPorFecha
@@ -2474,7 +2480,6 @@ def reporteTramitesPorTipoDirectorPdf(request, pk_tramite):
     response["Content-Disposition"] = contenido
     wb.save(response)
     return response
-
 
 
 def reporteTramitesPorTipoDirectorExcel(request, pk_tramite):
