@@ -19,6 +19,10 @@ def alta_documento(request):
     '''
     if request.method == "POST":
         form = FormularioDocumento(request.POST)
+        print("-------------")
+        print("formulario documento")
+        print(form)
+        print("-------------")
         if form.is_valid():
             documento = form.save(commit=False)
             documento.save()

@@ -6,6 +6,9 @@ from django.forms import BaseFormSet
 from django.forms import formset_factory
 from documento.models import *
 
+class FormularioCorreccionesDocumento(forms.Form):
+    file_field = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+
 
 class FormularioDocumento(forms.ModelForm):
     '''
@@ -17,9 +20,11 @@ class FormularioDocumento(forms.ModelForm):
     class Meta:
         model = Documento
         fields = ('tipo_documento', 'file')
-        widgets = {
-            'tipo_documento': forms.HiddenInput()
-        }
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioDocumento, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit(self.SUBMIT, 'Enviar Solicitud'))
 
     def save(self, commit=True, tramite=None):
         doc = super(FormularioDocumento, self).save(commit=False)
@@ -39,6 +44,7 @@ class FormularioDocumentosSetBase(BaseFormSet):
         self.helper = FormHelper()
 
         self.helper.form_tag = False
+
 
 
 def FormularioDocumentoSetFactory(tipos):
