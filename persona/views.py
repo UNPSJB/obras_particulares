@@ -1811,6 +1811,7 @@ def inspectores_sin_inspeccion_agendada(request, pk_estado):
             inspectores_sin_insp_agendadas.append(inp)
     if request.method == "POST" and "cambiar_inspector" in request.POST:
         if request.POST["idusuarioUsuarioS"]:
+            print(request.POST["idusuarioUsuarioS"])
             pk_inspector = int(request.POST["idusuarioUsuarioS"])
             inspector = Usuario.objects.get(pk=pk_inspector)
             if estado.usuario.persona.id != inspector.persona.id:
