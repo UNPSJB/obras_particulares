@@ -2831,7 +2831,7 @@ class boxplot_to_pdf(View):
 
     def get(self, request, *args, **kwargs):
         df = generar_boxplot(kwargs)
-        filename = "Informe de rendimiento de empleados.pdf"
+        filename = "Reporte_productividad_empleados.pdf"
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
         doc = SimpleDocTemplate(
@@ -2952,6 +2952,6 @@ class boxplot_to_excel(View):
         response = HttpResponse(excel_file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
         # set the file name in the Content-Disposition header
-        response['Content-Disposition'] = 'attachment; filename=reporte_productividad_empleados.xlsx'
+        response['Content-Disposition'] = 'attachment; filename=Reporte_productividad_empleados.xlsx'
 
         return response
