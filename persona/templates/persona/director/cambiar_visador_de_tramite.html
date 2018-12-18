@@ -183,7 +183,7 @@
 			{% for uf in visadores %}
 				if ("{{uf.persona.dni}}" == res[0]){
 					usuario_filtrado_usuario.push("{{uf}}");
-					usuario_filtrado_pk.push({{uf.persona.id}});
+					usuario_filtrado_pk.push({{uf.id}});
 					//usuario_filtrado_nombre.push("{{uf.persona.nombre}}");
 					//usuario_filtrado_apellido.push("{{uf.persona.apellido}}");
 				}

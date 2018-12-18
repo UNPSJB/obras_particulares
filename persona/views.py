@@ -1526,7 +1526,7 @@ def inspectores_sin_inspecciones_agendadas(request, pk_estado):
         if request.POST["idusuarioUsuarioS"]:
             pk_inspector = int(request.POST["idusuarioUsuarioS"])
             inspector = Usuario.objects.get(pk=pk_inspector)
-            if estado.usuario.persona.id != inspector.persona.id:
+            if estado.usuario.id != inspector.id:
                 estado.cambiar_usuario(inspector)
                 messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
             else:
@@ -1780,7 +1780,7 @@ def visadores_sin_visado_agendado(request, pk_estado):
         if request.POST["idusuarioUsuarioS"]:
             pk_visador = int(request.POST["idusuarioUsuarioS"])
             visador = Usuario.objects.get(pk=pk_visador)
-            if estado.usuario.persona.id != visador.persona.id:
+            if estado.usuario.id != visador.id:
                 estado.cambiar_usuario(visador)
                 messages.add_message(request, messages.SUCCESS, "El visador del tramite ha sido cambiado")
             else:
@@ -1840,8 +1840,9 @@ def inspectores_sin_inspeccion_agendada(request, pk_estado):
     if request.method == "POST" and "cambiar_inspector" in request.POST:
         if request.POST["idusuarioUsuarioS"]:
             pk_inspector = int(request.POST["idusuarioUsuarioS"])
+            print(pk_inspector)
             inspector = Usuario.objects.get(pk=pk_inspector)
-            if estado.usuario.persona.id != inspector.persona.id:
+            if estado.usuario.id != inspector.id:
                 estado.cambiar_usuario(inspector)
                 messages.add_message(request, messages.SUCCESS, "El inspector del tramite ha sido cambiado")
             else:
@@ -1994,6 +1995,10 @@ def reporte_de_correciones_profesional(request):
         print(tramites_estado_requerido)
         print("---------------------------------------------------------------------------")
 
+        for e in tramites_estado_requerido:
+            print e.estado().timestamp.date()
+        print("---------------------------------------------------------------------------")
+
         rango_fechas = request.POST.get('daterange')
         fechas = rango_fechas.split(' - ')
         fecha_inicio = datetime.datetime.strptime(fechas[0], "%m/%d/%Y").strftime("%Y-%m-%d")
@@ -2003,6 +2008,10 @@ def reporte_de_correciones_profesional(request):
             fecha_tramite = tramite.estado().timestamp.date()
             if str(fecha_inicio) <= str(fecha_tramite) <= str(fecha_fin):
                 tramites.append(tramite)
+
+        print tramites
+        print("---------------------------------------------------------------------------")
+
         # Se genera rangos de fechas por agrupamiento
         agrupamiento_req = request.POST.get('id_agrupamiento')
         if str(agrupamiento_req) == str(1):
@@ -2052,8 +2061,9 @@ def reporte_de_correciones_profesional(request):
         tram = listaPorFecha
         #tram = lista_por_fecha_por_tipo
 
-        print (tram)
         print(rangosLabels)
+        print (tram)
+
 
         contexto = {'todos_los_tramites': tram, 'tramites_tabla': tramites, "perfil": perfil, 'rangosLabels': rangosLabels}
         return render(request, 'persona/director/reporte_de_correcciones.html', contexto)
