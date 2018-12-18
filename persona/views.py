@@ -268,7 +268,6 @@ def mostrar_profesional(request):
             tramite_form = FormularioIniciarTramite(request.POST)
             documento_set = FormularioDocumentoSet(request.POST, request.FILES)
             propietario = propietario_form.obtener_o_crear(persona)
-
             if propietario is not None and tramite_form.is_valid() and documento_set.is_valid():
                 tramite = tramite_form.save(propietario=propietario, commit=False)
                 lista = []
@@ -282,7 +281,7 @@ def mostrar_profesional(request):
                 messages.add_message(request, messages.ERROR, 'Propietario no existe, debe darlo de alta para iniciar al tramite.')
         else:
             propietario_form = None
-            if int(usuario.persona.profesional.categoria) < int(request.POST['tipo_obra']):
+            if int(usuario.persona.profesional.categoria) > int(request.POST['tipo_obra']):
                 messages.add_message(request, messages.ERROR,
                                      'Categoria del profesional no es suficiente para el tipo de tramite que desea iniciar.')
             else:
@@ -1930,7 +1929,7 @@ def reporte_de_tramites_por_tipo(request):
         while start <= end:
             lista_dias.append(start.date())
             start += step
-        if start != end and start <= end:
+        if start != end:
             lista_dias.append(end.date())
         rangosLabels = []
         if str(agrupamiento_req) == str(1):
@@ -1951,7 +1950,7 @@ def reporte_de_tramites_por_tipo(request):
             for ld in argumentos_destino:
                 listaPorFecha = []
                 for i in range(len(lista_dias)):
-                    if i + 1 <= len(lista_dias):
+                    if i + 1 < len(lista_dias):
                         tp = filter(lambda t: t.destino_obra == ld and str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1]), tramites)
                         listaPorFecha.append(len(tp))
                 lista_por_fecha_por_destino[label_destino[ld-1]] = listaPorFecha
@@ -1963,7 +1962,7 @@ def reporte_de_tramites_por_tipo(request):
             for to in tipos_obra:
                 listaPorFecha = []
                 for i in range(len(lista_dias)):
-                    if i + 1 <= len(lista_dias):
+                    if i + 1 < len(lista_dias):
                         tp = filter(lambda t: t.tipo_obra == to and str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1]), tramites)
                         listaPorFecha.append(len(tp))
                 lista_por_fecha_por_tipo[to] = listaPorFecha
@@ -1997,13 +1996,14 @@ def reporte_de_correciones_profesional(request):
             tramites_estado_requerido = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'ConCorreccionesDePrimerInspeccion' or str(e.tramite.estado()) == 'ConCorreccionesDeInspeccion' or str(e.tramite.estado()) == 'ConCorreccionesDeInspeccionFinal') and (e.tipo == tipos[0] or e.tipo == tipos[1] or e.tipo == tipos[2])), estados)
 
 
-        print("---------------------------------------------------------------------------")
-        print(tramites_estado_requerido)
-        print("---------------------------------------------------------------------------")
 
+
+        print("-----------------tramites estado requerido----------------------")
+        print(tramites_estado_requerido)
+        print("-----------------------------------------------------------------")
         for e in tramites_estado_requerido:
             print e.timestamp.date()
-        print("---------------------------------------------------------------------------")
+        print("----------------------------tramites-----------------------------")
 
         rango_fechas = request.POST.get('daterange')
         fechas = rango_fechas.split(' - ')
@@ -2016,8 +2016,8 @@ def reporte_de_correciones_profesional(request):
             if str(fecha_inicio) <= str(fecha_tramite) <= str(fecha_fin):
                 tramites.append(tramite)
 
+
         print tramites
-        print("---------------------------------------------------------------------------")
 
         # Se genera rangos de fechas por agrupamiento
         agrupamiento_req = request.POST.get('id_agrupamiento')
@@ -2036,6 +2036,9 @@ def reporte_de_correciones_profesional(request):
             start += step
         if start != end:
             lista_dias.append(end.date())
+
+        #agregar dia!!!!
+
         rangosLabels = []
         '''
         if str(agrupamiento_req) == str(1):
@@ -2050,6 +2053,7 @@ def reporte_de_correciones_profesional(request):
         fecha_f = datetime.datetime.strptime(fechas[1], "%m/%d/%Y").strftime("%d-%m-%Y")
         titulosLabels = [estado, fecha_i, fecha_f]
         '''
+
         for i in range(len(lista_dias)):
             rangosLabels.append(i)
 
@@ -2068,7 +2072,12 @@ def reporte_de_correciones_profesional(request):
         tram = listaPorFecha
         #tram = lista_por_fecha_por_tipo
 
+
+        print("----------------rangos label------------------------")
+
         print(rangosLabels)
+
+        print("-----------------------tram----------------------------")
         print (tram)
 
 
