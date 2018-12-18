@@ -2547,6 +2547,7 @@ def boxplot(request):
 
     parametros = [7,8,5]
     usuarios = [lista_visadores.first().id]
+    contexto['boton_presionado'] = usuarios[0]
 
     if 'boton_plotbox' in request.POST:
         if 'opciones' in request.POST:
@@ -2566,6 +2567,7 @@ def boxplot(request):
                     parametros = [11,12,9]
                 else:
                     parametros = parametros = [7,8,5]
+            contexto['boton_presionado'] = request.POST.get('opciones')
 
     tramites_agendados = Estado.objects.filter(tipo__in=parametros, usuario__in=usuarios).values('usuario__username','tramite_id','timestamp','tipo').order_by('tramite_id','timestamp')
     df_tramites = pd.DataFrame.from_records(tramites_agendados)
@@ -2591,37 +2593,91 @@ def boxplot(request):
         df=df.to_html(index=False, classes=["table table-condensed", "table-bordered", "table-striped", "table-hover"])
         contexto['lista']=lista
         contexto['df']=df
+
     else:
         messages.add_message(request, messages.WARNING, "No existen datos disponibles para la consulta")
 
     return render(request, 'persona/director/reporte_boxplot.html', contexto)
 
 
-def generar_boxplot():
+def generar_boxplot(request):
     import plotly.offline as offline
     from selenium import webdriver
     import plotly.plotly as py
     import plotly.graph_objs as go
     import numpy as np
 
-    y0 = np.random.randn(50)-1
-    y1 = np.random.randn(50)+1
+    contexto={}
+    lista=[]
+    data=[]
 
-    trace0 = go.Box(
-        y=y0
-    )
-    trace1 = go.Box(
-        y=y1
-    )
-    data = [trace0, trace1]
+    lista_visadores = Usuario.objects.filter(groups__name='visador')
+    lista_inspectores = Usuario.objects.filter(groups__name='inspector')
+    contexto['lista_inspectores']=lista_inspectores
+    contexto['lista_visadores']=lista_visadores
+
+    parametros = [7,8,5]
+    usuarios = [lista_visadores.first().id]
+
+    opcion = request.get('opcion')
+
+    if opcion:
+        if 'todos_visadores' == opcion:
+            parametros = [7,8,5]          #VISADOR AgendadoParaVisado, Visado, ConCorreccionesDeVisado
+            usuarios = Usuario.objects.filter(groups__name='visador').values_list('id',flat=True)
+
+        elif 'todos_inspectores' == opcion:
+            parametros= [11,12,9]         #INSPECTOR AgendadoPrimerInspeccion, PrimerInspeccion, ConCorreccionesDePrimerInspeccion
+            usuarios = Usuario.objects.filter(groups__name='inspector').values_list('id',flat=True)
+
+        else:
+            id = opcion
+            u = Usuario.objects.get(id=int(id))
+            usuarios = [u.id]
+            if u.get_view_name() == 'inspector':
+                parametros = [11,12,9]
+            else:
+                parametros = parametros = [7,8,5]
+
+    #Genero el DataFrame con los datos iniciales
+    tramites_agendados = Estado.objects.filter(tipo__in=parametros, usuario__in=usuarios).values('usuario__username','tramite_id','timestamp','tipo').order_by('tramite_id','timestamp')
+    df_tramites = pd.DataFrame.from_records(tramites_agendados)
+    if not df_tramites.empty:
+        tramite_id = df_tramites.groupby(['tramite_id']).timestamp.count().items()
+        tramites_a_borrar = [x[0] for x in tramite_id if x[1]%2!=0]
+
+        if tramites_a_borrar:
+            for t in reversed(tramites_a_borrar): #la tengo que dar vuelta sino los indices no coinciden
+                indice = df_tramites[(df_tramites.tramite_id == t)].index.max()
+                df_tramites = df_tramites.drop(df_tramites.index[indice])
+
+        df=pd.pivot_table(df_tramites,index=['tramite_id','timestamp','usuario__username'], values='tipo', aggfunc='first', fill_value=0).reset_index()
+        df['tipo'] = df['tipo'].apply(cambiar_descrip_filas)
+        df['timestamp'] = df['timestamp'].apply(lambda row: row.strftime('%d/%m/%Y'))
+        for nombre in df.usuario__username.unique():
+            columna_temporal =  df[(df.usuario__username == nombre)].timestamp
+            pares = [datetime.datetime.strptime(x,'%d/%m/%Y').date() for x in columna_temporal[::2]]
+            impares = [datetime.datetime.strptime(y,'%d/%m/%Y').date() for y in columna_temporal[1::2]]
+            resta = [t.days for t in list(map(operator.sub, impares,pares))]
+            lista.append({nombre:resta})
+
+
+    #Genero el boxplot
+    for dic in lista:
+        for k,v in dic.items():
+            data.append(go.Box(name=str(k), y=v))
     fig = go.Figure(data=data)
 
+    #Genero el html que me da la imagen
     offline.plot(fig, image='svg', auto_open=False, image_width=1000, image_height=500)
 
+    #Selenium y PhantomJS para guardar la imagen
     driver = webdriver.PhantomJS()
     driver.set_window_size(1000, 500)
     driver.get('temp-plot.html')
     driver.save_screenshot(settings.MEDIA_ROOT + '/boxplot.png')
+
+    return df
 
 
 
@@ -2629,7 +2685,7 @@ from reportlab.platypus import SimpleDocTemplate, Image
 class boxplot_to_pdf(View):
 
     def get(self, request, *args, **kwargs):
-        generar_boxplot()
+        df = generar_boxplot(kwargs)
         filename = "Informe de rendimiento de empleados.pdf"
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
@@ -2667,13 +2723,10 @@ class boxplot_to_pdf(View):
         boxplot = Image(settings.MEDIA_ROOT + '/boxplot.png', width=400, height=250)
         story.append(boxplot)
 
+        story.append(Spacer(0, cm * 0.5))
 
-        encabezados = ('USUARIO', 'GRUPO', 'NOMBRE', 'DOCUMENTO ', 'TELEFONO', 'MAIL')
-        detalles = []
-
-        #detalles = [
-        #    (tramite.id, tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.medidas, tramite.estado())
-        #    for tramite in Tramite.objects.all()]
+        encabezados = ('TRAMITE', 'TIMESTAMP', 'NOMBRE DE USUARIO', 'TIPO ')
+        detalles = df.values.tolist()
 
         detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 3 * cm, 4 * cm, 4 * cm, 2 * cm, 3 * cm])
         detalle_orden.setStyle(TableStyle(
@@ -2688,19 +2741,72 @@ class boxplot_to_pdf(View):
         ))
         detalle_orden.hAlign = 'CENTER'
         story.append(detalle_orden)
-
-        '''
-        trabajando con los graficos dentro del informe
-        '''
-        d = Drawing(500, 200)
-        data = [
-            (13, 5, 20, 22, 37, 45, 19, 4),
-            (14, 6, 21, 23, 38, 46, 20, 5)
-        ]
-
-        '''
-        hasta aca, anda pero ver los valores, colores y como se ubica dentro de pagina
-        '''
-
         doc.build(story)
+        return response
+
+class boxplot_to_excel(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            from io import BytesIO as IO # for modern python
+        except ImportError:
+            from StringIO import StringIO as IO # for legacy python
+
+        lista_visadores = Usuario.objects.filter(groups__name='visador')
+        lista_inspectores = Usuario.objects.filter(groups__name='inspector')
+        parametros = [7,8,5]
+        usuarios = [lista_visadores.first().id]
+
+        opcion = kwargs.get('opcion')
+        if opcion:
+            if 'todos_visadores' == opcion:
+                parametros = [7,8,5]          #VISADOR AgendadoParaVisado, Visado, ConCorreccionesDeVisado
+                usuarios = Usuario.objects.filter(groups__name='visador').values_list('id',flat=True)
+
+            elif 'todos_inspectores' == opcion:
+                parametros= [11,12,9]         #INSPECTOR AgendadoPrimerInspeccion, PrimerInspeccion, ConCorreccionesDePrimerInspeccion
+                usuarios = Usuario.objects.filter(groups__name='inspector').values_list('id',flat=True)
+
+            else:
+                id = opcion
+                u = Usuario.objects.get(id=int(id))
+                usuarios = [u.id]
+                if u.get_view_name() == 'inspector':
+                    parametros = [11,12,9]
+                else:
+                    parametros = parametros = [7,8,5]
+
+        #Genero el DataFrame con los datos iniciales
+        tramites_agendados = Estado.objects.filter(tipo__in=parametros, usuario__in=usuarios).values('usuario__username','tramite_id','timestamp','tipo').order_by('tramite_id','timestamp')
+        df_tramites = pd.DataFrame.from_records(tramites_agendados)
+        if not df_tramites.empty:
+            tramite_id = df_tramites.groupby(['tramite_id']).timestamp.count().items()
+            tramites_a_borrar = [x[0] for x in tramite_id if x[1]%2!=0]
+
+            if tramites_a_borrar:
+                for t in reversed(tramites_a_borrar): #la tengo que dar vuelta sino los indices no coinciden
+                    indice = df_tramites[(df_tramites.tramite_id == t)].index.max()
+                    df_tramites = df_tramites.drop(df_tramites.index[indice])
+
+            df=pd.pivot_table(df_tramites,index=['tramite_id','timestamp','usuario__username'], values='tipo', aggfunc='first', fill_value=0).reset_index()
+            df['tipo'] = df['tipo'].apply(cambiar_descrip_filas)
+            df['timestamp'] = df['timestamp'].apply(lambda row: row.strftime('%d/%m/%Y'))
+
+
+        excel_file = IO()
+        xlwriter = pd.ExcelWriter(excel_file, engine='xlsxwriter')
+        df.set_index(df.columns[0], inplace=True)
+        df.to_excel(xlwriter, 'sheetname')
+        xlwriter.save()
+        xlwriter.close()
+
+        # important step, rewind the buffer or when it is read() you'll get nothing
+        # but an error message when you try to open your zero length file in Excel
+        excel_file.seek(0)
+
+        # set the mime type so that the browser knows what to do with the file
+        response = HttpResponse(excel_file.read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+        # set the file name in the Content-Disposition header
+        response['Content-Disposition'] = 'attachment; filename=reporte_productividad_empleados.xlsx'
+
         return response

@@ -52,7 +52,7 @@
                     <form method="post">
                         <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
                             <label> Visadores e Inspectores</label>
-                            <select class="form-control input-sm" name="opciones">
+                            <select class="form-control input-sm" name="opciones" id="select_mio">
                                 <optgroup label="Visadores">
                                     {% for visador in lista_visadores %}
                                         <option value="{{visador.id}}">{{visador.username}}</option>
@@ -102,10 +102,10 @@
               							<hr>
               						</div>
               						<div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
-              							<a id="crear_detalle" href="{% url 'reporte_tramites_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+              							<a id="crear_detalle" href="{% url 'excel_boxplot' opcion=boton_presionado %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
               								<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
               							</a>
-              							<a href="{% url 'pdf_boxplot' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
+              							<a href="{% url 'pdf_boxplot' opcion=boton_presionado %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
               								<i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
               							</a>
               						</div>
@@ -122,6 +122,14 @@
               		</div>
               	</div>
               </div>
+
+
+              <script type="text/javascript">
+                $('#select_mio').val("{{boton_presionado}}");
+                function submitear() {
+                    $('#form_boxplot').submit()
+                }
+              </script>
 
               {% endif %}
           </div>
