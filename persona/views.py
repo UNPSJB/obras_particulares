@@ -285,7 +285,7 @@ def mostrar_profesional(request):
                 messages.add_message(request, messages.ERROR, 'Propietario no existe, debe darlo de alta para iniciar al tramite.')
         else:
             propietario_form = None
-            if int(usuario.persona.profesional.categoria) < int(request.POST['tipo_obra']):
+            if int(usuario.persona.profesional.categoria) > int(request.POST['tipo_obra']):
                 messages.add_message(request, messages.ERROR,
                                      'Categoria del profesional no es suficiente para el tipo de tramite que desea iniciar.')
             else:
@@ -1913,10 +1913,12 @@ def reporte_de_tramites_por_tipo(request):
             estado = Iniciado
         elif (request.POST.get('id_estado') == '2'):
             estado = Finalizado
-        else:
+        elif (request.POST.get('id_estado') == '3'):
             estado = Baja
         # Se filtran tramites por estado
+      
         tramites_estado_requerido = Tramite.objects.en_estado(estado)
+       
         rango_fechas = request.POST.get('daterange')
         fechas = rango_fechas.split(' - ')
         fecha_inicio = datetime.datetime.strptime(fechas[0], "%m/%d/%Y").strftime("%Y-%m-%d")
@@ -1927,6 +1929,7 @@ def reporte_de_tramites_por_tipo(request):
             if str(fecha_inicio) <= str(fecha_tramite) <= str(fecha_fin):
                 tramites.append(tramite)
         # Se genera rangos de fechas por agrupamiento
+    
         agrupamiento_req = request.POST.get('id_agrupamiento')
         if str(agrupamiento_req) == str(1):
             dias = 1
@@ -1941,9 +1944,12 @@ def reporte_de_tramites_por_tipo(request):
         while start <= end:
             lista_dias.append(start.date())
             start += step
-        if start != end and start <= end:
+        if start != end and start < end:
             lista_dias.append(end.date())
+        
+        lista_dias.append(start.date())
         rangosLabels = []
+   
         if str(agrupamiento_req) == str(1):
             rangosLabels = lista_dias
         else:
@@ -1955,6 +1961,7 @@ def reporte_de_tramites_por_tipo(request):
         fecha_i = datetime.datetime.strptime(fechas[0], "%m/%d/%Y").strftime("%d-%m-%Y")
         fecha_f = datetime.datetime.strptime(fechas[1], "%m/%d/%Y").strftime("%d-%m-%Y")
         titulosLabels = [estado, fecha_i, fecha_f]
+        
         # Si es destino de obra
         if str(request.POST.get('id_tipo_destino')) == str(1):
             titulosLabels.append('Destino')
@@ -1962,11 +1969,12 @@ def reporte_de_tramites_por_tipo(request):
             for ld in argumentos_destino:
                 listaPorFecha = []
                 for i in range(len(lista_dias)):
-                    if i + 1 <= len(lista_dias):
-                        tp = filter(lambda t: t.destino_obra == ld and str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1]), tramites)
+                    if i + 1 < len(lista_dias):
+                        tp = filter(lambda t: t.destino_obra == ld and (str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i+1])), tramites)
                         listaPorFecha.append(len(tp))
                 lista_por_fecha_por_destino[label_destino[ld-1]] = listaPorFecha
             tram = lista_por_fecha_por_destino
+        
         # Si es tipo de obra
         if str(request.POST.get('id_tipo_destino')) == str(2):
             titulosLabels.append('Tipo')
@@ -1974,12 +1982,11 @@ def reporte_de_tramites_por_tipo(request):
             for to in tipos_obra:
                 listaPorFecha = []
                 for i in range(len(lista_dias)):
-                    if i + 1 <= len(lista_dias):
+                    if i + 1 < len(lista_dias):
                         tp = filter(lambda t: t.tipo_obra == to and str(lista_dias[i]) <= str(t.estado().timestamp.date()) < str(lista_dias[i + 1]), tramites)
                         listaPorFecha.append(len(tp))
                 lista_por_fecha_por_tipo[to] = listaPorFecha
             tram = lista_por_fecha_por_tipo
-        print (tram)
         contexto = {'todos_los_tramites': tram, 'tramites_tabla': tramites, "perfil": perfil, 'rangosLabels': rangosLabels, 'titulosLabels': titulosLabels}
         return render(request, 'persona/director/reporte_de_tramites_por_tipo.html', contexto)
     else:
