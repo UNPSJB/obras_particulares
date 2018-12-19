@@ -6,6 +6,9 @@ from django.forms import BaseFormSet
 from django.forms import formset_factory
 from documento.models import *
 
+class FormularioCorreccionesDocumento(forms.Form):
+    file_field = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}))
+
 
 class FormularioDocumento(forms.ModelForm):
     '''
