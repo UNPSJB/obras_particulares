@@ -228,11 +228,12 @@ def cambiar_profesional_de_tramite(request, pk_tramite):
                     profesionales.append(u)
     if request.method == "POST" and "cambiar_profesional" in request.POST:
         if request.POST["idempleado"]:
-
             pk_profesional = int(request.POST["idempleado"])
-            profesional = Usuario.objects.get(pk=pk_profesional)
-            if tramite.profesional.persona.id != pers_profesional.id:
-                tramite.cambiar_profesional(pers_profesional.profesional)
+            print(request.POST['idempleado'])
+            print(pk_profesional)
+            profesional = Persona.objects.get(pk=pk_profesional)
+            if tramite.profesional.persona.id != profesional.id:
+                tramite.cambiar_profesional(profesional.profesional)
                 messages.add_message(request, messages.SUCCESS, "El profesional del tramite ha sido cambiado")
             else:
                 messages.add_message(request, messages.ERROR, "El profesional del tramite no ha sido cambiado. Selecciono el mismo profesional.")
