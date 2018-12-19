@@ -681,7 +681,7 @@ def listado_tramites_vencidos():
                 tramites_vencidos_no_pagados_no_renovados.append(t)
             elif e.tramite == t and len(list(estado_t)) > 0 and (e.timestamp + timedelta(days=1825)).strftime("%Y/%m/%d") < datetime.datetime.now().strftime("%Y/%m/%d"):
                 tramites_vencidos_no_pagados_no_renovados.append(t)
-    contexto = {'tramites': tramites_vencidos_no_pagados_no_renovados, 'tramites_vencidos_no_pagados_no_renovados': len(tramites_vencidos)}
+    contexto = {'tramites': tramites_vencidos_no_pagados_no_renovados, 'tramites_vencidos_no_pagados_no_renovados': len(tramites_vencidos_no_pagados_no_renovados)}
     return contexto
 
 
@@ -1745,8 +1745,15 @@ def empleados(director):
 def tramites_con_visado_agendado():
     estados = Estado.objects.all()
     tipos = [7]
+    tramites = Tramite.objects.all()
+    estados_agendados_para_visado = []
+    for tramite in tramites:
+        print tramite.estado()
+        if tramite.estado().tipo == tipos[0]:
+            estados_agendados_para_visado.append(tramite.estado())
+    
     estados_agendados= filter(lambda e: (e.usuario is not None and str(e.tramite.estado()) == 'AgendadoParaVisado' and e.tipo == tipos[0]), estados)
-    return estados_agendados
+    return estados_agendados_para_visado
 
 
 def visadores_sin_visado_agendado(request, pk_estado):
@@ -1776,6 +1783,7 @@ def visadores_sin_visado_agendado(request, pk_estado):
     for vis in visadores:
         if vis not in visadores_estados_agendados and vis.is_active:
             visadores_sin_vis_agendadas.append(vis)
+    print(visadores_sin_vis_agendadas)
     if request.method == "POST" and "cambiar_visador" in request.POST:
         if request.POST["idusuarioUsuarioS"]:
             pk_visador = int(request.POST["idusuarioUsuarioS"])
