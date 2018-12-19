@@ -35,6 +35,7 @@
 						</button>
 					</a>
 				</td>
+				{% if tramite.propietario_solicita_aprobar_tramite %}
 				<td align="center" class="col-xs-1">
 					<a href="{% url 'cargar_aprobacion_propietario' pk_tramite=tramite.id %}">
 						<button type="button" class="btn btn-primary btn-xs" name="Solicitar aprobación">
@@ -42,6 +43,16 @@
 						</button>
 					</a>
 				</td>
+				{% else %}
+				<td align="center" class="col-xs-1">
+					<a href="#">
+						<button disabled type="button" class="btn btn-primary btn-xs" name="Solicitar aprobación">
+							<span class="glyphicon glyphicon-home" aria-hidden="true"> Solicitar</span>
+						</button>
+					</a>
+				</td>
+				{% endif %}
+				{% if tramite.propietario_solicita_final_de_obra %}
 				<td align="center" class="col-xs-1">
 					<a href="{% url 'cargar_final_de_obra_total_propietario' pk_tramite=tramite.id %}">
 						<button type="button" class="btn btn-primary btn-xs" name="solicita_final_obra">
@@ -49,6 +60,15 @@
 						</button>
 					</a>
 				</td>
+				{% else %}
+				<td align="center" class="col-xs-1">
+					<a href="#">
+						<button disabled type="button" class="btn btn-primary btn-xs" name="solicita_final_obra">
+							<span class="glyphicon glyphicon-home" aria-hidden="true"> Solicitar</span>
+						</button>
+					</a>
+				</td>
+				{% endif %}
 			</tr>
 			{% endfor %}
 			{% endif%}

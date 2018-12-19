@@ -191,6 +191,26 @@ class Tramite(models.Model):
             else:
                 return False
 
+    def propietario_solicita_final_de_obra(self):
+        # Tiene que estar en el estado 31 (NoFinalizado)
+        estados_filtrados = filter(lambda estado: (estado.tipo == 31), self.estados.all())
+
+        if  len(estados_filtrados) >= 1 and self.esta_pagado:
+            return True
+        else:
+            return False
+
+    def propietario_solicita_aprobar_tramite(self):
+        # tiene que estar en los estados de tipo 16 (NoAprobado) y primer cuota paga
+        # Verifico de tener estados necesarios para no aprobar un tramite
+        estados_filtrados = filter(lambda estado: (estado.tipo == 16), self.estados.all())
+        valor_cuota = self.monto_a_pagar / 12
+
+        if  len(estados_filtrados) >= 1 and self.monto_pagado >= valor_cuota:
+            return True
+        else:
+            return False
+        
 class Estado(models.Model):
     TIPO = 0
     TIPOS = [
