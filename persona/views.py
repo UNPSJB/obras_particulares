@@ -8,7 +8,7 @@ from django.contrib import messages
 from tipos.forms import *
 from obras_particulares.views import *
 from tramite.forms import FormularioIniciarTramite
-from documento.forms import FormularioDocumentoSetFactory
+from documento.forms import FormularioDocumentoSetFactory,FormularioCorreccionesDocumento
 from documento.forms import metodo
 from tramite.models import *
 from django.core.mail import send_mail
@@ -515,6 +515,13 @@ def profesional_solicita_final_obra_parcial(request, pk_tramite):
         return redirect('profesional')
 
 
+from documento.models import Documento
+def crear_correcciones(request, tramite, tipos_correcciones):
+    files = request.FILES.getlist('file_field')
+    for f in files:
+        doc = Documento.objects.create(tipo_documento=tipos_correcciones[0], tramite=tramite, file=f)
+
+
 def ver_documentos_corregidos(request, pk_tramite):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
@@ -522,20 +529,25 @@ def ver_documentos_corregidos(request, pk_tramite):
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INGRESAR_CORRECCIONES)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
-
+    formCorrecciones = FormularioCorreccionesDocumento
 
     documento_set = FormularioDocumentoSet(initial=inicial)
     if request.method == "POST" and "enviar_correcciones" in request.POST:
+        '''
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
             for docForm in documento_set:
                 docForm.save(tramite=tramite)
             enviar_correcciones(request, pk_tramite)
+        '''
+        crear_correcciones(request, tramite, tipos_de_documentos_requeridos)
+        enviar_correcciones(request, pk_tramite)
     else:
         return render(request, 'persona/profesional/ver_documentos_corregidos.html', {'tramite': tramite,
                                                                                       "perfil": perfil,
                                                                                       'ctxdocumentoset': documento_set,
                                                                                       'documentos_requeridos': tipos_de_documentos_requeridos,
+                                                                                      'form_correcciones': formCorrecciones
                                                                                       })
     return redirect('profesional')
 
