@@ -50,7 +50,7 @@
                         </thead>
                         <tbody>
                           {% if propietarios %}
-													{% for propietario in propietarios %}
+						  {% for propietario in propietarios %}
                           <tr>
                             <td class="col-xs-2">{{ propietario.persona.nombre }}</td>
                             <td class="col-xs-2">{{ propietario.persona.apellido }} </td>
@@ -89,6 +89,9 @@
 {% endblock %}
 
 {% block scripts %}
+	<script>
+		document.getElementById('id_boton_ayuda_2').style.visibility = 'hidden'
+	</script>
 	<script>
 		var c = document.getElementById("botonConfiguracion");
 		c.style.display= '';

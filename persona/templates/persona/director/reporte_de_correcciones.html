@@ -24,7 +24,7 @@
 {% endblock %}
 
 {% block contenido %}
-<div id="contenedor_botoncalapsable_resto"></div>
+<div id="contenedor_botoncalapsable	_resto"></div>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
 
     <div class="panel">
@@ -40,10 +40,15 @@
 				<div class="container-fluid">
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                            <h4><strong>Reporte de Correcciones de tramite </strong></h4><h5><strong>Agrupados por estado {{titulosLabels.0}}, en el periodo {{titulosLabels.1}} a {{titulosLabels.2}}</strong></h5>
+							{% if datos_titulo %}
+                            <h4><strong>Reporte de correciones</strong></h4><h5><strong>Agrupados por estado {{datos_titulo.0}}, en el periodo {{datos_titulo.1}} a {{datos_titulo.2}}</strong></h5>
                             <canvas id="chartDirectorTramites" height="80"></canvas>
-
+							{% else %}
+                            <h4><strong>Reporte de correciones</strong></h4><h5 style="color:red"><strong>Seleccionar criterios para agrupar y filtrar</strong></h5>
+							<div style="padding-bottom: 250px;">
+								<br style="padding-bottom: 50px;">
+							</div>
+							{% endif %}
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-top: 0px;">
                             <h6 style="padding-left: 16px;"><strong>Agrupar y filtrar por:</strong></h6>
@@ -62,13 +67,6 @@
                                             <option value="3">Intervalo de 360 días</option>
                                         </select>
                                     </div>
-                                    <!--div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                        <select class="form-control input-sm" id="id_tipo_" name="id_tipo" required>
-                                            <option value="" >Seleccionar Tipo </option>
-                                            <option value="1" >De visado</option>
-                                            <option value="2" >de Inspeccion</option>
-                                        </select>
-                                    </div-->
                                     <div class="controls col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                         <select class="form-control input-sm" id="id_estado" name="id_estado" required>
                                             <option value="" >Selec. tipo corrección</option>
@@ -100,9 +98,9 @@
       		<div class="panel-body">
         		<div class="container-fluid">
           			<div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<div class="table-responsive">
-								<table id="tabladatos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-bordered table-striped table-hover table-condensed" style="background: white;">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div id="target" class="table-responsive">
+								<table id="tab_customers" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-bordered table-striped table-hover table-condensed" style="font-size:9px; background: white;">
                                     <thead>
 										<tr>
 											<th>Nro</th>
@@ -134,7 +132,7 @@
 							<hr>
 						</div>
 						<div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
-							<a href="javascript:enviarExcel()" class="btn btn-info btn-collapsible btn-sm" onclick="" title="Generar Archivo Excel" >
+							<a id="btn-excel1" class="btn btn-info btn-collapsible btn-sm" onclick="" title="Generar Archivo Excel" >
 								<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
 							</a>
 							<a href="javascript:enviarPDF()" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
@@ -157,6 +155,9 @@
 {% endblock %}
 
 {% block scripts %}
+	<script>
+		document.getElementById('id_boton_ayuda_2').style.visibility = 'hidden'
+	</script>
     <script>
 		datalabel = [];
 		dataTipos = [];
@@ -176,15 +177,18 @@
 		}
 		var barChartData ={
 			datasets: [{
-				label: 'Scatter Dataset',
-				borderColor: 'rgba(0, 255, 0, 1.0)',
+				label: "{{dataset}}",
 				backgroundColor: 'rgba(0, 255, 0, 1.0)',
+        		borderWidth: 0,
+				borderColor: 'rgba(0, 0, 0, 0)',
+        		fill: false,
 				data: data_d
 			}]
         };
+
 		var ctx = document.getElementById("chartDirectorTramites");
-		var chartDirectorTramites = new Chart.Scatter( ctx, {
-            //type: 'scatter',
+		var chartDirectorTramites = new Chart( ctx, {
+            type: 'scatter',
             data: barChartData,
             options: {
                 scales: {
@@ -227,22 +231,56 @@
 		d.style.display= '';
 	</script>
 
+	<script>
+		$('#btn-excel1').click(function(){
+			tabla = $('#target').html();
+			path = 'data:application/vnd.ms-excel,'+encodeURIComponent(tabla);
+			this.href = path;
+			this.download = 'ReporteCorrecciones.xls'
+			return true;
+		});
 
-	<!--script>
+   		var specialElementHandlers = {
+			'#editor': function(element, renderer) { return true; }
+		};
+
 		function enviarPDF(){
-			id_tramite = 1;
-			datos = document.getElementsByName("datos_exportacion")[0].value;
-			url = '/persona/reporte_tramites_por_tipo_director_pdf/'+id_tramite+'/?msg='+datos;
-			location.href = url;
-		}
-		function enviarExcel(){
-			id_tramite = 1;
-			datos = document.getElementsByName("datos_exportacion")[0].value;
-			url = '/persona/reporte_tramites_por_tipo_director_excel/'+id_tramite+'/?msg='+datos;
-			location.href = url;
-		}
 
-	</script-->
+			var usuario =  ('{{user.persona}}')
+			var hoy = new Date();
+			var dd = hoy.getDate();
+			var mm = hoy.getMonth()+1;
+			var yyyy = hoy.getFullYear();
+
+			var pdf = new jsPDF('p', 'pt', 'letter');
+			pdf.setFontSize(10);
+			pdf.text( 'Usuario:' + usuario + ' - Fecha: ' + dd +'/'+mm+'/'+ yyyy , 600, 15, "right" );
+
+			var logo = new Image();
+			logo.src = "{% static 'images/banner_municipio_3.png' %}" ;
+			pdf.addImage(logo, 'JPEG', 0, 20,620,50);
+
+			pdf.setFontSize(12);
+			pdf.text( 'Reporte de correcciones' , 600, 85, "right");
+
+			var logo1 = new Image();
+			logo1.src = "{% static 'images/espacioPDF.png' %}" ;
+			pdf.addImage(logo1, 'PNG', 0, 90,620,3);
+
+			var newCanvas = document.querySelector('#chartDirectorTramites');
+			var newCanvasImg = newCanvas.toDataURL("image/png", 1.0);
+			pdf.addImage(newCanvasImg, 'JPEG', 20, 120, 580, 170);
+
+
+			pdf.fromHTML($('#target').html(), 20, 300, {
+                        'width': 500,'elementHandlers': specialElementHandlers
+                    });
+
+			pdf.save('ReporteCorrecciones.pdf');
+
+		}
+	</script>
+
 
 
 {% endblock %}

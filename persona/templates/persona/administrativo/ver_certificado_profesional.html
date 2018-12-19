@@ -84,11 +84,11 @@
                                             </a>
                                             <br>
                                             <p style="color: #17202a; font-style: oblique; text-align: center;">Mover el cursor sobre la imagen</p>
-                                            <form action="">
+                                            <!--form action="">
                                                 <p align="right" >
                                                     <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>Descargar</span></a>
                                                 </p>
-                                            </form>
+                                            </form-->
                                         </div>
                                     </div>
                                     <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
@@ -126,6 +126,9 @@
 {% endblock %}
 
 {% block scripts %}
+	<script>
+		document.getElementById('id_boton_ayuda_2').style.visibility = 'hidden'
+	</script>
     <script>
         function t(id){return document.getElementById(id);}
         function addEvent(obj,fun,type){

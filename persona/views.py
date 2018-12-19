@@ -1967,7 +1967,6 @@ def reporte_de_tramites_por_tipo(request):
                         listaPorFecha.append(len(tp))
                 lista_por_fecha_por_tipo[to] = listaPorFecha
             tram = lista_por_fecha_por_tipo
-        print (tram)
         contexto = {'todos_los_tramites': tram, 'tramites_tabla': tramites, "perfil": perfil, 'rangosLabels': rangosLabels, 'titulosLabels': titulosLabels}
         return render(request, 'persona/director/reporte_de_tramites_por_tipo.html', contexto)
     else:
@@ -1980,45 +1979,32 @@ def reporte_de_correciones_profesional(request):
     perfil = 'css/' + usuario.persona.perfilCSS
     tipos_obra = TipoObra.objects.all()
     tramites = []
+    tramites_estado_requerido = []
     estados = Estado.objects.all()
-    if request.method == "POST":
+
+    if request.method == "POST" and request.POST.get('buscar'):
         if request.POST.get('id_estado') == '1':
-            tipos = [2]
-            # 'ConCorrecciones'
-            tramites_estado_requerido = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'ConCorrecciones' and (e.tipo == tipos[0]))), estados)
+            tipos = 2
+            dataset = 'Con correciones'
+            tramites_estado_requerido = filter(lambda e: e.tipo == tipos, estados)
         elif request.POST.get('id_estado') == '2':
-            tipos = [5]
-            # 'ConCorreccionesDeVisado'
-            tramites_estado_requerido = filter(lambda e:(e.usuario is not None and (str(e.tramite.estado()) == 'ConCorreccionesDeVisado' and (e.tipo == tipos[0]))), estados)
+            tipos = 5
+            dataset = 'Con correciones de visado'
+            tramites_estado_requerido = filter(lambda e: e.tipo == tipos, estados)
         else:
             tipos = [9, 19, 26]
-            # 'ConCorreccionesDePrimerInspeccion', 'ConCorreccionesDeInspeccion', 'ConCorreccionesDeInspeccionFinal'
-            tramites_estado_requerido = filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'ConCorreccionesDePrimerInspeccion' or str(e.tramite.estado()) == 'ConCorreccionesDeInspeccion' or str(e.tramite.estado()) == 'ConCorreccionesDeInspeccionFinal') and (e.tipo == tipos[0] or e.tipo == tipos[1] or e.tipo == tipos[2])), estados)
-
-
-
-
-        print("-----------------tramites estado requerido----------------------")
-        print(tramites_estado_requerido)
-        print("-----------------------------------------------------------------")
-        for e in tramites_estado_requerido:
-            print e.timestamp.date()
-        print("----------------------------tramites-----------------------------")
-
+            dataset = 'Con correciones de inspeccion'
+            tramites_estado_requerido = filter(lambda e: (e.tipo == tipos[0] or e.tipo == tipos[1] or e.tipo == tipos[2]), estados)
+        #print tramites_estado_requerido
         rango_fechas = request.POST.get('daterange')
         fechas = rango_fechas.split(' - ')
         fecha_inicio = datetime.datetime.strptime(fechas[0], "%m/%d/%Y").strftime("%Y-%m-%d")
         fecha_fin = datetime.datetime.strptime(fechas[1], "%m/%d/%Y").strftime("%Y-%m-%d")
         # Se filtra tramites por fecha
         for tramite in tramites_estado_requerido:
-            #fecha_tramite = tramite.estado().timestamp.date()
             fecha_tramite = tramite.timestamp.date()
             if str(fecha_inicio) <= str(fecha_tramite) <= str(fecha_fin):
                 tramites.append(tramite)
-
-
-        print tramites
-
         # Se genera rangos de fechas por agrupamiento
         agrupamiento_req = request.POST.get('id_agrupamiento')
         if str(agrupamiento_req) == str(1):
@@ -2034,58 +2020,27 @@ def reporte_de_correciones_profesional(request):
         while start <= end:
             lista_dias.append(start.date())
             start += step
-        if start != end:
+        if start != end and start < end:
             lista_dias.append(end.date())
-
-        #agregar dia!!!!
-
+        lista_dias.append(start.date())
         rangosLabels = []
-        '''
-        if str(agrupamiento_req) == str(1):
-            rangosLabels = lista_dias
-        else:
-            for i in range(len(lista_dias)):
-                if i+1 < len(lista_dias):
-                    ini = datetime.datetime.strptime(str(lista_dias[i]), "%Y-%m-%d").strftime("%d-%m-%Y")
-                    fin = datetime.datetime.strptime(str(lista_dias[i+1]), "%Y-%m-%d").strftime("%d-%m-%Y")
-                    rangosLabels.append(ini + " a " + fin)
-        fecha_i = datetime.datetime.strptime(fechas[0], "%m/%d/%Y").strftime("%d-%m-%Y")
-        fecha_f = datetime.datetime.strptime(fechas[1], "%m/%d/%Y").strftime("%d-%m-%Y")
-        titulosLabels = [estado, fecha_i, fecha_f]
-        '''
-
         for i in range(len(lista_dias)):
             rangosLabels.append(i)
-
-        # Si es tipo de obra
-        #if str(request.POST.get('id_tipo_destino')) == str(2):
-
-        #titulosLabels.append('Tipo')
-        #lista_por_fecha_por_tipo = {}
-        #for to in tipos_obra:
         listaPorFecha = []
         for i in range(len(lista_dias)):
             if i + 1 < len(lista_dias):
                 tp = filter(lambda t: str(lista_dias[i]) <= str(t.timestamp.date()) < str(lista_dias[i + 1]), tramites)
                 listaPorFecha.append(len(tp))
-        #lista_por_fecha_por_tipo[to] = listaPorFecha
         tram = listaPorFecha
-        #tram = lista_por_fecha_por_tipo
-
-
-        print("----------------rangos label------------------------")
-
-        print(rangosLabels)
-
-        print("-----------------------tram----------------------------")
-        print (tram)
-
-
-        contexto = {'todos_los_tramites': tram, 'tramites_tabla': tramites, "perfil": perfil, 'rangosLabels': rangosLabels}
+        fecha_i = datetime.datetime.strptime(fechas[0], "%m/%d/%Y").strftime("%d-%m-%Y")
+        fecha_f = datetime.datetime.strptime(fechas[1], "%m/%d/%Y").strftime("%d-%m-%Y")
+        datos_titulo = [dataset, fecha_i, fecha_f]
+        contexto = {'todos_los_tramites': tram, 'tramites_tabla': tramites, "perfil": perfil, 'rangosLabels': rangosLabels, 'dataset': dataset, 'datos_titulo': datos_titulo}
         return render(request, 'persona/director/reporte_de_correcciones.html', contexto)
     else:
         contexto = {"perfil": perfil}
         return render(request, 'persona/director/reporte_de_correcciones.html', contexto)
+
 
 def empleados_con_director():
     usuarios = Usuario.objects.all()
@@ -2479,57 +2434,32 @@ class ReporteTramitesDirectorPdf(View):
         return response
 
 
-def reporteTramitesPorTipoDirectorPdf(request, pk_tramite):
-    print("Esta en reporte tramites director pdf")
-    wb = Workbook()
-    ws = wb.active
-    nombre_archivo = "ListadoEmpleadosExcel.xlsx"
-    response = HttpResponse(content_type="application/ms-excel")
-    contenido = "attachment; filename={0}".format(nombre_archivo)
-    response["Content-Disposition"] = contenido
-    wb.save(response)
-    return response
-
-
-def reporteTramitesPorTipoDirectorExcel(request, pk_tramite):
-
-    wb = Workbook()
-    ws = wb.active
-    ws['A1'] = 'REPORTE DE TRAMITES'
-    ws.merge_cells('B1:I1')
-    ws['B2'] = 'NRO'
-    ws['C2'] = 'PROPIETARIO'
-    ws['D2'] = 'PROFESIONAL'
-    ws['E2'] = 'ESTADO'
-    ws['F2'] = 'MEDIDAS'
-    ws['G2'] = 'TIPOO'
-    ws['H2'] = 'DESTINO'
-    cont = 3
-
-    if request.method == "GET":
-        if request.GET["msg"]:
-            tramites = {request.GET["msg"]}
-            print ("-----------------------")
-            print tramites
-            print ("-----------------------")
-            #[ < Tramite: Numero de tramite: 7 - Profesional: duarte, ernesto - Propietario: herbas, nelson >]
-            for tramite in tramites:
-                print tramite
-                for t in tramite:
-                    print t
-            print ("-----------------------")
-                #    ws.cell(row=cont, column=2).value = Usuario.id
-            #    ws.cell(row=cont, column=3).value = str(tramite.tipo_obra)
-            #    ws.cell(row=cont, column=4).value = str(tramite.profesional)
-            #    ws.cell(row=cont, column=5).value = str(tramite.propietario)
-            #    ws.cell(row=cont, column=6).value = tramite.medidas
-            #    cont = cont + 1
-    nombre_archivo = "ReporteTramitesExcel.xlsx"
-    response = HttpResponse(content_type="application/ms-excel")
-    contenido = "attachment; filename={0}".format(nombre_archivo)
-    response["Content-Disposition"] = contenido
-    wb.save(response)
-    return response
+class ReporteTramitesPorTipoDirectorExcel(TemplateView):
+    def get(self, request, *args, **kwargs):
+        wb = Workbook()
+        ws = wb.active
+        ws['A1'] = 'REPORTE DE TRAMITES'
+        ws.merge_cells('B1:I1')
+        ws['B2'] = 'NRO'
+        ws['C2'] = 'PROPIETARIO'
+        ws['D2'] = 'PROFESIONAL'
+        ws['E2'] = 'ESTADO'
+        ws['F2'] = 'MEDIDAS'
+        ws['G2'] = 'TIPOO'
+        ws['H2'] = 'DESTINO'
+        cont = 3
+        #    ws.cell(row=cont, column=2).value = Usuario.id
+        #    ws.cell(row=cont, column=3).value = str(tramite.tipo_obra)
+        #    ws.cell(row=cont, column=4).value = str(tramite.profesional)
+        #    ws.cell(row=cont, column=5).value = str(tramite.propietario)
+        #    ws.cell(row=cont, column=6).value = tramite.medidas
+        #    cont = cont + 1
+        nombre_archivo = "ReporteTramitesExcel.xlsx"
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+        return response
 
 
 class ReporteEmpleadosDirectorExcel(TemplateView):
@@ -2563,7 +2493,6 @@ class ReporteEmpleadosDirectorExcel(TemplateView):
         return response
 
 
-
 class RotarImagen(Image):
     def wrap(self, availWidth, availHeight):
         self.w, self.h = Image.wrap(self, availWidth, availHeight)
@@ -2573,6 +2502,7 @@ class RotarImagen(Image):
         self.canv.translate(0,self.h)
         self.canv.rotate(-90)
         Image.draw(self)
+
 
 class ReporteEmpleadosDirectorPdf(View):
 

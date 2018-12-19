@@ -48,11 +48,11 @@
 									<br>
 									<p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}} - {{documento.fecha}} </p>
 
-									<form action="">
+									<!--form action="">
 										<p align="right" >
 											<a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
 										</p>
-									</form>
+									</form-->
 								</div>
 							</div>
 							{% endfor %}
@@ -73,6 +73,9 @@
 {% endblock %}
 
 {% block scripts %}
+	<script>
+		document.getElementById('id_boton_ayuda_2').style.visibility = 'hidden'
+	</script>
     <!--script>
 		$("#id_correcciones").fileinput({
 			showCaption: false,

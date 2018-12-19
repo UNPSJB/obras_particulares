@@ -58,11 +58,11 @@
 									<img src="/media/{{documento.file}}" class="img">
 								</a>
 								<font color="#337ab7" size="4">{{documento.tipo_documento}}</font>
-								<form action="">
+								<!--form action="">
 									<p align="right" >
 										<a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save-file"></i><span> Descargar</span></a>
 									</p>
-								</form>
+								</form-->
 							</div>
 						</div>
 						{% endfor %}
@@ -76,6 +76,9 @@
 {% endblock %}
 
 {% block scripts %}
+	<script>
+		document.getElementById('id_boton_ayuda_2').style.visibility = 'hidden'
+	</script>
 <script>
 	$("#id_correcciones").fileinput({
 		showCaption: false,
