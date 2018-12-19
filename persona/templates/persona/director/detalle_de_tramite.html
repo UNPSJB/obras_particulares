@@ -109,7 +109,9 @@
 {% endblock %}
 
 {% block scripts %}
-
+	<script>
+		document.getElementById('id_boton_ayuda_2').style.visibility = 'hidden'
+	</script>
     <script>
         $("[id^='1 -']").css('width', 5 + '%');
         $("[id^='2 -']").removeClass("progress-bar-success");

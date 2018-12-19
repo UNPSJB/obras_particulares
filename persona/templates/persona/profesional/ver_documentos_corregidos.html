@@ -25,6 +25,11 @@
 {% endblock %}
 
 {% block contenido %}
+<style media="screen">
+	#id_file_field{
+		background-color: red;
+	}
+</style>
 <div id="contenedor_botoncalapsable_resto"></div>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
     <div class="panel">
@@ -48,11 +53,11 @@
                                     </a>
                                     <br>
                                     <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}} - {{documento.fecha}} </p>
-                                    <form action="">
+                                    <!--form action="">
                                         <p align="right" >
                                             <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
                                         </p>
-                                    </form>
+                                    </form-->
                                 </div>
                             </div>
                             {% endfor %}
@@ -103,6 +108,9 @@
 {% endblock %}
 
 {% block scripts %}
+	<script>
+		document.getElementById('id_boton_ayuda_2').style.visibility = 'hidden'
+	</script>
     <script>
 		$(document).ready(function() {
 			$('.alert-danger').delay(999999999);
@@ -136,7 +144,7 @@
             $("input[id='id_form-"+n+"-file']").attr("required", true);
             $("input[id='id_form-"+n+"-file']").attr("multiple", true);
         }
-		$('.file').fileinput({
+		$('#id_file_field').fileinput({
 			showCaption: false,
 			browseClass: "btn btn-primary btn-sm",
 			fileType: "any",

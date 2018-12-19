@@ -4,6 +4,7 @@ from . import views
 from tramite.models import *
 from persona.views import *
 
+
 urlpatterns = [
 
     #No me acuerdo de donde son - Acomodar esto!!!! -------------------------------------------------------------------
@@ -108,10 +109,6 @@ urlpatterns = [
     url(r'^reporte_propietarios_director_pdf/$', login_required(ReportePropietariosDirectorPdf.as_view()), name="reporte_propietarios_director_pdf"),
     url(r'^reporte_de_tramites_por_tipo/$', views.reporte_de_tramites_por_tipo, name="reporte_de_tramites_por_tipo"),
     url(r'^reporte_de_correciones_profesional/$', views.reporte_de_correciones_profesional, name="reporte_de_correciones_profesional"),
-
-    url(r'^reporte_tramites_por_tipo_director_excel/(?P<pk_tramite>\d+)/$', views.reporteTramitesPorTipoDirectorExcel, name="reporte_tramites_por_tipo_director_excel"),
-    url(r'^reporte_tramites_por_tipo_director_pdf/(?P<pk_tramite>\d+)/$', views.reporteTramitesPorTipoDirectorPdf, name="reporte_tramites_por_tipo_director_pdf"),
-
     url(r'^reporte_boxplot/$', views.boxplot, name="reporte_boxplot"),
     url(r'^pdf_boxplot/(?P<opcion>\w+)/$', views.boxplot_to_pdf.as_view(), name="pdf_boxplot"),
     url(r'^excel_boxplot/(?P<opcion>\w+)/$', views.boxplot_to_excel.as_view(), name="excel_boxplot"),

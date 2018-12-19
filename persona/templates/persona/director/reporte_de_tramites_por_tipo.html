@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block imagenusuario %}
-<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle">
+<img src= "{{user.persona.perfilFoto.url}}" width=40 height=40 class="img-circle" id="prueba">
 {% endblock %}
 
 {% block barra %}
@@ -50,16 +50,6 @@
 							</div>
 							{% endif %}
                         </div>
-
-<!--div id="content">
-    <h3>Sample h3 tag</h3>
-    <p>Sample pararaph</p>
-</div>
-<div id="editor"></div>
-<button id="cmd">Generate PDF</button>
-
-<button id="hhh">Generate PDF img</button-->
-
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-top: 0px;">
                             <h6 style="padding-left: 16px;"><strong>Agrupar y filtrar por:</strong></h6>
                         </div>
@@ -116,8 +106,8 @@
         		<div class="container-fluid">
           			<div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<div class="table-responsive">
-								<table id="tabladatos" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-bordered table-striped table-hover table-condensed" style="background: white;">
+							<div id="target" class="table-responsive">
+								<table id="tab_customers" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-bordered table-striped table-hover table-condensed" style="font-size:9px; background: white;">
                                     <thead>
 										<tr>
 											<th>Nro</th>
@@ -148,11 +138,8 @@
 							</div>
 							<hr>
 						</div>
-
-						<!--input type="text" class="form-control input-sm" id="datos_exportacion" name="datos_exportacion" value="{{tramites_tabla}}"-->
-
 						<div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
-							<a href="javascript:enviarExcel()" class="btn btn-info btn-collapsible btn-sm" onclick="" title="Generar Archivo Excel" >
+							<a id="btn-excel" class="btn btn-info btn-collapsible btn-sm" onclick="" title="Generar Archivo Excel" >
 								<i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
 							</a>
 							<a href="javascript:enviarPDF()" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
@@ -175,6 +162,10 @@
 {% endblock %}
 
 {% block scripts %}
+	<script>
+		document.getElementById('id_boton_ayuda_2').style.visibility = 'hidden'
+	</script>
+
     <script>
         bgcColor = [
             'rgba(255, 255, 0, 1.0)',
@@ -299,60 +290,52 @@
 	</script>
 
 
-	<!--script>
+	<script>
+		$('#btn-excel').click(function(){
+			tabla = $('#target').html();
+			path = 'data:application/vnd.ms-excel,'+encodeURIComponent(tabla);
+			this.href = path;
+			this.download = 'archivo.xls'
+			return true;
+		});
+
+   		var specialElementHandlers = {
+			'#editor': function(element, renderer) { return true; }
+		};
+
 		function enviarPDF(){
-			id_tramite = 1;
-			datos = document.getElementsByName("datos_exportacion")[0].value;
-			url = '/persona/reporte_tramites_por_tipo_director_pdf/'+id_tramite+'/?msg='+datos;
-			location.href = url;
+			var usuario =  ('{{user.persona}}')
+			var hoy = new Date();
+			var dd = hoy.getDate();
+			var mm = hoy.getMonth()+1;
+			var yyyy = hoy.getFullYear();
+
+			var pdf = new jsPDF('p', 'pt', 'letter');
+			pdf.setFontSize(10);
+			pdf.text( 'Usuario:' + usuario + ' - Fecha: ' + dd +'/'+mm+'/'+ yyyy , 600, 15, "right" );
+
+			var logo = new Image();
+			logo.src = "{% static 'images/banner_municipio_3.png' %}" ;
+			pdf.addImage(logo, 'JPEG', 0, 20,620,50);
+
+			pdf.setFontSize(12);
+			pdf.text( 'Reporte de tramites' , 600, 85, "right");
+
+			var logo1 = new Image();
+			logo1.src = "{% static 'images/espacioPDF.png' %}" ;
+			pdf.addImage(logo1, 'PNG', 0, 90,620,3);
+
+			var newCanvas = document.querySelector('#chartDirectorTramites');
+			var newCanvasImg = newCanvas.toDataURL("image/png", 1.0);
+			pdf.addImage(newCanvasImg, 'JPEG', 20, 120, 580, 170);
+
+			pdf.fromHTML($('#target').html(), 20, 300, {
+                        'width': 500,'elementHandlers': specialElementHandlers
+                    });
+
+			pdf.save('Test.pdf');
+
 		}
-		function enviarExcel(){
-			id_tramite = 1;
-			datos = document.getElementsByName("datos_exportacion")[0].value;
-			url = '/persona/reporte_tramites_por_tipo_director_excel/'+id_tramite+'/?msg='+datos;
-			location.href = url;
-		}
-
-	</script-->
-
-
-
-<script>
-
-var doc = new jsPDF();
-var specialElementHandlers = {
-    '#editor': function (element, renderer) {
-        return true;
-    }
-};
-
-$('#cmd').click(function () {
-    doc.fromHTML($('#tabladatos').html(), 15, 15, {
-        'width': 170,
-            'elementHandlers': specialElementHandlers
-    });
-    doc.save('sample-file.pdf');
-});
-
-// This code is collected but useful, click below to jsfiddle link.
-
-</script>
-
-<script>
-	var newCanvas = document.querySelector('#chartDirectorTramites');
-$('#hhh').click(function () {
-  //create image from dummy canvas
-	var newCanvasImg = newCanvas.toDataURL("image/jpeg", 1.0);
-
-  	//creates PDF from img
-	var doc = new jsPDF('landscape');
-	doc.setFontSize(10);
-	doc.text(15, 15, "Super Cool Chart");
-	doc.addImage(newCanvasImg, 'JPEG', 10, 10, 280, 70);
-
-
-	doc.save('new-canvas.pdf');
-});
-</script>
+	</script>
 
 {% endblock %}
