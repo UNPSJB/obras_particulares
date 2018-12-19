@@ -4,7 +4,7 @@
 		<thead>
 			<tr>
 				<th>Nro</th>
-				<th>Fecha Inicio</th>
+				<th>Fecha</th>
 				<th>Tipo de obra</th>
 				<th>Profesional</th>
 				<th>Propietario</th>
@@ -17,7 +17,7 @@
 			{% for estado in estados %}
 			<tr>
 				<td class="col-xs-1">{{ estado.tramite.id}}</td>
-				<td class="col-xs-2">{{ estado.tramite.estado.timestamp}}</td>
+				<td class="col-xs-1">{{ estado.timestamp}}</td>
 				<td class="col-xs-2">{{ estado.tramite.tipo_obra }} </td>
 				<td class="col-xs-2">{{ estado.tramite.profesional}}</td>
 				<td class="col-xs-2">{{ estado.tramite.propietario}}</td>
