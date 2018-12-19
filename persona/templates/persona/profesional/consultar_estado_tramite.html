@@ -30,6 +30,7 @@
 						</button>
 					</a>
 				</td>
+				{% if tramite.se_puede_aprobar %}
 				<td align="center" class="col-xs-1">
 					<a href="{% url 'profesional_solicita_aprobar_tramite' pk_tramite=tramite.id %}">
 						<button type="button" class="btn btn-primary btn-xs" name="aprobar_tramite">
@@ -37,6 +38,16 @@
 						</button>
 					</a>
 				</td>
+				{% else %}
+				<td align="center" class="col-xs-1">
+					<a href="#">
+						<button disabled type="button" class="btn btn-primary btn-xs" name="aprobar_tramite">
+							<span class="glyphicon glyphicon-home" aria-hidden="true"> Solicitar</span>
+						</button>
+					</a>
+				</td>
+				{% endif %}
+				{% if tramite.se_puede_pedir_no_aprobar %}
 				<td align="center" class="col-xs-1">
 					<a href="{% url 'cargar_no_aprobar_profesional' pk_tramite=tramite.id %}">
 						<button type="button" class="btn btn-danger btn-xs" name="no_aprobar_tramite">
@@ -44,6 +55,16 @@
 						</button>
 					</a>
 				</td>
+				{% else %}
+				<td align="center" class="col-xs-1">
+					<a href="#">
+						<button disabled type="button" class="btn btn-danger btn-xs" name="no_aprobar_tramite">
+							<span class="glyphicon glyphicon-home" aria-hidden="true"> Solicitar</span>
+						</button>
+					</a>
+				</td>
+				{% endif %}
+				{% if tramite.se_puede_pedir_final_de_obra %}
 				<td align="center" class="col-xs-1">
 					<a href="{% url 'cargar_final_de_obra_total_profesional' pk_tramite=tramite.id %}">
 						<button type="button" class="btn btn-primary btn-xs" name="solicita_final_obra">
@@ -51,6 +72,16 @@
 						</button>
 					</a>
 				</td>
+				{% else %}
+				<td align="center" class="col-xs-1">
+					<a href="#">
+						<button disabled type="button" class="btn btn-primary btn-xs" name="solicita_final_obra">
+							<span class="glyphicon glyphicon-home" aria-hidden="true"> Solicitar</span>
+						</button>
+					</a>
+				</td>
+				{% endif %}
+				{% if tramite.se_puede_pedir_no_final_de_obra_total %}
 				<td align="center" class="col-xs-1">
 					<a href="{% url 'cargar_no_final_de_obra_total_profesional' pk_tramite=tramite.id %}">
 						<button type="button" class="btn btn-danger btn-xs" name="solicita_no_final_obra">
@@ -58,6 +89,16 @@
 						</button>
 					</a>
 				</td>
+				{% else %}
+				<td align="center" class="col-xs-1">
+					<a href="#">
+						<button disabled type="button" class="btn btn-danger btn-xs" name="solicita_no_final_obra">
+							<span class="glyphicon glyphicon-home" aria-hidden="true"> Solicitar</span>
+						</button>
+					</a>
+				</td>
+				{% endif %}
+				{% if tramite.se_puede_pedir_final_de_obra_parcial %}
 				<td align="center" class="col-xs-1">
 					<a href="{% url 'profesional_solicita_final_obra_parcial' pk_tramite=tramite.id %}">
 						<button type="button" class="btn btn-primary btn-xs" name="solicita_final_obra_parcial">
@@ -65,6 +106,15 @@
 						</button>
 					</a>
 				</td>
+				{% else %}
+				<td align="center" class="col-xs-1">
+					<a href="#">
+						<button disabled type="button" class="btn btn-primary btn-xs" name="solicita_final_obra_parcial">
+							<span class="glyphicon glyphicon-home" aria-hidden="true"> Solicitar</span>
+						</button>
+					</a>
+				</td>
+				{% endif %}
 			</tr>
 			{% endfor %}
 			{% endif%}

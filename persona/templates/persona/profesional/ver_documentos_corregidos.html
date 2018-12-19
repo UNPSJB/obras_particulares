@@ -25,6 +25,11 @@
 {% endblock %}
 
 {% block contenido %}
+<style media="screen">
+	#id_file_field{
+		background-color: red;
+	}
+</style>
 <div id="contenedor_botoncalapsable_resto"></div>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
     <div class="panel">
@@ -83,7 +88,7 @@
                         <form action="" method="post" enctype="multipart/form-data">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group">
-                                    {{ctxdocumentoset}}
+                                    {{form_correcciones}}
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
@@ -139,7 +144,7 @@
             $("input[id='id_form-"+n+"-file']").attr("required", true);
             $("input[id='id_form-"+n+"-file']").attr("multiple", true);
         }
-		$('.file').fileinput({
+		$('#id_file_field').fileinput({
 			showCaption: false,
 			browseClass: "btn btn-primary btn-sm",
 			fileType: "any",
