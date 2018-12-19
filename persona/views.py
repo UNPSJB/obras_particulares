@@ -8,7 +8,7 @@ from django.contrib import messages
 from tipos.forms import *
 from obras_particulares.views import *
 from tramite.forms import FormularioIniciarTramite
-from documento.forms import FormularioDocumentoSetFactory
+from documento.forms import FormularioDocumentoSetFactory,FormularioCorreccionesDocumento
 from documento.forms import metodo
 from tramite.models import *
 from django.core.mail import send_mail
@@ -515,6 +515,13 @@ def profesional_solicita_final_obra_parcial(request, pk_tramite):
         return redirect('profesional')
 
 
+from documento.models import Documento
+def crear_correcciones(request, tramite, tipos_correcciones):
+    files = request.FILES.getlist('file_field')
+    for f in files:
+        doc = Documento.objects.create(tipo_documento=tipos_correcciones[0], tramite=tramite, file=f)
+
+
 def ver_documentos_corregidos(request, pk_tramite):
     usuario = request.user
     perfil = 'css/' + usuario.persona.perfilCSS
@@ -522,20 +529,25 @@ def ver_documentos_corregidos(request, pk_tramite):
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INGRESAR_CORRECCIONES)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
-
+    formCorrecciones = FormularioCorreccionesDocumento
 
     documento_set = FormularioDocumentoSet(initial=inicial)
     if request.method == "POST" and "enviar_correcciones" in request.POST:
+        '''
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         if documento_set.is_valid():
             for docForm in documento_set:
                 docForm.save(tramite=tramite)
             enviar_correcciones(request, pk_tramite)
+        '''
+        crear_correcciones(request, tramite, tipos_de_documentos_requeridos)
+        enviar_correcciones(request, pk_tramite)
     else:
         return render(request, 'persona/profesional/ver_documentos_corregidos.html', {'tramite': tramite,
                                                                                       "perfil": perfil,
                                                                                       'ctxdocumentoset': documento_set,
                                                                                       'documentos_requeridos': tipos_de_documentos_requeridos,
+                                                                                      'form_correcciones': formCorrecciones
                                                                                       })
     return redirect('profesional')
 
@@ -681,7 +693,7 @@ def listado_tramites_vencidos():
                 tramites_vencidos_no_pagados_no_renovados.append(t)
             elif e.tramite == t and len(list(estado_t)) > 0 and (e.timestamp + timedelta(days=1825)).strftime("%Y/%m/%d") < datetime.datetime.now().strftime("%Y/%m/%d"):
                 tramites_vencidos_no_pagados_no_renovados.append(t)
-    contexto = {'tramites': tramites_vencidos_no_pagados_no_renovados, 'tramites_vencidos_no_pagados_no_renovados': len(tramites_vencidos)}
+    contexto = {'tramites': tramites_vencidos_no_pagados_no_renovados, 'tramites_vencidos_no_pagados_no_renovados': len(tramites_vencidos_no_pagados_no_renovados)}
     return contexto
 
 
@@ -1746,8 +1758,15 @@ def empleados(director):
 def tramites_con_visado_agendado():
     estados = Estado.objects.all()
     tipos = [7]
+    tramites = Tramite.objects.all()
+    estados_agendados_para_visado = []
+    for tramite in tramites:
+        print tramite.estado()
+        if tramite.estado().tipo == tipos[0]:
+            estados_agendados_para_visado.append(tramite.estado())
+    
     estados_agendados= filter(lambda e: (e.usuario is not None and str(e.tramite.estado()) == 'AgendadoParaVisado' and e.tipo == tipos[0]), estados)
-    return estados_agendados
+    return estados_agendados_para_visado
 
 
 def visadores_sin_visado_agendado(request, pk_estado):
@@ -1777,6 +1796,7 @@ def visadores_sin_visado_agendado(request, pk_estado):
     for vis in visadores:
         if vis not in visadores_estados_agendados and vis.is_active:
             visadores_sin_vis_agendadas.append(vis)
+    print(visadores_sin_vis_agendadas)
     if request.method == "POST" and "cambiar_visador" in request.POST:
         if request.POST["idusuarioUsuarioS"]:
             pk_visador = int(request.POST["idusuarioUsuarioS"])

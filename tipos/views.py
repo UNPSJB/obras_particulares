@@ -45,6 +45,7 @@ Metodo que se encarga de desactivar un tipo de documento
 def desactivar(request, pk_tipo_documento):
         tipo_documento = TipoDocumento.objects.filter(id=pk_tipo_documento).first()
         tipo_documento.activo = False
+        tipo_documento.fecha_baja = datetime.datetime.now()
         tipo_documento.save();
         mensaje = "Se desactivo correctamente el tipo de documento. " + tipo_documento.nombre
         messages.add_message(request, messages.SUCCESS, mensaje)
