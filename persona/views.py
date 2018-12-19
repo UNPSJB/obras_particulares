@@ -690,6 +690,7 @@ def registrar_pago_tramite(request):
         archivo_pago_form = FormularioArchivoPago(request.POST, request.FILES)
         if archivo_pago_form.is_valid():
             Pago.procesar_pagos(request.FILES['pagos'])
+            messages.add_message(request, messages.SUCCESS, 'Se ha registrado el pago')
     else:
         archivo_pago_form = FormularioArchivoPago()
     return archivo_pago_form
