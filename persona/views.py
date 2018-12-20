@@ -2069,16 +2069,43 @@ def reporte_de_correciones_profesional(request):
         fecha_f = datetime.datetime.strptime(fechas[1], "%m/%d/%Y").strftime("%d-%m-%Y")
         datos_titulo = [dataset, fecha_i, fecha_f]
 
+        #linea de tendencia
+        linea_tendencia = []
+        if fecha_inicio < fecha_fin:
+            t1 = 0.0
+            t2 = 0.0
+            y1 = 0.0
+            y2 = 0.0
+            for i in range(len(tram)):
+                if i <= (len(tram)/2):
+                    y1 =y1 + tram[i]
+                else:
+                    y2 = y2 + tram[i]
+            y1 = y1/ (len(tram)/2)
+            y2 = y2 / (len(tram) / 2)
+            for i in range(len(rangosLabels)):
+                if i <= (len(rangosLabels)/2):
+                    t1 =t1 + rangosLabels[i]
+                else:
+                    t2 = t2 + rangosLabels[i]
+            t1 = t1 / (len(rangosLabels) / 2)
+            t2 = t2 / (len(rangosLabels) / 2)
+            x = 0
+            x1 = len(tram)
+            y = 0
+            y1 = 0
+            y = ((y2 - y1)/(t2 - t1))*( x * t1) + y1
+            y1 = ((y2 - y1) / (t2 - t1)) * (x1 * t1) + y1
 
-        print("------------------------------")
-        print tram
-        print("------------------------------")
-        print tramites
-        for t in tramites:
-            print t.tramite.pk
+            linea_tendencia.append(int(x))
+            linea_tendencia.append(int(y))
+            linea_tendencia.append(int(x1))
+            linea_tendencia.append(int(y1))
 
-        print("------------------------------")
-        contexto = {'todos_los_tramites': tram, 'tramites_tabla': tramites, "perfil": perfil, 'rangosLabels': rangosLabels, 'dataset': dataset, 'datos_titulo': datos_titulo}
+            print ("-------------------------")
+            print linea_tendencia
+
+        contexto = {'todos_los_tramites': tram, 'tramites_tabla': tramites, "perfil": perfil, 'rangosLabels': rangosLabels, 'dataset': dataset, 'datos_titulo': datos_titulo, 'linea_tendencia': linea_tendencia}
         return render(request, 'persona/director/reporte_de_correcciones.html', contexto)
     else:
         contexto = {"perfil": perfil}

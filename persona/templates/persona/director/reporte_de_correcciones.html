@@ -179,6 +179,17 @@
         {% for value in todos_los_tramites %}
 			dataTipos.push("{{value}}");
 		{% endfor %}
+		var linea_tend = [];
+        {% for p in linea_tendencia %}
+			linea_tend.push({{p}});
+		{% endfor %}
+
+		//alert (linea_tend)
+		var x0 = linea_tend[0]
+		var y0 = linea_tend[1]
+		var x1 = linea_tend[2]
+		var y1 = linea_tend[3]
+
 		data_d = []
 		for(i=0; i < datalabel.length ; i++){
 			var newData = {
@@ -195,6 +206,19 @@
 				borderColor: 'rgba(0, 0, 0, 0)',
         		fill: false,
 				data: data_d
+			},{
+				label: "Linea tendencia",
+				backgroundColor: 'rgba(0, 234, 236, 1.0)',
+        		borderWidth: 2,
+				borderColor: 'rgba(0, 234, 236, 1.0)',
+        		fill: false,
+				data: [{
+					x: x0,
+				 	y: y0,
+				},{
+					x: x1,
+					y: y1,
+				}]
 			}]
         };
 
