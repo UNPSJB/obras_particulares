@@ -1687,8 +1687,8 @@ def usuarios_no_borrables(usuario):
 
         elif (usuario.pertenece_a_grupo('inspector')):
             tipos = [11, 21, 28]
-            estados_agendados= filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' 
-                                                or str(e.tramite.estado()) == 'AgendadoInspeccion' 
+            estados_agendados= filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion'
+                                                or str(e.tramite.estado()) == 'AgendadoInspeccion'
                                                 or str(e.tramite.estado()) == 'AgendadoInspeccionFinal')
                                                 and (e.tipo == tipos[0] or e.tipo == tipos[1] or e.tipo == tipos[2])), estados)
             if (any(e.usuario.id == usuario.id for e in estados_agendados)):
@@ -1725,8 +1725,11 @@ def mostrar_director(request):
         if request.method == "POST" and submit_name in request.POST:
             _form = KlassForm(request.POST, request.FILES)
             if _form.is_valid():
-                _form.save()
-                messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
+                try:
+                    _form.save()
+                    messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
+                except Exception as e:
+                    messages.add_message(request, messages.ERROR, "La accion solicitada no se puede realizar.")
                 return redirect(usuario.get_view_name())
             else:
                 values["submit_name"] = submit_name

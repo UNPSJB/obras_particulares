@@ -3,7 +3,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group
 from random import choice
 
-
 class Rol(models.Model):
     '''
     Correspondiente a un rol dentro del sistema

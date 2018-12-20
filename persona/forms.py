@@ -283,6 +283,7 @@ class FormularioUsuarioGrupo(forms.Form):
     NAME = 'usuario_grupo_form'
     SUBMIT = 'usuario_grupo_submit'
     usuario_seleccionado = forms.CharField()
+    error_messages = {'cambio_usuario': "No se puede cambiar el usuario"}
     '''
     gruposEmp = set()
     valor = 1
@@ -307,14 +308,43 @@ class FormularioUsuarioGrupo(forms.Form):
         self.helper = FormHelper()
         self.helper.add_input(Submit('usuario_grupo_submit', 'Modificar grupo', css_class="btn btn-default"))
 
+    def cumple_condicion(self, usuario, grupo_a_cambiar):
+
+        if (usuario.groups.values_list('name', flat=True)[0] == 'visador'):
+            argumentos = [AgendadoParaVisado]
+            tramites = Tramite.objects.en_estado(argumentos)
+            lista_visados = [t.estado().usuario.id for t in tramites]
+            if (usuario.id in lista_visados):
+                return False
+            else:
+                return True
+
+        if (usuario.groups.values_list('name', flat=True)[0] == 'inspector'):
+            argumentos = [AgendadoPrimerInspeccion, AgendadoInspeccion]
+            tramites = Tramite.objects.en_estado(argumentos)
+            lista_inspecciones = [t.estado().usuario.id for t in tramites]
+            if (usuario.id in lista_inspecciones):
+                return False
+            else:
+                return True
+        return True
+
+
+
     def save(self):
         datos = self.cleaned_data
         user_sel = Usuario.objects.get(username=datos['usuario_seleccionado'])
         grupo_post = list(datos['grupos_disponibles'])
+
         for g in self.gruposEmp:
             if g[0] == grupo_post[0]:
-                user_sel.persona.modificarGrupo(g[1])
-
+                if (self.cumple_condicion(user_sel,grupo_post[0])):
+                    user_sel.persona.modificarGrupo(g[1])
+                else:
+                    raise forms.ValidationError(
+                        self.error_messages['cambio_usuario'],
+                        code='No se puede cambiar el usuario',
+                    )
 
 class FormularioUsuarioCambiarDatos(forms.Form):
     NAME = 'usuario_datospersonales_form'
