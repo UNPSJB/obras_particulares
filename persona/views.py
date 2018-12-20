@@ -829,8 +829,10 @@ def cargar_no_aprobacion(request, pk_tramite):
     inicial = metodo(tipos_de_documentos_requeridos)
     documento_set = FormularioDocumentoSet(initial=inicial)
     id_tramite = int(pk_tramite)
+    print("-----------------GET----------------")
     if request.method == "POST":
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
+
         if documento_set.is_valid():
             if "no_aprobar_tramite" in request.POST:
                 no_aprobar_tramite(request, pk_tramite, documento_set)
@@ -1764,7 +1766,7 @@ def tramites_con_visado_agendado():
         print tramite.estado()
         if tramite.estado().tipo == tipos[0]:
             estados_agendados_para_visado.append(tramite.estado())
-    
+
     estados_agendados= filter(lambda e: (e.usuario is not None and str(e.tramite.estado()) == 'AgendadoParaVisado' and e.tipo == tipos[0]), estados)
     return estados_agendados_para_visado
 
