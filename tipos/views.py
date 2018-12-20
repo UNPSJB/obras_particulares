@@ -34,7 +34,9 @@ Metodo que se encarga de activar un tipo de documento
 def activar(request, pk_tipo_documento):
         tipo_documento = TipoDocumento.objects.filter(id=pk_tipo_documento).first()
         tipo_documento.activo = True
-        tipo_documento.save();
+        tipo_documento.fecha_alta = datetime.datetime.now()
+        tipo_documento.fecha_baja = None
+        tipo_documento.save()
         mensaje = "Se activo correctamente el tipo de documento. " + tipo_documento.nombre
         messages.add_message(request, messages.SUCCESS, mensaje)
         return redirect("director")
@@ -46,7 +48,7 @@ def desactivar(request, pk_tipo_documento):
         tipo_documento = TipoDocumento.objects.filter(id=pk_tipo_documento).first()
         tipo_documento.activo = False
         tipo_documento.fecha_baja = datetime.datetime.now()
-        tipo_documento.save();
+        tipo_documento.save()
         mensaje = "Se desactivo correctamente el tipo de documento. " + tipo_documento.nombre
         messages.add_message(request, messages.SUCCESS, mensaje)
         return redirect("director")
