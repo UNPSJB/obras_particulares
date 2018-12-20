@@ -2060,6 +2060,16 @@ def reporte_de_correciones_profesional(request):
         fecha_i = datetime.datetime.strptime(fechas[0], "%m/%d/%Y").strftime("%d-%m-%Y")
         fecha_f = datetime.datetime.strptime(fechas[1], "%m/%d/%Y").strftime("%d-%m-%Y")
         datos_titulo = [dataset, fecha_i, fecha_f]
+
+
+        print("------------------------------")
+        print tram
+        print("------------------------------")
+        print tramites
+        for t in tramites:
+            print t.tramite.pk
+
+        print("------------------------------")
         contexto = {'todos_los_tramites': tram, 'tramites_tabla': tramites, "perfil": perfil, 'rangosLabels': rangosLabels, 'dataset': dataset, 'datos_titulo': datos_titulo}
         return render(request, 'persona/director/reporte_de_correcciones.html', contexto)
     else:

@@ -41,10 +41,10 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							{% if datos_titulo %}
-                            <h4><strong>Reporte de correciones</strong></h4><h5><strong>Agrupados por estado {{datos_titulo.0}}, en el periodo {{datos_titulo.1}} a {{datos_titulo.2}}</strong></h5>
+                            <h4><strong>Reporte de correcciones</strong></h4><h5><strong>Agrupados por estado {{datos_titulo.0}}, en el periodo {{datos_titulo.1}} a {{datos_titulo.2}}</strong></h5>
                             <canvas id="chartDirectorTramites" height="80"></canvas>
 							{% else %}
-                            <h4><strong>Reporte de correciones</strong></h4><h5 style="color:red"><strong>Seleccionar criterios para agrupar y filtrar</strong></h5>
+                            <h4><strong>Reporte de correcciones</strong></h4><h5 style="color:red"><strong>Seleccionar criterios para agrupar y filtrar</strong></h5>
 							<div style="padding-bottom: 250px;">
 								<br style="padding-bottom: 50px;">
 							</div>
@@ -100,7 +100,19 @@
           			<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<div id="target" class="table-responsive">
-								<table id="tab_customers" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-bordered table-striped table-hover table-condensed" style="font-size:9px; background: white;">
+								<table id="tab_customers" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-bordered table-striped table-hover table-condensed" style="background: white; ">
+
+								  <colgroup>
+								   <col width="10%">
+								   <col width="20%">
+								   <col width="20%">
+								   <col width="20%">
+								   <col width="10%">
+								   <col width="10%">
+								   <col width="10%">
+								  </colgroup>
+
+
                                     <thead>
 										<tr>
 											<th>Nro</th>
@@ -114,15 +126,15 @@
 									</thead>
 									<tbody>
 										{% if tramites_tabla %}
-										{% for tramite in tramites_tabla%}
+										{% for estado in tramites_tabla%}
 										<tr>
-											<td class="col-xs-1" align="center">{{tramite.id}}</td>
-											<td class="col-xs-2">{{tramite.propietario}}</td>
-											<td class="col-xs-2">{{tramite.profesional}}</td>
-											<td class="col-xs-2" align="center">{{tramite.estado}}</td>
-											<td class="col-xs-1" align="center">{{tramite.medidas}}</td>
-											<td class="col-xs-2" align="center">{{tramite.tipo_obra}}</td>
-                                            <td class="col-xs-2" align="center">{{tramite.destino_obra}}</td>
+											<td  align="center">{{estado.tramite.pk}}</td>
+											<td >{{estado.tramite.propietario}}</td>
+											<td >{{estado.tramite.profesional}}</td>
+											<td >{{estado.tramite.estado}}</td>
+											<td align="center">{{estado.tramite.medidas}}</td>
+											<td align="center">{{estado.tramite.tipo_obra}}</td>
+                                            <td align="center">{{estado.tramite.destino_obra}}</td>
 										</tr>
 										{% endfor %}
 										{% endif%}
@@ -240,9 +252,9 @@
 			return true;
 		});
 
-   		var specialElementHandlers = {
-			'#editor': function(element, renderer) { return true; }
-		};
+   		//var specialElementHandlers = {
+		//	'#editor': function(element, renderer) { return true; }
+		//};
 
 		function enviarPDF(){
 
@@ -272,9 +284,19 @@
 			pdf.addImage(newCanvasImg, 'JPEG', 20, 120, 580, 170);
 
 
-			pdf.fromHTML($('#target').html(), 20, 300, {
-                        'width': 500,'elementHandlers': specialElementHandlers
-                    });
+			//pdf.fromHTML($('#target').html(), 20, 300, {
+			//	'width': 620,'elementHandlers': specialElementHandlers
+			//});
+
+			var res = pdf.autoTableHtmlToJson(document.getElementById('tab_customers'));
+			  pdf.autoTable(res.columns, res.data, {
+				startY: 320,
+				tableWidth: 'auto',
+				columnWidth: 'auto',
+				styles: {
+				  overflow: 'linebreak'
+				}
+			  });
 
 			pdf.save('ReporteCorrecciones.pdf');
 

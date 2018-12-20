@@ -107,7 +107,7 @@
           			<div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<div id="target" class="table-responsive">
-								<table id="tab_customers" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-bordered table-striped table-hover table-condensed" style="font-size:9px; background: white;">
+								<table id="tab_customers" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 table-bordered table-striped table-hover table-condensed" style="background: white;">
                                     <thead>
 										<tr>
 											<th>Nro</th>
@@ -299,9 +299,9 @@
 			return true;
 		});
 
-   		var specialElementHandlers = {
-			'#editor': function(element, renderer) { return true; }
-		};
+   		//var specialElementHandlers = {
+		//	'#editor': function(element, renderer) { return true; }
+		//};
 
 		function enviarPDF(){
 			var usuario =  ('{{user.persona}}')
@@ -329,11 +329,22 @@
 			var newCanvasImg = newCanvas.toDataURL("image/png", 1.0);
 			pdf.addImage(newCanvasImg, 'JPEG', 20, 120, 580, 170);
 
-			pdf.fromHTML($('#target').html(), 20, 300, {
-                        'width': 500,'elementHandlers': specialElementHandlers
-                    });
+			//pdf.fromHTML($('#target').html(), 20, 300, {
+            //            'width': 500,'elementHandlers': specialElementHandlers
+            //        });
 
-			pdf.save('Test.pdf');
+
+			var res = pdf.autoTableHtmlToJson(document.getElementById('tab_customers'));
+			  pdf.autoTable(res.columns, res.data, {
+				startY: 320,
+				tableWidth: 'auto',
+				columnWidth: 'auto',
+				styles: {
+				  overflow: 'linebreak'
+				}
+			 });
+
+			pdf.save('ReporteTramites.pdf');
 
 		}
 	</script>
