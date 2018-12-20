@@ -1687,8 +1687,11 @@ def usuarios_no_borrables(usuario):
                 setattr(usuario, "descripcion", "Visador asignado a tramite: " +", ".join([str(e.tramite.id) for e in estados_agendados]))
 
         elif (usuario.pertenece_a_grupo('inspector')):
-            tipos = [6, 14]
-            estados_agendados= filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' or str(e.tramite.estado()) == 'AgendadoInspeccion') and (e.tipo == tipos[0] or e.tipo == tipos[1])), estados)
+            tipos = [11, 21, 28]
+            estados_agendados= filter(lambda e: (e.usuario is not None and (str(e.tramite.estado()) == 'AgendadoPrimerInspeccion' 
+                                                or str(e.tramite.estado()) == 'AgendadoInspeccion' 
+                                                or str(e.tramite.estado()) == 'AgendadoInspeccionFinal')
+                                                and (e.tipo == tipos[0] or e.tipo == tipos[1] or e.tipo == tipos[2])), estados)
             if (any(e.usuario.id == usuario.id for e in estados_agendados)):
                 setattr(usuario, "relacionado", True)
                 setattr(usuario, "descripcion", "Inspector asignado a tramite: " +", ".join([str(e.tramite.id) for e in estados_agendados]))
