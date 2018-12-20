@@ -1794,10 +1794,18 @@ def visadores_sin_visado_agendado(request, pk_estado):
     visadores_estados_agendados = []
     for i in range(len(list(estados_agendados))):
         visadores_estados_agendados.append(estados_agendados[i].usuario)
+    print('visadores_estados_agendados:')
+    print(visadores_estados_agendados)
+
     visadores_sin_vis_agendadas = []
+    visados_agendados = []
     for vis in visadores:
-        if vis not in visadores_estados_agendados and vis.is_active:
+        visados_agendados = filter(lambda v: vis.pk == v.pk, visadores_estados_agendados)
+        print('visadores_agendados:')
+        print (visados_agendados)
+        if vis != estado.usuario and vis.is_active and len(visados_agendados) < 3:
             visadores_sin_vis_agendadas.append(vis)
+    print('visadores_sin_vis_agendadas:')
     print(visadores_sin_vis_agendadas)
     if request.method == "POST" and "cambiar_visador" in request.POST:
         if request.POST["idusuarioUsuarioS"]:
