@@ -2469,57 +2469,30 @@ class ReporteTramitesDirectorPdf(View):
         return response
 
 
-class ReporteTramitesPorTipoDirectorExcel(TemplateView):
-    def get(self, request, *args, **kwargs):
-        wb = Workbook()
-        ws = wb.active
-        ws['A1'] = 'REPORTE DE TRAMITES'
-        ws.merge_cells('B1:I1')
-        ws['B2'] = 'NRO'
-        ws['C2'] = 'PROPIETARIO'
-        ws['D2'] = 'PROFESIONAL'
-        ws['E2'] = 'ESTADO'
-        ws['F2'] = 'MEDIDAS'
-        ws['G2'] = 'TIPOO'
-        ws['H2'] = 'DESTINO'
-        cont = 3
-        #    ws.cell(row=cont, column=2).value = Usuario.id
-        #    ws.cell(row=cont, column=3).value = str(tramite.tipo_obra)
-        #    ws.cell(row=cont, column=4).value = str(tramite.profesional)
-        #    ws.cell(row=cont, column=5).value = str(tramite.propietario)
-        #    ws.cell(row=cont, column=6).value = tramite.medidas
-        #    cont = cont + 1
-        nombre_archivo = "ReporteTramitesExcel.xlsx"
-        response = HttpResponse(content_type="application/ms-excel")
-        contenido = "attachment; filename={0}".format(nombre_archivo)
-        response["Content-Disposition"] = contenido
-        wb.save(response)
-        return response
-
-
 class ReporteEmpleadosDirectorExcel(TemplateView):
 
     def get(self, request, *args, **kwargs):
-        empleados = Usuario.objects.all()
+        usuarios = empleados_con_director()
         wb = Workbook()
         ws = wb.active
         ws['A1'] = 'LISTADO DE EMPLEADOS'
-        ws.merge_cells('B1:G1')
-        ws['B2'] = 'NRO'
-        ws['C2'] = 'TIPO_DE_OBRA'
-        ws['D2'] = 'PROFESIONAL'
-        ws['E2'] = 'PROPIETARIO'
-        ws['F2'] = 'MEDIDAS'
+        ws.merge_cells('B1:H1')
+        ws['B2'] = 'USUARIO'
+        ws['C2'] = 'GRUPO'
+        ws['D2'] = 'NOMBRE'
+        ws['E2'] = 'DOCUMENTO'
+        ws['F2'] = 'TELEFONO'
+        ws['G2'] = 'MAIL'
         cont = 3
-        '''
-        for tramite in tramites:
-            ws.cell(row=cont, column=2).value = Usuario.id
-            ws.cell(row=cont, column=3).value = str(tramite.tipo_obra)
-            ws.cell(row=cont, column=4).value = str(tramite.profesional)
-            ws.cell(row=cont, column=5).value = str(tramite.propietario)
-            ws.cell(row=cont, column=6).value = tramite.medidas
+        for u in usuarios:
+            ws.cell(row=cont, column=2).value = str(u)
+            ws.cell(row=cont, column=3).value = str(u.get_view_groups()[0])
+            ws.cell(row=cont, column=4).value = str(u.persona)
+            ws.cell(row=cont, column=5).value = str(u.persona.dni)
+            ws.cell(row=cont, column=6).value = str(u.persona.telefono)
+            ws.cell(row=cont, column=7).value = str(u.persona.mail)
             cont = cont + 1
-        '''
+
         nombre_archivo = "ListadoEmpleadosExcel.xlsx"
         response = HttpResponse(content_type="application/ms-excel")
         contenido = "attachment; filename={0}".format(nombre_archivo)
@@ -2568,7 +2541,7 @@ class ReporteEmpleadosDirectorPdf(View):
         story.append(im1)
 
         story.append(Spacer(0, cm * 0.05))
-        subtitulo = 'Reporte de empleados'
+        subtitulo = 'Informe de empleados'
         story.append(Paragraph(subtitulo, styles["Subtitulo"]))
         story.append(Spacer(0, cm * 0.15))
 
@@ -2578,12 +2551,11 @@ class ReporteEmpleadosDirectorPdf(View):
 
         encabezados = ('USUARIO', 'GRUPO', 'NOMBRE', 'DOCUMENTO ', 'TELEFONO', 'MAIL')
         detalles = []
+        detalles = [
+            (u, u.get_view_groups()[0], u.persona,u.persona.dni, u.persona.telefono, u.persona.mail)
+            for u in empleados_con_director()]
 
-        #detalles = [
-        #    (tramite.id, tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.medidas, tramite.estado())
-        #    for tramite in Tramite.objects.all()]
-
-        detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 3 * cm, 4 * cm, 4 * cm, 2 * cm, 3 * cm])
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 3 * cm, 4 * cm, 4 * cm, 3 * cm, 4 * cm])
         detalle_orden.setStyle(TableStyle(
             [
                 ('ALIGN', (0, 0), (0, 0), 'CENTER'),
@@ -2596,40 +2568,6 @@ class ReporteEmpleadosDirectorPdf(View):
         ))
         detalle_orden.hAlign = 'CENTER'
         story.append(detalle_orden)
-
-        '''
-        trabajando con los graficos dentro del informe
-        '''
-        d = Drawing(500, 200)
-        data = [
-            (13, 5, 20, 22, 37, 45, 19, 4),
-            (14, 6, 21, 23, 38, 46, 20, 5)
-        ]
-        bc = VerticalBarChart()
-        bc.x = 50
-        bc.y = 50
-        bc.height = 125
-        bc.width = 500
-        bc.data = data
-        bc.strokeColor = colors.black
-        bc.valueAxis.valueMin = 0
-        bc.valueAxis.valueMax = 50
-        bc.valueAxis.valueStep = 10  # paso de distancia entre punto y punto
-        bc.categoryAxis.labels.boxAnchor = 'ne'
-        bc.categoryAxis.labels.dx = 8
-        bc.categoryAxis.labels.dy = -2
-        bc.categoryAxis.labels.angle = 30
-        bc.categoryAxis.categoryNames = ['Ene-14', 'Feb-14', 'Mar-14',
-                                         'Abr-14', 'May-14', 'Jun-14', 'Jul-14', 'Ago-14']
-        bc.groupSpacing = 10
-        bc.barSpacing = 2
-        d.add(bc)
-        story.append(d)
-
-        '''
-        hasta aca, anda pero ver los valores, colores y como se ubica dentro de pagina
-        '''
-
         doc.build(story)
         return response
 
