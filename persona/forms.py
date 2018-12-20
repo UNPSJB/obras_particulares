@@ -67,6 +67,12 @@ class FormularioPersona(forms.ModelForm):
             raise ValidationError('Email actualmente en uso')
         return mail
 
+    def clean_telefono(self):
+        telefono = self.cleaned_data['telefono']
+        if len(telefono) < 7:
+            raise ValidationError('Formato Incorrecto')
+        return telefono
+
 
 class FormularioProfesional(FormularioPersona):
     '''
