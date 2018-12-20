@@ -1043,14 +1043,13 @@ class ReporteProfesionalesAdministrativoPdf(View):
         story.append(im0)
         story.append(Spacer(0, cm * 0.5))
 
-        encabezados = ('NOMBRE', 'APELLIDO', 'MAIL', 'DIRECCION', 'CUIL', 'TELEFONO', 'PROFESION', 'CAT.', 'MAT.')
+        encabezados = ('NOMBRE', 'APELLIDO', 'MAIL', 'CUIL', 'TELEFONO', 'PROFESION', 'CAT.', 'MAT.')
         personas = Persona.objects.all()
         profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
         detalles = [
-            (p.nombre, p.apellido, p.mail, p.domicilio_persona, p.cuil, p.telefono, p.profesional.profesion, p.profesional.categoria, p.profesional.matricula)
+            (p.nombre, p.apellido, p.mail, p.cuil, p.telefono, p.profesional.profesion, p.profesional.categoria, p.profesional.matricula)
             for p in profesionales_con_usuario]
-        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 3 * cm, 3 * cm, 3 * cm, 2 * cm, 2 * cm, 1 * cm, 1 * cm])
-
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 4 * cm, 3 * cm, 2 * cm, 3.5 * cm, 1 * cm, 2.5 * cm])
         detalle_orden.setStyle(TableStyle(
             [
                 ('ALIGN', (0, 0), (0, 0), 'CENTER'),
@@ -1806,7 +1805,7 @@ def visadores_sin_visado_agendado(request, pk_estado):
         visados_agendados = filter(lambda v: vis.pk == v.pk, visadores_estados_agendados)
         print('visadores_agendados:')
         print (visados_agendados)
-        if vis != estado.usuario and vis.is_active and len(visados_agendados) < 3:
+        if vis != estado.usuario and vis.is_active and len(visados_agendados) < 1 :
             visadores_sin_vis_agendadas.append(vis)
     print('visadores_sin_vis_agendadas:')
     print(visadores_sin_vis_agendadas)
@@ -2317,13 +2316,13 @@ class ReporteProfesionalesDirectorPdf(View):
         im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=640, height=3)
         story.append(im0)
         story.append(Spacer(0, cm * 0.5))
-        encabezados = ('NOMBRE', 'APELLIDO', 'MAIL', 'DIRECCION', 'CUIL', 'TELEFONO', 'PROFESION', 'CAT.', 'MAT.')
+        encabezados = ('NOMBRE', 'APELLIDO', 'MAIL', 'CUIL', 'TELEFONO', 'PROFESION', 'CAT.', 'MAT.')
         personas = Persona.objects.all()
         profesionales_con_usuario = filter(lambda persona: (persona.usuario is not None and persona.profesional is not None), personas)
         detalles = [
-            (p.nombre, p.apellido, p.mail, p.domicilio_persona, p.cuil, p.telefono, p.profesional.profesion, p.profesional.categoria, p.profesional.matricula)
+            (p.nombre, p.apellido, p.mail, p.cuil, p.telefono, p.profesional.profesion, p.profesional.categoria, p.profesional.matricula)
             for p in profesionales_con_usuario]
-        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 3 * cm, 3 * cm, 3 * cm, 2 * cm, 2 * cm, 1 * cm, 1 * cm])
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 4 * cm, 3 * cm, 2 * cm, 3.5 * cm, 1 * cm, 2.5 * cm])
         detalle_orden.setStyle(TableStyle(
             [
                 ('ALIGN', (0, 0), (0, 0), 'CENTER'),
@@ -2457,12 +2456,12 @@ class ReporteTramitesDirectorPdf(View):
         story.append(im0)
         story.append(Spacer(0, cm * 0.5))
 
-        encabezados = ('NRO', 'TIPO', 'PROFESIONAL', 'PROPIETARIO', 'MEDIDAS', 'ESTADO')
+        encabezados = ('NRO', 'TIPO', 'PROFESIONAL', 'PROPIETARIO', 'M2', 'ESTADO')
         detalles = [
             (tramite.id, tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.medidas, tramite.estado())
             for tramite in
             Tramite.objects.all()]
-        detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 1.5 * cm, 5 * cm, 5 * cm, 2 * cm, 6 * cm])
+        detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 5 * cm, 4 * cm, 4 * cm, 1 * cm, 5.5 * cm])
 
         detalle_orden.setStyle(TableStyle(
             [
@@ -2566,7 +2565,7 @@ class ReporteEmpleadosDirectorPdf(View):
             (u, u.get_view_groups()[0], u.persona,u.persona.dni, u.persona.telefono, u.persona.mail)
             for u in empleados_con_director()]
 
-        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 3 * cm, 4 * cm, 4 * cm, 3 * cm, 4 * cm])
+        detalle_orden = Table([encabezados] + detalles, colWidths=[4 * cm, 3 * cm, 4 * cm, 2 * cm, 2 * cm, 4 * cm])
         detalle_orden.setStyle(TableStyle(
             [
                 ('ALIGN', (0, 0), (0, 0), 'CENTER'),
