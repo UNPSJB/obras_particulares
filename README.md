@@ -34,5 +34,5 @@ Trabajo practico para la catedra Desarrollo de Software de la UNPSJB sede Trelew
 - Garibaldi Anele
 - Monjelat David
 - Garcia Julian
-- Avitu Victor
+- Abitu Victor
 - Perdomo Luciano
