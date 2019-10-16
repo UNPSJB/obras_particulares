@@ -177,7 +177,7 @@ def ver_historial_tramite(request, pk_tramite):
     estados = Estado.objects.all()
     estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
     contexto1 = {'estados_del_tramite': estados_de_tramite}
-    fechas_del_estado = [];
+    fechas_del_estado = []
     for est in estados_de_tramite:
         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"))
     return render(request, 'persona/propietario/ver_historial_tramite.html', {"tramite": contexto0,
@@ -678,7 +678,7 @@ def listado_tramites_vencidos():
     tramites_vencidos = []
     for t in tramites_ap:
         for e in estados_iniciado:
-            if e.tramite == t and (e.timestamp + timedelta(days=60)).strftime("%Y/%m/%d") < datetime.datetime.now().strftime("%Y/%m/%d"):
+            if e.tramite == t and (e.timestamp + timedelta(days=60)).strftime("%Y/%m/%d") < datetime.now().strftime("%Y/%m/%d"):
                 tramites_vencidos.append(t)
     tramites_vencidos_no_pagados_no_renovados = []
     for tr in tramites_vencidos:
@@ -688,9 +688,9 @@ def listado_tramites_vencidos():
     for t in tramites_fo:
         estado_t = filter(lambda e: (e.tipo == tipoFOPS and str(e.tramite.pk) == str(t.pk)), estados)
         for e in estados_iniciado:
-            if e.tramite == t and len(list(estado_t)) == 0 and (e.timestamp + timedelta(days=1095)).strftime("%Y/%m/%d") < datetime.datetime.now().strftime("%Y/%m/%d"):
+            if e.tramite == t and len(list(estado_t)) == 0 and (e.timestamp + timedelta(days=1095)).strftime("%Y/%m/%d") < datetime.now().strftime("%Y/%m/%d"):
                 tramites_vencidos_no_pagados_no_renovados.append(t)
-            elif e.tramite == t and len(list(estado_t)) > 0 and (e.timestamp + timedelta(days=1825)).strftime("%Y/%m/%d") < datetime.datetime.now().strftime("%Y/%m/%d"):
+            elif e.tramite == t and len(list(estado_t)) > 0 and (e.timestamp + timedelta(days=1825)).strftime("%Y/%m/%d") < datetime.now().strftime("%Y/%m/%d"):
                 tramites_vencidos_no_pagados_no_renovados.append(t)
     contexto = {'tramites': tramites_vencidos_no_pagados_no_renovados, 'tramites_vencidos_no_pagados_no_renovados': len(tramites_vencidos)}
     return contexto

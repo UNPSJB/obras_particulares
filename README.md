@@ -9,17 +9,24 @@ Instalación y Uso
 ##### Paso 1: Clonar el repositorio a nuestro sistema
     git clone https://github.com/UNPSJB/obras_particulares.git
     cd obras_particulares
-    
-##### Paso 2: Instalar lista de dependencias
+
+##### Paso 2: Crear ambiente virtual
+    pip install virtualenv
+    python -m virtualenv myvirtualenv
+    Linux: source myvirtualenv/bin/activate
+    Windows: myvirtualenv/Scripts/activate.bat
+
+
+##### Paso 3: Instalar lista de dependencias
     pip install -r requirements.txt
     
-##### Paso 3: Realizar migraciones de aplicaciones
-    python manage.py makemigrations app
+##### Paso 4: Realizar migraciones de aplicaciones
+    python manage.py makemigrations
     
-##### Paso 4: Correr el código
+##### Paso 5: Correr el código
     python manage.py runserver
     
-##### Paso 5: Acceso al sistema
+##### Paso 6: Acceso al sistema
     Ir a http://localhost:8000
 
 Catedra e Integrantes
