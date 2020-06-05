@@ -1,6 +1,6 @@
 backports.shutil-get-terminal-size==1.0.0
 decorator==4.3.0
-Django==1.11.4
+Django==1.11.29
 django-crispy-forms==1.6.1
 django-excel==0.0.10
 enum34==1.1.6
