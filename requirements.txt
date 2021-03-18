@@ -14,7 +14,7 @@ openpyxl==2.4.8
 pathlib2==2.3.3
 pexpect==4.6.0
 pickleshare==0.7.5
-Pillow==4.2.1
+Pillow==8.1.1
 
 prompt-toolkit==1.0.15
 ptyprocess==0.6.0
